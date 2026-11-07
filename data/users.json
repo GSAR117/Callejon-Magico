@@ -1,0 +1,20 @@
+[
+  {
+    "id": "usr_davanti_001",
+    "fullName": "Carlos Mendoza",
+    "email": "carlos@davanti.com",
+    "username": "davanti_orion99",
+    "password": "Password123!",
+    "tier": "Privé Gold",
+    "createdAt": "2026-10-26T18:00:00.000Z"
+  },
+  {
+    "id": "usr_mvq35isonfxsj",
+    "fullName": "Valeria Castillo",
+    "email": "valeria@gmail.com",
+    "username": "valeria_chic412",
+    "password": "Password123!",
+    "tier": "Privé Member",
+    "createdAt": "2026-10-27T02:47:59.592Z"
+  }
+]

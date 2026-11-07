@@ -1,0 +1,629 @@
+/* ==========================================================================
+   FASHION & APPAREL DEPARTMENT - STYLESHEET
+   Grandé Tienda Departamental - Moda y Ropa (Liverpool / Palacio Style)
+   ========================================================================== */
+
+/* Breadcrumbs */
+.dept-breadcrumbs {
+  padding: 1rem 0;
+  font-size: 0.82rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dept-breadcrumbs a {
+  color: #6b7280;
+  transition: color var(--transition-fast);
+}
+
+.dept-breadcrumbs a:hover {
+  color: var(--color-gold);
+}
+
+.dept-breadcrumbs span.current {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Department Editorial Hero Banner */
+.fashion-hero-banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  background-color: #0b1b3d;
+  box-shadow: var(--shadow-lg);
+}
+
+.fashion-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(0.85);
+}
+
+.fashion-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 19, 43, 0.95) 0%,
+    rgba(7, 19, 43, 0.80) 45%,
+    rgba(7, 19, 43, 0.25) 100%
+  );
+  z-index: 1;
+}
+
+.fashion-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+  padding: 3rem 3.5rem;
+  color: #ffffff;
+}
+
+.fashion-hero-badge {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #e5b869;
+  background: rgba(229, 184, 105, 0.12);
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(229, 184, 105, 0.3);
+  margin-bottom: 1rem;
+}
+
+.fashion-hero-title {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.fashion-hero-desc {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #d1d5db;
+  margin-bottom: 1.5rem;
+}
+
+/* Department Perks Strip */
+.fashion-perks-strip {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 1.25rem;
+  font-size: 0.82rem;
+  color: #f3f4f6;
+}
+
+.fashion-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* Brand Showcase Bar */
+.fashion-brands-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0 1.8rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.fashion-brands-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-pill-btn {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-full);
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.brand-pill-btn:hover {
+  border-color: var(--color-gold);
+  color: #111;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-pill-btn.active {
+  background-color: #111317;
+  color: #ffffff;
+  border-color: #111317;
+}
+
+/* Department Main Layout */
+.department-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+/* Filter Sidebar */
+.filter-sidebar {
+  background-color: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid #edf0f3;
+  padding: 1.75rem;
+  height: fit-content;
+  position: sticky;
+  top: 95px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.filter-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #edf0f3;
+  margin-bottom: 1.5rem;
+}
+
+.filter-sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-reset-filters {
+  font-size: 0.78rem;
+  color: #e53935;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.btn-reset-filters:hover {
+  color: #b91c1c;
+}
+
+/* Active Filter Chips */
+.active-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #1f2937;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.filter-chip-remove {
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+/* Filter Section Group */
+.filter-group {
+  margin-bottom: 1.6rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.filter-group-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Gender / Department Tabs in Sidebar */
+.filter-gender-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.gender-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: #4b5563;
+  transition: all var(--transition-fast);
+}
+
+.gender-btn:hover {
+  background-color: #f9fafb;
+}
+
+.gender-btn.active {
+  background-color: #111317;
+  color: #ffffff;
+  border-color: #111317;
+}
+
+/* Subcategories List */
+.filter-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.filter-cat-link {
+  font-size: 0.84rem;
+  color: #4b5563;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.filter-cat-link:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.filter-cat-link.active {
+  font-weight: 700;
+  color: var(--color-gold);
+  background-color: #fdfaf3;
+}
+
+/* Size Grid Selector */
+.size-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+}
+
+.size-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.45rem 0.2rem;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-xs);
+  background: #ffffff;
+  color: #374151;
+  transition: all var(--transition-fast);
+}
+
+.size-btn:hover {
+  border-color: #111827;
+}
+
+.size-btn.active {
+  background-color: #111317;
+  color: #ffffff;
+  border-color: #111317;
+}
+
+/* Color Swatches */
+.color-swatches-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.color-swatch-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #d1d5db;
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--transition-fast);
+}
+
+.color-swatch-circle:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch-circle.active {
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+/* Price Filter Range */
+.price-range-boxes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.price-input-box {
+  flex: 1;
+  position: relative;
+}
+
+.price-input-box input {
+  width: 100%;
+  height: 36px;
+  padding: 0 0.5rem 0 1.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-xs);
+  font-size: 0.84rem;
+}
+
+.price-input-box span {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 0.84rem;
+}
+
+.btn-apply-price {
+  height: 36px;
+  padding: 0 0.85rem;
+  background-color: #111317;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+}
+
+/* Catalog Top Header Bar */
+.catalog-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.catalog-counter {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.catalog-counter span {
+  font-weight: 400;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.catalog-sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sort-select {
+  height: 38px;
+  padding: 0 2rem 0 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  background-color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+/* Fashion Grid */
+.fashion-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.fashion-products-grid.grid-4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Brand label inside card */
+.product-brand-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 0.25rem;
+}
+
+/* Color swatches inside card */
+.card-color-swatches {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.mini-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Editorial Lookbook Section */
+.fashion-lookbook-section {
+  padding: 3rem 0;
+  border-top: 1px solid #edf0f3;
+}
+
+.lookbook-title-row {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.lookbook-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.lookbook-sub {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.lookbook-card {
+  position: relative;
+  height: 340px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2.5rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.lookbook-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.lookbook-card:hover img {
+  transform: scale(1.05);
+}
+
+.lookbook-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 16, 20, 0.2) 0%, rgba(14, 16, 20, 0.85) 100%);
+}
+
+.lookbook-card-content {
+  position: relative;
+  z-index: 2;
+  max-width: 400px;
+}
+
+.lookbook-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #e5b869;
+  margin-bottom: 0.5rem;
+}
+
+.lookbook-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+
+.lookbook-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all var(--transition-fast);
+}
+
+.lookbook-card:hover .lookbook-card-cta {
+  background-color: #ffffff;
+  color: #111;
+  transform: translateX(4px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .department-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-sidebar {
+    position: static;
+    margin-bottom: 1.5rem;
+  }
+
+  .fashion-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lookbook-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .fashion-hero-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .fashion-hero-title {
+    font-size: 2rem;
+  }
+
+  .fashion-perks-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}

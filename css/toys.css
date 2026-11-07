@@ -1,0 +1,653 @@
+/* ==========================================================================
+   TOYS & GAMES DEPARTMENT - STYLESHEET
+   Grandé Tienda Departamental - Juguetes, Juegos & Niños
+   ========================================================================== */
+
+/* Breadcrumbs */
+.dept-breadcrumbs {
+  padding: 1rem 0;
+  font-size: 0.82rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dept-breadcrumbs a {
+  color: #6b7280;
+  transition: color var(--transition-fast);
+}
+
+.dept-breadcrumbs a:hover {
+  color: var(--color-gold);
+}
+
+.dept-breadcrumbs span.current {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Department Hero Banner */
+.toys-hero-banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  background-color: #07132b;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(197, 143, 56, 0.25);
+}
+
+.toys-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(0.65) contrast(1.1);
+}
+
+.toys-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 19, 43, 0.96) 0%,
+    rgba(11, 27, 61, 0.82) 50%,
+    rgba(7, 19, 43, 0.35) 100%
+  );
+  z-index: 1;
+}
+
+.toys-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+  padding: 3rem 3.5rem;
+  color: #ffffff;
+}
+
+.toys-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffd54f;
+  background: rgba(255, 213, 79, 0.15);
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 213, 79, 0.35);
+  margin-bottom: 1rem;
+}
+
+.toys-hero-title {
+  font-family: var(--font-serif);
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.toys-hero-desc {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  margin-bottom: 1.5rem;
+}
+
+.toys-perks-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.toys-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: #f1f5f9;
+}
+
+.toys-perk-item strong {
+  color: #ffffff;
+}
+
+/* Brands Bar */
+.toys-brands-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 1.25rem 0;
+  margin-bottom: 1.5rem;
+  scrollbar-width: thin;
+}
+
+.toys-brands-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.toys-brands-bar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.brand-pill-btn {
+  white-space: nowrap;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-full);
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.brand-pill-btn:hover {
+  border-color: var(--color-gold);
+  color: #0f172a;
+  background-color: #fdfaf3;
+}
+
+.brand-pill-btn.active {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-color: #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
+}
+
+/* Department Layout: Sidebar + Catalog Grid */
+.department-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 4rem;
+}
+
+/* Left Filter Sidebar */
+.filter-sidebar {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 90px;
+}
+
+.filter-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.filter-sidebar-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-reset-filters {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.btn-reset-filters:hover {
+  color: #ef4444;
+}
+
+/* Active Filter Chips */
+.active-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background-color: #fdf6ec;
+  color: #b45309;
+  padding: 0.28rem 0.65rem;
+  border-radius: var(--radius-full);
+  border: 1px solid #fef3c7;
+}
+
+.filter-chip-remove {
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: #b45309;
+  margin-left: 0.2rem;
+}
+
+.filter-chip-remove:hover {
+  color: #ef4444;
+}
+
+/* Filter Groups */
+.filter-group {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.filter-group-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Subcategories */
+.filter-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filter-cat-link {
+  font-size: 0.84rem;
+  color: #475569;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.filter-cat-link:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.filter-cat-link.active {
+  font-weight: 700;
+  color: #d97706;
+  background-color: #fffbeb;
+}
+
+/* Age Selector Buttons */
+.age-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.45rem;
+}
+
+.age-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.5rem 0.3rem;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-xs);
+  background: #ffffff;
+  color: #334155;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.age-btn:hover {
+  border-color: #0f172a;
+}
+
+.age-btn.active {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+/* Price Range Inputs */
+.price-range-boxes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-input-box {
+  display: flex;
+  align-items: center;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-xs);
+  padding: 0 0.5rem;
+  width: 80px;
+}
+
+.price-input-box span {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.price-input-box input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.25rem;
+  font-size: 0.8rem;
+  outline: none;
+  color: #0f172a;
+}
+
+.btn-apply-price {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-apply-price:hover {
+  background-color: var(--color-gold);
+  color: #000;
+}
+
+/* Right Catalog Content */
+.catalog-main-content {
+  min-width: 0;
+}
+
+/* Top Catalog Bar */
+.catalog-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.catalog-counter-text {
+  font-size: 0.92rem;
+  color: #64748b;
+}
+
+.catalog-counter-text strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.catalog-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sort-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-select-label {
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.sort-select-input {
+  padding: 0.45rem 1.8rem 0.45rem 0.75rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  background-color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1rem;
+}
+
+.grid-view-switcher {
+  display: flex;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.grid-view-btn {
+  padding: 0.4rem 0.55rem;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #64748b;
+  transition: all var(--transition-fast);
+}
+
+.grid-view-btn.active {
+  background-color: #0f172a;
+  color: #ffffff;
+}
+
+/* Toys Products Grid */
+.toys-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.toys-products-grid.grid-4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Enhanced Toy Card with Age and Skill Badges */
+.toy-product-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  position: relative;
+}
+
+.toy-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.12);
+  border-color: #cbd5e1;
+}
+
+.toy-age-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0.5rem 0;
+}
+
+.toy-age-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #fef3c7;
+  color: #b45309;
+  padding: 0.18rem 0.5rem;
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.toy-skill-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 0.18rem 0.45rem;
+  border-radius: var(--radius-xs);
+}
+
+/* Toys Modal Spec Table */
+.toy-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  margin: 1rem 0;
+  background: #f8fafc;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.toy-specs-table tr {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.toy-specs-table tr:last-child {
+  border-bottom: none;
+}
+
+.toy-specs-table td {
+  padding: 0.5rem 0.75rem;
+}
+
+.toy-specs-table td.spec-name {
+  font-weight: 600;
+  color: #475569;
+  width: 38%;
+  background: #f1f5f9;
+  text-transform: capitalize;
+}
+
+.toy-specs-table td.spec-val {
+  color: #0f172a;
+  font-weight: 500;
+}
+
+/* Empty Catalog State */
+.toys-empty-state {
+  text-align: center;
+  padding: 5rem 1.5rem;
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  color: #64748b;
+}
+
+.toys-empty-state h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.toys-empty-state p {
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Modal QuickView Sticky Gallery */
+.modal-window .quickview-layout {
+  align-items: start;
+}
+
+.modal-window .quickview-gallery {
+  position: sticky;
+  top: 1rem;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .department-layout {
+    grid-template-columns: 240px 1fr;
+    gap: 1.25rem;
+  }
+  .toys-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .toys-products-grid.grid-4-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .toys-hero-content {
+    padding: 2.5rem 2rem;
+  }
+  .toys-hero-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .department-layout {
+    grid-template-columns: 1fr;
+  }
+  .filter-sidebar {
+    position: static;
+    margin-bottom: 1.5rem;
+  }
+  .toys-products-grid,
+  .toys-products-grid.grid-4-cols {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .grid-view-switcher {
+    display: none;
+  }
+  .toys-hero-banner {
+    min-height: 320px;
+  }
+  .toys-hero-content {
+    padding: 2rem 1.5rem;
+  }
+  .toys-hero-title {
+    font-size: 1.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .toys-products-grid,
+  .toys-products-grid.grid-4-cols {
+    grid-template-columns: 1fr;
+  }
+}

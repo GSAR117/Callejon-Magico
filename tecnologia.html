@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tecnología y Electrónica | Callejón Mágico - Innovación de Vanguardia</title>
+  <meta name="description" content="Descubre lo más exclusivo en tecnología: iPhone 15 Pro, Samsung Galaxy AI, MacBook Pro M3, Smart TVs 4K OLED, consolas PS5, Nintendo Switch y audio premium con hasta 18 MSI en Callejón Mágico.">
+  
+  <!-- Favicon with Callejón Mágico Bag & Magic Sparkle -->
+  <link rel="icon" type="image/svg+xml" href="img/logo-icon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/tech.css">
+  <link rel="stylesheet" href="css/lightbox.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP ANNOUNCEMENT BAR
+       ========================================================================== -->
+  <div class="top-ticker">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+      <div class="top-ticker-content">
+        <span class="top-ticker-tag">⚡ Festival Tech</span>
+        <span>Hasta 18 Meses Sin Intereses + Envío Express Gratis en compras mayores a $999 con Tarjeta Callejón Mágico</span>
+      </div>
+      <div class="top-ticker-links">
+        <a href="#pedidos" class="open-orders-modal-btn">📦 Mis Pedidos & Rastreo</a>
+        <a href="index.html#click-collect">📍 Localizador de Tiendas</a>
+        <a href="#tarjeta-callejon" class="open-card-modal-btn">💳 Tarjeta Callejón Mágico</a>
+        <a href="index.html#ayuda">Centro de Ayuda</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN HEADER (OBSIDIAN DARK THEME)
+       ========================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container">
+      <div class="header-main-row">
+        
+        <!-- Logo (Callejón Mágico - Identidad Oficial) -->
+        <a href="index.html" class="brand-logo" aria-label="Callejón Mágico - Inicio">
+          <svg class="brand-magic-bag-icon" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 96,60 C 96,24 113,18 126,18 C 139,18 156,24 156,60" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" />
+            <path d="M 104,60 C 104,30 116,24 126,24 C 136,24 148,30 148,60" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" />
+            <path d="M 88,60 L 116,65 L 108,154 L 72,142 Z" fill="#07142A" stroke="#1d3568" stroke-width="1.5" />
+            <path d="M 116,65 L 182,75 L 198,159 C 166,152 130,148 108,154 Z" fill="#0B1B3D" stroke="#1d3568" stroke-width="1.5" />
+            <path d="M 88,60 L 116,65 L 182,75" fill="none" stroke="#C58F38" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M 56,165 C 75,138 106,106 142,90 C 172,78 200,74 224,76 C 194,84 162,96 136,111 C 100,133 73,161 56,165 Z" fill="#C58F38" />
+            <ellipse cx="224" cy="84" rx="35" ry="15" transform="rotate(-28, 224, 84)" fill="none" stroke="#C58F38" stroke-width="4.5" stroke-dasharray="115, 24" stroke-linecap="round" />
+            <path d="M 224,44 Q 224,82 260,82 Q 224,82 224,120 Q 224,82 188,82 Q 224,82 224,44 Z" fill="#C58F38" />
+            <circle cx="224" cy="82" r="3.5" fill="#FFEBB8" />
+          </svg>
+          <span class="brand-name"><span class="brand-callejon">Callejón</span> <span class="brand-magico">Mágico</span></span>
+          <span class="brand-subtitle"><span class="brand-sub-rule"></span>TIENDA DEPARTAMENTAL<span class="brand-sub-rule"></span></span>
+        </a>
+
+        <!-- Center Search Bar -->
+        <div class="header-search-container">
+          <form class="search-form" id="searchForm" role="search">
+            <input 
+              type="text" 
+              class="search-input" 
+              id="searchInput" 
+              placeholder="Buscar iPhone, pantallas OLED, laptops, audio..." 
+              autocomplete="off" 
+              aria-label="Buscar productos, marcas y más"
+            />
+            <button type="submit" class="search-submit-btn" aria-label="Ejecutar búsqueda">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </form>
+          <div class="search-results-dropdown" id="searchResultsDropdown"></div>
+        </div>
+
+        <!-- User Actions (Account, Wishlist, Cart) -->
+        <div class="header-actions">
+          <div class="account-dropdown-trigger">
+            <button class="header-action-btn" id="btnUserAccount" aria-label="Mi Cuenta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Mi cuenta</span>
+              <svg class="chevron-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <button class="header-action-btn" id="btnOpenWishlist" aria-label="Favoritos">
+            <div style="position: relative; display: flex; align-items: center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <span class="badge-count gold" id="wishlistBadgeCount" style="display: none;">0</span>
+            </div>
+            <span>Favoritos</span>
+          </button>
+
+          <button class="header-action-btn" id="btnOpenCart" aria-label="Carrito de compras">
+            <div style="position: relative; display: flex; align-items: center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span class="badge-count" id="cartBadgeCount">0</span>
+            </div>
+            <span>Carrito</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Secondary Navigation Bar -->
+    <nav class="site-nav">
+      <div class="container nav-container">
+        <button type="button" class="nav-all-categories-btn" id="btnAllCategories" aria-expanded="false" aria-controls="megaMenuPanel">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Todas las categorías</span>
+        </button>
+
+        <ul class="nav-links-list">
+          <li><a href="index.html" class="nav-link-item">Inicio</a></li>
+          <li><a href="moda.html?gender=hombre" class="nav-link-item">Hombres</a></li>
+          <li><a href="moda.html?gender=mujer" class="nav-link-item">Mujeres</a></li>
+          <li><a href="moda.html" class="nav-link-item">Moda y Ropa</a></li>
+          <li><a href="tecnologia.html" class="nav-link-item active">Tecnología</a></li>
+          <li><a href="hogar.html" class="nav-link-item">Hogar</a></li>
+          <li><a href="deportes.html" class="nav-link-item">Deportes</a></li>
+          <li><a href="belleza.html" class="nav-link-item">Belleza</a></li>
+          <li><a href="juguetes.html" class="nav-link-item">Juguetes</a></li>
+          <li><a href="videojuegos.html" class="nav-link-item">🎮 Videojuegos</a></li>
+          <li><a href="tecnologia.html?discount=true" class="nav-link-item highlight-offer">Ofertas Tech</a></li>
+        </ul>
+      </div>
+
+      <!-- MegaMenu Dropdown Panel -->
+      <div class="megamenu-panel" id="megaMenuPanel">
+        <div class="container megamenu-inner">
+          
+          <div class="megamenu-dept-col">
+            <h4 class="megamenu-dept-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>
+              Moda & Ropa
+            </h4>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="moda.html?gender=hombre" style="color:inherit; text-decoration:none;">Hombre</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="moda.html?gender=hombre&subcategory=camisas">Camisas y Playeras</a></li>
+                <li><a href="moda.html?gender=hombre&subcategory=chamarras">Chamarras y Abrigos</a></li>
+                <li><a href="moda.html?gender=hombre&subcategory=pantalones">Pantalones y Jeans</a></li>
+                <li><a href="moda.html?gender=hombre&subcategory=calzado">Calzado Casual y Formal</a></li>
+              </ul>
+            </div>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="moda.html?gender=mujer" style="color:inherit; text-decoration:none;">Mujer</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="moda.html?gender=mujer&subcategory=vestidos">Vestidos de Noche y Casual</a></li>
+                <li><a href="moda.html?gender=mujer&subcategory=bolsas">Bolsas y Carteras</a></li>
+                <li><a href="moda.html?gender=mujer&subcategory=calzado">Zapatos y Zapatillas</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="megamenu-dept-col">
+            <h4 class="megamenu-dept-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              Electrónica & Cómputo
+            </h4>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="tecnologia.html?subcategory=telefonia" style="color:inherit; text-decoration:none;">Telefonía Móvil</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="tecnologia.html?subcategory=telefonia">Apple iPhone 15 & Pro</a></li>
+                <li><a href="tecnologia.html?subcategory=telefonia">Samsung Galaxy Serie S24</a></li>
+                <li><a href="tecnologia.html?subcategory=wearables">Smartwatches y Wearables</a></li>
+              </ul>
+            </div>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="tecnologia.html?subcategory=pantallas" style="color:inherit; text-decoration:none;">Pantallas y Audio</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="tecnologia.html?subcategory=pantallas">Smart TVs 4K UHD & OLED</a></li>
+                <li><a href="tecnologia.html?subcategory=audio">Audífonos Noise Cancelling</a></li>
+                <li><a href="tecnologia.html?subcategory=audio">Barras de Sonido de Cine</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="megamenu-dept-col">
+            <h4 class="megamenu-dept-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              Hogar, Muebles & Cocina
+            </h4>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="hogar.html" style="color:inherit; text-decoration:none;">Salas & Recámaras</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="hogar.html?subcategory=muebles">Sofás Seccionales & Salas</a></li>
+                <li><a href="hogar.html?subcategory=muebles">Mesas de Centro y Comedores</a></li>
+                <li><a href="hogar.html?subcategory=recamara">Colchones Tempur & Blancos</a></li>
+              </ul>
+            </div>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="hogar.html" style="color:inherit; text-decoration:none;">Cocina & Electrodomésticos</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="hogar.html?subcategory=electrodomesticos">Cafeteras Espresso Breville</a></li>
+                <li><a href="hogar.html?subcategory=electrodomesticos">Freidoras de Aire Ninja</a></li>
+                <li><a href="hogar.html?subcategory=cocina">Baterías Le Creuset</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="megamenu-dept-col">
+            <h4 class="megamenu-dept-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="14" r="7"></circle><circle cx="6" cy="7" r="3"></circle><circle cx="18" cy="7" r="3"></circle></svg>
+              Juguetería, Deportes & Belleza
+            </h4>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="juguetes.html" style="color:inherit; text-decoration:none;">Juguetes & Niños</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="juguetes.html?subcategory=construccion">LEGO Star Wars & Technic</a></li>
+                <li><a href="juguetes.html?subcategory=figuras">Barbie Dreamhouse & Figuras</a></li>
+                <li><a href="juguetes.html?subcategory=vehiculos">Hot Wheels & Pistas RC</a></li>
+                <li><a href="juguetes.html?subcategory=juegos-mesa">Juegos de Mesa: Catan & Monopoly</a></li>
+              </ul>
+            </div>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="belleza.html" style="color:inherit; text-decoration:none;">Alta Perfumería & Belleza</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="belleza.html?subcategory=perfumeria-mujer">Chanel N°5, YSL & Good Girl</a></li>
+                <li><a href="belleza.html?subcategory=perfumeria-hombre">Dior Sauvage & Bleu de Chanel</a></li>
+                <li><a href="deportes.html">Deportes & Outdoor (Nike, Trek)</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="megamenu-dept-col">
+            <h4 class="megamenu-dept-title" style="color: #63b3ed;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#63b3ed" stroke-width="2"><rect x="6" y="11" width="12" height="8" rx="2"></rect><path d="M10 11V9a2 2 0 0 1 4 0v2"></path><circle cx="10" cy="15" r="1" fill="#63b3ed"></circle><circle cx="14" cy="15" r="1" fill="#63b3ed"></circle></svg>
+              🎮 Videojuegos & Consolas
+            </h4>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="videojuegos.html?subcategory=consolas" style="color:inherit; text-decoration:none;">Consolas</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="videojuegos.html?platform=PlayStation">PlayStation 5 Slim Digital</a></li>
+                <li><a href="videojuegos.html?platform=Xbox">Xbox Series X 2TB</a></li>
+                <li><a href="videojuegos.html?platform=Nintendo">Nintendo Switch OLED Zelda</a></li>
+                <li><a href="videojuegos.html?subcategory=realidad-virtual">PlayStation VR2</a></li>
+              </ul>
+            </div>
+            <div class="megamenu-category-group">
+              <span class="megamenu-cat-name"><a href="videojuegos.html?subcategory=juegos" style="color:inherit; text-decoration:none;">Videojuegos & Accesorios</a></span>
+              <ul class="megamenu-subitems-list">
+                <li><a href="videojuegos.html?subcategory=juegos">Spider-Man 2, Zelda, CoD 2024</a></li>
+                <li><a href="videojuegos.html?subcategory=accesorios">DualSense Edge & Audífonos Gaming</a></li>
+                <li><a href="videojuegos.html?subcategory=pc-gaming">Laptops ROG & Periféricos Razer</a></li>
+                <li><a href="videojuegos.html?discount=true">⚡ Ofertas Gaming de la Semana</a></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="container">
+    
+    <!-- Breadcrumbs -->
+    <nav class="dept-breadcrumbs" aria-label="Ruta de navegación">
+      <a href="index.html">Inicio</a>
+      <span>/</span>
+      <span class="current">Tecnología y Electrónica</span>
+    </nav>
+
+    <!-- Tech Department Hero Banner -->
+    <section class="tech-hero-banner">
+      <img src="assets/images/promo_tech.jpg" alt="Tecnología e Innovación D'Avanti" class="tech-hero-bg" />
+      <div class="tech-hero-overlay"></div>
+      <div class="tech-hero-content">
+        <span class="tech-hero-badge">⚡ TECNOLOGÍA & ELECTRÓNICA DE VANGUARDIA 2026</span>
+        <h1 class="tech-hero-title">Innovación, Potencia & Estilo Digital</h1>
+        <p class="tech-hero-desc">
+          Explora la más selecta colección de smartphones con Inteligencia Artificial, laptops de alto rendimiento, pantallas OLED cinematográficas y audio de alta fidelidad con hasta 18 Meses Sin Intereses.
+        </p>
+        
+        <div class="tech-perks-strip">
+          <div class="tech-perk-item">
+            <span>💳</span> <strong>Hasta 18 MSI</strong> con Tarjeta D'Avanti
+          </div>
+          <div class="tech-perk-item">
+            <span>🚚</span> <strong>Envío Express Gratis</strong> > $999
+          </div>
+          <div class="tech-perk-item">
+            <span>🛡️</span> <strong>Garantía de Fábrica Oficial</strong>
+          </div>
+          <div class="tech-perk-item">
+            <span>🏬</span> <strong>Click & Collect</strong> en tienda hoy
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brands Carousel / Filter Bar -->
+    <div class="tech-brands-bar" id="techBrandsBar">
+      <button class="brand-pill-btn active" data-brand="all">Todas las Marcas</button>
+      <button class="brand-pill-btn" data-brand="Apple">Apple</button>
+      <button class="brand-pill-btn" data-brand="Samsung">Samsung</button>
+      <button class="brand-pill-btn" data-brand="Sony">Sony</button>
+      <button class="brand-pill-btn" data-brand="LG">LG Electronics</button>
+      <button class="brand-pill-btn" data-brand="ASUS">ASUS ROG</button>
+      <button class="brand-pill-btn" data-brand="Bose">Bose</button>
+      <button class="brand-pill-btn" data-brand="Nintendo">Nintendo</button>
+      <button class="brand-pill-btn" data-brand="Canon">Canon</button>
+      <button class="brand-pill-btn" data-brand="DJI">DJI</button>
+      <button class="brand-pill-btn" data-brand="Sonos">Sonos</button>
+      <button class="brand-pill-btn" data-brand="Dell">Dell</button>
+    </div>
+
+    <!-- Department Layout (Sidebar Filters + Catalog Grid) -->
+    <div class="department-layout">
+      
+      <!-- Left Filter Sidebar -->
+      <aside class="filter-sidebar">
+        
+        <div class="filter-sidebar-header">
+          <h3 class="filter-sidebar-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            Filtros
+          </h3>
+          <button class="btn-reset-filters" id="btnResetAllFilters" style="display: none;">Limpiar filtros</button>
+        </div>
+
+        <!-- Active Filter Chips -->
+        <div class="active-filter-chips" id="activeFilterChips"></div>
+
+        <!-- Subcategories -->
+        <div class="filter-group">
+          <h4 class="filter-group-title">Categorías</h4>
+          <div class="filter-category-list">
+            <span class="filter-cat-link" data-subcategory="telefonia">Telefonía & Smartphones</span>
+            <span class="filter-cat-link" data-subcategory="computo">Cómputo, Laptops & Tablets</span>
+            <span class="filter-cat-link" data-subcategory="pantallas">Pantallas & Smart TVs</span>
+            <span class="filter-cat-link" data-subcategory="audio">Audio & Alta Fidelidad</span>
+            <span class="filter-cat-link" data-subcategory="videojuegos">Consolas & Videojuegos</span>
+            <span class="filter-cat-link" data-subcategory="wearables">Smartwatches & Wearables</span>
+            <span class="filter-cat-link" data-subcategory="fotografia">Fotografía, Cámaras & Drones</span>
+          </div>
+        </div>
+
+        <!-- Capacity / Screen Size Filter -->
+        <div class="filter-group">
+          <h4 class="filter-group-title">Capacidad / Tamaño</h4>
+          <div class="capacity-selector-grid">
+            <button class="capacity-btn" data-capacity="128 GB">128 GB</button>
+            <button class="capacity-btn" data-capacity="256 GB">256 GB</button>
+            <button class="capacity-btn" data-capacity="512 GB">512 GB</button>
+            <button class="capacity-btn" data-capacity="1 TB">1 TB</button>
+            <button class="capacity-btn" data-capacity="55 Pulgadas">55"</button>
+            <button class="capacity-btn" data-capacity="65 Pulgadas">65"</button>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-group">
+          <h4 class="filter-group-title">Rango de Precio (MXN)</h4>
+          <div class="price-range-boxes">
+            <div class="price-input-box">
+              <span>$</span>
+              <input type="number" id="minPriceInput" placeholder="Mín" min="0" />
+            </div>
+            <span style="color: #94a3b8;">-</span>
+            <div class="price-input-box">
+              <span>$</span>
+              <input type="number" id="maxPriceInput" placeholder="Máx" min="0" />
+            </div>
+            <button class="btn-apply-price" id="btnApplyPrice">Ir</button>
+          </div>
+        </div>
+
+        <!-- Special Promotion Filters -->
+        <div class="filter-group">
+          <h4 class="filter-group-title">Promociones</h4>
+          <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+            <label style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.86rem; font-weight: 600; color: #1e293b; cursor: pointer;">
+              <input type="checkbox" id="chkOnlyDiscount" style="width: 17px; height: 17px; accent-color: var(--color-gold);" />
+              Solo productos con descuento
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.86rem; font-weight: 600; color: #1e293b; cursor: pointer;">
+              <input type="checkbox" id="chkOnlyShipping" style="width: 17px; height: 17px; accent-color: var(--color-gold);" />
+              Envío gratis inmediato
+            </label>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- Right Catalog Content -->
+      <section class="catalog-main-content">
+        
+        <!-- Top Catalog Bar (Count, Sort, Grid switcher) -->
+        <div class="catalog-top-bar">
+          <div class="catalog-counter-text">
+            Mostrando <strong id="techProductCount">0</strong> productos de Tecnología
+          </div>
+
+          <div class="catalog-controls-group">
+            <!-- Sort dropdown -->
+            <div class="sort-select-wrapper">
+              <label for="sortSelect" class="sort-select-label">Ordenar por:</label>
+              <select id="sortSelect" class="sort-select-input">
+                <option value="featured">Recomendados</option>
+                <option value="price-asc">Precio: Menor a Mayor</option>
+                <option value="price-desc">Precio: Mayor a Menor</option>
+                <option value="rating">Mejor Calificados</option>
+                <option value="discount">Mayor Descuento %</option>
+              </select>
+            </div>
+
+            <!-- Grid switch (3 vs 4 cols) -->
+            <div class="grid-view-switcher">
+              <button class="grid-view-btn active" id="btnGridCols3" title="Cuadrícula 3 columnas">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                </svg>
+              </button>
+              <button class="grid-view-btn" id="btnGridCols4" title="Cuadrícula 4 columnas">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="5" height="5"></rect>
+                  <rect x="10" y="3" width="5" height="5"></rect>
+                  <rect x="17" y="3" width="5" height="5"></rect>
+                  <rect x="3" y="10" width="5" height="5"></rect>
+                  <rect x="10" y="10" width="5" height="5"></rect>
+                  <rect x="17" y="10" width="5" height="5"></rect>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tech Products Grid -->
+        <div class="tech-products-grid" id="techProductsGrid">
+          <!-- Rendered dynamically by js/tech.js -->
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       DEPARTMENT STORE FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-col brand-col">
+          <a href="index.html" class="brand-logo" style="align-items: flex-start; margin-bottom: 1.25rem;">
+            <svg class="brand-magic-bag-icon" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 2px;">
+              <path d="M 96,60 C 96,24 113,18 126,18 C 139,18 156,24 156,60" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" />
+              <path d="M 104,60 C 104,30 116,24 126,24 C 136,24 148,30 148,60" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" />
+              <path d="M 88,60 L 116,65 L 108,154 L 72,142 Z" fill="#07142A" stroke="#1d3568" stroke-width="1.5" />
+              <path d="M 116,65 L 182,75 L 198,159 C 166,152 130,148 108,154 Z" fill="#0B1B3D" stroke="#1d3568" stroke-width="1.5" />
+              <path d="M 88,60 L 116,65 L 182,75" fill="none" stroke="#C58F38" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M 56,165 C 75,138 106,106 142,90 C 172,78 200,74 224,76 C 194,84 162,96 136,111 C 100,133 73,161 56,165 Z" fill="#C58F38" />
+              <ellipse cx="224" cy="84" rx="35" ry="15" transform="rotate(-28, 224, 84)" fill="none" stroke="#C58F38" stroke-width="4.5" stroke-dasharray="115, 24" stroke-linecap="round" />
+              <path d="M 224,44 Q 224,82 260,82 Q 224,82 224,120 Q 224,82 188,82 Q 224,82 224,44 Z" fill="#C58F38" />
+              <circle cx="224" cy="82" r="3.5" fill="#FFEBB8" />
+            </svg>
+            <span class="brand-name" style="font-size: 2rem;"><span class="brand-callejon">Callejón</span> <span class="brand-magico">Mágico</span></span>
+            <span class="brand-subtitle"><span class="brand-sub-rule"></span>TIENDA DEPARTAMENTAL<span class="brand-sub-rule"></span></span>
+          </a>
+          <p class="footer-desc">
+            La tienda departamental con la más selecta curaduría en tecnología, moda, hogar y estilo de vida con prestigio y garantía inigualable.
+          </p>
+          <div class="footer-payments-row">
+            <span>💳 18 MSI</span>
+            <span>🔒 SSL 256 bits</span>
+            <span>🛡️ Garantía Oficial</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Concierge & Atención</h4>
+          <ul class="footer-links">
+            <li>
+              <a href="#pedidos" class="open-orders-modal-btn">
+                Mis Pedidos & Rastreo
+              </a>
+            </li>
+            <li>
+              <a href="#contacto" class="open-concierge-modal-btn">
+                Atención Concierge
+              </a>
+            </li>
+            <li>
+              <a href="#envios" class="open-envios-modal-btn">
+                Envíos y devoluciones
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Callejón Mágico</h4>
+          <ul class="footer-links">
+            <li><a href="#historia" class="open-historia-modal-btn">Nuestra historia</a></li>
+            <li><a href="#terminos" class="open-terminos-modal-btn">Términos y condiciones</a></li>
+            <li><a href="#privacidad" class="open-privacidad-modal-btn">Aviso de privacidad</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Síguenos</h4>
+          <div class="footer-social-row" style="margin-top: 0.5rem;">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Facebook Callejón Mágico">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Instagram Callejón Mágico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="TikTok Callejón Mágico">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.86.12V9.38a6.34 6.34 0 0 0-.86-.06A6.33 6.33 0 0 0 3.12 15.65a6.33 6.33 0 0 0 10.74 4.54 6.27 6.27 0 0 0 1.94-4.52V8.92a8.28 8.28 0 0 0 4.83 1.54V7.01a4.82 4.82 0 0 1-1.04-.32z"></path></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="YouTube Callejón Mágico">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.43zM9.75 15.02V8.48l5.75 3.27-5.75 3.27z"></path></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-row">
+        <p>© 2026 Callejón Mágico. Todos los derechos reservados.</p>
+        <div class="footer-bottom-links">
+          <a href="index.html">Términos y Condiciones</a>
+          <a href="index.html">Privacidad</a>
+          <a href="index.html">Mapa de Sitio</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       DRAWERS & MODALS (SYNCHRONIZED WITH APP.JS)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+
+  <!-- Shopping Cart Drawer -->
+  <aside class="drawer-panel" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Bolsa de Compras (<span id="drawerCartCount">0</span>)</h3>
+      <button class="drawer-close-btn" id="btnCloseCart">&times;</button>
+    </div>
+    <div class="drawer-shipping-meter">
+      <div class="shipping-meter-text" id="shippingMeterText">
+        Agrega <strong>$999.00</strong> para obtener <strong>Envío de Cortesía</strong>
+      </div>
+      <div class="shipping-meter-track">
+        <div class="shipping-meter-fill" id="shippingProgressFill" style="width: 0%;"></div>
+      </div>
+    </div>
+    <div class="drawer-content">
+      <div class="cart-items-list" id="cartItemsList"></div>
+      <div class="drawer-empty-state" id="cartEmptyState" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <p>Tu carrito de compras está vacío.</p>
+        <a href="tecnologia.html" class="btn-checkout-primary" style="margin-top: 1rem; width: auto; padding: 0.65rem 1.5rem;">Explorar Tecnología</a>
+      </div>
+    </div>
+    <div class="drawer-footer" id="cartSummaryBox">
+      <div class="cart-summary-row"><span>Subtotal:</span><strong id="cartSubtotalText">$0.00</strong></div>
+      <div class="cart-summary-row"><span>Envío:</span><span id="cartShippingText">GRATIS</span></div>
+      <div class="cart-summary-row total"><span>Total estimado:</span><span id="cartTotalText">$0.00</span></div>
+      <button class="btn-checkout-primary" id="btnProceedCheckout">Proceder al Pago Seguro</button>
+    </div>
+  </aside>
+
+  <!-- Wishlist Drawer -->
+  <aside class="drawer-panel" id="wishlistDrawer" role="dialog" aria-modal="true" aria-label="Favoritos">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Tus Favoritos</h3>
+      <button class="drawer-close-btn" id="btnCloseWishlist">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <div class="cart-items-list" id="wishlistItemsList"></div>
+      <div class="drawer-empty-state" id="wishlistEmptyState" style="display: none;">
+        <p>No tienes favoritos guardados aún.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- QuickView Modal -->
+  <div class="modal-window" id="quickViewModal" role="dialog" aria-modal="true">
+    <button class="modal-close-btn" id="btnCloseQuickView">&times;</button>
+    <div id="quickViewBody"></div>
+  </div>
+
+  <!-- ==========================================================================
+       CHECKOUT SIMULATOR MODAL (3 PASOS)
+       ========================================================================== -->
+  <div class="modal-window checkout-modal" id="checkoutModal" role="dialog" aria-modal="true" aria-label="Finalizar compra">
+    <button class="modal-close-btn" id="btnCloseCheckout" aria-label="Cerrar pago">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="checkout-header">
+      <h2>Pago Seguro Callejón Mágico</h2>
+      <p style="font-size: 0.88rem; color: #6b7280;">Transacción protegida con cifrado SSL de 256 bits</p>
+    </div>
+
+    <div class="checkout-steps-nav" id="checkoutStepsNav">
+      <div class="checkout-step-badge active" id="badgeStep1" data-step="1">
+        <span class="step-number">1</span>
+        <span>Envío</span>
+      </div>
+      <div class="checkout-step-badge" id="badgeStep2" data-step="2">
+        <span class="step-number">2</span>
+        <span>Pago</span>
+      </div>
+      <div class="checkout-step-badge" id="badgeStep3" data-step="3">
+        <span class="step-number">3</span>
+        <span>Confirmación</span>
+      </div>
+    </div>
+
+    <form id="checkoutForm">
+      <!-- ================= PASO 1: DATOS DE ENVÍO ================= -->
+      <div class="checkout-step-pane active" id="checkoutStep1">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.85rem;">Paso 1: Dirección de entrega</h4>
+        <div class="form-grid">
+          <div>
+            <label class="form-label" for="checkoutRecipientName">Nombre completo</label>
+            <input type="text" class="form-control" id="checkoutRecipientName" required placeholder="Ej: Clarisa Morales" value="" autocomplete="name" />
+          </div>
+          <div>
+            <label class="form-label" for="checkoutPhone" style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span>Tu número de WhatsApp</span>
+              <span style="color: #25D366; font-size: 0.76rem; font-weight: 600;">📲 Para enviarte tu ticket</span>
+            </label>
+            <input type="tel" class="form-control" id="checkoutPhone" required placeholder="Ej: 962 123 4567" value="" autocomplete="tel" />
+          </div>
+          <div class="form-group-full">
+            <label class="form-label" for="checkoutEmail" style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span>Correo electrónico para tu ticket oficial</span>
+              <span style="color: #c58f38; font-size: 0.76rem; font-weight: 600;">✉️ Envío automático al pagar</span>
+            </label>
+            <input type="email" class="form-control" id="checkoutEmail" required placeholder="tu-correo@gmail.com" value="" />
+          </div>
+          <div class="form-group-full">
+            <label class="form-label" for="checkoutStreet">Calle y número</label>
+            <input type="text" class="form-control" id="checkoutStreet" required placeholder="Calle, número ext/int y colonia" value="" autocomplete="street-address" />
+          </div>
+          <div>
+            <label class="form-label" for="checkoutPostal">Código Postal</label>
+            <input type="text" class="form-control" id="checkoutPostal" required placeholder="Ej: 30700" value="" autocomplete="postal-code" />
+          </div>
+          <div>
+            <label class="form-label" for="checkoutCity">Ciudad / Estado</label>
+            <input type="text" class="form-control" id="checkoutCity" required placeholder="Ej: Tapachula, Chiapas" value="" autocomplete="address-level2" />
+          </div>
+        </div>
+        <button type="button" class="btn-checkout-primary" id="btnNextToPayment" style="height: 50px;">
+          <span>Continuar a Forma de Pago (Paso 2)</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- ================= PASO 2: MÉTODO DE PAGO ================= -->
+      <div class="checkout-step-pane" id="checkoutStep2" style="display: none;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.85rem;">Paso 2: Selecciona tu método de pago</h4>
+        <div class="payment-radio-group">
+          
+          <!-- Opción 1: Tarjeta Callejón Mágico -->
+          <label class="payment-radio-card active" data-method="callejon">
+            <div class="payment-radio-left">
+              <input type="radio" name="paymentMethod" value="callejon" checked />
+              <div>
+                <strong style="font-size: 0.9rem; color: #111827;">Tarjeta Departamental Callejón Mágico</strong>
+                <div style="font-size: 0.75rem; color: #059669; font-weight: 600;">10% de descuento adicional + 18 Meses Sin Intereses</div>
+              </div>
+            </div>
+            <span style="font-size: 1.2rem;">💳</span>
+          </label>
+
+          <!-- Opción 2: Tarjeta de Crédito o Débito -->
+          <label class="payment-radio-card" data-method="card">
+            <div class="payment-radio-left">
+              <input type="radio" name="paymentMethod" value="card" />
+              <div>
+                <strong style="font-size: 0.9rem; color: #111827;">Tarjeta de Crédito o Débito (Visa / Mastercard / AMEX)</strong>
+                <div style="font-size: 0.75rem; color: #6b7280;">Hasta 12 Meses Sin Intereses • Aprobación Inmediata</div>
+              </div>
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 700; color: #1434cb;">VISA / MC</span>
+          </label>
+
+          <!-- Formulario Datos Reales Tarjeta Bancaria -->
+          <div id="creditDebitCardBox" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1rem; margin-top: -0.25rem; margin-bottom: 0.65rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.82rem; font-weight: 700; color: #0b1b3d;">Ingresa los datos de tu tarjeta bancaria:</span>
+              <span id="detectedCardBrand" style="font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: #e2e8f0; color: #475569;">Bancaria</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0.65rem;">
+              <div>
+                <label class="form-label" for="ccCardNumber" style="font-size: 0.78rem;">Número de tarjeta (16 dígitos)</label>
+                <div style="position: relative;">
+                  <input type="text" id="ccCardNumber" class="form-control" placeholder="•••• •••• •••• ••••" maxlength="19" inputmode="numeric" style="padding-left: 2.2rem; font-family: monospace; letter-spacing: 0.08em; font-weight: 600;" />
+                  <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">💳</span>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="ccCardHolder" style="font-size: 0.78rem;">Nombre del titular (como aparece en la tarjeta)</label>
+                <input type="text" id="ccCardHolder" class="form-control" placeholder="Ej: CLARISA MORALES" style="text-transform: uppercase;" />
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <div>
+                  <label class="form-label" for="ccCardExpiry" style="font-size: 0.78rem;">Vigencia (MM/AA)</label>
+                  <input type="text" id="ccCardExpiry" class="form-control" placeholder="MM/AA" maxlength="5" inputmode="numeric" style="text-align: center; font-family: monospace; font-weight: 600;" />
+                </div>
+                <div>
+                  <label class="form-label" for="ccCardCvv" style="font-size: 0.78rem;">Código CVV</label>
+                  <input type="password" id="ccCardCvv" class="form-control" placeholder="•••" maxlength="4" inputmode="numeric" style="text-align: center; font-family: monospace; font-weight: 700; letter-spacing: 0.15em;" />
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="ccCardInstallments" style="font-size: 0.78rem;">Plazo de pago bancario</label>
+                <select id="ccCardInstallments" class="form-control" style="font-size: 0.85rem; height: 42px;">
+                  <option value="1">Pago de Contado (Una sola exhibición)</option>
+                  <option value="3">3 Meses Sin Intereses</option>
+                  <option value="6">6 Meses Sin Intereses</option>
+                  <option value="12">12 Meses Sin Intereses</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opción 3: PayPal -->
+          <label class="payment-radio-card" data-method="paypal">
+            <div class="payment-radio-left">
+              <input type="radio" name="paymentMethod" value="paypal" />
+              <div>
+                <strong style="font-size: 0.9rem; color: #111827;">PayPal</strong>
+                <div style="font-size: 0.75rem; color: #6b7280;">Paga de forma rápida y segura con tu cuenta PayPal</div>
+              </div>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 700; color: #003087;">PayPal</span>
+          </label>
+
+          <!-- Formulario Datos Reales PayPal -->
+          <div id="paypalAccountBox" style="display: none; background: #f0f7ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 1rem; margin-top: -0.25rem; margin-bottom: 0.65rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #003087;">Vinculación con cuenta PayPal:</span>
+              <span style="font-size: 0.72rem; color: #0284c7; font-weight: 700; background: #e0f2fe; padding: 2px 6px; border-radius: 4px;">Protección al Comprador</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0.65rem;">
+              <div>
+                <label class="form-label" for="paypalEmail" style="font-size: 0.78rem;">Correo electrónico registrado en PayPal</label>
+                <div style="position: relative;">
+                  <input type="email" id="paypalEmail" class="form-control" placeholder="ejemplo.paypal@correo.com" autocomplete="email" style="padding-left: 2.2rem;" />
+                  <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">✉️</span>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="paypalPhone" style="font-size: 0.78rem;">Teléfono celular asociado a PayPal</label>
+                <div style="position: relative;">
+                  <input type="tel" id="paypalPhone" class="form-control" placeholder="Ej: 962 123 4567 (10 dígitos)" maxlength="14" inputmode="numeric" style="padding-left: 2.2rem;" />
+                  <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">📱</span>
+                </div>
+              </div>
+              <div style="font-size: 0.74rem; color: #1e40af; background: #ffffff; padding: 0.5rem 0.65rem; border-radius: 6px; border: 1px dashed #bfdbfe; line-height: 1.4;">
+                🛡️ Tus fondos y compras están asegurados por PayPal. El cobro se procesará inmediatamente al confirmar.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem;">
+          <button type="button" class="btn-card-action-secondary" id="btnBackToShipping" style="height: 50px; width: 140px; margin: 0;">
+            ← Volver
+          </button>
+          <button type="submit" class="btn-checkout-primary" id="btnConfirmOrder" style="height: 50px; flex: 1; margin: 0;">
+            Confirmar y Pagar Pedido (Paso 3)
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= PASO 3: CONFIRMACIÓN ================= -->
+      <div class="checkout-step-pane" id="checkoutStep3" style="display: none;"></div>
+    </form>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/products-data.js"></script>
+  <script src="js/offers.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/tech.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/card.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ticket.js"></script>
+  <script src="js/info-modals.js"></script>
+  <script src="js/lightbox.js"></script>
+</body>
+</html>

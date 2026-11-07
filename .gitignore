@@ -1,0 +1,12 @@
+# Dependencias
+node_modules/
+
+# Archivos de entorno y temporales
+scratch/
+.vscode/
+*.log
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
