@@ -1769,38 +1769,112 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // =========================================================================
+    // VALIDACIÓN ESTRICTA PASO 1 (DATOS DE ENTREGA)
+    // =========================================================================
+    function validateCheckoutStep1(showToastMsg = true) {
+      const recipientNameInput = document.getElementById('checkoutRecipientName');
+      const phoneInput = document.getElementById('checkoutPhone');
+      const emailInput = document.getElementById('checkoutEmail');
+      const streetInput = document.getElementById('checkoutStreet');
+      const postalInput = document.getElementById('checkoutPostal');
+      const cityInput = document.getElementById('checkoutCity');
+
+      const nameVal = (recipientNameInput?.value || '').trim();
+      const phoneVal = (phoneInput?.value || '').trim();
+      const phoneDigits = phoneVal.replace(/\D/g, '');
+      const emailVal = (emailInput?.value || '').trim();
+      const streetVal = (streetInput?.value || '').trim();
+      const postalVal = (postalInput?.value || '').trim();
+      const cityVal = (cityInput?.value || '').trim();
+
+      // Limpiar bordes de error previos
+      [recipientNameInput, phoneInput, emailInput, streetInput, postalInput, cityInput].forEach(el => {
+        if (el) {
+          el.style.borderColor = '';
+          el.style.boxShadow = '';
+        }
+      });
+
+      const fail = (el, msg) => {
+        if (el) {
+          el.focus();
+          el.style.borderColor = '#ef4444';
+          el.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
+        }
+        if (showToastMsg) showToast(msg);
+        return false;
+      };
+
+      // 1. Nombre completo
+      if (!nameVal || nameVal.length < 5) {
+        return fail(recipientNameInput, '👤 Ingresa tu nombre y apellido completo (mínimo 5 letras).');
+      }
+      const words = nameVal.split(/\s+/).filter(w => w.length > 0);
+      if (words.length < 2 || !/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.'-]+$/.test(nameVal)) {
+        return fail(recipientNameInput, '👤 Por favor ingresa un nombre y apellido válido sin números ni caracteres extraños.');
+      }
+
+      // 2. Teléfono / WhatsApp
+      if (!phoneVal || phoneDigits.length !== 10) {
+        return fail(phoneInput, '📲 El número de WhatsApp debe tener exactamente 10 dígitos (ej: 964 108 9910).');
+      }
+      if (/^(\d)\1{9}$/.test(phoneDigits)) {
+        return fail(phoneInput, '📲 El número de teléfono no puede ser un número repetido (ej: 0000000000).');
+      }
+      if (!/^[2-9]/.test(phoneDigits)) {
+        return fail(phoneInput, '📲 Ingresa un número de celular o teléfono móvil válido de 10 dígitos.');
+      }
+
+      // 3. Correo electrónico
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        return fail(emailInput, '✉️ Ingresa un correo electrónico válido para tu ticket digital (ej: tu-nombre@gmail.com).');
+      }
+
+      // 4. Calle y número
+      if (!streetVal || streetVal.length < 6) {
+        return fail(streetInput, '📍 Ingresa tu calle y número exterior/interior completo (mínimo 6 caracteres).');
+      }
+
+      // 5. Código postal
+      if (!postalVal || !/^\d{5}$/.test(postalVal)) {
+        return fail(postalInput, '📮 El Código Postal debe tener exactamente 5 números (ej: 30700).');
+      }
+
+      // 6. Ciudad / Estado
+      if (!cityVal || cityVal.length < 3 || !/[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(cityVal)) {
+        return fail(cityInput, '🏙️ Ingresa tu Ciudad y Estado (ej: Tapachula, Chiapas).');
+      }
+
+      return true;
+    }
+
+    // Algoritmo de Luhn para validación real de tarjetas bancarias
+    function checkLuhn(digits) {
+      const clean = digits.replace(/\D/g, '');
+      if (clean.length < 15 || clean.length > 16) return false;
+      if (/^(\d)\1+$/.test(clean)) return false;
+      let sum = 0;
+      let alternate = false;
+      for (let i = clean.length - 1; i >= 0; i--) {
+        let n = parseInt(clean.charAt(i), 10);
+        if (alternate) {
+          n *= 2;
+          if (n > 9) n -= 9;
+        }
+        sum += n;
+        alternate = !alternate;
+      }
+      return (sum % 10 === 0);
+    }
+
     // Step 1 -> Step 2 Button
     const btnNext = document.getElementById('btnNextToPayment');
     if (btnNext) {
       btnNext.addEventListener('click', () => {
-        const pane1 = document.getElementById('checkoutStep1');
-        if (pane1) {
-          const requiredInputs = pane1.querySelectorAll('input[required]');
-          for (let input of requiredInputs) {
-            if (!input.value.trim()) {
-              input.focus();
-              showToast('Por favor completa los datos de entrega requeridos.');
-              return;
-            }
-          }
-          const phoneInput = document.getElementById('checkoutPhone');
-          if (phoneInput) {
-            const pv = phoneInput.value.replace(/\D/g, '');
-            if (pv.length < 10) {
-              phoneInput.focus();
-              showToast('📲 Por favor ingresa tu número de WhatsApp (10 dígitos) para enviarte el comprobante.');
-              return;
-            }
-          }
-          const emailInput = document.getElementById('checkoutEmail');
-          if (emailInput) {
-            const ev = emailInput.value.trim();
-            if (!ev || !ev.includes('@') || !ev.includes('.')) {
-              emailInput.focus();
-              showToast('✉️ Ingresa un correo electrónico válido para recibir tu ticket digital.');
-              return;
-            }
-          }
+        if (!validateCheckoutStep1(true)) {
+          return;
         }
         goToCheckoutStep(2);
       });
@@ -1817,34 +1891,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Interactive Step Badges Navigation
     document.getElementById('badgeStep1')?.addEventListener('click', () => goToCheckoutStep(1));
     document.getElementById('badgeStep2')?.addEventListener('click', () => {
-      const pane1 = document.getElementById('checkoutStep1');
-      if (pane1) {
-        const requiredInputs = pane1.querySelectorAll('input[required]');
-        for (let input of requiredInputs) {
-          if (!input.value.trim()) {
-            input.focus();
-            showToast('Por favor completa los datos de entrega primero.');
-            return;
-          }
-        }
-        const phoneInput = document.getElementById('checkoutPhone');
-        if (phoneInput) {
-          const pv = phoneInput.value.replace(/\D/g, '');
-          if (pv.length < 10) {
-            phoneInput.focus();
-            showToast('📲 Ingresa tu número de WhatsApp válido (10 dígitos).');
-            return;
-          }
-        }
-        const emailInput = document.getElementById('checkoutEmail');
-        if (emailInput) {
-          const ev = emailInput.value.trim();
-          if (!ev || !ev.includes('@') || !ev.includes('.')) {
-            emailInput.focus();
-            showToast('✉️ Ingresa un correo electrónico válido para tu ticket.');
-            return;
-          }
-        }
+      if (!validateCheckoutStep1(true)) {
+        return;
       }
       goToCheckoutStep(2);
     });
@@ -1868,6 +1916,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (DOM.checkoutForm) {
       DOM.checkoutForm.addEventListener('submit', (e) => {
         // 1. VALIDACIÓN PASO 1 (si no se completó adecuadamente)
+        if (!validateCheckoutStep1(true)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          goToCheckoutStep(1);
+          return;
+        }
+
         const recipientName = (document.getElementById('checkoutRecipientName')?.value || '').trim();
         const recipientEmail = (document.getElementById('checkoutEmail')?.value || '').trim();
         const street = (document.getElementById('checkoutStreet')?.value || '').trim();
@@ -1876,19 +1931,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const phone = (document.getElementById('checkoutPhone')?.value || '').trim();
         const phoneDigits = phone.replace(/\D/g, '');
 
-        if (!recipientName || !recipientEmail || !street || !postal || !city || phoneDigits.length < 10) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          goToCheckoutStep(1);
-          showToast('⚠️ Por favor completa todos los campos de entrega requeridos en el Paso 1.');
-          return;
-        }
-
         // 2. VALIDACIÓN PASO 2: DATOS REALES DE PAGO REQUERIDOS
         const activeRadio = DOM.checkoutForm.querySelector('input[name="paymentMethod"]:checked');
         const methodVal = activeRadio ? (activeRadio.value || activeRadio.closest('.payment-radio-card')?.dataset.method) : 'callejon';
 
         let paymentLabel = 'Tarjeta Departamental Callejón Mágico';
+
+        const cartSubtotal = State.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const lastCharge = window.__lastCallejonCharge || {};
+        const discount = lastCharge.discount || 0;
+        const netSubtotal = Math.max(0, cartSubtotal - discount);
+        const iva = lastCharge.iva !== undefined ? lastCharge.iva : Math.round(netSubtotal * 0.16 * 100) / 100;
+        const totalAmount = lastCharge.finalAmount || Math.round((netSubtotal + iva) * 100) / 100;
 
         if (methodVal === 'card') {
           const ccNumberInput = document.getElementById('ccCardNumber');
@@ -1899,7 +1953,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const brandBadge = document.getElementById('detectedCardBrand');
 
           const rawNum = (ccNumberInput?.value || '').replace(/\D/g, '');
-          if (rawNum.length < 15 || rawNum.length > 16) {
+          if (rawNum.length < 15 || rawNum.length > 16 || !checkLuhn(rawNum)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             if (ccNumberInput) {
@@ -1907,7 +1961,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ccNumberInput.style.borderColor = '#ef4444';
               ccNumberInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
             }
-            showToast('💳 Ingresa un número de tarjeta de crédito o débito válido (15 o 16 dígitos).');
+            showToast('💳 Ingresa un número de tarjeta de crédito o débito real y válido (15 o 16 dígitos verificados por banco).');
             return;
           } else if (ccNumberInput) {
             ccNumberInput.style.borderColor = '';
@@ -1915,7 +1969,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           const holder = (ccHolderInput?.value || '').trim();
-          if (holder.length < 3) {
+          const holderWords = holder.split(/\s+/).filter(w => w.length > 0);
+          if (holder.length < 5 || holderWords.length < 2 || !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.'-]+$/.test(holder)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             if (ccHolderInput) {
@@ -1923,7 +1978,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ccHolderInput.style.borderColor = '#ef4444';
               ccHolderInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
             }
-            showToast('👤 Ingresa el nombre del titular como figura en la tarjeta bancaria.');
+            showToast('👤 Ingresa el nombre y apellido del titular como figura en la tarjeta bancaria.');
             return;
           } else if (ccHolderInput) {
             ccHolderInput.style.borderColor = '';
@@ -1945,7 +2000,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           const expMonth = parseInt(expMatch[1], 10);
           const expYear = parseInt(expMatch[2], 10);
-          if (expMonth < 1 || expMonth > 12 || expYear < 26) {
+          const now = new Date();
+          const curY = now.getFullYear() % 100; // e.g. 26
+          const curM = now.getMonth() + 1; // 1-12
+
+          if (expMonth < 1 || expMonth > 12 || expYear < curY || (expYear === curY && expMonth < curM)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             if (ccExpiryInput) {
@@ -1953,7 +2012,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ccExpiryInput.style.borderColor = '#ef4444';
               ccExpiryInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
             }
-            showToast('⚠️ La vigencia de tu tarjeta debe ser un mes entre 01-12 y año 26 en adelante.');
+            showToast('⚠️ La tarjeta está vencida o el mes es inválido. Ingresa una vigencia vigente.');
             return;
           } else if (ccExpiryInput) {
             ccExpiryInput.style.borderColor = '';
@@ -1969,7 +2028,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ccCvvInput.style.borderColor = '#ef4444';
               ccCvvInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
             }
-            showToast('🔒 Ingresa el código de seguridad CVV (3 o 4 dígitos al reverso de la tarjeta).');
+            showToast('🔒 Ingresa el código de seguridad CVV (3 o 4 dígitos numéricos).');
             return;
           } else if (ccCvvInput) {
             ccCvvInput.style.borderColor = '';
@@ -1987,7 +2046,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const ppPhoneInput = document.getElementById('paypalPhone');
 
           const ppEmail = (ppEmailInput?.value || '').trim();
-          if (!ppEmail || !ppEmail.includes('@') || !ppEmail.includes('.')) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!ppEmail || !emailRegex.test(ppEmail)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             if (ppEmailInput) {
@@ -2003,7 +2063,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           const rawPpPhone = (ppPhoneInput?.value || '').replace(/\D/g, '');
-          if (rawPpPhone.length < 10) {
+          if (rawPpPhone.length !== 10 || /^(\d)\1{9}$/.test(rawPpPhone)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             if (ppPhoneInput) {
@@ -2011,7 +2071,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ppPhoneInput.style.borderColor = '#ef4444';
               ppPhoneInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
             }
-            showToast('📱 Ingresa el teléfono celular vinculado a tu cuenta PayPal (10 dígitos).');
+            showToast('📱 Ingresa el teléfono celular válido de 10 dígitos vinculado a tu cuenta PayPal.');
             return;
           } else if (ppPhoneInput) {
             ppPhoneInput.style.borderColor = '';
@@ -2021,21 +2081,43 @@ document.addEventListener('DOMContentLoaded', () => {
           paymentLabel = `PayPal (${ppEmail})`;
 
         } else {
-          paymentLabel = `Tarjeta Departamental Callejón Mágico`;
+          // Tarjeta Departamental Callejón Mágico
+          let userLoggedIn = false;
+          let availableBalance = 0;
+
+          if (window.DavantiAuth && typeof window.DavantiAuth.getActiveUser === 'function') {
+            const u = window.DavantiAuth.getActiveUser();
+            if (u && u.fullName) userLoggedIn = true;
+          }
+          if (!userLoggedIn && window.CallejonAuth && typeof window.CallejonAuth.getActiveUser === 'function') {
+            const u = window.CallejonAuth.getActiveUser();
+            if (u && u.fullName) userLoggedIn = true;
+          }
+
+          if (window.CallejonCard && typeof window.CallejonCard.getCard === 'function') {
+            const c = window.CallejonCard.getCard();
+            if (c) availableBalance = Number(c.balance) || 0;
+          }
+
+          if (!userLoggedIn) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            showToast('🔒 Debes iniciar sesión con tu cuenta para pagar con tu Tarjeta Callejón Mágico, o selecciona Tarjeta Bancaria / PayPal.');
+            return;
+          }
+
+          if (availableBalance <= 0 || availableBalance < totalAmount) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            showToast(`⚠️ Saldo insuficiente en tu Tarjeta Callejón Mágico ($${availableBalance.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN disponible). Por favor selecciona otro método de pago.`);
+            return;
+          }
+
+          paymentLabel = `Tarjeta Departamental Callejón Mágico (${lastCharge.msi || 18} MSI)`;
         }
 
         e.preventDefault();
         const orderNum = 'CLM-' + Math.floor(100000 + Math.random() * 900000);
-        const cartSubtotal = State.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const lastCharge = window.__lastCallejonCharge || {};
-        const discount = lastCharge.discount || 0;
-        const netSubtotal = Math.max(0, cartSubtotal - discount);
-        const iva = lastCharge.iva !== undefined ? lastCharge.iva : Math.round(netSubtotal * 0.16 * 100) / 100;
-        const totalAmount = lastCharge.finalAmount || Math.round((netSubtotal + iva) * 100) / 100;
-
-        if (methodVal === 'callejon') {
-          paymentLabel = `Tarjeta Departamental Callejón Mágico (${lastCharge.msi || 18} MSI)`;
-        }
 
         // Read charge details if handled by CallejonCard
         const earnedPoints = lastCharge.pointsEarned || Math.max(25, Math.round(totalAmount * 0.05));
@@ -2114,22 +2196,22 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="checkout-confirm-actions">
-              <button type="button" class="checkout-action-btn btn-whatsapp" onclick="if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${orderNum}', '${phone}');}">
+              <button type="button" class="checkout-action-btn btn-whatsapp" onclick="event.stopPropagation(); if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${orderNum}', '${phone}');}">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.53 7.35C9.34 7.35 9.04 7.42 8.78 7.7C8.52 7.97 7.81 8.63 7.81 10C7.81 11.37 8.81 12.69 8.94 12.87C9.08 13.06 11.03 16.06 14 17.35C14.71 17.65 15.26 17.84 15.7 17.98C16.41 18.2 17.06 18.17 17.57 18.1C18.14 18.01 19.33 17.38 19.58 16.68C19.83 15.98 19.83 15.38 19.76 15.26C19.69 15.13 19.5 15.06 19.22 14.92C18.94 14.78 17.57 14.1 17.31 14.01C17.06 13.92 16.87 13.87 16.68 14.15C16.5 14.43 15.96 15.06 15.8 15.25C15.64 15.43 15.49 15.46 15.21 15.32C14.93 15.18 13.75 14.79 12.35 13.54C11.26 12.57 10.53 11.37 10.31 11C10.1 10.63 10.29 10.43 10.43 10.29C10.56 10.16 10.71 9.96 10.86 9.79C11 9.61 11.06 9.48 11.15 9.29C11.25 9.11 11.19 8.94 11.12 8.81C11.06 8.67 10.5 7.31 10.28 6.78C10.06 6.25 9.83 6.32 9.67 6.32C9.53 6.32 9.34 6.31 9.53 7.35Z"/>
                 </svg>
                 <span>Abrir / Reenviar en WhatsApp</span>
               </button>
-              <button type="button" class="checkout-action-btn btn-view-ticket" onclick="if(window.CallejonTicket){CallejonTicket.open('${orderNum}');}">
+              <button type="button" class="checkout-action-btn btn-view-ticket" onclick="event.stopPropagation(); document.getElementById('checkoutModal')?.classList.remove('active'); if(window.CallejonTicket){CallejonTicket.open('${orderNum}');}">
                 <span>🧾 Ver / Imprimir Ticket de Compra</span>
               </button>
-              <button type="button" class="checkout-action-btn btn-resend-email" onclick="if(window.CallejonTicket){CallejonTicket.sendEmailFromOrder('${orderNum}', '${recipientEmail}');}">
+              <button type="button" class="checkout-action-btn btn-resend-email" onclick="event.stopPropagation(); if(window.CallejonTicket){CallejonTicket.sendEmailFromOrder('${orderNum}', '${recipientEmail}');}">
                 <span>✉️ Reenviar Ticket a mi Correo</span>
               </button>
-              <button type="button" class="checkout-action-btn btn-track-order" onclick="if(window.CallejonOrders){CallejonOrders.openModal('${orderNum}');}">
+              <button type="button" class="checkout-action-btn btn-track-order" onclick="event.stopPropagation(); document.getElementById('checkoutModal')?.classList.remove('active'); if(window.CallejonOrders){CallejonOrders.openModal('${orderNum}');}">
                 <span>📦 Rastrear este pedido en Mis Pedidos</span>
               </button>
-              <button type="button" class="checkout-action-btn btn-keep-browsing" onclick="location.reload()">
+              <button type="button" class="checkout-action-btn btn-keep-browsing" onclick="document.getElementById('checkoutModal')?.classList.remove('active'); document.getElementById('modalBackdrop')?.classList.remove('active'); document.body.style.overflow=''; location.reload();">
                 <span>Seguir explorando catálogo</span>
               </button>
             </div>

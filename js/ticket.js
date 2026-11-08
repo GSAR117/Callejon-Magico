@@ -915,19 +915,6 @@ _Conserva este comprobante oficial para cualquier consulta o garantía._`
         this.close();
       });
 
-      // Cerrar al hacer clic en cualquier parte fuera de la ventana del ticket
-      document.addEventListener('click', (e) => {
-        const modal = document.getElementById('ticketModal');
-        if (modal && modal.classList.contains('active')) {
-          const isTrigger = e.target && typeof e.target.closest === 'function'
-            ? e.target.closest('.btn-checkout-ticket-view, .btn-view-order-ticket, .open-ticket-btn')
-            : null;
-          if (!modal.contains(e.target) && !isTrigger) {
-            this.close();
-          }
-        }
-      });
-
       // Cerrar con tecla Escape
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {

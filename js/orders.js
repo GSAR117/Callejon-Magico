@@ -370,22 +370,14 @@
           this.openModal();
           return;
         }
-
-        // 2. Cerrar al hacer clic en cualquier parte fuera del cuadro de pedidos cuando esté abierto
-        const modal = document.getElementById('ordersModal');
-        if (modal && modal.classList.contains('active')) {
-          if (!modal.contains(e.target)) {
-            this.closeModal();
-          }
-        }
       });
 
-      // 3. Cerrar al hacer clic en el fondo borroso (backdrop)
+      // 2. Cerrar al hacer clic en el fondo borroso (backdrop)
       document.getElementById('modalBackdrop')?.addEventListener('click', () => {
         this.closeModal();
       });
 
-      // 4. Cerrar con tecla Escape
+      // 3. Cerrar con tecla Escape
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           this.closeModal();

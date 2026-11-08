@@ -4120,6 +4120,12 @@
   margin-bottom: 0.35rem;
 }
 
+/* Modal layers priority: Ticket & Orders modals must display on top of checkout */
+#ticketModal.modal-window,
+#ordersModal.modal-window {
+  z-index: 10001 !important;
+}
+
 
 
 
