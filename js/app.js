@@ -2082,38 +2082,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else {
           // Tarjeta Departamental Callejón Mágico
-          let userLoggedIn = false;
-          let availableBalance = 0;
-
-          if (window.DavantiAuth && typeof window.DavantiAuth.getActiveUser === 'function') {
-            const u = window.DavantiAuth.getActiveUser();
-            if (u && u.fullName) userLoggedIn = true;
+          let user = null;
+          if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
+            user = window.DavantiAuth.getCurrentUser();
           }
-          if (!userLoggedIn && window.CallejonAuth && typeof window.CallejonAuth.getActiveUser === 'function') {
-            const u = window.CallejonAuth.getActiveUser();
-            if (u && u.fullName) userLoggedIn = true;
+          if (!user && window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
+            user = window.CallejonAuth.getCurrentUser();
           }
-
-          if (window.CallejonCard && typeof window.CallejonCard.getCard === 'function') {
-            const c = window.CallejonCard.getCard();
-            if (c) availableBalance = Number(c.balance) || 0;
+          if (!user) {
+            try {
+              const raw = localStorage.getItem('davanti_current_user') || localStorage.getItem('callejon_current_user');
+              if (raw) user = JSON.parse(raw);
+            } catch (err) {}
           }
 
-          if (!userLoggedIn) {
+          if (!user || (!user.fullName && !user.email)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             showToast('🔒 Debes iniciar sesión con tu cuenta para pagar con tu Tarjeta Callejón Mágico, o selecciona Tarjeta Bancaria / PayPal.');
             return;
           }
 
-          if (availableBalance <= 0 || availableBalance < totalAmount) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            showToast(`⚠️ Saldo insuficiente en tu Tarjeta Callejón Mágico ($${availableBalance.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN disponible). Por favor selecciona otro método de pago.`);
-            return;
+          // Procesar cargo a través de CallejonCard
+          const selectedMsi = lastCharge.msi || 3;
+          let chargeResult = null;
+          if (window.CallejonCard && typeof window.CallejonCard.charge === 'function') {
+            chargeResult = window.CallejonCard.charge(totalAmount, 'Compra en tienda departamental Callejón Mágico', selectedMsi);
+            if (!chargeResult || !chargeResult.success) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              showToast(chargeResult?.message || '⚠️ No se pudo procesar el cargo con tu Tarjeta Callejón Mágico.');
+              return;
+            }
           }
 
-          paymentLabel = `Tarjeta Departamental Callejón Mágico (${lastCharge.msi || 18} MSI)`;
+          paymentLabel = `Tarjeta Departamental Callejón Mágico (${selectedMsi} MSI)`;
         }
 
         e.preventDefault();
