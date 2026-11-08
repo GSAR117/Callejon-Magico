@@ -77,9 +77,13 @@ ul, ol {
   letter-spacing: 0.05em;
   padding: 0.5rem 1rem;
   border-bottom: 1px solid rgba(197, 143, 56, 0.28);
+}
+
+.top-ticker .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .top-ticker-content {
@@ -98,6 +102,8 @@ ul, ol {
   border-radius: var(--radius-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .top-ticker-links {
@@ -105,10 +111,32 @@ ul, ol {
   gap: 1.5rem;
   font-size: 0.75rem;
   color: #a0aec0;
+  white-space: nowrap;
 }
 
 .top-ticker-links a:hover {
   color: var(--color-gold-light);
+}
+
+@media (max-width: 992px) {
+  .top-ticker {
+    padding: 0.4rem 0.65rem;
+  }
+  .top-ticker .container {
+    justify-content: center !important;
+  }
+  .top-ticker-content {
+    justify-content: center !important;
+    text-align: center;
+    font-size: 0.74rem;
+    line-height: 1.35;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin: 0 auto;
+  }
+  .top-ticker-links {
+    display: none !important;
+  }
 }
 
 /* ==========================================================================
