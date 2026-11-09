@@ -785,6 +785,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // MODALS & DRAWERS HANDLERS
   // ==========================================
+  function getActiveAuthUser() {
+    let user = null;
+    if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
+      user = window.DavantiAuth.getCurrentUser();
+    }
+    if (!user && window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
+      user = window.CallejonAuth.getCurrentUser();
+    }
+    if (!user) {
+      try {
+        const raw = localStorage.getItem('davanti_current_user') || localStorage.getItem('callejon_current_user');
+        if (raw) user = JSON.parse(raw);
+      } catch (err) {}
+    }
+    return (user && (user.email || user.fullName || user.id)) ? user : null;
+  }
+
   function openDrawer(type) {
     closeAllModals();
     if (DOM.backdrop) DOM.backdrop.classList.add('active');
@@ -794,6 +811,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openModal(type) {
+    if (type === 'checkout') {
+      const activeUser = getActiveAuthUser();
+      if (!activeUser) {
+        closeAllModals();
+        sessionStorage.setItem('callejon_pending_checkout', 'true');
+        if (window.DavantiAuth && typeof window.DavantiAuth.openAuth === 'function') {
+          window.DavantiAuth.openAuth('login');
+        } else if (window.DavantiAuth && typeof window.DavantiAuth.openModal === 'function') {
+          window.DavantiAuth.openModal('login');
+        }
+        showToast('🔒 Debes iniciar sesión con tu cuenta para continuar con tu compra.');
+        return;
+      }
+    }
+
     closeAllModals();
     if (DOM.backdrop) DOM.backdrop.classList.add('active');
     if (type === 'quickview' && DOM.quickViewModal) DOM.quickViewModal.classList.add('active');
@@ -802,7 +834,7 @@ document.addEventListener('DOMContentLoaded', () => {
       DOM.checkoutModal.classList.add('active');
       goToCheckoutStep(1);
 
-      // Garantizar que todos los campos de entrega comiencen completamente en blanco para que el cliente los llene
+      const activeUser = getActiveAuthUser();
       const nameInput = document.getElementById('checkoutRecipientName');
       const phoneInput = document.getElementById('checkoutPhone');
       const emailInput = document.getElementById('checkoutEmail');
@@ -810,21 +842,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const postalInput = document.getElementById('checkoutPostal');
       const cityInput = document.getElementById('checkoutCity');
 
-      if (nameInput) nameInput.value = '';
-      if (phoneInput) phoneInput.value = '';
-      if (emailInput) emailInput.value = '';
-      if (streetInput) streetInput.value = '';
-      if (postalInput) postalInput.value = '';
-      if (cityInput) cityInput.value = '';
+      // Auto-completar datos de la cuenta activa
+      if (nameInput) nameInput.value = activeUser?.fullName || '';
+      if (emailInput) emailInput.value = activeUser?.email || '';
+      if (phoneInput && !phoneInput.value) phoneInput.value = activeUser?.phone || '';
+      if (streetInput && !streetInput.value) streetInput.value = activeUser?.street || '';
+      if (postalInput && !postalInput.value) postalInput.value = activeUser?.postal || '';
+      if (cityInput && !cityInput.value) cityInput.value = activeUser?.city || '';
 
-      // Limpiar también campos de pago en Paso 2 para exigir datos reales en cada compra
+      // Limpiar campos de tarjeta bancaria
       const ccNum = document.getElementById('ccCardNumber');
       const ccHolder = document.getElementById('ccCardHolder');
       const ccExp = document.getElementById('ccCardExpiry');
       const ccCvv = document.getElementById('ccCardCvv');
 
       if (ccNum) ccNum.value = '';
-      if (ccHolder) ccHolder.value = '';
+      if (ccHolder) ccHolder.value = (activeUser?.fullName || '').toUpperCase();
       if (ccExp) ccExp.value = '';
       if (ccCvv) ccCvv.value = '';
     }
@@ -1761,6 +1794,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Checkout Modal Proceed Button
     if (DOM.btnProceedCheckout) {
       DOM.btnProceedCheckout.addEventListener('click', () => {
+        if (!State.cart || State.cart.length === 0) {
+          showToast('🛒 Tu carrito está vacío. Agrega artículos antes de continuar.');
+          return;
+        }
+
+        const activeUser = getActiveAuthUser();
+        if (!activeUser) {
+          closeAllModals();
+          sessionStorage.setItem('callejon_pending_checkout', 'true');
+          if (window.DavantiAuth && typeof window.DavantiAuth.openAuth === 'function') {
+            window.DavantiAuth.openAuth('login');
+          } else if (window.DavantiAuth && typeof window.DavantiAuth.openModal === 'function') {
+            window.DavantiAuth.openModal('login');
+          }
+          showToast('🔒 Debes iniciar sesión con tu cuenta para continuar con tu compra.');
+          return;
+        }
+
         closeAllModals();
         openModal('checkout');
       });
@@ -1912,6 +1963,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Checkout Form Submission (Step 2 -> Step 3: Confirmación con validación estricta de pago)
     if (DOM.checkoutForm) {
       DOM.checkoutForm.addEventListener('submit', (e) => {
+        // 0. VERIFICACIÓN CRÍTICA: SESIÓN ACTIVA OBLIGATORIA PARA CONFIRMAR COMPRAS
+        const activeUser = getActiveAuthUser();
+        if (!activeUser || (!activeUser.email && !activeUser.fullName)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          closeAllModals();
+          sessionStorage.setItem('callejon_pending_checkout', 'true');
+          if (window.DavantiAuth && typeof window.DavantiAuth.openAuth === 'function') {
+            window.DavantiAuth.openAuth('login');
+          } else if (window.DavantiAuth && typeof window.DavantiAuth.openModal === 'function') {
+            window.DavantiAuth.openModal('login');
+          }
+          showToast('🔒 Tu sesión no está activa. Inicia sesión con tu cuenta para confirmar tu compra.');
+          return;
+        }
+
         // 1. VALIDACIÓN PASO 1 (si no se completó adecuadamente)
         if (!validateCheckoutStep1(true)) {
           e.preventDefault();
@@ -1929,20 +1996,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneDigits = phone.replace(/\D/g, '');
 
         // 2. VALIDACIÓN PASO 2: DATOS REALES DE PAGO REQUERIDOS
-        let activeUser = null;
-        if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
-          activeUser = window.DavantiAuth.getCurrentUser();
-        }
-        if (!activeUser && window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
-          activeUser = window.CallejonAuth.getCurrentUser();
-        }
-        if (!activeUser) {
-          try {
-            const raw = localStorage.getItem('davanti_current_user') || localStorage.getItem('callejon_current_user');
-            if (raw) activeUser = JSON.parse(raw);
-          } catch (err) {}
-        }
-
         const activeRadio = DOM.checkoutForm.querySelector('input[name="paymentMethod"]:checked');
         const methodVal = activeRadio ? (activeRadio.value || activeRadio.closest('.payment-radio-card')?.dataset.method) : 'callejon';
 
@@ -2241,6 +2294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI,
     updateWishlistUI,
     showToast,
+    openCheckoutModal: () => openModal('checkout'),
     openOrdersModal: (targetNum) => window.CallejonOrders?.openModal(targetNum)
   };
 

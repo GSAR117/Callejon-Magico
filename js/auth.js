@@ -803,6 +803,16 @@
             window.DavantiApp.updateCartUI();
           }
           this.showToast(`✨ ${result.message}`);
+
+          // Reanudar checkout si el cliente había solicitado pagar antes de iniciar sesión
+          if (sessionStorage.getItem('callejon_pending_checkout') === 'true') {
+            sessionStorage.removeItem('callejon_pending_checkout');
+            setTimeout(() => {
+              if (window.DavantiApp && typeof window.DavantiApp.openCheckoutModal === 'function') {
+                window.DavantiApp.openCheckoutModal();
+              }
+            }, 350);
+          }
         } else {
           this.showError(result.message);
         }
@@ -835,6 +845,16 @@
             window.DavantiApp.updateCartUI();
           }
           this.showToast(`✨ ¡Bienvenido/a a Callejón Mágico, ${name.split(' ')[0]}! Tu usuario asignado es @${result.user.username}`);
+
+          // Reanudar checkout si el cliente había solicitado pagar antes de crear su cuenta
+          if (sessionStorage.getItem('callejon_pending_checkout') === 'true') {
+            sessionStorage.removeItem('callejon_pending_checkout');
+            setTimeout(() => {
+              if (window.DavantiApp && typeof window.DavantiApp.openCheckoutModal === 'function') {
+                window.DavantiApp.openCheckoutModal();
+              }
+            }, 350);
+          }
         } else {
           this.showError(result.message);
         }
@@ -861,6 +881,7 @@
     Engine: AuthEngine,
     UI: AuthUI,
     openAuth: (tab) => AuthUI.openModal(tab),
+    openModal: (tab) => AuthUI.openModal(tab),
     showToast: (msg) => AuthUI.showToast(msg),
     getCurrentUser: () => AuthEngine.getCurrentUser(),
     generateRandomUsername
