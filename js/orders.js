@@ -3,6 +3,7 @@
  * CALLEJÓN MÁGICO — SISTEMA DE GESTIÓN DE PEDIDOS Y RASTREO EN VIVO
  * Historial de Compras, Detalle de Artículos Adquiridos, Guías de Envío,
  * Línea de Tiempo de Rastreo e Integración con Carrito y Pasarela.
+ * Aislamiento estricto por cuenta de usuario (Email / User ID).
  * ==========================================================================
  */
 
@@ -11,10 +12,13 @@
 
   const STORAGE_KEY = 'callejon_user_orders';
 
-  // Pedido demostrativo inicial de cortesía para mostrar rastreo realista
+  // Pedido demostrativo inicial de cortesía exclusivo para el usuario demo Carlos Mendoza
   const INITIAL_DEMO_ORDERS = [
     {
       orderNum: 'CLM-784210',
+      userId: 'usr_demo_1',
+      userEmail: 'carlos@callejonmagico.com',
+      username: 'davanti_orion99',
       date: '28 de Octubre, 2026, 04:30 PM',
       timestamp: 1793200000000,
       status: 'in-transit',
@@ -25,6 +29,7 @@
       estimatedDelivery: 'Mañana antes de las 6:00 PM',
       recipient: {
         name: 'Carlos Mendoza',
+        email: 'carlos@callejonmagico.com',
         phone: '55 9876 5432',
         street: '8A Avenida Sur no. 54 col. Centro entre 4 y 6 poniente (Plantel Centro)',
         city: 'Tapachula, Chiapas'
@@ -48,22 +53,45 @@
     }
   ];
 
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   const OrdersEngine = {
-    getOrders() {
+    getActiveUser() {
       try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DEMO_ORDERS));
-          return [...INITIAL_DEMO_ORDERS];
+        if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
+          const u = window.DavantiAuth.getCurrentUser();
+          if (u && (u.email || u.id || u.fullName)) return u;
         }
-        const parsed = JSON.parse(stored);
-        return Array.isArray(parsed) ? parsed : [...INITIAL_DEMO_ORDERS];
+        if (window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
+          const u = window.CallejonAuth.getCurrentUser();
+          if (u && (u.email || u.id || u.fullName)) return u;
+        }
+        const raw = localStorage.getItem('davanti_current_user') || localStorage.getItem('callejon_current_user');
+        return raw ? JSON.parse(raw) : null;
       } catch (e) {
-        return [...INITIAL_DEMO_ORDERS];
+        return null;
       }
     },
 
-    saveOrders(orders) {
+    getAllRawOrders() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return [];
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    },
+
+    saveAllRawOrders(orders) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
       } catch (e) {
@@ -71,13 +99,115 @@
       }
     },
 
+    getOrderByNumber(orderNum) {
+      if (!orderNum) return null;
+      const cleanNum = String(orderNum).trim().toUpperCase();
+      const all = this.getAllRawOrders();
+      let found = all.find(o => String(o.orderNum).trim().toUpperCase() === cleanNum);
+      if (found) return found;
+
+      // Buscar en claves aisladas por usuario
+      const activeUser = this.getActiveUser();
+      if (activeUser && activeUser.email) {
+        try {
+          const emailKey = 'callejon_orders_' + activeUser.email.toLowerCase().trim();
+          const userSpecific = JSON.parse(localStorage.getItem(emailKey) || '[]');
+          found = userSpecific.find(o => String(o.orderNum).trim().toUpperCase() === cleanNum);
+          if (found) return found;
+        } catch (e) {}
+      }
+
+      // Buscar en demo orders
+      return INITIAL_DEMO_ORDERS.find(o => String(o.orderNum).trim().toUpperCase() === cleanNum) || null;
+    },
+
     /**
-     * Registra un nuevo pedido completado en la pasarela de compra
+     * Devuelve ÚNICAMENTE los pedidos pertenecientes a la cuenta de usuario activa.
+     * AISLAMIENTO ESTRICTO: Dos usuarios con nombres idénticos o similares
+     * pero correos / IDs diferentes JAMÁS compartirán historial de pedidos.
+     */
+    getOrders(userParam = null) {
+      const activeUser = userParam || this.getActiveUser();
+
+      // Caso 1: Invitado sin sesión
+      if (!activeUser || (!activeUser.email && !activeUser.id)) {
+        try {
+          const guestOrders = JSON.parse(sessionStorage.getItem('callejon_guest_orders') || '[]');
+          return Array.isArray(guestOrders) ? guestOrders : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      const userEmail = (activeUser.email || '').trim().toLowerCase();
+      const userId = activeUser.id ? String(activeUser.id).trim() : null;
+
+      // Caso 2: Usuario demo oficial (Carlos Mendoza)
+      const isDemoUser = (userEmail === 'carlos@callejonmagico.com' || userId === 'usr_demo_1');
+
+      // Caso 3: Filtrar pedidos de la base de datos por Email o ID único
+      // NUNCA por nombre (para evitar colisiones entre personas con el mismo nombre)
+      const allOrders = this.getAllRawOrders();
+      const userOrders = allOrders.filter(order => {
+        if (!order) return false;
+
+        // 1. Coincidencia por ID de cuenta único
+        if (userId && order.userId && String(order.userId).trim() === userId) {
+          return true;
+        }
+
+        // 2. Coincidencia por Correo Electrónico
+        const orderEmail = (order.userEmail || order.recipient?.email || '').trim().toLowerCase();
+        if (userEmail && orderEmail && orderEmail === userEmail) {
+          return true;
+        }
+
+        return false;
+      });
+
+      // Incluir también los pedidos guardados en la clave aislada local del usuario si faltara alguno
+      if (userEmail) {
+        try {
+          const isolated = JSON.parse(localStorage.getItem('callejon_orders_' + userEmail) || '[]');
+          if (Array.isArray(isolated)) {
+            isolated.forEach(isoOrder => {
+              if (!userOrders.some(o => o.orderNum === isoOrder.orderNum)) {
+                userOrders.push(isoOrder);
+              }
+            });
+          }
+        } catch (e) {}
+      }
+
+      // Ordenar cronológicamente (más recientes primero)
+      userOrders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      // Solo si es Carlos Mendoza y no tiene pedidos nuevos, mostrar el pedido de cortesía demo
+      if (isDemoUser && userOrders.length === 0) {
+        return [...INITIAL_DEMO_ORDERS];
+      }
+
+      // Para CUALQUIER otro usuario (incluso con el mismo nombre 'tito tito capotito'):
+      // Se devuelven única y exclusivamente sus propios pedidos. Si es cuenta nueva, devuelve [].
+      return userOrders;
+    },
+
+    /**
+     * Registra un nuevo pedido completado en la pasarela de compra,
+     * vinculándolo permanentemente al email y ID de la cuenta activa.
      */
     addOrder(orderData) {
-      const orders = this.getOrders();
+      const activeUser = this.getActiveUser();
+      const userEmail = (activeUser?.email || orderData.userEmail || orderData.recipient?.email || '').trim().toLowerCase();
+      const userId = activeUser?.id || orderData.userId || null;
+      const username = activeUser?.username || orderData.username || null;
+      const recipientEmail = (orderData.recipient?.email || userEmail || '').trim().toLowerCase();
+
       const newOrder = {
         orderNum: orderData.orderNum || ('CLM-' + Math.floor(100000 + Math.random() * 900000)),
+        userId: userId,
+        userEmail: userEmail || recipientEmail,
+        username: username,
         date: new Date().toLocaleDateString('es-MX', {
           year: 'numeric',
           month: 'long',
@@ -93,15 +223,16 @@
         trackingNumber: 'EST-MX-' + Math.floor(100000000 + Math.random() * 900000000),
         estimatedDelivery: '48 a 72 horas hábiles',
         recipient: {
-          name: orderData.recipient?.name || 'Cliente Callejón Mágico',
+          name: orderData.recipient?.name || activeUser?.fullName || 'Cliente Callejón Mágico',
+          email: recipientEmail,
           phone: orderData.recipient?.phone || '55 1234 5678',
           street: orderData.recipient?.street || 'Paseo de la Reforma 222',
           city: orderData.recipient?.city || 'Ciudad de México'
         },
         paymentMethod: orderData.paymentMethod || 'Tarjeta Departamental Callejón Mágico',
         msi: orderData.msi || 1,
-        pointsEarned: orderData.pointsEarned || Math.round(orderData.total * 0.05),
-        subtotal: orderData.subtotal || orderData.total,
+        pointsEarned: orderData.pointsEarned || Math.round((orderData.total || 0) * 0.05),
+        subtotal: orderData.subtotal || orderData.total || 0,
         discount: orderData.discount || 0,
         total: orderData.total || 0,
         items: Array.isArray(orderData.items) && orderData.items.length > 0 
@@ -119,17 +250,46 @@
             ]
       };
 
-      orders.unshift(newOrder);
-      this.saveOrders(orders);
+      // 1. Guardar en registro general
+      const allOrders = this.getAllRawOrders();
+      allOrders.unshift(newOrder);
+      this.saveAllRawOrders(allOrders);
 
-      // Si hay usuario en sesión, vincularlo también a su cuenta
+      // 2. Guardar en clave aislada por email de usuario
+      const targetEmail = userEmail || recipientEmail;
+      if (targetEmail) {
+        try {
+          const userKey = 'callejon_orders_' + targetEmail;
+          const userSpecific = JSON.parse(localStorage.getItem(userKey) || '[]');
+          userSpecific.unshift(newOrder);
+          localStorage.setItem(userKey, JSON.stringify(userSpecific));
+        } catch (e) {}
+      }
+
+      // 3. Vincular a cuenta activa en DavantiAuth / LocalStorage
       try {
-        const currentUserRaw = localStorage.getItem('davanti_current_user');
-        if (currentUserRaw) {
-          const u = JSON.parse(currentUserRaw);
-          if (!u.orders) u.orders = [];
-          u.orders.unshift(newOrder);
-          localStorage.setItem('davanti_current_user', JSON.stringify(u));
+        if (activeUser) {
+          if (!activeUser.orders) activeUser.orders = [];
+          activeUser.orders.unshift(newOrder);
+          localStorage.setItem('davanti_current_user', JSON.stringify(activeUser));
+
+          const usersRaw = localStorage.getItem('davanti_users');
+          if (usersRaw) {
+            const users = JSON.parse(usersRaw);
+            const idx = users.findIndex(u => (userId && u.id === userId) || (userEmail && u.email.toLowerCase() === userEmail));
+            if (idx > -1) {
+              if (!users[idx].orders) users[idx].orders = [];
+              users[idx].orders.unshift(newOrder);
+              localStorage.setItem('davanti_users', JSON.stringify(users));
+            }
+          }
+        } else {
+          // Si es compra de invitado sin cuenta, almacenar en sesión temporal
+          try {
+            const guestOrders = JSON.parse(sessionStorage.getItem('callejon_guest_orders') || '[]');
+            guestOrders.unshift(newOrder);
+            sessionStorage.setItem('callejon_guest_orders', JSON.stringify(guestOrders));
+          } catch (e) {}
         }
       } catch (err) {}
 
@@ -141,6 +301,15 @@
     init() {
       this.injectModal();
       this.bindTriggers();
+
+      // Escuchar cambios de sesión para refrescar la lista de pedidos en vivo
+      window.addEventListener('storage', (e) => {
+        if (!e.key || e.key === 'davanti_current_user' || e.key === STORAGE_KEY) {
+          if (document.getElementById('ordersModal')?.classList.contains('active')) {
+            this.renderOrders();
+          }
+        }
+      });
     },
 
     injectModal() {
@@ -172,9 +341,35 @@
       const container = document.getElementById('ordersModalContent');
       if (!container) return;
 
+      const activeUser = OrdersEngine.getActiveUser();
       const orders = OrdersEngine.getOrders();
 
+      // Caso A: No hay sesión iniciada
+      if (!activeUser || (!activeUser.email && !activeUser.id)) {
+        if (!orders || orders.length === 0) {
+          container.innerHTML = `
+            <div class="orders-empty-state">
+              <div class="orders-empty-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <h3 class="orders-empty-title">Inicia sesión para ver tu historial</h3>
+              <p class="orders-empty-desc">Para proteger tu privacidad, cada cuenta de usuario tiene su propio historial exclusivo de compras y guías de rastreo. Inicia sesión para consultar tus pedidos.</p>
+              <button type="button" class="btn-checkout-primary" onclick="if(window.DavantiAuth){CallejonOrders.closeModal(); DavantiAuth.openModal('login');}" style="max-width: 240px; margin: 0 auto;">
+                Iniciar Sesión
+              </button>
+            </div>
+          `;
+          return;
+        }
+      }
+
+      // Caso B: Usuario logueado pero SIN pedidos (cuenta nueva o sin compras)
       if (!orders || orders.length === 0) {
+        const userName = activeUser?.fullName ? activeUser.fullName.split(' ')[0] : 'Cliente';
+        const userEmail = activeUser?.email || '';
         container.innerHTML = `
           <div class="orders-empty-state">
             <div class="orders-empty-icon">
@@ -184,8 +379,8 @@
                 <path d="M16 10a4 4 0 0 1-8 0"></path>
               </svg>
             </div>
-            <h3 class="orders-empty-title">Aún no tienes pedidos registrados</h3>
-            <p class="orders-empty-desc">Tus compras y códigos de seguimiento en tiempo real aparecerán aquí en cuanto confirmes un pedido.</p>
+            <h3 class="orders-empty-title">Aún no tienes pedidos en esta cuenta</h3>
+            <p class="orders-empty-desc">Hola, <strong>${escapeHtml(userName)}</strong>. Tu cuenta <code>${escapeHtml(userEmail)}</code> no tiene compras registradas. En cuanto confirmes tu primer pedido, aquí podrás ver su empaque, número de guía y ticket digital.</p>
             <button type="button" class="btn-checkout-primary" onclick="CallejonOrders.closeModal();" style="max-width: 240px; margin: 0 auto;">
               Explorar Catálogo
             </button>
@@ -194,7 +389,21 @@
         return;
       }
 
+      // Caso C: El usuario tiene pedidos propios
       const ordersHtml = `
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.65rem 0.95rem; margin-bottom: 1.15rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.15rem;">👤</span>
+            <div>
+              <div style="font-size: 0.84rem; font-weight: 700; color: #0b1b3d;">Historial exclusivo de: ${escapeHtml(activeUser?.fullName || 'Cliente')}</div>
+              <div style="font-size: 0.74rem; color: #64748b;">Cuenta: <strong>${escapeHtml(activeUser?.email || 'Sesión actual')}</strong></div>
+            </div>
+          </div>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 3px 10px; border-radius: 9999px;">
+            ${orders.length} ${orders.length === 1 ? 'pedido' : 'pedidos'}
+          </span>
+        </div>
+
         <div class="orders-list">
           ${orders.map(order => {
             const step = order.stepIndex || 2;
@@ -273,7 +482,7 @@
                   </div>
                 </div>
 
-                <!-- Detalle de Productos Comprados (Lo que compré) -->
+                <!-- Detalle de Productos Comprados -->
                 <div class="order-items-wrapper">
                   <div style="font-size: 0.82rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">
                     Artículos en este paquete (${order.items.reduce((s, i) => s + (i.quantity || 1), 0)} pieza(s)):
@@ -389,9 +598,12 @@
   // Exponer API global
   window.CallejonOrders = {
     getOrders: OrdersEngine.getOrders.bind(OrdersEngine),
+    getAllOrders: OrdersEngine.getAllRawOrders.bind(OrdersEngine),
+    getOrderByNumber: OrdersEngine.getOrderByNumber.bind(OrdersEngine),
     addOrder: OrdersEngine.addOrder.bind(OrdersEngine),
     openModal: OrdersUI.openModal.bind(OrdersUI),
     closeModal: OrdersUI.closeModal.bind(OrdersUI),
+    renderOrders: OrdersUI.renderOrders.bind(OrdersUI),
     openTicket: (orderNum) => {
       if (window.CallejonTicket && typeof window.CallejonTicket.open === 'function') {
         window.CallejonTicket.open(orderNum);
@@ -405,4 +617,3 @@
     OrdersUI.init();
   }
 })();
-

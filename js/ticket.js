@@ -207,13 +207,19 @@
 
     const orderNum = typeof orderOrNum === 'string' ? orderOrNum.trim() : null;
 
-    if (window.CallejonOrders && typeof window.CallejonOrders.getOrders === 'function') {
-      const orders = window.CallejonOrders.getOrders();
-      if (orderNum) {
-        const found = orders.find(o => o.orderNum === orderNum);
+    if (window.CallejonOrders) {
+      if (typeof window.CallejonOrders.getOrderByNumber === 'function' && orderNum) {
+        const found = window.CallejonOrders.getOrderByNumber(orderNum);
         if (found) return found;
-      } else if (orders.length > 0) {
-        return orders[0];
+      }
+      if (typeof window.CallejonOrders.getOrders === 'function') {
+        const orders = window.CallejonOrders.getOrders();
+        if (orderNum) {
+          const found = orders.find(o => o.orderNum === orderNum);
+          if (found) return found;
+        } else if (orders.length > 0) {
+          return orders[0];
+        }
       }
     }
 

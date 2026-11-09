@@ -1929,6 +1929,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneDigits = phone.replace(/\D/g, '');
 
         // 2. VALIDACIÓN PASO 2: DATOS REALES DE PAGO REQUERIDOS
+        let activeUser = null;
+        if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
+          activeUser = window.DavantiAuth.getCurrentUser();
+        }
+        if (!activeUser && window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
+          activeUser = window.CallejonAuth.getCurrentUser();
+        }
+        if (!activeUser) {
+          try {
+            const raw = localStorage.getItem('davanti_current_user') || localStorage.getItem('callejon_current_user');
+            if (raw) activeUser = JSON.parse(raw);
+          } catch (err) {}
+        }
+
         const activeRadio = DOM.checkoutForm.querySelector('input[name="paymentMethod"]:checked');
         const methodVal = activeRadio ? (activeRadio.value || activeRadio.closest('.payment-radio-card')?.dataset.method) : 'callejon';
 
@@ -2057,21 +2071,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else {
           // MÉTODO 1: TARJETA DE LA TIENDA (Financiamiento a MSI con 10% OFF)
-          let user = null;
-          if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
-            user = window.DavantiAuth.getCurrentUser();
-          }
-          if (!user && window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
-            user = window.CallejonAuth.getCurrentUser();
-          }
-          if (!user) {
-            try {
-              const raw = localStorage.getItem('davanti_current_user') || localStorage.getItem('callejon_current_user');
-              if (raw) user = JSON.parse(raw);
-            } catch (err) {}
-          }
-
-          if (!user || (!user.fullName && !user.email)) {
+          if (!activeUser || (!activeUser.fullName && !activeUser.email)) {
             e.preventDefault();
             e.stopImmediatePropagation();
             showToast('🔒 Para usar tu Tarjeta de la tienda inicia sesión, o selecciona Efectivo / Tarjeta Bancaria.');
@@ -2121,6 +2121,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.CallejonOrders && typeof window.CallejonOrders.addOrder === 'function') {
           savedOrder = window.CallejonOrders.addOrder({
             orderNum: orderNum,
+            userId: activeUser?.id || null,
+            userEmail: (activeUser?.email || recipientEmail || '').trim().toLowerCase(),
+            username: activeUser?.username || null,
             total: totalAmount,
             subtotal: cartSubtotal,
             discount: discount,
