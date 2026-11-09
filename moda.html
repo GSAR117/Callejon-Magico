@@ -665,7 +665,8 @@
   <!-- ==========================================================================
        CHECKOUT SIMULATOR MODAL (3 PASOS)
        ========================================================================== -->
-  <div class="modal-window checkout-modal" id="checkoutModal" role="dialog" aria-modal="true" aria-label="Finalizar compra">
+  <div class="modal-window checkout-modal" id="checkoutModal" role="dialog" aria-modal="true"
+    aria-label="Finalizar compra">
     <button class="modal-close-btn" id="btnCloseCheckout" aria-label="Cerrar pago">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -692,142 +693,163 @@
       </div>
     </div>
 
-    <form id="checkoutForm">
+    <form id="checkoutForm" novalidate>
       <!-- ================= PASO 1: DATOS DE ENVÍO ================= -->
       <div class="checkout-step-pane active" id="checkoutStep1">
-        <h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.85rem;">Paso 1: Dirección de entrega</h4>
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.85rem;">Paso 1: Dirección de
+          entrega</h4>
         <div class="form-grid">
           <div>
             <label class="form-label" for="checkoutRecipientName">Nombre completo</label>
-            <input type="text" class="form-control" id="checkoutRecipientName" required placeholder="Ej: Clarisa Morales" value="" autocomplete="name" />
+            <input type="text" class="form-control" id="checkoutRecipientName" required
+              placeholder="Ej: Clarisa Morales" value="" autocomplete="name" />
           </div>
           <div>
-            <label class="form-label" for="checkoutPhone" style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="form-label" for="checkoutPhone"
+              style="display: flex; justify-content: space-between; align-items: baseline;">
               <span>Tu número de WhatsApp</span>
               <span style="color: #25D366; font-size: 0.76rem; font-weight: 600;">📲 Para enviarte tu ticket</span>
             </label>
-            <input type="tel" class="form-control" id="checkoutPhone" required placeholder="Ej: 962 123 4567" value="" autocomplete="tel" />
+            <input type="tel" class="form-control" id="checkoutPhone" required placeholder="Ej: 962 123 4567" value=""
+              autocomplete="tel" />
           </div>
           <div class="form-group-full">
-            <label class="form-label" for="checkoutEmail" style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="form-label" for="checkoutEmail"
+              style="display: flex; justify-content: space-between; align-items: baseline;">
               <span>Correo electrónico para tu ticket oficial</span>
               <span style="color: #c58f38; font-size: 0.76rem; font-weight: 600;">✉️ Envío automático al pagar</span>
             </label>
-            <input type="email" class="form-control" id="checkoutEmail" required placeholder="tu-correo@gmail.com" value="" />
+            <input type="email" class="form-control" id="checkoutEmail" required placeholder="tu-correo@gmail.com"
+              value="" />
           </div>
           <div class="form-group-full">
             <label class="form-label" for="checkoutStreet">Calle y número</label>
-            <input type="text" class="form-control" id="checkoutStreet" required placeholder="Calle, número ext/int y colonia" value="" autocomplete="street-address" />
+            <input type="text" class="form-control" id="checkoutStreet" required
+              placeholder="Calle, número ext/int y colonia" value="" autocomplete="street-address" />
           </div>
           <div>
             <label class="form-label" for="checkoutPostal">Código Postal</label>
-            <input type="text" class="form-control" id="checkoutPostal" required placeholder="Ej: 30700" value="" autocomplete="postal-code" />
+            <input type="text" class="form-control" id="checkoutPostal" required placeholder="Ej: 30700" value=""
+              autocomplete="postal-code" />
           </div>
           <div>
             <label class="form-label" for="checkoutCity">Ciudad / Estado</label>
-            <input type="text" class="form-control" id="checkoutCity" required placeholder="Ej: Tapachula, Chiapas" value="" autocomplete="address-level2" />
+            <input type="text" class="form-control" id="checkoutCity" required placeholder="Ej: Tapachula, Chiapas"
+              value="" autocomplete="address-level2" />
           </div>
         </div>
         <button type="button" class="btn-checkout-primary" id="btnNextToPayment" style="height: 50px;">
           <span>Continuar a Forma de Pago (Paso 2)</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
         </button>
       </div>
 
       <!-- ================= PASO 2: MÉTODO DE PAGO ================= -->
       <div class="checkout-step-pane" id="checkoutStep2" style="display: none;">
-        <h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.85rem;">Paso 2: Selecciona tu método de pago</h4>
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.85rem;">Paso 2: Selecciona tu
+          método de pago</h4>
         <div class="payment-radio-group">
-          
-          <!-- Opción 1: Tarjeta Callejón Mágico (Financiamiento) -->
-          <label class="payment-radio-card active" data-method="callejon">
+
+          <!-- Método 1: Tarjeta de la tienda -->
+          <label class="payment-radio-card active" data-method="callejon" id="payMethodCardStore">
             <div class="payment-radio-left">
-              <input type="radio" name="paymentMethod" value="callejon" checked />
+              <input type="radio" name="paymentMethod" value="callejon" id="radioMethodCallejon" checked />
               <div>
-                <strong style="font-size: 0.9rem; color: #111827;">Tarjeta Departamental Callejón Mágico</strong>
-                <div style="font-size: 0.75rem; color: #059669; font-weight: 600;">10% de descuento adicional + Hasta 18 Meses Sin Intereses</div>
+                <strong style="font-size: 0.92rem; color: #111827;">Tarjeta de la Tienda (Callejón Mágico)</strong>
+                <div style="font-size: 0.76rem; color: #059669; font-weight: 600;">10% de descuento adicional + Hasta 18 Meses Sin Intereses</div>
               </div>
             </div>
-            <span style="font-size: 1.2rem;">💳</span>
+            <span style="font-size: 1.25rem;">💳</span>
           </label>
 
-          <!-- Opción 2: Pago de Contado (Efectivo / SPEI / OXXO) -->
-          <label class="payment-radio-card" data-method="cash">
+          <!-- Método 2: Efectivo -->
+          <label class="payment-radio-card" data-method="cash" id="payMethodCash">
             <div class="payment-radio-left">
-              <input type="radio" name="paymentMethod" value="cash" />
+              <input type="radio" name="paymentMethod" value="cash" id="radioMethodCash" />
               <div>
-                <strong style="font-size: 0.9rem; color: #111827;">Pago de Contado (Efectivo / SPEI / OXXO)</strong>
-                <div style="font-size: 0.75rem; color: #059669; font-weight: 600;">Una sola exhibición • No afecta tu saldo ni crédito</div>
+                <strong style="font-size: 0.92rem; color: #111827;">Efectivo</strong>
+                <div style="font-size: 0.76rem; color: #059669; font-weight: 600;">Pago en sucursal, contra entrega, SPEI u OXXO • No toca tu saldo</div>
               </div>
             </div>
-            <span style="font-size: 1.2rem;">💵</span>
+            <span style="font-size: 1.25rem;">💵</span>
           </label>
 
-          <!-- Formulario Opciones Pago de Contado -->
+          <!-- Formulario Opciones Efectivo -->
           <div id="cashPaymentBox"
             style="display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 1rem; margin-top: -0.25rem; margin-bottom: 0.65rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.82rem; font-weight: 800; color: #166534;">Elige tu modalidad de pago de contado:</span>
+              <span style="font-size: 0.82rem; font-weight: 800; color: #166534;">Elige cómo realizar tu pago en efectivo:</span>
               <span style="font-size: 0.72rem; color: #15803d; font-weight: 700; background: #dcfce7; padding: 2px 6px; border-radius: 4px;">Sin comisiones</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr; gap: 0.65rem;">
               <div>
-                <label class="form-label" for="cashPaymentType" style="font-size: 0.78rem;">Modalidad de pago</label>
+                <label class="form-label" for="cashPaymentType" style="font-size: 0.78rem;">Modalidad de efectivo</label>
                 <select id="cashPaymentType" class="form-control" style="font-size: 0.85rem; height: 42px;">
+                  <option value="contraentrega">Efectivo contra entrega al recibir el pedido</option>
+                  <option value="sucursal">Pago en efectivo al recoger en sucursal (Plantel Centro)</option>
                   <option value="spei">Transferencia Electrónica Inmediata (SPEI)</option>
-                  <option value="contraentrega">Efectivo contra entrega al recibir pedido</option>
-                  <option value="sucursal">Pago en efectivo al recoger en Sucursal (Plantel Centro)</option>
                   <option value="oxxo">Depósito en OXXO / Tiendas de conveniencia</option>
                 </select>
               </div>
               <div id="cashDetailsNote" style="font-size: 0.76rem; color: #166534; background: #ffffff; padding: 0.6rem 0.75rem; border-radius: 6px; border: 1px dashed #bbf7d0; line-height: 1.45;">
-                ℹ️ <strong>Pago seguro de contado:</strong> Tu compra se liquida en una sola exhibición sin tocar ni gastar el saldo de tu Tarjeta Departamental Callejón Mágico. Recibirás tu ticket oficial de compra con folio de control fiscal.
+                ℹ️ <strong>Pago seguro en efectivo:</strong> Tu compra se liquida de contado directo sin tocar ni gastar el saldo de tu Tarjeta Callejón Mágico. Recibirás tu ticket oficial de compra con folio de rastreo.
               </div>
             </div>
           </div>
 
-          <!-- Opción 3: Tarjeta de Crédito o Débito -->
-          <label class="payment-radio-card" data-method="card">
+          <!-- Método 3: Tarjeta Bancaria -->
+          <label class="payment-radio-card" data-method="card" id="payMethodBank">
             <div class="payment-radio-left">
-              <input type="radio" name="paymentMethod" value="card" />
+              <input type="radio" name="paymentMethod" value="card" id="radioMethodCard" />
               <div>
-                <strong style="font-size: 0.9rem; color: #111827;">Tarjeta de Crédito o Débito (Visa / Mastercard / AMEX)</strong>
-                <div style="font-size: 0.75rem; color: #6b7280;">Hasta 12 Meses Sin Intereses • Aprobación Inmediata</div>
+                <strong style="font-size: 0.92rem; color: #111827;">Tarjeta Bancaria (Crédito o Débito)</strong>
+                <div style="font-size: 0.76rem; color: #6b7280;">Visa, Mastercard o AMEX de cualquier banco • Hasta 12 MSI</div>
               </div>
             </div>
             <span style="font-size: 0.8rem; font-weight: 700; color: #1434cb;">VISA / MC</span>
           </label>
 
           <!-- Formulario Datos Reales Tarjeta Bancaria -->
-          <div id="creditDebitCardBox" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1rem; margin-top: -0.25rem; margin-bottom: 0.65rem;">
+          <div id="creditDebitCardBox"
+            style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1rem; margin-top: -0.25rem; margin-bottom: 0.65rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
               <span style="font-size: 0.82rem; font-weight: 700; color: #0b1b3d;">Ingresa los datos de tu tarjeta bancaria:</span>
-              <span id="detectedCardBrand" style="font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: #e2e8f0; color: #475569;">Bancaria</span>
+              <span id="detectedCardBrand"
+                style="font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: #e2e8f0; color: #475569;">Bancaria</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr; gap: 0.65rem;">
               <div>
                 <label class="form-label" for="ccCardNumber" style="font-size: 0.78rem;">Número de tarjeta (16 dígitos)</label>
                 <div style="position: relative;">
-                  <input type="text" id="ccCardNumber" class="form-control" placeholder="•••• •••• •••• ••••" maxlength="19" inputmode="numeric" style="padding-left: 2.2rem; font-family: monospace; letter-spacing: 0.08em; font-weight: 600;" />
-                  <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">💳</span>
+                  <input type="text" id="ccCardNumber" class="form-control" placeholder="•••• •••• •••• ••••"
+                    maxlength="19" inputmode="numeric"
+                    style="padding-left: 2.2rem; font-family: monospace; letter-spacing: 0.08em; font-weight: 600;" />
+                  <span
+                    style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">💳</span>
                 </div>
               </div>
               <div>
                 <label class="form-label" for="ccCardHolder" style="font-size: 0.78rem;">Nombre del titular (como aparece en la tarjeta)</label>
-                <input type="text" id="ccCardHolder" class="form-control" placeholder="Ej: CLARISA MORALES" style="text-transform: uppercase;" />
+                <input type="text" id="ccCardHolder" class="form-control" placeholder="Ej: CLARISA MORALES"
+                  style="text-transform: uppercase;" />
               </div>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                 <div>
                   <label class="form-label" for="ccCardExpiry" style="font-size: 0.78rem;">Vigencia (MM/AA)</label>
-                  <input type="text" id="ccCardExpiry" class="form-control" placeholder="MM/AA" maxlength="5" inputmode="numeric" style="text-align: center; font-family: monospace; font-weight: 600;" />
+                  <input type="text" id="ccCardExpiry" class="form-control" placeholder="MM/AA" maxlength="5"
+                    inputmode="numeric" style="text-align: center; font-family: monospace; font-weight: 600;" />
                 </div>
                 <div>
                   <label class="form-label" for="ccCardCvv" style="font-size: 0.78rem;">Código CVV</label>
-                  <input type="password" id="ccCardCvv" class="form-control" placeholder="•••" maxlength="4" inputmode="numeric" style="text-align: center; font-family: monospace; font-weight: 700; letter-spacing: 0.15em;" />
+                  <input type="password" id="ccCardCvv" class="form-control" placeholder="•••" maxlength="4"
+                    inputmode="numeric"
+                    style="text-align: center; font-family: monospace; font-weight: 700; letter-spacing: 0.15em;" />
                 </div>
               </div>
               <div>
-                <label class="form-label" for="ccCardInstallments" style="font-size: 0.78rem;">Plazo de pago bancario</label>
+                <label class="form-label" for="ccCardInstallments" style="font-size: 0.78rem;">Plazo bancario</label>
                 <select id="ccCardInstallments" class="form-control" style="font-size: 0.85rem; height: 42px;">
                   <option value="1">Pago de Contado (Una sola exhibición)</option>
                   <option value="3">3 Meses Sin Intereses</option>
@@ -838,52 +860,15 @@
             </div>
           </div>
 
-          <!-- Opción 3: PayPal -->
-          <label class="payment-radio-card" data-method="paypal">
-            <div class="payment-radio-left">
-              <input type="radio" name="paymentMethod" value="paypal" />
-              <div>
-                <strong style="font-size: 0.9rem; color: #111827;">PayPal</strong>
-                <div style="font-size: 0.75rem; color: #6b7280;">Paga de forma rápida y segura con tu cuenta PayPal</div>
-              </div>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 700; color: #003087;">PayPal</span>
-          </label>
-
-          <!-- Formulario Datos Reales PayPal -->
-          <div id="paypalAccountBox" style="display: none; background: #f0f7ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 1rem; margin-top: -0.25rem; margin-bottom: 0.65rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.82rem; font-weight: 800; color: #003087;">Vinculación con cuenta PayPal:</span>
-              <span style="font-size: 0.72rem; color: #0284c7; font-weight: 700; background: #e0f2fe; padding: 2px 6px; border-radius: 4px;">Protección al Comprador</span>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 0.65rem;">
-              <div>
-                <label class="form-label" for="paypalEmail" style="font-size: 0.78rem;">Correo electrónico registrado en PayPal</label>
-                <div style="position: relative;">
-                  <input type="email" id="paypalEmail" class="form-control" placeholder="ejemplo.paypal@correo.com" autocomplete="email" style="padding-left: 2.2rem;" />
-                  <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">✉️</span>
-                </div>
-              </div>
-              <div>
-                <label class="form-label" for="paypalPhone" style="font-size: 0.78rem;">Teléfono celular asociado a PayPal</label>
-                <div style="position: relative;">
-                  <input type="tel" id="paypalPhone" class="form-control" placeholder="Ej: 962 123 4567 (10 dígitos)" maxlength="14" inputmode="numeric" style="padding-left: 2.2rem;" />
-                  <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;">📱</span>
-                </div>
-              </div>
-              <div style="font-size: 0.74rem; color: #1e40af; background: #ffffff; padding: 0.5rem 0.65rem; border-radius: 6px; border: 1px dashed #bfdbfe; line-height: 1.4;">
-                🛡️ Tus fondos y compras están asegurados por PayPal. El cobro se procesará inmediatamente al confirmar.
-              </div>
-            </div>
-          </div>
-
         </div>
 
         <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem;">
-          <button type="button" class="btn-card-action-secondary" id="btnBackToShipping" style="height: 50px; width: 140px; margin: 0;">
+          <button type="button" class="btn-card-action-secondary" id="btnBackToShipping"
+            style="height: 50px; width: 140px; margin: 0;">
             ← Volver
           </button>
-          <button type="submit" class="btn-checkout-primary" id="btnConfirmOrder" style="height: 50px; flex: 1; margin: 0;">
+          <button type="submit" class="btn-checkout-primary" id="btnConfirmOrder"
+            style="height: 50px; flex: 1; margin: 0;">
             Confirmar y Pagar Pedido (Paso 3)
           </button>
         </div>

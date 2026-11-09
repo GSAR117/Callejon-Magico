@@ -1181,7 +1181,6 @@
 
       // Watch payment method radio change & toggle sub-forms
       const creditDebitBox = document.getElementById('creditDebitCardBox');
-      const paypalBox = document.getElementById('paypalAccountBox');
       const cashBox = document.getElementById('cashPaymentBox');
 
       const updatePaymentBoxes = (selectedRadio) => {
@@ -1190,38 +1189,36 @@
         if (methodVal === 'callejon' || (!methodVal && selectedRadio?.closest('.payment-radio-card') === cardOption)) {
           if (msiContainer) msiContainer.style.display = 'block';
           if (creditDebitBox) creditDebitBox.style.display = 'none';
-          if (paypalBox) paypalBox.style.display = 'none';
           if (cashBox) cashBox.style.display = 'none';
           this.updateCheckoutMSI();
         } else if (methodVal === 'cash') {
           if (msiContainer) msiContainer.style.display = 'none';
           if (creditDebitBox) creditDebitBox.style.display = 'none';
-          if (paypalBox) paypalBox.style.display = 'none';
           if (cashBox) cashBox.style.display = 'block';
           const btn = checkoutForm.querySelector('button[type="submit"]');
           const cartTotal = this.getCartTotal();
-          if (btn) btn.innerHTML = `Confirmar Pedido de Contado ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
+          if (btn) btn.innerHTML = `Confirmar Pedido en Efectivo ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
         } else if (methodVal === 'card') {
           if (msiContainer) msiContainer.style.display = 'none';
           if (creditDebitBox) creditDebitBox.style.display = 'block';
-          if (paypalBox) paypalBox.style.display = 'none';
           if (cashBox) cashBox.style.display = 'none';
           const btn = checkoutForm.querySelector('button[type="submit"]');
           const cartTotal = this.getCartTotal();
           if (btn) btn.innerHTML = `Confirmar y Pagar con Tarjeta ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
-        } else if (methodVal === 'paypal') {
-          if (msiContainer) msiContainer.style.display = 'none';
-          if (creditDebitBox) creditDebitBox.style.display = 'none';
-          if (paypalBox) paypalBox.style.display = 'block';
-          if (cashBox) cashBox.style.display = 'none';
-          const btn = checkoutForm.querySelector('button[type="submit"]');
-          const cartTotal = this.getCartTotal();
-          if (btn) btn.innerHTML = `Confirmar y Pagar con PayPal ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
         }
       };
 
       paymentCards.forEach(cardLabel => {
         const radio = cardLabel.querySelector('input[type="radio"]');
+        cardLabel.addEventListener('click', (e) => {
+          if (radio && !radio.checked) {
+            radio.checked = true;
+          }
+          paymentCards.forEach(c => c.classList.remove('active'));
+          cardLabel.classList.add('active');
+          updatePaymentBoxes(radio);
+        });
+
         if (radio) {
           radio.addEventListener('change', () => {
             paymentCards.forEach(c => c.classList.remove('active'));
@@ -1236,7 +1233,6 @@
       const ccBrandBadge = document.getElementById('detectedCardBrand');
       const ccExpiryInput = document.getElementById('ccCardExpiry');
       const ccCvvInput = document.getElementById('ccCardCvv');
-      const ppPhoneInput = document.getElementById('paypalPhone');
 
       if (ccNumInput) {
         ccNumInput.addEventListener('input', (e) => {

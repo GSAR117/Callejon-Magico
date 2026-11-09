@@ -822,15 +822,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const ccHolder = document.getElementById('ccCardHolder');
       const ccExp = document.getElementById('ccCardExpiry');
       const ccCvv = document.getElementById('ccCardCvv');
-      const ppEmail = document.getElementById('paypalEmail');
-      const ppPhone = document.getElementById('paypalPhone');
 
       if (ccNum) ccNum.value = '';
       if (ccHolder) ccHolder.value = '';
       if (ccExp) ccExp.value = '';
       if (ccCvv) ccCvv.value = '';
-      if (ppEmail) ppEmail.value = '';
-      if (ppPhone) ppPhone.value = '';
     }
     document.body.style.overflow = 'hidden';
   }
@@ -1941,6 +1937,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cartSubtotal = State.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         let discount = 0;
         let totalAmount = cartSubtotal;
+        let lastCharge = window.__lastCallejonCharge || {};
 
         if (methodVal === 'callejon') {
           discount = Math.round(cartSubtotal * 0.10 * 100) / 100;
@@ -2047,58 +2044,19 @@ document.addEventListener('DOMContentLoaded', () => {
           const instLabel = installments === '1' ? '1 solo pago de contado' : `${installments} Meses Sin Intereses`;
           paymentLabel = `Tarjeta ${brand} (•••• ${last4}) — ${instLabel}`;
 
-        } else if (methodVal === 'paypal') {
-          const ppEmailInput = document.getElementById('paypalEmail');
-          const ppPhoneInput = document.getElementById('paypalPhone');
-
-          const ppEmail = (ppEmailInput?.value || '').trim();
-          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          if (!ppEmail || !emailRegex.test(ppEmail)) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            if (ppEmailInput) {
-              ppEmailInput.focus();
-              ppEmailInput.style.borderColor = '#ef4444';
-              ppEmailInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
-            }
-            showToast('✉️ Ingresa un correo electrónico de PayPal válido (ejemplo: usuario@correo.com).');
-            return;
-          } else if (ppEmailInput) {
-            ppEmailInput.style.borderColor = '';
-            ppEmailInput.style.boxShadow = '';
-          }
-
-          const rawPpPhone = (ppPhoneInput?.value || '').replace(/\D/g, '');
-          if (rawPpPhone.length !== 10 || /^(\d)\1{9}$/.test(rawPpPhone)) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            if (ppPhoneInput) {
-              ppPhoneInput.focus();
-              ppPhoneInput.style.borderColor = '#ef4444';
-              ppPhoneInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
-            }
-            showToast('📱 Ingresa el teléfono celular válido de 10 dígitos vinculado a tu cuenta PayPal.');
-            return;
-          } else if (ppPhoneInput) {
-            ppPhoneInput.style.borderColor = '';
-            ppPhoneInput.style.boxShadow = '';
-          }
-
-          paymentLabel = `PayPal (${ppEmail})`;
-
         } else if (methodVal === 'cash') {
-          // PAGO DE CONTADO INDEPENDIENTE (Efectivo / SPEI / OXXO)
-          // NO TOCA LA TARJETA CALLEJÓN MÁGICO. EL SALDO DE LA TIENDA NO SE GASTA.
+          // MÉTODO 2: EFECTIVO (Contraentrega / Sucursal / SPEI / OXXO)
+          // NO TOCA LA TARJETA CALLEJÓN MÁGICO. EL SALDO DE LA TIENDA QUEDA 100% INTACTO.
           const cashTypeSelect = document.getElementById('cashPaymentType');
-          const cashType = cashTypeSelect ? cashTypeSelect.value : 'spei';
-          let cashLabel = 'Transferencia SPEI';
-          if (cashType === 'contraentrega') cashLabel = 'Efectivo contra entrega';
-          else if (cashType === 'sucursal') cashLabel = 'Efectivo al recoger en Sucursal';
+          const cashType = cashTypeSelect ? cashTypeSelect.value : 'contraentrega';
+          let cashLabel = 'Efectivo contra entrega';
+          if (cashType === 'sucursal') cashLabel = 'Efectivo en Sucursal';
+          else if (cashType === 'spei') cashLabel = 'Transferencia SPEI';
           else if (cashType === 'oxxo') cashLabel = 'Depósito en OXXO';
-          paymentLabel = `Pago de Contado (${cashLabel})`;
+          paymentLabel = `Efectivo (${cashLabel})`;
 
         } else {
-          // Tarjeta Departamental Callejón Mágico (Financiamiento a MSI)
+          // MÉTODO 1: TARJETA DE LA TIENDA (Financiamiento a MSI con 10% OFF)
           let user = null;
           if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
             user = window.DavantiAuth.getCurrentUser();
@@ -2116,12 +2074,12 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!user || (!user.fullName && !user.email)) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            showToast('🔒 Debes iniciar sesión con tu cuenta para financiar con tu Tarjeta Callejón Mágico, o selecciona Pago de Contado / Tarjeta Bancaria.');
+            showToast('🔒 Para usar tu Tarjeta de la tienda inicia sesión, o selecciona Efectivo / Tarjeta Bancaria.');
             return;
           }
 
           // Procesar cargo a través de CallejonCard (UNA SOLA VEZ)
-          const lastCharge = window.__lastCallejonCharge || {};
+          lastCharge = window.__lastCallejonCharge || {};
           const selectedMsi = lastCharge.msi || 18;
           let chargeResult = null;
           if (window.CallejonCard && typeof window.CallejonCard.charge === 'function') {
