@@ -282,9 +282,8 @@
     calculateFinancials(order) {
       if (!order) return null;
 
-      // 1. Regla de cálculo oficial: El precio registrado en la tienda es el SUBTOTAL
-      // El I.V.A. (16%) se calcula sobre dicho subtotal (menos descuentos) y SE LE SUMA para obtener el Total a Pagar.
-      const pricesIncludeTax = order.pricesIncludeTax === true; // false por defecto: el precio de tienda es el subtotal y el IVA se suma
+      // 1. Regla oficial e-commerce México: Los precios mostrados al público ya INCLUYEN el IVA (Tasa 16%)
+      const pricesIncludeTax = order.pricesIncludeTax !== false; // true por defecto: los precios de tienda ya tienen el IVA incluido
 
       // 2. Normalizar artículos y calcular Subtotal Bruto de Venta
       const rawItems = Array.isArray(order.items) && order.items.length > 0 ? order.items : [];
@@ -608,7 +607,7 @@
             ` : ''}
 
             <div class="ticket-fin-row highlight-iva">
-              <span>I.V.A. TRASLADADO (TASA 16% FISCAL):</span>
+              <span>I.V.A. TRASLADADO (16% INCLUIDO):</span>
               <span><strong>$${fin.iva16.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN</strong></span>
             </div>
 

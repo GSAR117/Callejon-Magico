@@ -1111,12 +1111,11 @@
       this.updateCheckoutMSI = () => {
         const cartSubtotal = this.getCartTotal();
         const discount = Math.round(cartSubtotal * 0.10 * 100) / 100;
-        const net = Math.max(0, cartSubtotal - discount);
-        const iva = Math.round(net * 0.16 * 100) / 100;
-        const discountedTotal = Math.round((net + iva) * 100) / 100;
+        const discountedTotal = Math.round((cartSubtotal - discount) * 100) / 100;
+        const net = Math.round((discountedTotal / 1.16) * 100) / 100;
+        const iva = Math.round((discountedTotal - net) * 100) / 100;
 
         const msiPlans = [
-          { months: 1, label: 'Contado', popular: false },
           { months: 3, label: '3 MSI', popular: false },
           { months: 6, label: '6 MSI', popular: false },
           { months: 12, label: '12 MSI', popular: false },
@@ -1126,6 +1125,10 @@
         const card = CardEngine.getCard();
         const holderState = getCardHolderState();
         const hasEnoughBalance = holderState.isLoggedIn && (card.balance >= discountedTotal);
+
+        if (![3, 6, 12, 18].includes(this.selectedMSI)) {
+          this.selectedMSI = 18;
+        }
 
         msiContainer.innerHTML = `
           <div class="card-checkout-discount-badge">
@@ -1172,17 +1175,14 @@
         const btn = checkoutForm.querySelector('button[type="submit"]');
         if (btn) {
           const monthly = total / months;
-          if (months === 1) {
-            btn.innerHTML = `Pagar $${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} al Contado (10% OFF)`;
-          } else {
-            btn.innerHTML = `Pagar con ${months} MSI de $${monthly.toLocaleString('es-MX', { minimumFractionDigits: 2 })} (10% OFF)`;
-          }
+          btn.innerHTML = `Pagar con ${months} MSI de $${monthly.toLocaleString('es-MX', { minimumFractionDigits: 2 })} (10% OFF)`;
         }
       };
 
       // Watch payment method radio change & toggle sub-forms
       const creditDebitBox = document.getElementById('creditDebitCardBox');
       const paypalBox = document.getElementById('paypalAccountBox');
+      const cashBox = document.getElementById('cashPaymentBox');
 
       const updatePaymentBoxes = (selectedRadio) => {
         const methodVal = selectedRadio ? (selectedRadio.value || selectedRadio.closest('.payment-radio-card')?.dataset.method) : 'callejon';
@@ -1191,25 +1191,32 @@
           if (msiContainer) msiContainer.style.display = 'block';
           if (creditDebitBox) creditDebitBox.style.display = 'none';
           if (paypalBox) paypalBox.style.display = 'none';
+          if (cashBox) cashBox.style.display = 'none';
           this.updateCheckoutMSI();
+        } else if (methodVal === 'cash') {
+          if (msiContainer) msiContainer.style.display = 'none';
+          if (creditDebitBox) creditDebitBox.style.display = 'none';
+          if (paypalBox) paypalBox.style.display = 'none';
+          if (cashBox) cashBox.style.display = 'block';
+          const btn = checkoutForm.querySelector('button[type="submit"]');
+          const cartTotal = this.getCartTotal();
+          if (btn) btn.innerHTML = `Confirmar Pedido de Contado ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
         } else if (methodVal === 'card') {
           if (msiContainer) msiContainer.style.display = 'none';
           if (creditDebitBox) creditDebitBox.style.display = 'block';
           if (paypalBox) paypalBox.style.display = 'none';
+          if (cashBox) cashBox.style.display = 'none';
           const btn = checkoutForm.querySelector('button[type="submit"]');
           const cartTotal = this.getCartTotal();
-          const iva = Math.round(cartTotal * 0.16 * 100) / 100;
-          const finalAmount = Math.round((cartTotal + iva) * 100) / 100;
-          if (btn) btn.innerHTML = `Confirmar y Pagar con Tarjeta ($${finalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })})`;
+          if (btn) btn.innerHTML = `Confirmar y Pagar con Tarjeta ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
         } else if (methodVal === 'paypal') {
           if (msiContainer) msiContainer.style.display = 'none';
           if (creditDebitBox) creditDebitBox.style.display = 'none';
           if (paypalBox) paypalBox.style.display = 'block';
+          if (cashBox) cashBox.style.display = 'none';
           const btn = checkoutForm.querySelector('button[type="submit"]');
           const cartTotal = this.getCartTotal();
-          const iva = Math.round(cartTotal * 0.16 * 100) / 100;
-          const finalAmount = Math.round((cartTotal + iva) * 100) / 100;
-          if (btn) btn.innerHTML = `Confirmar y Pagar con PayPal ($${finalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })})`;
+          if (btn) btn.innerHTML = `Confirmar y Pagar con PayPal ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
         }
       };
 
@@ -1295,7 +1302,7 @@
         });
       }
 
-      // Hook checkout form submission
+      // Hook checkout form submission (preparar metadatos financieros)
       checkoutForm.addEventListener('submit', (e) => {
         const activeRadio = checkoutForm.querySelector('input[name="paymentMethod"]:checked');
         const isCallejonCard = activeRadio && (activeRadio.value === 'callejon' || activeRadio.closest('.payment-radio-card') === cardOption);
@@ -1303,43 +1310,32 @@
 
         if (isCallejonCard) {
           const discount = Math.round(cartTotal * 0.10 * 100) / 100;
-          const net = Math.max(0, cartTotal - discount);
-          const iva = Math.round(net * 0.16 * 100) / 100;
-          const finalAmount = Math.round((net + iva) * 100) / 100;
-          const chargeResult = CardEngine.charge(finalAmount, 'Compra Departamental Callejón Mágico', this.selectedMSI);
+          const finalAmount = Math.round((cartTotal - discount) * 100) / 100;
+          const net = Math.round((finalAmount / 1.16) * 100) / 100;
+          const iva = Math.round((finalAmount - net) * 100) / 100;
+          const pointsEarned = Math.round(finalAmount * 0.05);
 
-          if (!chargeResult.success) {
-            e.preventDefault();
-            if (chargeResult.limitReached) {
-              this.showSucursalModal(
-                'Has alcanzado el límite de tu Tarjeta Callejón Mágico. Para continuar realizando compras o abonar a tu saldo, por favor acude a tu sucursal departamental Callejón Mágico más cercana.'
-              );
-            } else {
-              alert(chargeResult.message);
-            }
-            return;
-          }
-
-          // Guardar resumen para que el Paso 3 de confirmación lo muestre en pantalla
+          // Guardar resumen para que app.js y ticket.js procesen la orden exactamente
           window.__lastCallejonCharge = {
-            ...chargeResult,
             isCallejonCard: true,
-            msi: this.selectedMSI,
+            msi: this.selectedMSI || 18,
             discount: discount,
             subtotal: cartTotal,
             iva: iva,
             finalAmount: finalAmount,
-            pointsEarned: chargeResult.pointsEarned,
-            totalPoints: chargeResult.totalPoints
+            pointsEarned: pointsEarned
           };
 
         } else {
-          // Si paga con cualquier otro método (Visa, PayPal, Efectivo):
-          // También suben los Puntos Mágicos por cada compra que se realice!
-          const iva = Math.round(cartTotal * 0.16 * 100) / 100;
-          const finalAmount = Math.round((cartTotal + iva) * 100) / 100;
-          const otherPoints = Math.max(25, Math.round(finalAmount * 0.05));
-          const newPointsTotal = CardEngine.addPoints(otherPoints, 'Compra departamental');
+          // Si paga de contado (Efectivo / SPEI, Tarjeta Bancaria, PayPal):
+          // No toca el saldo de la Tarjeta Callejón Mágico. Precios ya incluyen IVA.
+          const net = Math.round((cartTotal / 1.16) * 100) / 100;
+          const iva = Math.round((cartTotal - net) * 100) / 100;
+          const otherPoints = Math.max(25, Math.round(cartTotal * 0.05));
+          let newPointsTotal = otherPoints;
+          if (typeof CardEngine.addPoints === 'function') {
+            newPointsTotal = CardEngine.addPoints(otherPoints, 'Compra departamental');
+          }
           
           window.__lastCallejonCharge = {
             isCallejonCard: false,
@@ -1347,7 +1343,7 @@
             discount: 0,
             subtotal: cartTotal,
             iva: iva,
-            finalAmount: finalAmount,
+            finalAmount: cartTotal,
             pointsEarned: otherPoints,
             totalPoints: newPointsTotal
           };

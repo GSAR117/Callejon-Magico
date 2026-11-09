@@ -376,8 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalItems = State.cart.reduce((sum, item) => sum + item.quantity, 0);
     const subtotal = State.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const shipping = subtotal >= State.freeShippingThreshold || subtotal === 0 ? 0 : 149.00;
-    const iva = Math.round(subtotal * 0.16 * 100) / 100;
-    const total = subtotal + shipping + iva;
+    const netSubtotal = Math.round((subtotal / 1.16) * 100) / 100;
+    const iva = Math.round((subtotal - netSubtotal) * 100) / 100;
+    const total = subtotal + shipping;
 
     // Update Header Badge
     if (DOM.cartCount) {
@@ -1938,11 +1939,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let paymentLabel = 'Tarjeta Departamental Callejón Mágico';
 
         const cartSubtotal = State.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const lastCharge = window.__lastCallejonCharge || {};
-        const discount = lastCharge.discount || 0;
-        const netSubtotal = Math.max(0, cartSubtotal - discount);
-        const iva = lastCharge.iva !== undefined ? lastCharge.iva : Math.round(netSubtotal * 0.16 * 100) / 100;
-        const totalAmount = lastCharge.finalAmount || Math.round((netSubtotal + iva) * 100) / 100;
+        let discount = 0;
+        let totalAmount = cartSubtotal;
+
+        if (methodVal === 'callejon') {
+          discount = Math.round(cartSubtotal * 0.10 * 100) / 100;
+          totalAmount = Math.round((cartSubtotal - discount) * 100) / 100;
+        }
+
+        const netSubtotal = Math.round((totalAmount / 1.16) * 100) / 100;
+        const iva = Math.round((totalAmount - netSubtotal) * 100) / 100;
 
         if (methodVal === 'card') {
           const ccNumberInput = document.getElementById('ccCardNumber');
@@ -2080,8 +2086,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
           paymentLabel = `PayPal (${ppEmail})`;
 
+        } else if (methodVal === 'cash') {
+          // PAGO DE CONTADO INDEPENDIENTE (Efectivo / SPEI / OXXO)
+          // NO TOCA LA TARJETA CALLEJÓN MÁGICO. EL SALDO DE LA TIENDA NO SE GASTA.
+          const cashTypeSelect = document.getElementById('cashPaymentType');
+          const cashType = cashTypeSelect ? cashTypeSelect.value : 'spei';
+          let cashLabel = 'Transferencia SPEI';
+          if (cashType === 'contraentrega') cashLabel = 'Efectivo contra entrega';
+          else if (cashType === 'sucursal') cashLabel = 'Efectivo al recoger en Sucursal';
+          else if (cashType === 'oxxo') cashLabel = 'Depósito en OXXO';
+          paymentLabel = `Pago de Contado (${cashLabel})`;
+
         } else {
-          // Tarjeta Departamental Callejón Mágico
+          // Tarjeta Departamental Callejón Mágico (Financiamiento a MSI)
           let user = null;
           if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
             user = window.DavantiAuth.getCurrentUser();
@@ -2099,15 +2116,16 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!user || (!user.fullName && !user.email)) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            showToast('🔒 Debes iniciar sesión con tu cuenta para pagar con tu Tarjeta Callejón Mágico, o selecciona Tarjeta Bancaria / PayPal.');
+            showToast('🔒 Debes iniciar sesión con tu cuenta para financiar con tu Tarjeta Callejón Mágico, o selecciona Pago de Contado / Tarjeta Bancaria.');
             return;
           }
 
-          // Procesar cargo a través de CallejonCard
-          const selectedMsi = lastCharge.msi || 3;
+          // Procesar cargo a través de CallejonCard (UNA SOLA VEZ)
+          const lastCharge = window.__lastCallejonCharge || {};
+          const selectedMsi = lastCharge.msi || 18;
           let chargeResult = null;
           if (window.CallejonCard && typeof window.CallejonCard.charge === 'function') {
-            chargeResult = window.CallejonCard.charge(totalAmount, 'Compra en tienda departamental Callejón Mágico', selectedMsi);
+            chargeResult = window.CallejonCard.charge(totalAmount, 'Compra departamental financiada Callejón Mágico', selectedMsi);
             if (!chargeResult || !chargeResult.success) {
               e.preventDefault();
               e.stopImmediatePropagation();
@@ -2195,7 +2213,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <p style="margin-bottom: 0.4rem;">📍 <strong>${street.includes('Plantel') ? 'Sucursal de retiro (Click & Collect):' : 'Dirección de entrega:'}</strong> ${street}, ${city}</p>
               <p style="margin-bottom: 0.4rem;">📦 <strong>${street.includes('Plantel') ? 'Disponibilidad:' : 'Entrega de cortesía:'}</strong> ${street.includes('Plantel') ? '¡Listo para entrega en 2 horas en la sucursal seleccionada con tu INE y número de orden!' : 'En 48 a 72 horas hábiles en empaque boutique.'}</p>
               <p style="margin-bottom: 0.4rem;">💳 <strong>Método de pago:</strong> ${paymentLabel} — Aprobado inmediatamente.</p>
-              ${lastCharge.msi ? `<p style="margin-bottom: 0;">🎉 <strong>Financiamiento:</strong> ${lastCharge.msi} mensualidades sin intereses de $${(totalAmount / lastCharge.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })} con 10% OFF aplicado.</p>` : ''}
+              ${(methodVal === 'callejon' && lastCharge.msi > 1) ? `<p style="margin-bottom: 0;">🎉 <strong>Financiamiento:</strong> ${lastCharge.msi} mensualidades sin intereses de $${(totalAmount / lastCharge.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })} con 10% OFF aplicado a tu Tarjeta Callejón Mágico.</p>` : ''}
+              ${methodVal === 'cash' ? `<p style="margin-bottom: 0;">💵 <strong>Modalidad de pago:</strong> Liquidado al 100% de contado. Tu crédito y saldo de Tarjeta Callejón Mágico no fueron afectados.</p>` : ''}
             </div>
 
             <div class="checkout-confirm-actions">
