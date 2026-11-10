@@ -1894,7 +1894,7 @@ const PRODUCTS_DATA = [
     "rating": 4.7,
     "reviewsCount": 115,
     "age": "3-5 años",
-    "image": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Play-Doh Set Súper Tienda de Helados y Dulces Creativos.jpg",
     "description": "Crea helados en espiral, barquillos y postres de colores. Incluye máquina dispensadora doble, jarabe Drizzle líquido que se endurece como chocolate y 8 latas de masa no tóxica.",
     "sku": "PLY-HLD-SMR01",
     "inStock": true,
@@ -2065,7 +2065,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 51,
     "age": "+8 años",
-    "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Telescopio Astronómico Infantil 70mm Refractor con Trípode y Celular.jpg",
     "description": "Explora la luna, cráteres y constelaciones. Apertura de 70 mm con lentes de cristal multicapa, trípode de aluminio ligero y adaptador universal para celular.",
     "sku": "DSC-TEL-70MM",
     "inStock": true,
@@ -3267,7 +3267,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 489,
     "discipline": "Fitness, Gym & Uso Diario",
-    "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L  rojo.jpg",
+    "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L.jpg",
     "description": "El vaso térmico más popular del planeta. Fabricado con acero inoxidable reciclado al 90%, aislamiento al vacío de doble pared que mantiene tus bebidas frías por 11 horas (o heladas por 2 días) y tapa FlowState giratoria de 3 posiciones con popote reutilizable.",
     "sku": "STY-QNCH-40-CRM",
     "inStock": true,
@@ -3275,18 +3275,18 @@ const PRODUCTS_DATA = [
       "40 oz / 1.18 Litros"
     ],
     "colors": [
-      "Rojo Escarlata",
-      "Crema Vainilla",
+      "Verde Salvia Original",
+      "Negro Mate",
       "Rosa Cuarzo",
-      "Verde Eucalipto",
-      "Negro Mate"
+      "Gris Glaciar",
+      "Rojo Escarlata"
     ],
     "colorHex": [
-      "#dc2626",
-      "#fef08a",
-      "#fbcfe8",
       "#a7f3d0",
-      "#18181b"
+      "#18181b",
+      "#fbcfe8",
+      "#cbd5e1",
+      "#dc2626"
     ],
     "specs": {
       "capacidad": "1.18 litros (40 onzas líquidas)",
@@ -3306,6 +3306,10 @@ const PRODUCTS_DATA = [
     "offerStartDate": "2026-11-06T00:00:00-06:00",
     "offerEndDate": "2026-11-20T23:59:59-06:00",
     "colorImages": {
+      "Verde Salvia Original": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L.jpg",
+      "Negro Mate": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L negro.jpg",
+      "Rosa Cuarzo": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L rosa.jpg",
+      "Gris Glaciar": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L gris.jpg",
       "Rojo Escarlata": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L  rojo.jpg"
     }
   },
@@ -7996,6 +8000,45 @@ const PRODUCTS_DATA = [
       "Vehículo patrulla con cabina abatible y espacio para el oficial",
       "Moto deportiva policial con neumáticos de alta tracción",
       "Guía didáctica ilustrada paso a paso e interactiva en app LEGO Builder"
+    ]
+  },
+  {
+    "id": "tech-clm-8",
+    "department": "Tecnología · Celulares & Smartphones",
+    "name": "Smartphone Honor X6e 128GB Cámara Triple 50MP Pantalla 90Hz Batería 5200mAh",
+    "slug": "honor-x6e-128gb-negro",
+    "category": "electronica",
+    "subcategory": "celulares",
+    "brand": "Honor",
+    "badge": "Popular",
+    "badgeType": "bestseller",
+    "price": 3299,
+    "originalPrice": 3899,
+    "rating": 4.8,
+    "reviewsCount": 175,
+    "image": "Productos 3/Movistar Honor X6e 128 GB Negro.jpg",
+    "description": "Smartphone ágil y confiable con almacenamiento expandible de 128GB, sistema de triple cámara con sensor principal de 50MP para fotos nítidas con IA y batería gigante de 5200 mAh para hasta 2 días de uso continuo.",
+    "sku": "HNR-X6E-128BLK",
+    "inStock": true,
+    "sizes": [
+      "128GB Almacenamiento / 4GB RAM"
+    ],
+    "colors": [
+      "Negro Medianoche"
+    ],
+    "colorHex": [
+      "#09090b"
+    ],
+    "specs": {
+      "pantalla": "6.56\" HD+ con tasa de refresco ultra fluida de 90Hz",
+      "procesador": "MediaTek Helio G36 Octa-Core de alto rendimiento",
+      "bateria": "5,200 mAh de ultra larga duración con carga inteligente",
+      "seguridad": "Lector de huellas dactilares lateral y desbloqueo facial"
+    },
+    "features": [
+      "Cámara ultra clara de 50 megapíxeles con modo retrato y noche",
+      "Memoria expandible hasta 1TB mediante tarjeta MicroSD",
+      "Desbloqueado para cualquier compañía telefónica"
     ]
   }
 ];
