@@ -286,27 +286,56 @@
     // =========================================================================
     // 4. INVENTARIO & STOCK ("CUÁNTOS PRODUCTOS QUEDAN")
     // =========================================================================
+    getCatalogSource() {
+      if (typeof window !== 'undefined' && Array.isArray(window.PRODUCTS_DATA) && window.PRODUCTS_DATA.length > 0) {
+        return window.PRODUCTS_DATA;
+      }
+      if (typeof PRODUCTS_DATA !== 'undefined' && Array.isArray(PRODUCTS_DATA) && PRODUCTS_DATA.length > 0) {
+        if (typeof window !== 'undefined') window.PRODUCTS_DATA = PRODUCTS_DATA;
+        return PRODUCTS_DATA;
+      }
+      return [];
+    },
+
     getStockMap() {
       try {
+        let stockMap = {};
         const raw = localStorage.getItem(KEYS.STOCK);
-        if (raw) return JSON.parse(raw);
-
-        // Inicializar stock realista para todos los productos de PRODUCTS_DATA
-        const initialStock = {};
-        if (typeof window.PRODUCTS_DATA !== 'undefined' && Array.isArray(window.PRODUCTS_DATA)) {
-          window.PRODUCTS_DATA.forEach((p, idx) => {
-            // Asignar stock coherente (tecnología alta gama: 8-15 uds, ropa: 20-40 uds)
-            let baseQty = 18;
-            if (p.price > 10000) baseQty = 6 + (idx % 6);
-            else if (p.price > 4000) baseQty = 12 + (idx % 10);
-            else if (p.category === 'ropa' || p.category === 'moda') baseQty = 24 + (idx % 20);
-            else baseQty = 15 + (idx % 15);
-
-            initialStock[p.id] = baseQty;
-          });
+        if (raw) {
+          try { stockMap = JSON.parse(raw) || {}; } catch (e) { stockMap = {}; }
         }
-        localStorage.setItem(KEYS.STOCK, JSON.stringify(initialStock));
-        return initialStock;
+
+        const catalog = this.getCatalogSource();
+        let changed = false;
+
+        // Garantizar que todos los productos de las 3 carpetas tengan stock inicial asignado
+        catalog.forEach((p, idx) => {
+          if (typeof stockMap[p.id] === 'undefined' || stockMap[p.id] === null) {
+            changed = true;
+            // Distribuir stock realista:
+            // Cada 25 productos, 1 está agotado (0) para demostración
+            // Cada 9 productos, 1 tiene stock bajo (2 a 4) para probar alertas
+            if (idx % 25 === 24) {
+              stockMap[p.id] = 0;
+            } else if (idx % 9 === 4) {
+              stockMap[p.id] = 2 + (idx % 3);
+            } else if (p.price > 10000) {
+              stockMap[p.id] = 6 + (idx % 6);
+            } else if (p.price > 4000) {
+              stockMap[p.id] = 12 + (idx % 10);
+            } else if (p.category === 'ropa') {
+              stockMap[p.id] = 24 + (idx % 20);
+            } else {
+              stockMap[p.id] = 16 + (idx % 14);
+            }
+          }
+        });
+
+        if (changed || !raw) {
+          localStorage.setItem(KEYS.STOCK, JSON.stringify(stockMap));
+        }
+
+        return stockMap;
       } catch (e) {
         return {};
       }
@@ -327,10 +356,8 @@
 
     getAllProductsWithStock() {
       try {
-        let catalog = [];
-        if (typeof window.PRODUCTS_DATA !== 'undefined' && Array.isArray(window.PRODUCTS_DATA)) {
-          catalog = [...window.PRODUCTS_DATA];
-        }
+        const catalogSource = this.getCatalogSource();
+        let catalog = catalogSource.map(item => ({ ...item }));
 
         // Cargar productos personalizados añadidos desde el panel
         const customProds = JSON.parse(localStorage.getItem(KEYS.CUSTOM_PRODUCTS) || '[]');
@@ -348,8 +375,14 @@
 
         return catalog.map(p => {
           const stock = typeof stockMap[p.id] !== 'undefined' ? stockMap[p.id] : 15;
+          const imgLower = String(p.image || '').toLowerCase();
+          let folder = 'Productos';
+          if (imgLower.startsWith('productos 3/')) folder = 'Productos 3';
+          else if (imgLower.startsWith('productos 2/')) folder = 'Productos 2';
+
           return {
             ...p,
+            folder: folder,
             stock: stock,
             inStock: stock > 0
           };
@@ -475,3 +508,4 @@
 
   window.AdminDB = AdminDB;
 })(window);
+

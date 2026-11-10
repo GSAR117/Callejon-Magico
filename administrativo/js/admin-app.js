@@ -38,6 +38,7 @@
     searchOrders: document.getElementById('searchOrdersInput'),
     filterOrderStatus: document.getElementById('filterOrderStatus'),
     searchStock: document.getElementById('searchStockInput'),
+    filterStockFolder: document.getElementById('filterStockFolder'),
     filterStockDept: document.getElementById('filterStockDept'),
     filterStockStatus: document.getElementById('filterStockStatus'),
 
@@ -137,7 +138,7 @@
     const badgeOrders = document.getElementById('navBadgeOrders');
     if (badgeOrders) badgeOrders.textContent = metrics.totalOrders;
     const badgeStock = document.getElementById('navBadgeStock');
-    if (badgeStock) badgeStock.textContent = metrics.lowStockCount > 0 ? `⚠️ ${metrics.lowStockCount}` : metrics.totalProductsCount;
+    if (badgeStock) badgeStock.textContent = metrics.totalProductsCount;
   }
 
   // 2. Dashboard Resumen
@@ -339,11 +340,16 @@
     if (!DOM.tableStockBody) return;
     const products = window.AdminDB.getAllProductsWithStock();
     const query = (DOM.searchStock ? DOM.searchStock.value : '').trim().toLowerCase();
+    const folderFilter = (DOM.filterStockFolder ? DOM.filterStockFolder.value : 'all');
     const deptFilter = (DOM.filterStockDept ? DOM.filterStockDept.value : 'all');
     const statusFilter = (DOM.filterStockStatus ? DOM.filterStockStatus.value : 'all');
 
     const filtered = products.filter(p => {
       const matchSearch = (p.name || '').toLowerCase().includes(query) || (p.sku || '').toLowerCase().includes(query);
+      let matchFolder = true;
+      if (folderFilter !== 'all') {
+        matchFolder = p.folder === folderFilter;
+      }
       let matchDept = true;
       if (deptFilter !== 'all') {
         matchDept = p.category === deptFilter;
@@ -353,11 +359,11 @@
       else if (statusFilter === 'lowstock') matchStatus = p.stock > 0 && p.stock <= 5;
       else if (statusFilter === 'outofstock') matchStatus = p.stock === 0;
 
-      return matchSearch && matchDept && matchStatus;
+      return matchSearch && matchFolder && matchDept && matchStatus;
     });
 
     if (!filtered.length) {
-      DOM.tableStockBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--admin-text-muted);">No se encontraron productos en el inventario.</td></tr>`;
+      DOM.tableStockBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--admin-text-muted);">No se encontraron productos en el inventario con los filtros seleccionados.</td></tr>`;
       return;
     }
 
@@ -372,6 +378,8 @@
         badgeStockText = `¡Poco stock! (${p.stock})`;
       }
 
+      const folderClass = p.folder === 'Productos 3' ? 'folder-p3' : (p.folder === 'Productos 2' ? 'folder-p2' : 'folder-p1');
+
       return `
         <tr>
           <td>
@@ -382,6 +390,9 @@
                 <span style="font-size: 0.72rem; color: var(--admin-text-muted);">SKU: ${p.sku || 'N/A'}</span>
               </div>
             </div>
+          </td>
+          <td>
+            <span class="badge-folder ${folderClass}">📁 ${escapeHtml(p.folder || 'Productos')}</span>
           </td>
           <td><span style="font-size: 0.78rem; color: var(--admin-text-muted);">${escapeHtml(p.department || p.category)}</span></td>
           <td><strong>$${Number(p.price || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong></td>
@@ -656,6 +667,7 @@
     if (DOM.searchOrders) DOM.searchOrders.addEventListener('input', () => renderOrdersTable());
     if (DOM.filterOrderStatus) DOM.filterOrderStatus.addEventListener('change', () => renderOrdersTable());
     if (DOM.searchStock) DOM.searchStock.addEventListener('input', () => renderStockTable());
+    if (DOM.filterStockFolder) DOM.filterStockFolder.addEventListener('change', () => renderStockTable());
     if (DOM.filterStockDept) DOM.filterStockDept.addEventListener('change', () => renderStockTable());
     if (DOM.filterStockStatus) DOM.filterStockStatus.addEventListener('change', () => renderStockTable());
   }
@@ -717,3 +729,4 @@
     showToast
   };
 })();
+

@@ -346,6 +346,13 @@
                   <input type="text" class="admin-search-input" id="searchStockInput" placeholder="Buscar por nombre o SKU..." />
                 </div>
 
+                <select class="admin-select" id="filterStockFolder">
+                  <option value="all" selected>Todas las Carpetas (Productos, 2 y 3)</option>
+                  <option value="Productos">📁 Carpeta Productos (1)</option>
+                  <option value="Productos 2">📁 Carpeta Productos 2</option>
+                  <option value="Productos 3">📁 Carpeta Productos 3</option>
+                </select>
+
                 <select class="admin-select" id="filterStockDept">
                   <option value="all">Todos los Departamentos</option>
                   <option value="electronica">Tecnología & Cómputo</option>
@@ -358,7 +365,7 @@
                 </select>
 
                 <select class="admin-select" id="filterStockStatus">
-                  <option value="all">Todas las existencias</option>
+                  <option value="all" selected>Todas las existencias</option>
                   <option value="instock">Con Stock (>5)</option>
                   <option value="lowstock">Stock Bajo (1 a 5)</option>
                   <option value="outofstock">Agotados (0)</option>
@@ -375,6 +382,7 @@
                 <thead>
                   <tr>
                     <th>Producto & SKU</th>
+                    <th>Carpeta Origen</th>
                     <th>Departamento</th>
                     <th>Precio</th>
                     <th>Cuántos Quedan (Stock)</th>
@@ -557,3 +565,4 @@
 </body>
 
 </html>
+
