@@ -5819,63 +5819,89 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    "id": "toy-clm-13",
-    "department": "Juguetes & Niños",
-    "name": "Juego de Mesa Familiar White Edition de Estrategia y Palabras",
-    "slug": "juego-de-mesa-blanco-familiar",
-    "category": "juguetes",
-    "subcategory": "juegos-mesa",
-    "brand": "Ravensburger / Callejón",
-    "badge": "Diversión en Familia",
-    "badgeType": "new",
-    "price": 799,
-    "originalPrice": 949,
-    "rating": 4.8,
-    "reviewsCount": 420,
+    "id": "home-clm-10",
+    "department": "Hogar · Comedores & Mesas",
+    "name": "Juego de Comedor Moderno 6 Plazas con Mesa de Cristal Templado y Sillas Blancas",
+    "slug": "juego-comedor-moderno-cristal-6-sillas-blancas",
+    "category": "hogar",
+    "subcategory": "muebles",
+    "brand": "D'Avanti Home / Callejón",
+    "badge": "Diseño Moderno",
+    "badgeType": "bestseller",
+    "price": 12999,
+    "originalPrice": 15999,
+    "rating": 4.9,
+    "reviewsCount": 142,
     "image": "Productos/Juego de mesa blanco.jpg",
-    "description": "Elegante juego de mesa familiar con tablero blanco minimalista, fichas de madera natural y mecánicas de asociación de conceptos que garantizan tardes de diversión.",
-    "sku": "JUG-RAV-JMB-13",
+    "description": "Juego de comedor contemporáneo de 6 plazas con cubierta de cristal templado de alta resistencia, estructura de acero cromado pulido y 6 sillas ergonómicas tapizadas en piel sintética blanca de fácil limpieza.",
+    "sku": "HGR-CMD-WHT-06",
     "inStock": true,
     "sizes": [
-      "2-6 Jugadores"
+      "Comedor 6 Plazas (150 x 90 x 75 cm)"
     ],
     "features": [
-      "Diseño escandinavo limpio y sobrio",
-      "Fichas y dados de madera ecológica",
-      "Reglas rápidas de aprender en 5 minutos",
-      "Ideal para todas las edades a partir de 8 años"
-    ]
+      "Cubierta de cristal templado segura que aporta sensación de amplitud y luminosidad",
+      "Sillas acolchadas con costuras reforzadas que brindan máximo confort en sobremesa",
+      "Patas con tapones plásticos antiderrapantes que no rayan el piso",
+      "Incluye servicio de armado profesional y entrega en planta baja garantizada"
+    ],
+    "colors": [
+      "Blanco Nieve con Cristal"
+    ],
+    "colorHex": [
+      "#f8fafc"
+    ],
+    "specs": {
+      "capacidad": "6 personas cómodamente sentadas",
+      "cubierta": "Cristal templado de 10 mm biselado resistente a impactos y cambios térmicos",
+      "estructura": "Patas de acero inoxidable con acabado cromado brillante",
+      "sillas": "6 sillas con respaldo ergonómico alto y acojinado indeformable",
+      "tapiz": "Ecopiel blanca de alta densidad lavable y antimanchas"
+    }
   },
   {
-    "id": "toy-clm-14",
-    "department": "Juguetes & Niños",
-    "name": "Juego de Mesa Estratégico Modern Grey Edition de Conquista",
-    "slug": "juego-de-mesa-gris-estrategia",
-    "category": "juguetes",
-    "subcategory": "juegos-mesa",
-    "brand": "Asmodee / Callejón",
-    "badge": "Estrategia Pro",
+    "id": "home-clm-11",
+    "department": "Hogar · Comedores & Mesas",
+    "name": "Juego de Comedor Imperial 8 Plazas con Mesa de Madera y Sillas Capitoné Gris Grafito",
+    "slug": "juego-comedor-imperial-8-plazas-sillas-capitone-gris",
+    "category": "hogar",
+    "subcategory": "muebles",
+    "brand": "D'Avanti Home / Callejón",
+    "badge": "Lujo & Confort",
     "badgeType": "offer",
-    "price": 899,
-    "originalPrice": 1149,
-    "rating": 4.9,
-    "reviewsCount": 510,
+    "price": 18999,
+    "originalPrice": 24999,
+    "rating": 5,
+    "reviewsCount": 186,
     "image": "Productos/juego de mesa gris.jpg",
-    "description": "Juego de tablero moderno de gestión de recursos y expansión territorial con componentes de alta densidad en tono gris pizarra y acabado mate premium.",
-    "sku": "JUG-ASM-JMG-14",
+    "description": "Comedor señorial para 8 personas fabricado en madera de roble con acabado oscuro y elegante centro de cristal templado. Acompañado de 8 sillas de respaldo alto con acabado capitoné artesanal abotonado en suave terciopelo gris grafito.",
+    "sku": "HGR-CMD-GRY-08",
     "inStock": true,
     "sizes": [
-      "2-5 Jugadores"
+      "Comedor Imperial 8 Plazas (220 x 105 x 78 cm)"
     ],
     "features": [
-      "Tablero modular con alta rejugabilidad",
-      "Tarjetas plastificadas de alta resistencia",
-      "Mecánicas profundas para jugadores intermedios",
-      "Tiempo estimado por partida: 45-60 min"
+      "Diseño aristocrático con respaldo capitoné que viste cualquier salón o comedor",
+      "Madera tratada en horno que evita deformaciones por humedad o cambios de clima",
+      "Confort excepcional para cenas formales y reuniones familiares prolongadas",
+      "Hasta 18 Meses Sin Intereses con tarjetas participantes y garantía de 5 años"
     ],
-    "offerTitle": "Oferta Especial Asmodee / Callejón",
+    "offerTitle": "Venta Especial Hogar · Comedores de Lujo",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-25T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00",
+    "colors": [
+      "Gris Grafito & Madera Oscura"
+    ],
+    "colorHex": [
+      "#374151"
+    ],
+    "specs": {
+      "capacidad": "8 personas con espacio amplio para servicio gourmet",
+      "madera": "Estructura robusta en madera sólida de roble con sellador de poliuretano mate",
+      "cubierta": "Marco de madera con panel central de cristal templado esmerilado",
+      "sillas": "8 sillas capitoné con botones tapizados y relleno de espuma de memoria",
+      "tapiz": "Terciopelo tecnológico repelente a líquidos y fácil de aspirar"
+    }
   },
   {
     "id": "tech-clm-1",
