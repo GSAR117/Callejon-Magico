@@ -3267,7 +3267,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 489,
     "discipline": "Fitness, Gym & Uso Diario",
-    "image": "https://images.unsplash.com/photo-1570554886111-e80fcca6a029?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L  rojo.jpg",
     "description": "El vaso térmico más popular del planeta. Fabricado con acero inoxidable reciclado al 90%, aislamiento al vacío de doble pared que mantiene tus bebidas frías por 11 horas (o heladas por 2 días) y tapa FlowState giratoria de 3 posiciones con popote reutilizable.",
     "sku": "STY-QNCH-40-CRM",
     "inStock": true,
@@ -3275,12 +3275,14 @@ const PRODUCTS_DATA = [
       "40 oz / 1.18 Litros"
     ],
     "colors": [
+      "Rojo Escarlata",
       "Crema Vainilla",
       "Rosa Cuarzo",
       "Verde Eucalipto",
       "Negro Mate"
     ],
     "colorHex": [
+      "#dc2626",
       "#fef08a",
       "#fbcfe8",
       "#a7f3d0",
@@ -3302,7 +3304,10 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta del Día · Hidratación Pro",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-20T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00",
+    "colorImages": {
+      "Rojo Escarlata": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L  rojo.jpg"
+    }
   },
   {
     "id": "sport-9",
