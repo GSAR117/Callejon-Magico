@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Administrativo | Callejón Mágico — Gestión de Tienda Departamental</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Estilos del Panel Administrativo -->
+  <link rel="stylesheet" href="administrativo/css/admin.css" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23dfb743'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
+</head>
+
+<body>
+  <div class="admin-layout">
+
+    <!-- ======================================================================
+         SIDEBAR ADMINISTRATIVO
+         ====================================================================== -->
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="brand-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Callejón Mágico <span class="brand-badge">Admin</span></h1>
+          <p>Panel de Control y Base de Datos</p>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <span class="nav-section-title">Principal</span>
+        <button type="button" class="nav-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="9" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="5" rx="1"></rect>
+            <rect x="14" y="12" width="7" height="9" rx="1"></rect>
+            <rect x="3" y="16" width="7" height="5" rx="1"></rect>
+          </svg>
+          Dashboard
+        </button>
+
+        <span class="nav-section-title">Operaciones</span>
+        <button type="button" class="nav-item" data-view="clients">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Clientes & Saldos
+          <span class="nav-badge" id="navBadgeUsers">0</span>
+        </button>
+
+        <button type="button" class="nav-item" data-view="orders">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          Ventas & Pedidos
+          <span class="nav-badge" id="navBadgeOrders">0</span>
+        </button>
+
+        <button type="button" class="nav-item" data-view="inventory">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          Inventario & Stock
+          <span class="nav-badge" id="navBadgeStock">0</span>
+        </button>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" class="btn-sidebar-store" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          Ver Tienda Pública
+        </a>
+      </div>
+    </aside>
+
+    <!-- ======================================================================
+         ÁREA PRINCIPAL DE CONTENIDO
+         ====================================================================== -->
+    <main class="admin-main">
+
+      <!-- Topbar Superior -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button type="button" class="btn-toggle-sidebar" id="btnToggleSidebar" aria-label="Abrir Menú">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="topbar-page-title">
+            <h2 id="adminPageTitle">Dashboard General</h2>
+            <p id="adminPageSubtitle">Resumen ejecutivo de ventas, clientes e inventario en tiempo real</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="topbar-sync-pill">
+            <span class="sync-dot"></span>
+            Base de Datos en Vivo
+          </div>
+
+          <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" id="btnExportDatabase" title="Descargar respaldo JSON completo">
+            📥 Exportar BD
+          </button>
+
+          <div class="admin-user-pill">
+            <div class="admin-avatar">CM</div>
+            <div class="admin-info-text">
+              <span class="name">Administrador</span>
+              <span class="role">Super Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Contenedor de Vistas -->
+      <div class="admin-content">
+
+        <!-- ==================================================================
+             VISTA 1: DASHBOARD GENERAL
+             ================================================================== -->
+        <section class="admin-view active" id="view-dashboard">
+          
+          <!-- Grid de Métricas Principales (KPIs) -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Clientes Registrados</span>
+                <div class="stat-icon clients">👥</div>
+              </div>
+              <div class="stat-value" id="kpiTotalUsers">0</div>
+              <div class="stat-meta">Cuentas con acceso a la tienda</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Ventas Totales</span>
+                <div class="stat-icon sales">💰</div>
+              </div>
+              <div class="stat-value" id="kpiTotalSales">$0.00</div>
+              <div class="stat-meta">Ingresos acumulados en pedidos</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Productos en Stock</span>
+                <div class="stat-icon stock">📦</div>
+              </div>
+              <div class="stat-value" id="kpiTotalStock">0 unidades</div>
+              <div class="stat-meta">Existencias totales disponibles</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Saldo Total Clientes</span>
+                <div class="stat-icon balance">💳</div>
+              </div>
+              <div class="stat-value" id="kpiTotalBalances">$0.00</div>
+              <div class="stat-meta">Fondos en Tarjetas Callejón Mágico</div>
+            </div>
+          </div>
+
+          <!-- Dos Paneles: Últimos Pedidos y Alertas de Stock Bajo -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem;">
+            
+            <!-- Últimas Ventas -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <div class="card-title-group">
+                  <h3>🛍️ Últimas Ventas Realizadas</h3>
+                  <p>Pedidos más recientes entrantes en la tienda</p>
+                </div>
+                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp.switchView('orders')">
+                  Ver Todas
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Folio</th>
+                      <th>Cliente</th>
+                      <th>Método</th>
+                      <th>Monto</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrdersBody">
+                    <!-- Dinámico -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Alerta de Cuántos Productos Quedan (Stock Bajo) -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <div class="card-title-group">
+                  <h3>⚠️ Alertas de Existencias Bajas</h3>
+                  <p>Productos con 5 o menos unidades en inventario</p>
+                </div>
+                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp.switchView('inventory')">
+                  Gestionar Stock
+                </button>
+              </div>
+              <div id="lowStockAlertList" style="max-height: 280px; overflow-y: auto;">
+                <!-- Dinámico -->
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VISTA 2: GESTIÓN DE CLIENTES & SALDOS
+             ================================================================== -->
+        <section class="admin-view" id="view-clients">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>👥 Base de Datos de Clientes</h3>
+                <p>Monitoreo de datos personales, historial y saldos en Tarjeta Callejón Mágico</p>
+              </div>
+              <div class="admin-card-actions">
+                <div class="search-input-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" class="admin-search-input" id="searchUsersInput" placeholder="Buscar por nombre, correo o teléfono..." />
+                </div>
+                <button type="button" class="btn-admin btn-admin-primary" id="btnOpenNewCustomerModal">
+                  + Nuevo Cliente
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Teléfono</th>
+                    <th>Registro</th>
+                    <th>Saldo Tarjeta Tienda</th>
+                    <th>Compras Totales</th>
+                    <th style="text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VISTA 3: VENTAS & PEDIDOS
+             ================================================================== -->
+        <section class="admin-view" id="view-orders">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>💰 Registro de Ventas y Compras</h3>
+                <p>Historial completo de pedidos, métodos de pago y estados de entrega</p>
+              </div>
+              <div class="admin-card-actions">
+                <div class="search-input-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" class="admin-search-input" id="searchOrdersInput" placeholder="Buscar por folio o cliente..." />
+                </div>
+                <select class="admin-select" id="filterOrderStatus">
+                  <option value="all">Todos los Estados</option>
+                  <option value="pending">⏳ Pendientes</option>
+                  <option value="paid">✅ Pagados</option>
+                  <option value="in-transit">🚚 En Camino</option>
+                  <option value="delivered">📦 Entregados</option>
+                  <option value="cancelled">❌ Cancelados</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Folio</th>
+                    <th>Fecha y Hora</th>
+                    <th>Cliente</th>
+                    <th>Artículos</th>
+                    <th>Método de Pago</th>
+                    <th>Total</th>
+                    <th>Estatus del Pedido</th>
+                  </tr>
+                </thead>
+                <tbody id="adminOrdersTableBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VISTA 4: INVENTARIO & STOCK ("CUÁNTOS PRODUCTOS QUEDAN")
+             ================================================================== -->
+        <section class="admin-view" id="view-inventory">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>📦 Control de Inventario & Existencias</h3>
+                <p>Consulta en tiempo real cuántos productos quedan, ajusta el stock o añade nuevos productos</p>
+              </div>
+              <div class="admin-card-actions">
+                <div class="search-input-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" class="admin-search-input" id="searchStockInput" placeholder="Buscar por nombre o SKU..." />
+                </div>
+
+                <select class="admin-select" id="filterStockDept">
+                  <option value="all">Todos los Departamentos</option>
+                  <option value="electronica">Tecnología & Cómputo</option>
+                  <option value="ropa">Moda & Ropa</option>
+                  <option value="hogar">Hogar & Muebles</option>
+                  <option value="deportes">Deportes & Fitness</option>
+                  <option value="belleza">Belleza & Perfumes</option>
+                  <option value="juguetes">Juguetes</option>
+                  <option value="videojuegos">Videojuegos & Consolas</option>
+                </select>
+
+                <select class="admin-select" id="filterStockStatus">
+                  <option value="all">Todas las existencias</option>
+                  <option value="instock">Con Stock (>5)</option>
+                  <option value="lowstock">Stock Bajo (1 a 5)</option>
+                  <option value="outofstock">Agotados (0)</option>
+                </select>
+
+                <button type="button" class="btn-admin btn-admin-primary" id="btnOpenNewProductModal">
+                  + Agregar Producto
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Producto & SKU</th>
+                    <th>Departamento</th>
+                    <th>Precio</th>
+                    <th>Cuántos Quedan (Stock)</th>
+                    <th>Estado de Existencias</th>
+                    <th style="text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="adminStockTableBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ======================================================================
+       MODALES DE ADMINISTRACIÓN
+       ====================================================================== -->
+
+  <!-- Modal 1: Recargar / Ajustar Saldo de Cliente -->
+  <div class="admin-modal-backdrop" id="modalAdjustBalance">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>💳 Recargar Saldo — Tarjeta Callejón Mágico</h3>
+        <button type="button" class="btn-close-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="formAdjustBalance">
+        <div class="admin-modal-body">
+          <div style="background: rgba(223, 183, 67, 0.1); border: 1px solid rgba(223, 183, 67, 0.25); padding: 1rem; border-radius: 8px; margin-bottom: 1.25rem;">
+            <div style="font-size: 0.78rem; color: var(--admin-text-muted); text-transform: uppercase;">Cliente Seleccionado</div>
+            <strong style="font-size: 1.05rem; color: #ffffff;" id="balanceClientName">-</strong>
+            <div style="font-size: 0.8rem; color: var(--admin-gold);" id="balanceClientEmail">-</div>
+            <div style="margin-top: 0.5rem; font-size: 0.85rem;">
+              Saldo actual: <strong style="color: #ffffff;" id="balanceCurrentDisplay">$0.00 MXN</strong>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="balanceActionType">Tipo de Operación</label>
+            <select id="balanceActionType" class="admin-form-control">
+              <option value="add">➕ Abonar / Recargar saldo al cliente</option>
+              <option value="subtract">➖ Restar / Deducir saldo</option>
+              <option value="set">🎯 Fijar saldo exacto</option>
+            </select>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="balanceAmountInput">Monto ($ MXN)</label>
+            <input type="number" id="balanceAmountInput" class="admin-form-control" placeholder="Ej: 1500.00" min="1" step="0.50" required />
+          </div>
+
+          <div class="admin-form-group">
+            <label for="balanceReasonInput">Concepto / Motivo</label>
+            <input type="text" id="balanceReasonInput" class="admin-form-control" placeholder="Ej: Abono en efectivo en sucursal / Devolución" required />
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Confirmar Saldo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Agregar / Editar Producto -->
+  <div class="admin-modal-backdrop" id="modalProductForm">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalProductTitle">📦 Producto</h3>
+        <button type="button" class="btn-close-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="formProduct">
+        <div class="admin-modal-body">
+          <div class="admin-form-group">
+            <label for="prodNameInput">Nombre del Producto</label>
+            <input type="text" id="prodNameInput" class="admin-form-control" placeholder="Ej: Smart TV Samsung 65 Pulgadas Crystal 4K" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="prodCategoryInput">Categoría</label>
+              <select id="prodCategoryInput" class="admin-form-control">
+                <option value="electronica">Tecnología</option>
+                <option value="ropa">Moda & Ropa</option>
+                <option value="hogar">Hogar</option>
+                <option value="deportes">Deportes</option>
+                <option value="belleza">Belleza</option>
+                <option value="juguetes">Juguetes</option>
+                <option value="videojuegos">Videojuegos & Consolas</option>
+              </select>
+            </div>
+            <div class="admin-form-group">
+              <label for="prodDeptInput">Departamento</label>
+              <input type="text" id="prodDeptInput" class="admin-form-control" placeholder="Ej: Tecnología · Pantallas" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="prodPriceInput">Precio ($ MXN)</label>
+              <input type="number" id="prodPriceInput" class="admin-form-control" placeholder="Ej: 8499" min="1" step="0.5" required />
+            </div>
+            <div class="admin-form-group">
+              <label for="prodOrigPriceInput">Precio Regular</label>
+              <input type="number" id="prodOrigPriceInput" class="admin-form-control" placeholder="Ej: 10999" min="1" step="0.5" />
+            </div>
+            <div class="admin-form-group">
+              <label for="prodStockInput">Stock (Existencias)</label>
+              <input type="number" id="prodStockInput" class="admin-form-control" placeholder="Ej: 20" min="0" required />
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="prodImageInput">Ruta de Imagen (Local o URL)</label>
+            <input type="text" id="prodImageInput" class="admin-form-control" placeholder="Ej: Productos/nombre-de-foto.jpg o URL" required />
+          </div>
+
+          <div class="admin-form-group">
+            <label for="prodDescInput">Descripción del Producto</label>
+            <textarea id="prodDescInput" class="admin-form-control" rows="3" placeholder="Detalles, materiales, especificaciones técnicas..."></textarea>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Nuevo Cliente -->
+  <div class="admin-modal-backdrop" id="modalCustomerForm">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>👤 Registrar Nuevo Cliente</h3>
+        <button type="button" class="btn-close-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="formCustomer">
+        <div class="admin-modal-body">
+          <div class="admin-form-group">
+            <label for="custFullName">Nombre Completo</label>
+            <input type="text" id="custFullName" class="admin-form-control" placeholder="Ej: María Fernanda González" required />
+          </div>
+
+          <div class="admin-form-group">
+            <label for="custEmail">Correo Electrónico</label>
+            <input type="email" id="custEmail" class="admin-form-control" placeholder="Ej: maria@ejemplo.com" required />
+          </div>
+
+          <div class="admin-form-group">
+            <label for="custPhone">Teléfono de Contacto</label>
+            <input type="tel" id="custPhone" class="admin-form-control" placeholder="Ej: 55 1234 5678" />
+          </div>
+
+          <div class="admin-form-group">
+            <label for="custInitialBalance">Saldo Inicial en Tarjeta Callejón Mágico ($ MXN)</label>
+            <input type="number" id="custInitialBalance" class="admin-form-control" placeholder="Ej: 2500.00" min="0" value="0" />
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Registrar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contenedor de Alertas Toast -->
+  <div class="admin-toast-container" id="adminToastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/products-data.js"></script>
+  <script src="administrativo/js/admin-db.js"></script>
+  <script src="administrativo/js/admin-app.js"></script>
+</body>
+
+</html>

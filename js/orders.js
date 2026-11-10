@@ -291,6 +291,24 @@
             sessionStorage.setItem('callejon_guest_orders', JSON.stringify(guestOrders));
           } catch (e) {}
         }
+
+        // 4. Actualizar inventario en tiempo real para panel administrativo
+        try {
+          const stockMap = JSON.parse(localStorage.getItem('callejon_stock_db') || '{}');
+          if (Array.isArray(newOrder.items)) {
+            newOrder.items.forEach(it => {
+              const pid = it.id || it.sku;
+              const qty = parseInt(it.quantity, 10) || 1;
+              if (pid) {
+                const currentStock = (stockMap[pid] !== undefined) ? parseInt(stockMap[pid], 10) : 15;
+                stockMap[pid] = Math.max(0, currentStock - qty);
+              }
+            });
+            localStorage.setItem('callejon_stock_db', JSON.stringify(stockMap));
+          }
+        } catch (stkErr) {
+          console.warn('Error al actualizar stock:', stkErr);
+        }
       } catch (err) {}
 
       return newOrder;
