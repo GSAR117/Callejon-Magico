@@ -2106,7 +2106,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 68,
     "age": "+8 años",
-    "image": "https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Auto Deportivo Radiocontrol RC Todo Terreno 4x4 Alta Velocidad.jpg",
     "description": "Velocidad salvaje en pasto, arena y rocas. Tracción integral 4x4 con amortiguadores de aceite, motor de alto torque y control remoto antiinterferencias.",
     "sku": "RC-TRK-4X4-40K",
     "inStock": true,
@@ -8039,6 +8039,45 @@ const PRODUCTS_DATA = [
       "Cámara ultra clara de 50 megapíxeles con modo retrato y noche",
       "Memoria expandible hasta 1TB mediante tarjeta MicroSD",
       "Desbloqueado para cualquier compañía telefónica"
+    ]
+  },
+  {
+    "id": "tech-clm-9",
+    "department": "Tecnología · Tablets & Productividad",
+    "name": "Tablet Lenovo IdeaTab 11\" 128GB 8GB RAM con Teclado Magnético Incluido",
+    "slug": "tablet-lenovo-ideatab-11-teclado",
+    "category": "electronica",
+    "subcategory": "tablets",
+    "brand": "Lenovo",
+    "badge": "2 en 1",
+    "badgeType": "new",
+    "price": 6499,
+    "originalPrice": 7999,
+    "rating": 4.9,
+    "reviewsCount": 120,
+    "image": "Productos 3/Tablet Lenovo Ideatab 11 + Keyboard 11 Pulgadas 128 GB 8 GB RAM.jpg",
+    "description": "Productividad y entretenimiento sin límites. Pantalla IPS 2K de 11 pulgadas, 8GB de memoria RAM para multitarea fluida, 128GB de almacenamiento y teclado físico magnético desmontable que la convierte al instante en una laptop ligera.",
+    "sku": "LNV-TAB11-KB",
+    "inStock": true,
+    "sizes": [
+      "11 Pulgadas / 128GB + 8GB RAM"
+    ],
+    "colors": [
+      "Gris Tormenta Metálico"
+    ],
+    "colorHex": [
+      "#4b5563"
+    ],
+    "specs": {
+      "pantalla": "11\" 2K (2000 x 1200) IPS con brillo de 400 nits y certificación TÜV Low Blue Light",
+      "procesador": "MediaTek Helio G99 Octa-Core de 6nm de alta eficiencia",
+      "bateria": "7,700 mAh con hasta 12 horas continuas de reproducción de video",
+      "audio": "Cuatro altavoces estéreo optimizados con Dolby Atmos"
+    },
+    "features": [
+      "Incluye funda protectora con soporte y teclado magnético desmontable en español",
+      "Modo lectura inmersivo con simulación de papel para cuidar la vista",
+      "Cuerpo unibody de aleación de aluminio pulido ultra delgado de solo 7.4 mm"
     ]
   }
 ];
