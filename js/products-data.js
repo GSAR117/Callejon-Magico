@@ -7871,5 +7871,91 @@ const PRODUCTS_DATA = [
       "Acrílico grado archivo que previene decoloración solar y polvo",
       "Certificado de autenticidad y envío con embalaje reforzado de alta seguridad"
     ]
+  },
+  {
+    "id": "toy-clm-20",
+    "name": "Andadera y Juguete de Empuje para Bebés Fisher-Price Perrito Camina Conmigo Musical",
+    "slug": "fisher-price-perrito-camina-conmigo-andadera",
+    "category": "juguetes",
+    "subcategory": "bebes",
+    "brand": "Fisher-Price",
+    "department": "Juguetes · Bebés & Estimulación Temprana",
+    "badge": "Estimulación",
+    "badgeType": "bestseller",
+    "price": 899,
+    "originalPrice": 1199,
+    "rating": 4.9,
+    "reviewsCount": 215,
+    "age": "6-36 meses",
+    "image": "Productos 3/Juguete para Caminar y Empujar para bebés Fisher-Price Perrito Camina Conmigo Café.jpg",
+    "description": "El compañero perfecto para dar los primeros pasos. Con más de 75 canciones, sonidos y frases educativas, enseña el abecedario, formas, colores y números mientras el bebé empuja o juega sentado.",
+    "sku": "FSH-PRT-CMP01",
+    "inStock": true,
+    "sizes": [
+      "Andadera Musical con Asa Ergonómica"
+    ],
+    "colors": [
+      "Café Cachorro Amigable"
+    ],
+    "colorHex": [
+      "#92400e"
+    ],
+    "specs": {
+      "etapas": "Tecnología Aprendizaje Continuo Smart Stages",
+      "contenido": "Más de 75 canciones, melodías, sonidos y frases en español",
+      "motricidad": "Fortalece la coordinación motriz gruesa y equilibrio",
+      "edad": "De 6 a 36 meses"
+    },
+    "features": [
+      "2 formas de jugar: Sentarse a explorar el panel o pararse y empujar",
+      "Asa de fácil agarre y base ancha con 4 ruedas resistentes que dan estabilidad",
+      "Nariz y botones iluminados que estimulan la curiosidad del bebé"
+    ]
+  },
+  {
+    "id": "toy-clm-21",
+    "name": "Set LEGO City Persecución en Auto y Moto de Policía con Minifiguras",
+    "slug": "lego-city-persecucion-policia-auto-moto",
+    "category": "juguetes",
+    "subcategory": "construccion",
+    "brand": "LEGO",
+    "department": "Juguetes · Construcción & LEGO City",
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 599,
+    "originalPrice": 799,
+    "rating": 4.9,
+    "reviewsCount": 142,
+    "age": "+5 años",
+    "image": "Productos 3/Set LEGO City Persecución de Policía.jpg",
+    "description": "Acción a toda velocidad con este emocionante set de persecución policial de LEGO City. Incluye patrulla interceptora, moto policial veloz y minifiguras de oficial de policía y ladrón con accesorios.",
+    "sku": "LEG-CTY-POL01",
+    "inStock": true,
+    "sizes": [
+      "Set Completo con 2 Vehículos y Minifiguras"
+    ],
+    "colors": [
+      "Patrulla Interceptora",
+      "Moto de Persecución"
+    ],
+    "colorHex": [
+      "#2563eb",
+      "#1d4ed8"
+    ],
+    "colorImages": {
+      "Patrulla Interceptora": "Productos 3/Set LEGO City Persecución de Policía.jpg",
+      "Moto de Persecución": "Productos 3/Set LEGO City Persecución en Moto de Policía.jpg"
+    },
+    "specs": {
+      "piezas": "198 piezas LEGO oficiales de alta precisión",
+      "minifiguras": "2 minifiguras (oficial de policía y sospechoso) con esposas y billete",
+      "edad": "Recomendado para constructores de 5 años en adelante",
+      "compatibilidad": "Compatible con todos los sets del universo LEGO City"
+    },
+    "features": [
+      "Vehículo patrulla con cabina abatible y espacio para el oficial",
+      "Moto deportiva policial con neumáticos de alta tracción",
+      "Guía didáctica ilustrada paso a paso e interactiva en app LEGO Builder"
+    ]
   }
 ];
