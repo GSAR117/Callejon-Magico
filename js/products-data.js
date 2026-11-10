@@ -1784,7 +1784,7 @@ const PRODUCTS_DATA = [
   },
   {
     "id": "toy-8",
-    "name": "Montable Eléctrico Jeep Aventura 12V 4x4 con Control Remoto Parental",
+    "name": "Carro Buggy Eléctrico Montable Todo Terreno 12V con Batería y Control Remoto",
     "slug": "montable-electrico-jeep-12v-4x4",
     "category": "juguetes",
     "subcategory": "vehiculos",
@@ -1797,7 +1797,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 62,
     "age": "3-5 años",
-    "image": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg",
+    "image": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños.jpg",
     "description": "Aventura todoterreno para pequeños pilotos. Batería de 12V recargable, doble motor con suspensión en las 4 ruedas, luces LED, bocina y control remoto inalámbrico para padres.",
     "sku": "MNT-JEP-12V4X",
     "inStock": true,
@@ -1805,12 +1805,18 @@ const PRODUCTS_DATA = [
       "12V Biplaza"
     ],
     "colors": [
-      "Rojo Deportivo Sport",
-      "Gris ATV Can Am Todo Terreno"
+      "Rojo Fuego",
+      "Verde Militar",
+      "Negro Extremo",
+      "Gris Can-Am ATV",
+      "Deportivo Infantil"
     ],
     "colorHex": [
       "#dc2626",
-      "#4b5563"
+      "#15803d",
+      "#18181b",
+      "#4b5563",
+      "#2563eb"
     ],
     "specs": {
       "motor": "Doble motor de 12V con tracción asistida",
@@ -1825,8 +1831,11 @@ const PRODUCTS_DATA = [
       "Cinturón de seguridad de tres puntos y puertas con cerrojo de protección"
     ],
     "colorImages": {
-      "Rojo Deportivo Sport": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg",
-      "Gris ATV Can Am Todo Terreno": "Productos 3/Vehículo Montable a Batería Xootz Can Am ATV 12V con Licencia Gris Electrico.jpg"
+      "Rojo Fuego": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños rojo.jpg",
+      "Verde Militar": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños verde.jpg",
+      "Negro Extremo": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños.jpg",
+      "Gris Can-Am ATV": "Productos 3/Vehículo Montable a Batería Xootz Can Am ATV 12V con Licencia Gris Electrico.jpg",
+      "Deportivo Infantil": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg"
     }
   },
   {
