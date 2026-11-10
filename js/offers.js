@@ -17,28 +17,27 @@
   // Cronograma predeterminado sincronizado con la fecha actual del sistema (Noviembre 2026)
   // Permite que haya ofertas con diferentes plazos: inmediatas (para prueba en vivo), de hoy y de fin de semana
   const DEFAULT_SCHEDULED_DATES = {
-    // ⚡ Ofertas Relámpago (Vencen hoy en minutos / plazo corto para ver la expiración en vivo)
-    'fashion-4': '2026-11-06T12:00:00-06:00',   // Bolso Tote Michael Kors (Mediodía)
-    'tech-4': '2026-11-06T13:00:00-06:00',      // Smart TV Samsung 55" (1:00 PM)
-    'gaming-con-1': '2026-11-06T12:30:00-06:00',// PS5 Slim Edición Digital (12:30 PM)
+    // ⚡ Ofertas Especiales de Noviembre (Vigentes hasta el 20 de Noviembre)
+    'fashion-4': '2026-11-20T23:59:59-06:00',   // Bolso Tote Michael Kors
+    'tech-4': '2026-11-20T23:59:59-06:00',      // Smart TV Samsung 55"
+    'gaming-con-1': '2026-11-20T23:59:59-06:00',// PS5 Slim Edición Digital
+    'home-2': '2026-11-20T23:59:59-06:00',      // Batería Cocina Hierro Fundido
+    'sport-8': '2026-11-20T23:59:59-06:00',     // Termo Stanley Quencher
+    'beauty-2': '2026-11-20T23:59:59-06:00',    // Perfume Sauvage Dior
+    'toy-3': '2026-11-20T23:59:59-06:00',       // Set Castillo de Construcción
 
-    // 🌟 Ofertas del Día (Vencen hoy viernes 6 de noviembre a medianoche)
-    'home-2': '2026-11-06T23:59:59-06:00',      // Batería Cocina Hierro Fundido
-    'sport-8': '2026-11-06T23:59:59-06:00',     // Termo Stanley Quencher
-    'beauty-2': '2026-11-06T23:59:59-06:00',    // Perfume Sauvage Dior
-    'toy-3': '2026-11-06T23:59:59-06:00',       // Set Castillo de Construcción
-
-    // 🛍️ Ofertas de Fin de Semana Mágico (Vencen el lunes 9 de noviembre)
-    'fash-clm-2': '2026-11-09T23:59:59-06:00',   // Vestido Satín
-    'tech-clm-1': '2026-11-09T23:59:59-06:00',   // Monitor Curvo Samsung
-    'home-10': '2026-11-09T23:59:59-06:00',      // Freidora DualZone
-    'sport-clm-3': '2026-11-09T23:59:59-06:00',  // Red Portería Nike Pro
-    'gaming-acc-1': '2026-11-09T23:59:59-06:00', // Headset Razer BlackShark
-    'toy-clm-4': '2026-11-09T23:59:59-06:00',    // Auto Control Remoto
-    'beauty-8': '2026-11-09T23:59:59-06:00'      // Tratamiento Facial
+    // 🛍️ Gran Venta Departamental Callejón Mágico (Vigentes hasta el 25 de Noviembre)
+    'fash-clm-2': '2026-11-25T23:59:59-06:00',   // Vestido Satín
+    'tech-clm-1': '2026-11-25T23:59:59-06:00',   // Bocina Backdrop BD92
+    'tech-16': '2026-11-25T23:59:59-06:00',      // Monitor Curvo Gamer Samsung Odyssey OLED G9
+    'home-10': '2026-11-25T23:59:59-06:00',      // Freidora DualZone
+    'sport-clm-3': '2026-11-25T23:59:59-06:00',  // Red Portería Nike Pro
+    'gaming-acc-1': '2026-11-25T23:59:59-06:00', // Headset Razer BlackShark
+    'toy-clm-4': '2026-11-25T23:59:59-06:00',    // Auto Control Remoto
+    'beauty-8': '2026-11-25T23:59:59-06:00'      // Tratamiento Facial
   };
 
-  const DEFAULT_FUTURE_DATE = '2026-11-15T23:59:59-06:00'; // 15 de Noviembre para el resto de ofertas
+  const DEFAULT_FUTURE_DATE = '2026-11-25T23:59:59-06:00'; // 25 de Noviembre para el resto de ofertas
 
   /**
    * Obtiene la lista de IDs de ofertas marcadas como expiradas
@@ -115,35 +114,43 @@
   function getOfferEndTime(productOrId) {
     const id = typeof productOrId === 'string' ? productOrId : productOrId.id;
     const p = typeof productOrId === 'object' ? productOrId : (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(x => x.id === id) : null);
+    const now = Date.now();
 
-    // 1. Fecha personalizada guardada
+    // 1. Fecha personalizada guardada (si es futura)
     const customDates = getCustomOfferDates();
     if (customDates[id]) {
       const parsed = new Date(customDates[id]).getTime();
-      if (!isNaN(parsed)) return parsed;
+      if (!isNaN(parsed) && parsed > now) return parsed;
     }
 
-    // 2. Propiedad offerEndDate en el producto
+    // 2. Propiedad offerEndDate en el producto (si es futura)
     if (p && p.offerEndDate) {
       const parsed = new Date(p.offerEndDate).getTime();
-      if (!isNaN(parsed)) return parsed;
+      if (!isNaN(parsed) && parsed > now) return parsed;
     }
 
-    // 3. Backup de fecha
+    // 3. Backup de fecha (si es futura)
     const backup = initialOfferBackups[id];
     if (backup && backup.offerEndDate) {
       const parsed = new Date(backup.offerEndDate).getTime();
-      if (!isNaN(parsed)) return parsed;
+      if (!isNaN(parsed) && parsed > now) return parsed;
     }
 
-    // 4. Cronograma predeterminado
+    // 4. Cronograma predeterminado (si es futuro)
     if (DEFAULT_SCHEDULED_DATES[id]) {
       const parsed = new Date(DEFAULT_SCHEDULED_DATES[id]).getTime();
-      if (!isNaN(parsed)) return parsed;
+      if (!isNaN(parsed) && parsed > now) return parsed;
     }
 
     // 5. Fecha general
-    return new Date(DEFAULT_FUTURE_DATE).getTime();
+    const defaultFuture = new Date(DEFAULT_FUTURE_DATE).getTime();
+    if (defaultFuture > now) return defaultFuture;
+
+    // 6. Respaldo dinámico (7 días adelante a las 23:59:59)
+    const rolling = new Date();
+    rolling.setDate(rolling.getDate() + 7);
+    rolling.setHours(23, 59, 59, 999);
+    return rolling.getTime();
   }
 
   /**
@@ -152,17 +159,23 @@
   function getOfferEndDateString(productOrId) {
     const id = typeof productOrId === 'string' ? productOrId : productOrId.id;
     const p = typeof productOrId === 'object' ? productOrId : (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(x => x.id === id) : null);
+    const now = Date.now();
 
     const customDates = getCustomOfferDates();
-    if (customDates[id]) return customDates[id];
+    if (customDates[id] && new Date(customDates[id]).getTime() > now) return customDates[id];
 
-    if (p && p.offerEndDate) return p.offerEndDate;
-    if (DEFAULT_SCHEDULED_DATES[id]) return DEFAULT_SCHEDULED_DATES[id];
+    if (p && p.offerEndDate && new Date(p.offerEndDate).getTime() > now) return p.offerEndDate;
+    if (DEFAULT_SCHEDULED_DATES[id] && new Date(DEFAULT_SCHEDULED_DATES[id]).getTime() > now) return DEFAULT_SCHEDULED_DATES[id];
 
     const backup = initialOfferBackups[id];
-    if (backup && backup.offerEndDate) return backup.offerEndDate;
+    if (backup && backup.offerEndDate && new Date(backup.offerEndDate).getTime() > now) return backup.offerEndDate;
 
-    return DEFAULT_FUTURE_DATE;
+    if (new Date(DEFAULT_FUTURE_DATE).getTime() > now) return DEFAULT_FUTURE_DATE;
+
+    const rolling = new Date();
+    rolling.setDate(rolling.getDate() + 7);
+    rolling.setHours(23, 59, 59, 0);
+    return rolling.toISOString();
   }
 
   /**
@@ -230,13 +243,12 @@
 
       const endTime = getOfferEndTime(p);
       const isTimeUp = now >= endTime;
-      const isMarkedExpired = expiredIds.includes(p.id);
 
       // Asignar propiedades de fecha al producto para fácil consulta
       p.offerEndDate = getOfferEndDateString(p);
       p.offerEndTimeMs = endTime;
 
-      if (isTimeUp || isMarkedExpired) {
+      if (isTimeUp) {
         // La oferta concluyó o venció: volver al precio original
         p.price = backup.originalPrice;
         p.originalPrice = null;
@@ -246,17 +258,24 @@
           p.badgeType = 'regular';
         }
 
-        if (isTimeUp && !isMarkedExpired) {
+        if (!expiredIds.includes(p.id)) {
           expiredIds.push(p.id);
           newExpiredFound = true;
         }
       } else {
-        // La oferta sigue vigente
+        // La oferta sigue vigente: asegurar precio de oferta y restaurar badge
         p.price = backup.offerPrice;
         p.originalPrice = backup.originalPrice;
         p.badge = backup.badge;
         p.badgeType = backup.badgeType;
         p.isOfferExpired = false;
+
+        // Si estaba marcado en expiredIds previamente, limpiarlo
+        const expIdx = expiredIds.indexOf(p.id);
+        if (expIdx > -1) {
+          expiredIds.splice(expIdx, 1);
+          newExpiredFound = true;
+        }
       }
     });
 
@@ -492,9 +511,9 @@
         const dateLabel = formatOfferDate(dateStr);
 
         if (product.isOfferExpired) {
-          timerPill.className = 'card-offer-timer-pill expired';
-          timerPill.innerHTML = `<span>⌛ Oferta finalizada (${dateLabel})</span>`;
+          timerPill.style.display = 'none';
         } else {
+          timerPill.style.display = '';
           timerPill.className = 'card-offer-timer-pill active';
           timerPill.innerHTML = `
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -570,18 +589,10 @@
       originalPrice: product.originalPrice
     } : null);
 
-    if (!backup) return '';
+    if (!backup || product.isOfferExpired) return '';
 
     const dateStr = getOfferEndDateString(product);
     const dateLabel = formatOfferDate(dateStr);
-
-    if (product.isOfferExpired) {
-      return `
-        <div class="card-offer-timer-pill expired" title="Oferta concluida el ${dateLabel}. Precio regular restaurado.">
-          <span>⌛ Oferta finalizada (${dateLabel})</span>
-        </div>
-      `;
-    }
 
     return `
       <div class="card-offer-timer-pill active" title="Vence el ${dateLabel}">
@@ -601,25 +612,11 @@
       offerTitle: product.offerTitle || 'Oferta Exclusiva'
     } : null);
 
-    if (!backup) return '';
+    if (!backup || product.isOfferExpired) return '';
 
     const dateStr = getOfferEndDateString(product);
     const dateLabel = formatOfferDate(dateStr);
     const title = product.offerTitle || backup.offerTitle || 'Oferta por tiempo limitado';
-
-    if (product.isOfferExpired) {
-      return `
-        <div class="quickview-offer-banner expired" id="qvOfferLiveBanner">
-          <div class="qv-offer-left">
-            <span class="qv-offer-icon">⌛</span>
-            <div>
-              <div class="qv-offer-title">OFERTA FINALIZADA · ${title}</div>
-              <div class="qv-offer-sub">El plazo concluyó el <strong>${dateLabel}</strong>. El producto regresó a su precio regular de <strong>$${product.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong>.</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
 
     const savings = backup.originalPrice - backup.offerPrice;
     const savingsPct = Math.round((savings / backup.originalPrice) * 100);

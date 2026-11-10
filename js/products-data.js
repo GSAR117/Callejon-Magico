@@ -152,7 +152,7 @@ const PRODUCTS_DATA = [
     "badgeType": "offer",
     "offerTitle": "Venta Flash Atelier",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T12:00:00-06:00",
+    "offerEndDate": "2026-11-20T23:59:59-06:00",
     "price": 2899,
     "originalPrice": 3899,
     "rating": 4.9,
@@ -442,7 +442,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Edición Limitada Cronógrafo D'Avanti",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "fashion-11",
@@ -584,7 +584,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Flash Deal Galaxy AI",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T13:30:00-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-3",
@@ -678,7 +678,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Venta Flash Tecnología 4K",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T13:00:00-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-5",
@@ -724,7 +724,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Cine en Casa LG OLED Cinema",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-6",
@@ -908,7 +908,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Especial Nintendo Switch OLED",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-10",
@@ -999,7 +999,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Samsung",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "tech-12",
@@ -1046,7 +1046,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial ASUS",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "tech-13",
@@ -1220,7 +1220,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Monitor Ultra Wide Odyssey OLED G9",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-17",
@@ -1391,7 +1391,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Dior",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "prod-6",
@@ -1595,7 +1595,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta del Día · Pistas & Acción",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "toy-4",
@@ -1764,7 +1764,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Hasbro",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "toy-8",
@@ -1894,7 +1894,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Play-Doh",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "toy-11",
@@ -2106,7 +2106,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Velocidad Extrema Auto RC 4x4",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "toy-16",
@@ -2242,7 +2242,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Especial Perfumería Francesa",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "beauty-3",
@@ -2425,7 +2425,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Aromas de Alta Costura YSL",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "beauty-7",
@@ -2516,7 +2516,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Tratamiento Privé Charlotte Tilbury",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "beauty-9",
@@ -2564,7 +2564,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Lancôme",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "beauty-10",
@@ -2990,7 +2990,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Running Ultraboost",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "sport-3",
@@ -3275,7 +3275,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta del Día · Hidratación Pro",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "sport-9",
@@ -3600,7 +3600,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial D'Avanti Pro Sport",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "sport-16",
@@ -3741,7 +3741,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta del Día · Chef Gourmet",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "home-3",
@@ -3915,7 +3915,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Especial Repostería KitchenAid",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "home-7",
@@ -4060,7 +4060,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Confort Hotelero Satén Egipcio",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "home-10",
@@ -4104,7 +4104,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Cocina Saludable DualZone XL",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "home-11",
@@ -4191,7 +4191,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Barista en Casa Nespresso Vertuo",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "home-13",
@@ -4365,7 +4365,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Zara Home",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "gaming-con-1",
@@ -4407,7 +4407,7 @@ const PRODUCTS_DATA = [
     },
     "offerTitle": "Venta Relámpago Consolas Next-Gen",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T12:30:00-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "gaming-con-2",
@@ -4628,7 +4628,7 @@ const PRODUCTS_DATA = [
     },
     "offerTitle": "Expansión del Año Elden Ring Erdtree",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "gaming-acc-1",
@@ -4667,7 +4667,7 @@ const PRODUCTS_DATA = [
     },
     "offerTitle": "Pro Gaming Gear DualSense Edge",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "gaming-acc-2",
@@ -4936,7 +4936,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Combate Táctico Call of Duty",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-06T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "game-clm-4",
@@ -5079,7 +5079,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Xbox Game Studios",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "game-clm-9",
@@ -5138,7 +5138,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Ubisoft",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "game-clm-11",
@@ -5197,7 +5197,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Ubisoft",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "game-clm-13",
@@ -5368,7 +5368,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Electronic Arts / Respawn",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "game-clm-19",
@@ -5427,7 +5427,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Warner Bros. Games / TT Games",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "toy-clm-1",
@@ -5542,7 +5542,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Construcción Épica Halo UNSC",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "toy-clm-5",
@@ -5601,7 +5601,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Vehículos Sci-Fi Halo Banshee",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "toy-clm-7",
@@ -5828,7 +5828,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Oferta Especial Asmodee / Callejón",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-15T23:59:59-06:00"
+    "offerEndDate": "2026-11-25T23:59:59-06:00"
   },
   {
     "id": "tech-clm-1",
@@ -5856,7 +5856,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Especial Audio & Potencia BD92",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-clm-2",
@@ -5959,7 +5959,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Sonido 360° Azul Cobalto",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "tech-clm-6",
@@ -6094,7 +6094,7 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Semana de la Moda Callejón",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   },
   {
     "id": "fash-clm-3",
@@ -6948,6 +6948,6 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Fútbol y Cancha Nike Weekend",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-09T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00"
   }
 ];
