@@ -58,9 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateCatLinks() {
-    DOM.catLinks.forEach(link =>
-      link.classList.toggle('active', link.dataset.subcategory === GamingState.subcategory)
-    );
+    DOM.catLinks.forEach(link => {
+      const isConsolasJuegos = (GamingState.subcategory === 'consolas' || GamingState.subcategory === 'juegos' || GamingState.subcategory === 'consolas-videojuegos');
+      if (link.dataset.subcategory === 'consolas-videojuegos' && isConsolasJuegos) {
+        link.classList.add('active');
+      } else {
+        link.classList.toggle('active', link.dataset.subcategory === GamingState.subcategory);
+      }
+    });
   }
 
   function updatePlatformPills() {
@@ -76,7 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let list = PRODUCTS_DATA.filter(p => p.category === 'videojuegos');
 
     if (GamingState.subcategory !== 'all') {
-      list = list.filter(p => p.subcategory === GamingState.subcategory);
+      if (GamingState.subcategory === 'consolas' || GamingState.subcategory === 'juegos' || GamingState.subcategory === 'consolas-videojuegos') {
+        list = list.filter(p => p.subcategory === 'consolas-videojuegos' || p.subcategory === 'consolas' || p.subcategory === 'juegos');
+      } else {
+        list = list.filter(p => p.subcategory === GamingState.subcategory);
+      }
     }
 
     if (GamingState.platform !== 'all') {
@@ -221,11 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (GamingState.subcategory !== 'all') {
       const subLabels = {
-        'consolas':         '🎮 Consolas',
-        'juegos':           '💿 Videojuegos',
-        'accesorios':       '🎧 Accesorios',
-        'pc-gaming':        '💻 PC Gaming',
-        'realidad-virtual': '🥽 Realidad Virtual'
+        'consolas-videojuegos': '🎮 Consolas & Videojuegos',
+        'consolas':             '🎮 Consolas & Videojuegos',
+        'juegos':               '🎮 Consolas & Videojuegos',
+        'accesorios':           '🎧 Accesorios Gaming',
+        'pc-gaming':            '💻 PC Gaming',
+        'realidad-virtual':     '🥽 Realidad Virtual'
       };
       chips.push({ type: 'subcategory', label: subLabels[GamingState.subcategory] || GamingState.subcategory });
     }
