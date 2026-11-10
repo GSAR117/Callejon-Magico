@@ -1612,7 +1612,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 230,
     "age": "+12 años",
-    "image": "Productos/LEGO Technic Ferrari Daytona SP3.jpg",
+    "image": "Productos/Juego de Mesa Catan Edición Completa.jpg",
     "description": "El juego de estrategia y negociación más premiado. Coloniza la isla de Catan recolectando madera, trigo, ladrillos, lana y mineral para construir poblados, caminos y ciudades.",
     "sku": "CAT-BRD-ESP01",
     "inStock": true,
@@ -1653,7 +1653,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 78,
     "age": "+16 años",
-    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/LEGO Technic Ferrari Daytona SP3.jpg",
     "description": "Obra maestra de ingeniería a escala 1:8 con 3,778 piezas. Caja de cambios secuencial de 8 velocidades con levas en volante, motor V12 con pistones móviles y elegantes puertas de mariposa.",
     "sku": "LEG-TEC-FERRSP3",
     "inStock": true,
@@ -1681,44 +1681,44 @@ const PRODUCTS_DATA = [
   },
   {
     "id": "toy-6",
-    "name": "Fisher-Price Gimnasio Piano Pataditas Deluxe Musical 4 Modos",
-    "slug": "fisher-price-gimnasio-piano-pataditas",
+    "name": "Figura de Acción Marvel Spider-Man No Way Home Articulada",
+    "slug": "figura-marvel-spiderman-articulada",
     "category": "juguetes",
-    "subcategory": "bebes",
-    "brand": "Fisher-Price",
-    "department": "Juguetes · Bebés & Estimulación",
+    "subcategory": "figuras",
+    "brand": "Marvel",
+    "department": "Juguetes · Figuras de Acción",
     "badge": "Más vendido",
     "badgeType": "bestseller",
     "price": 1099,
     "originalPrice": 1499,
     "rating": 4.9,
     "reviewsCount": 310,
-    "age": "0-2 años",
+    "age": "+4 años",
     "image": "Productos/Figura Marvel Spider-Man.jpg",
-    "description": "El gimnasio interactivo #1 recomendado por pediatras. Con tecnología Smart Stages de aprendizaje en 3 niveles, piano desmontable con teclas luminosas y 5 juguetes sensoriales colgantes.",
-    "sku": "FSH-GIM-PNO01",
+    "description": "Figura de acción coleccionable Marvel Spider-Man inspirada en el traje integrado de No Way Home. Cuenta con más de 20 puntos de articulación para poses acrobáticas dinámicas, manos arácnidas intercambiables y acabados cinematográficos de alta fidelidad.",
+    "sku": "MVL-SPD-NWH01",
     "inStock": true,
     "sizes": [
-      "Tapete Acolchado Deluxe"
+      "Escala 6 Pulgadas (15 cm)"
     ],
     "colors": [
-      "Multicolor Pastel"
+      "Rojo y Dorado Traje Integrado"
     ],
     "colorHex": [
-      "#4fc3f7",
-      "#81c784"
+      "#c62828",
+      "#eab308"
     ],
     "specs": {
-      "etapas": "3 niveles de aprendizaje Smart Stages (0m+, 3m+, 6m+)",
-      "canciones": "Más de 65 canciones, sonidos y melodías instrumentales",
-      "material": "Tapete lavable a máquina y plásticos 100% libres de BPA",
-      "edad": "Desde recién nacidos (0 a 36 meses)"
+      "escala": "Escala coleccionista de 6 pulgadas (15 cm)",
+      "articulaciones": "Más de 20 puntos de articulación dinámica en cuerpo completo",
+      "accesorios": "2 pares de manos arácnidas intercambiables (puño y telaraña)",
+      "licencia": "Oficial Marvel Studios / Hasbro"
     },
     "features": [
-      "4 modos de juego: Acostado boca arriba, boca abajo, sentado y portátil",
-      "Piano desmontable para que el niño lo toque donde sea",
-      "5 juguetes colgantes: sonaja, mordedera de elefante, espejo de autodescubrimiento",
-      "Fomenta la motricidad gruesa, la coordinación viso-motriz y el ritmo"
+      "Detalles esculpidos de alta precisión y textura micro-relieve en traje",
+      "Articulación avanzada en hombros tipo mariposa, codos dobles y rodillas",
+      "Manos intercambiables para recrear las poses más icónicas del Hombre Araña",
+      "Empaque de colección con diseño gráfico cinematográfico de Marvel"
     ]
   },
   {
@@ -1736,7 +1736,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 165,
     "age": "6-8 años",
-    "image": "https://images.unsplash.com/photo-1604200213928-ba3cf4fc8436?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Figura Marvel Legends Spider-Man.jpg",
     "description": "Figura de colección prémium a escala de 6 pulgadas con más de 30 puntos de articulación para poses dinámicas. Incluye cabezas intercambiables, manos arácnidas y telarañas.",
     "sku": "HAS-MVL-SPD60",
     "inStock": true,
@@ -1824,7 +1824,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 140,
     "age": "+8 años",
-    "image": "Productos/Juego de Mesa Catan Edición Completa.jpg",
+    "image": "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=800&q=80",
     "description": "Olvídate de los billetes de papel. Cuenta con una terminal bancaria todo en uno con tecnología sin contacto para registrar pagos, compras de propiedades y fluctuaciones de mercado.",
     "sku": "HAS-MNP-ELCBK",
     "inStock": true,
@@ -1911,7 +1911,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 92,
     "age": "+8 años",
-    "image": "https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Nerf Elite 2.0 Lanzador Motorizado Turbine CS-18 con 36 Dardos.jpg",
     "description": "Dispara ráfagas veloces con motor eléctrico de alta potencia. Cuenta con clip extraíble de 18 dardos, 4 rieles tácticos y alcance de lanzamiento de hasta 27 metros.",
     "sku": "NRF-EL2-TRB18",
     "inStock": true,
@@ -1994,7 +1994,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 73,
     "age": "+8 años",
-    "image": "https://images.unsplash.com/photo-1604200213928-ba3cf4fc8436?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/transformers autobot optimus prime.jpg",
     "description": "El legendario comandante Autobot con conversión de robot a tractocamión en 35 pasos. Incluye el cañón iónico y la Matriz de Liderazgo desmontable.",
     "sku": "HAS-TRN-OPT01",
     "inStock": true,
@@ -2581,7 +2581,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 420,
     "beautyType": "Parfum Amaderado Aromático",
-    "image": "https://images.unsplash.com/photo-1527632984436-4781bed88924?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Bleu de Chanel Parfum.jpg",
     "description": "La expresión más pura, majestuosa y sofisticada de Bleu de Chanel. Un sendero aromático intensamente amaderado que abre con frescor cítrico y continúa con una generosa profundidad de sándalo de Nueva Caledonia.",
     "sku": "CHNL-BLEU-PRF100",
     "inStock": true,
@@ -2891,7 +2891,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 218,
     "discipline": "Running & Maratón",
-    "image": "Productos/bicicleta de montaña negra.jpg",
+    "image": "Productos/Nike Vaporfly 3 Tenis de Carrera rosado.jpg",
     "description": "Los tenis de competición que rompieron récords mundiales. Con placa completa de fibra de carbono Flyplate y la espuma más reactiva de Nike, ZoomX, ofrecen un retorno de energía sin precedentes para tus carreras de 10K hasta maratón completo.",
     "sku": "NKE-VP3-RED42",
     "inStock": true,
@@ -2906,16 +2906,14 @@ const PRODUCTS_DATA = [
       "29.0 MX"
     ],
     "colors": [
-      "Negro Mate",
-      "Blanco Glaciar",
-      "Naranja Lava",
-      "Rojo & Naranja Sport"
+      "Rosa Flúor",
+      "Rojo con Blanco",
+      "Blanco con Amarillo"
     ],
     "colorHex": [
-      "#18181b",
-      "#f4f4f5",
-      "#ea580c",
-      "#dc2626"
+      "#ec4899",
+      "#dc2626",
+      "#facc15"
     ],
     "specs": {
       "placa": "Placa completa de fibra de carbono Flyplate de rigidez propulsora",
@@ -2932,10 +2930,9 @@ const PRODUCTS_DATA = [
       "Aprobado por World Athletics para competencias oficiales y maratones olímpicos"
     ],
     "colorImages": {
-      "Negro Mate": "Productos/bicicleta de montaña negra.jpg",
-      "Blanco Glaciar": "Productos/bicicleta de montaña blanca.jpg",
-      "Naranja Lava": "Productos/bicicleta de montaña naranja.jpg",
-      "Rojo & Naranja Sport": "Productos/bicicleta de montaña roja y naranja.jpg"
+      "Rosa Flúor": "Productos/Nike Vaporfly 3 Tenis de Carrera rosado.jpg",
+      "Rojo con Blanco": "Productos/Nike Vaporfly 3 Tenis de Carrera rojo con blanco.jpg",
+      "Blanco con Amarillo": "Productos/Nike Vaporfly 3 Tenis de Carrera blanco con amarillo.jpg"
     }
   },
   {
@@ -3007,7 +3004,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 88,
     "discipline": "Cardio & Gimnasio en Casa",
-    "image": "Productos/Mancuernas Ajustables Bowflex SelectTech 552.jpg",
+    "image": "Productos/Caminadora Eléctrica NordicTrack T Series.jpg",
     "description": "Caminadora profesional interactiva con motor de 3.0 CHP de alto torque. Cuenta con inclinación digital automática del 0% al 12%, velocidad de hasta 19 km/h, sistema de amortiguación FlexSelect que protege tus rodillas y pantalla táctil HD interactiva.",
     "sku": "NDT-TR-T75HD",
     "inStock": true,
@@ -3050,7 +3047,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 265,
     "discipline": "Crossfit, Fuerza & Hipertrofia",
-    "image": "Productos/Nike Vaporfly 3 Tenis de Carrera rojo con blanco.jpg",
+    "image": "Productos/Mancuernas Ajustables Bowflex SelectTech 552.jpg",
     "description": "Reemplaza 15 pares de mancuernas tradicionales con un solo sistema compacto. Con solo girar el dial lateral seleccionas pesos desde 2 kg hasta 24 kg por mancuerna en incrementos progresivos, manteniendo tu espacio limpio y ordenado.",
     "sku": "BWX-MAN-ST552",
     "inStock": true,
@@ -3058,14 +3055,10 @@ const PRODUCTS_DATA = [
       "Par Completo con Bases de Reposo"
     ],
     "colors": [
-      "Rojo con Blanco",
-      "Blanco con Amarillo",
-      "Rosa Flúor"
+      "Negro Mate & Rojo"
     ],
     "colorHex": [
-      "#dc2626",
-      "#facc15",
-      "#ec4899"
+      "#dc2626"
     ],
     "specs": {
       "rangoPeso": "De 2 a 24 kg (5 a 52.5 lbs) por cada mancuerna",
@@ -3080,12 +3073,7 @@ const PRODUCTS_DATA = [
       "Recubrimiento especial que evita ruidos metálicos y no raya el piso de tu hogar",
       "Empuñadura ergonómica de agarre texturizado antideslizante",
       "Garantía oficial de 2 años en discos y mecanismo de selección"
-    ],
-    "colorImages": {
-      "Rojo con Blanco": "Productos/Nike Vaporfly 3 Tenis de Carrera rojo con blanco.jpg",
-      "Blanco con Amarillo": "Productos/Nike Vaporfly 3 Tenis de Carrera blanco con amarillo.jpg",
-      "Rosa Flúor": "Productos/Nike Vaporfly 3 Tenis de Carrera rosado.jpg"
-    }
+    ]
   },
   {
     "id": "sport-5",
@@ -3102,7 +3090,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 74,
     "discipline": "Ciclismo MTB & Senderos",
-    "image": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/bicicleta de montaña negra.jpg",
     "description": "La bicicleta de montaña que domina cualquier sendero. Construida con cuadro ligero de Aluminio Alpha Silver con guiado interno de cables, suspensión delantera RockShox Judy con bloqueo hidráulico, transmisión 1x10 Shimano Deore y frenos de disco hidráulicos.",
     "sku": "TRK-MAR7-G3-29",
     "inStock": true,
@@ -3112,12 +3100,16 @@ const PRODUCTS_DATA = [
       "Talla L (1.77 - 1.88m)"
     ],
     "colors": [
-      "Azul Galáctico Degradado",
-      "Gris Mate Carbón"
+      "Negro Mate",
+      "Blanco Glaciar",
+      "Naranja Lava",
+      "Rojo & Naranja Sport"
     ],
     "colorHex": [
-      "#1e40af",
-      "#3f3f46"
+      "#18181b",
+      "#f4f4f5",
+      "#ea580c",
+      "#dc2626"
     ],
     "specs": {
       "cuadro": "Aluminio Alpha Silver con geometría Trail moderna y cableado interno",
@@ -3132,7 +3124,13 @@ const PRODUCTS_DATA = [
       "Transmisión 1x monoplatón simple y eficiente sin ruidos de desviador delantero",
       "Puntos de montaje para portabultos, salpicaderas y soporte de pata lateral",
       "Garantía de por vida en el cuadro respaldada por Trek Bicycle México"
-    ]
+    ],
+    "colorImages": {
+      "Negro Mate": "Productos/bicicleta de montaña negra.jpg",
+      "Blanco Glaciar": "Productos/bicicleta de montaña blanca.jpg",
+      "Naranja Lava": "Productos/bicicleta de montaña naranja.jpg",
+      "Rojo & Naranja Sport": "Productos/bicicleta de montaña roja y naranja.jpg"
+    }
   },
   {
     "id": "sport-6",
@@ -4076,7 +4074,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 5899,
     "rating": 4.9,
     "reviewsCount": 178,
-    "image": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Freidora de Aire DualZone 9.5 Litros Doble Canastilla Smart XL.jpg",
     "description": "Cocina dos alimentos diferentes, de dos formas distintas, y sírvelos listos al mismo tiempo. Capacidad XL de 9.5 litros dividida en dos zonas independientes de 4.75L con tecnología Smart Finish para sincronizar la cocción y Match Cook para duplicar recetas familiares.",
     "sku": "HGR-NINJ-DZ401",
     "inStock": true,
@@ -4161,7 +4159,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 5199,
     "rating": 4.8,
     "reviewsCount": 110,
-    "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Cafetera Nespresso Vertuo Next Deluxe con Espumador de Leche Aeroccino.jpg",
     "description": "Revoluciona tu experiencia cafetera con solo pulsar un botón. La tecnología de extracción Centrifusion™ lee el código de barras de cada cápsula y gira a 4,000 RPM para calibrar temperatura, flujo de agua y crear una crema densa y deliciosa. Incluye Aeroccino 3 para capuchinos calientes o iced lattes.",
     "sku": "HGR-NESP-VNEXT",
     "inStock": true,
@@ -4250,7 +4248,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 9499,
     "rating": 4.9,
     "reviewsCount": 29,
-    "image": "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Tapete Monumental Geométrico Nórdico Tejido a Mano en Lana 200x300 cm.jpg",
     "description": "Eleva el confort y la acústica de tu espacio. Tejido artesanalmente en telar de mano por maestros artesanos usando 100% lana virgen de Nueva Zelanda de primera calidad. Patrón geométrico moderno de inspiración Bauhaus en tonos neutros que aportan profundidad visual y calidez táctil inigualable.",
     "sku": "HGR-WELM-RUG2030",
     "inStock": true,
@@ -4607,7 +4605,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 1199,
     "rating": 4.9,
     "reviewsCount": 5643,
-    "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos/Elden Ring Shadow of the Erdtree — Multiplatforma.jpg",
     "description": "La expansión más aclamada de 2024. Explora las Tierras del Sueño con nuevas armas, hechizos, armaduras y la historia inédita de Miquella. Incluye el juego base Elden Ring.",
     "sku": "GAM-BNE-ELDSOTE07",
     "inStock": true,
@@ -5558,7 +5556,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 3899,
     "rating": 4.9,
     "reviewsCount": 410,
-    "image": "Productos/Mega Construx – Halo UNSC Elephant Sandnest.jpg",
+    "image": "Productos/Mega Construx  Halo UNSC Elephant Sandnest.jpg",
     "description": "Vehículo de recuperación móvil blindado gigante con orugas masivas, grúa funcional de rescate, bahía de reparación de Warthog y escuadrón Spartan con armamento pesado.",
     "sku": "JUG-MCX-HELE-05",
     "inStock": true,
@@ -6949,5 +6947,207 @@ const PRODUCTS_DATA = [
     "offerTitle": "Fútbol y Cancha Nike Weekend",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
     "offerEndDate": "2026-11-20T23:59:59-06:00"
+  },
+  {
+    "id": "toy-clm-15",
+    "name": "Lanzador Nerf Fortnite B-AR Motorizado con Ráfaga de Dardos",
+    "slug": "lanzador-nerf-fortnite-b-ar",
+    "category": "juguetes",
+    "subcategory": "figuras",
+    "brand": "Nerf",
+    "department": "Juguetes · Lanzadores & Deportes",
+    "badge": "Popular",
+    "badgeType": "bestseller",
+    "price": 1399,
+    "originalPrice": 1699,
+    "rating": 4.8,
+    "reviewsCount": 84,
+    "age": "+8 años",
+    "image": "Productos/Lanzador NEF Fornite.jpg",
+    "description": "Inspirado en el equipamiento de Fortnite con el envoltorio Converge. Cuenta con lanzamiento motorizado de 10 dardos continuos y clip extraíble de alta precisión.",
+    "sku": "NRF-FTN-BAR01",
+    "inStock": true,
+    "sizes": [
+      "Clip 10 Dardos + 10 Dardos Elite"
+    ],
+    "colors": [
+      "Diseño Converge Camuflaje"
+    ],
+    "colorHex": [
+      "#0284c7"
+    ],
+    "specs": {
+      "alcance": "Hasta 24 metros de distancia",
+      "dardos": "Incluye 10 dardos oficiales Nerf Elite",
+      "baterias": "Requiere 4 pilas C (no incluidas)",
+      "edad": "Recomendado para mayores de 8 años"
+    },
+    "features": [
+      "Lanzamiento motorizado por ráfagas de 10 dardos",
+      "Mira de precisión integrada en el armazón",
+      "Envoltorio oficial con licencia Fortnite Epic Games"
+    ]
+  },
+  {
+    "id": "toy-clm-16",
+    "name": "Lanzador Nerf Elite 2.0 Shockwave RD-15 con Tambor Giratorio",
+    "slug": "lanzador-nerf-elite-shockwave-rd15",
+    "category": "juguetes",
+    "subcategory": "figuras",
+    "brand": "Nerf",
+    "department": "Juguetes · Lanzadores & Deportes",
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 999,
+    "originalPrice": 1249,
+    "rating": 4.9,
+    "reviewsCount": 112,
+    "age": "+8 años",
+    "image": "Productos/Lanzador NERF Elite 2.0.jpg",
+    "description": "Lanzador táctico personalizable con tambor giratorio de 15 dardos y acción de bombeo manual sin necesidad de baterías.",
+    "sku": "NRF-EL2-SHK15",
+    "inStock": true,
+    "sizes": [
+      "Tambor 15 Dardos + 30 Dardos"
+    ],
+    "colors": [
+      "Azul Eléctrico / Naranja"
+    ],
+    "colorHex": [
+      "#0277bd",
+      "#ff6d00"
+    ],
+    "specs": {
+      "alcance": "Hasta 27 metros de distancia",
+      "dardos": "Incluye 30 dardos oficiales Nerf Elite 2.0",
+      "baterias": "No requiere baterías (bombeo manual)",
+      "edad": "Recomendado para mayores de 8 años"
+    },
+    "features": [
+      "Tambor giratorio de 15 dardos para fuego continuo rápido",
+      "3 rieles tácticos y puntos de unión para culata y cañón",
+      "Mecanismo de acción por bombeo suave y resistente"
+    ]
+  },
+  {
+    "id": "toy-clm-17",
+    "name": "Lanzador Nerf Halo Infinite MA40 Motorizado Réplica Oficial",
+    "slug": "lanzador-nerf-halo-infinite-ma40",
+    "category": "juguetes",
+    "subcategory": "figuras",
+    "brand": "Nerf",
+    "department": "Juguetes · Lanzadores & Deportes",
+    "badge": "Colección",
+    "badgeType": "bestseller",
+    "price": 1899,
+    "originalPrice": 2299,
+    "rating": 5,
+    "reviewsCount": 156,
+    "age": "+8 años",
+    "image": "Productos/Lanzador NERF halo infinite.jpg",
+    "description": "Réplica oficial a escala inspirada en el legendario rifle de asalto MA40 de Halo Infinite. Lanzamiento motorizado con clip de 10 dardos y riel táctico.",
+    "sku": "NRF-HALO-MA40",
+    "inStock": true,
+    "sizes": [
+      "Clip 10 Dardos + 10 Dardos Elite"
+    ],
+    "colors": [
+      "Verde Olivo UNSC"
+    ],
+    "colorHex": [
+      "#4b5320"
+    ],
+    "specs": {
+      "alcance": "Hasta 25 metros de alcance balístico",
+      "dardos": "Incluye 10 dardos Nerf Elite especiales",
+      "baterias": "Requiere 4 pilas C (no incluidas)",
+      "edad": "Para fanáticos y jugadores de +8 años"
+    },
+    "features": [
+      "Réplica con licencia oficial de 343 Industries / Halo Infinite",
+      "Motor de alta aceleración para disparo semiautomático veloz",
+      "Incluye tarjeta con código de contenido descargable para Halo Infinite"
+    ]
+  },
+  {
+    "id": "toy-clm-18",
+    "name": "Lanzador Nerf Ultra One Motorizado de Alta Velocidad y Precisión",
+    "slug": "lanzador-nerf-ultra-one-motorizado",
+    "category": "juguetes",
+    "subcategory": "figuras",
+    "brand": "Nerf",
+    "department": "Juguetes · Lanzadores & Deportes",
+    "badge": "Ultra Alcance",
+    "badgeType": "bestseller",
+    "price": 1599,
+    "originalPrice": 1999,
+    "rating": 4.8,
+    "reviewsCount": 97,
+    "age": "+8 años",
+    "image": "Productos/Lanzador NERF ultra one.jpg",
+    "description": "Experimenta la distancia extrema con dardos Nerf Ultra que vuelan hasta 36 metros. Tambor motorizado de alta capacidad de 25 dardos.",
+    "sku": "NRF-ULT-ONE25",
+    "inStock": true,
+    "sizes": [
+      "Tambor 25 Dardos Ultra"
+    ],
+    "colors": [
+      "Blanco, Naranja y Oro"
+    ],
+    "colorHex": [
+      "#f8fafc",
+      "#ea580c",
+      "#eab308"
+    ],
+    "specs": {
+      "alcance": "Alcance récord de hasta 36 metros",
+      "dardos": "Incluye 25 dardos oficiales Nerf Ultra con punta aerodinámica",
+      "baterias": "Requiere 4 pilas C (no incluidas)",
+      "edad": "Mayores de 8 años"
+    },
+    "features": [
+      "Tambor motorizado de 25 dardos para ráfagas continuas masivas",
+      "Tecnología Aerofin de vuelo ultra recto y veloz",
+      "Porta dardos en culata para recargas inmediatas"
+    ]
+  },
+  {
+    "id": "fash-clm-17",
+    "department": "Moda · Ropa",
+    "name": "Playera Polo Clásica Piqué de Algodón Negro Carbón Signature",
+    "slug": "playera-polo-clasica-negro-carbon",
+    "category": "ropa",
+    "subcategory": "camisas",
+    "gender": "hombre",
+    "brand": "D'Avanti Signature",
+    "badge": "Esencial",
+    "badgeType": "bestseller",
+    "price": 1099,
+    "originalPrice": 1299,
+    "rating": 4.9,
+    "reviewsCount": 940,
+    "image": "Productos/Playera tipo polo color negro.jpg",
+    "description": "El tono negro carbón elegante y versátil. Algodón piqué prémium transpirable de alta densidad, cuello acanalado reforzado indeformable y botones grabados.",
+    "sku": "MOD-DAV-POLOBLK-17",
+    "inStock": true,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "colors": [
+      "Negro Carbón"
+    ],
+    "colorHex": [
+      "#18181b"
+    ],
+    "features": [
+      "100% Algodón piqué peinado de 220 gsm",
+      "Teñido reactivo profundo resistente al desvanecimiento",
+      "Cuello acanalado indeformable",
+      "Aberturas laterales reforzadas y corte Classic Fit"
+    ]
   }
 ];
