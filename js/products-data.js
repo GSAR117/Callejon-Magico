@@ -4701,7 +4701,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 3999,
     "rating": 4.8,
     "reviewsCount": 1876,
-    "image": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Control Inalámbrico DualSense Edge — PS5.jpg",
     "description": "El control pro definitivo para PlayStation 5. Perfiles personalizados, gatillos y sticks intercambiables, deadzone ajustable y botones traseros programables. Diseñado para rendimiento competitivo máximo.",
     "sku": "GAM-SON-DSEDGE08",
     "inStock": true,
@@ -8240,6 +8240,64 @@ const PRODUCTS_DATA = [
       "genero": "FPS / Survival Horror Atmosférico",
       "jugadores": "1 jugador (offline)",
       "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "gaming-acc-4",
+    "department": "Videojuegos · Accesorios & Controles",
+    "name": "Control Inalámbrico Xbox Series X|S y PC con Bluetooth y Agarre Texturizado",
+    "slug": "control-inalambrico-xbox-series-xs",
+    "category": "videojuegos",
+    "subcategory": "accesorios",
+    "platform": "Xbox",
+    "platformTag": "xbox",
+    "brand": "Microsoft / Xbox",
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1399,
+    "originalPrice": 1699,
+    "rating": 4.9,
+    "reviewsCount": 3820,
+    "image": "Productos 3/control inalambrico xbox serie x-s.jpg",
+    "description": "Experimenta la comodidad modernizada del control inalámbrico Xbox, con superficies esculpidas y geometría refinada para mayor comodidad durante el juego. Incluye pad direccional híbrido, agarre texturizado en gatillos y botones y botón Compartir dedicado.",
+    "sku": "GAM-MS-XBCON01",
+    "inStock": true,
+    "genre": "Accesorio / Control",
+    "sizes": [
+      "Mando Inalámbrico Oficial Xbox"
+    ],
+    "colors": [
+      "Robot White Clásico",
+      "Verde Lima Pulse",
+      "Verde Militar Velocity",
+      "Negro Carbón Carbon Black",
+      "Edición Inalámbrica Pro"
+    ],
+    "colorHex": [
+      "#ffffff",
+      "#84cc16",
+      "#15803d",
+      "#09090b",
+      "#3b82f6"
+    ],
+    "colorImages": {
+      "Robot White Clásico": "Productos 3/control inalambrico xbox serie x-s.jpg",
+      "Verde Lima Pulse": "Productos 3/control inalambrico xbox verde lima.jpg",
+      "Verde Militar Velocity": "Productos 3/control inalambrico xbox verde.jpg",
+      "Negro Carbón Carbon Black": "Productos 3/control inalambrico xbox.jpg",
+      "Edición Inalámbrica Pro": "Productos 3/control inalambrico.jpg"
+    },
+    "features": [
+      "Tecnología inalámbrica de Xbox y Bluetooth para jugar en consolas, PC con Windows, Android e iOS",
+      "Pad direccional híbrido de alta precisión y respuesta táctil inmediata",
+      "Captura y comparte contenido fácilmente con el botón Share integrado",
+      "Conector para auriculares de audio de 3.5 mm"
+    ],
+    "specs": {
+      "bateria": "Hasta 40 horas de autonomía con pilas AA o batería recargable",
+      "conexion": "Inalámbrico Xbox Wireless / Bluetooth / USB-C",
+      "compatibilidad": "Xbox Series X, Xbox Series S, Xbox One, Windows 10/11, iOS y Android",
+      "peso": "Aprox. 287 gramos con pilas"
     }
   }
 ];
