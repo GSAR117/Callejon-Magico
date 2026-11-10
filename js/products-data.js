@@ -1982,7 +1982,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 84,
     "age": "+12 años",
-    "image": "https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Rompecabezas Ravensburger 1,000 Piezas Mapa del Mundo Histórico.jpg",
     "description": "Tecnología Softclick prémium con piezas cortadas a mano que encajan a la perfección. Impreso en papel de lino especial antirreflejos de alta calidad gráfica.",
     "sku": "RAV-PUZ-MAP1000",
     "inStock": true,
