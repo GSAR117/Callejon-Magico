@@ -4687,7 +4687,7 @@ const PRODUCTS_DATA = [
   },
   {
     "id": "gaming-acc-1",
-    "department": "Videojuegos · Consolas",
+    "department": "Videojuegos & Consolas",
     "name": "Control Inalámbrico DualSense Edge — PS5",
     "slug": "dualsense-edge-ps5",
     "category": "videojuegos",
@@ -4758,42 +4758,6 @@ const PRODUCTS_DATA = [
       "microfono": "ClearCast Gen2 retráctil",
       "conexion": "USB-C 2.4GHz / Bluetooth 5.3 / Jack 3.5mm",
       "bateria": "Intercambiable 36 horas por batería"
-    }
-  },
-  {
-    "id": "gaming-acc-3",
-    "department": "Videojuegos · Consolas",
-    "name": "ASUS ROG Swift Pro PG248QP — Monitor 540Hz",
-    "slug": "asus-rog-swift-pro-540hz",
-    "category": "videojuegos",
-    "subcategory": "accesorios",
-    "platform": "PC",
-    "platformTag": "pc",
-    "brand": "ASUS ROG",
-    "badge": "Nuevo",
-    "badgeType": "new",
-    "price": 18999,
-    "originalPrice": 22499,
-    "rating": 4.8,
-    "reviewsCount": 342,
-    "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80",
-    "description": "El monitor gaming más rápido del mundo con 540Hz overclocked. Panel TN de 24.1 pulgadas diseñado para esports de alta competencia, compatible con NVIDIA G-SYNC y trazado de movimiento E.S.S.A.",
-    "sku": "GAM-ROG-PG248QP10",
-    "inStock": true,
-    "genre": "Periférico PC",
-    "features": [
-      "540Hz tasa de refresco overclocked",
-      "0.1ms tiempo de respuesta GTG",
-      "NVIDIA G-SYNC compatible",
-      "Panel TN anti-reflejo premium",
-      "Soporte VESA 100x100 incluido"
-    ],
-    "specs": {
-      "panel": "24.1\" TN Fast 1080p",
-      "refresco": "540Hz (Overclocked desde 480Hz)",
-      "respuesta": "0.1ms GTG",
-      "resolucion": "1920x1080 Full HD",
-      "conectividad": "DisplayPort 1.4 / 2x HDMI 2.0 / USB Hub"
     }
   },
   {
@@ -7874,6 +7838,9 @@ const PRODUCTS_DATA = [
       "No requiere pegamento ni herramientas de corte",
       "Incluye folleto con instrucciones paso a paso a todo color",
       "Pintura y acabado mate de colección para vitrina"
+    ],
+    "gallery": [
+      "Productos 3/Rompecabezas 4D Puzzles Pokémon Charmander 241 Piezas 1.jpg"
     ]
   },
   {
@@ -8244,9 +8211,232 @@ const PRODUCTS_DATA = [
   },
   {
     "id": "gaming-acc-4",
-    "department": "Videojuegos · Accesorios & Controles",
-    "name": "Control Inalámbrico Xbox Series X|S y PC con Bluetooth y Agarre Texturizado",
-    "slug": "control-inalambrico-xbox-series-xs",
+    "department": "Videojuegos & Consolas",
+    "name": "Control Inalámbrico Xbox Series X|S — Robot White",
+    "slug": "control-xbox-series-robot-white",
+    "category": "videojuegos",
+    "subcategory": "accesorios",
+    "platform": "Xbox",
+    "platformTag": "xbox",
+    "brand": "Microsoft / Xbox",
+    "badge": "Popular",
+    "badgeType": "bestseller",
+    "price": 1399,
+    "originalPrice": 1699,
+    "rating": 4.9,
+    "reviewsCount": 3820,
+    "image": "Productos 3/control inalambrico xbox serie x-s.jpg",
+    "description": "Control oficial inalámbrico Xbox en impecable acabado Robot White. Cuenta con pad direccional híbrido, agarre texturizado en gatillos y botón Compartir dedicado para Xbox, PC y móviles.",
+    "sku": "GAM-MS-XBCON-WHT",
+    "inStock": true,
+    "genre": "Accesorio / Control",
+    "features": [
+      "Tecnología inalámbrica Xbox Wireless y Bluetooth para PC y dispositivos móviles",
+      "Pad híbrido de alta sensibilidad para combates y juegos deportivos",
+      "Entrada jack de audio de 3.5 mm para audífonos"
+    ],
+    "specs": {
+      "bateria": "Hasta 40 horas de autonomía",
+      "conexion": "Inalámbrico Xbox / Bluetooth / USB-C"
+    }
+  },
+  {
+    "id": "game-clm-26",
+    "department": "Videojuegos & Consolas",
+    "name": "Call of Duty: Modern Warfare (2019)",
+    "slug": "call-of-duty-modern-warfare-2019",
+    "category": "videojuegos",
+    "subcategory": "consolas-videojuegos",
+    "platform": "Xbox / PlayStation / PC",
+    "platformTag": "all",
+    "brand": "Activision / Infinity Ward",
+    "badge": "Aclamado",
+    "badgeType": "bestseller",
+    "price": 899,
+    "originalPrice": 1299,
+    "rating": 4.9,
+    "reviewsCount": 6890,
+    "image": "Productos 3/call of duty modern warfare 2019.jpg",
+    "description": "El aclamado reinicio de la icónica saga Modern Warfare con un motor gráfico fotorrealista. Acompaña a la CIA, el SAS británico y la Fuerza de Liberación de Urzikistán en tensas misiones tácticas encubiertas.",
+    "sku": "GAM-ACT-MW2019",
+    "inStock": true,
+    "genre": "FPS Táctico / Militar",
+    "features": [
+      "Campaña cinematográfica de alto impacto con el Capitán John Price",
+      "Multijugador frenético con juego cruzado crossplay total entre plataformas",
+      "Operaciones Especiales cooperativas de 4 jugadores"
+    ],
+    "specs": {
+      "genero": "FPS Militar Táctico",
+      "jugadores": "1 campaña / multijugador online",
+      "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "game-clm-27",
+    "department": "Videojuegos & Consolas",
+    "name": "Call of Duty 4: Modern Warfare Remastered",
+    "slug": "call-of-duty-4-modern-warfare-remastered",
+    "category": "videojuegos",
+    "subcategory": "consolas-videojuegos",
+    "platform": "Xbox / PlayStation / PC",
+    "platformTag": "all",
+    "brand": "Activision",
+    "badge": "Clásico Histórico",
+    "badgeType": "bestseller",
+    "price": 599,
+    "originalPrice": 899,
+    "rating": 5,
+    "reviewsCount": 8410,
+    "image": "Productos 3/call of duty 4 morden warfare.jpg",
+    "description": "El legendario juego que revolucionó los shooters en primera persona para siempre. Remasterizado en impresionante alta definición con texturas mejoradas, renderizado basado en la física e iluminación de alto rango dinámico.",
+    "sku": "GAM-ACT-COD4MW",
+    "inStock": true,
+    "genre": "FPS / Clásico",
+    "features": [
+      "Misiones inolvidables como \"Todos camuflados\" en Prípiat",
+      "El multijugador clásico que definió rachas de bajas y puntos de experiencia",
+      "Audio remasterizado y gráficos optimizados a 60 fps"
+    ],
+    "specs": {
+      "genero": "Shooter Clásico",
+      "jugadores": "1 jugador / multijugador online",
+      "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "game-clm-28",
+    "department": "Videojuegos & Consolas",
+    "name": "Call of Duty: Modern Warfare 4 (2026)",
+    "slug": "call-of-duty-modern-warfare-4-2026",
+    "category": "videojuegos",
+    "subcategory": "consolas-videojuegos",
+    "platform": "Xbox / PlayStation / PC",
+    "platformTag": "all",
+    "brand": "Activision / Infinity Ward",
+    "badge": "Próximo Lanzamiento",
+    "badgeType": "new",
+    "price": 1599,
+    "originalPrice": 1799,
+    "rating": 5,
+    "reviewsCount": 920,
+    "image": "Productos 3/call of duty modern warfare 4 2026.jpg",
+    "description": "La culminación definitiva de la saga bélica moderna. Con físicas balísticas avanzadas, combate militar global a escala masiva y tecnología gráfica de última generación para consolas next-gen y PC.",
+    "sku": "GAM-ACT-MW4-26",
+    "inStock": true,
+    "genre": "FPS Táctico Next-Gen",
+    "features": [
+      "Misiones tácticas con entornos 100% destructibles en tiempo real",
+      "Integración total de audio espacial 3D y trazado de rayos completo",
+      "Campaña global con operaciones clandestinas de escala mundial"
+    ],
+    "specs": {
+      "genero": "FPS Next-Gen",
+      "jugadores": "1 campaña / hasta 128 online",
+      "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "game-clm-29",
+    "department": "Videojuegos & Consolas",
+    "name": "Call of Duty: Modern Warfare 2 (Clásico)",
+    "slug": "call-of-duty-modern-warfare-2-clasico",
+    "category": "videojuegos",
+    "subcategory": "consolas-videojuegos",
+    "platform": "Xbox / PlayStation / PC",
+    "platformTag": "all",
+    "brand": "Activision / Infinity Ward",
+    "badge": "Obra Maestra",
+    "badgeType": "bestseller",
+    "price": 649,
+    "originalPrice": 899,
+    "rating": 5,
+    "reviewsCount": 11200,
+    "image": "Productos 3/call of duty modern warfare 2.jpg",
+    "description": "Una de las entregas más aclamadas en la historia de los videojuegos. Sigue a la Fuerza Operativa 141 y a los Rangers del ejército de EE.UU. en una emocionante campaña que culmina en un multijugador legendario.",
+    "sku": "GAM-ACT-MW2-CLS",
+    "inStock": true,
+    "genre": "FPS Acción Militar",
+    "features": [
+      "La legendaria campaña con Soap, Ghost y el Capitán Price",
+      "Modo Operaciones Especiales con 23 misiones cooperativas desafiantes",
+      "Mapas multijugador icónicos como Rust, Terminal y Favela"
+    ],
+    "specs": {
+      "genero": "FPS Acción",
+      "jugadores": "1 historia / hasta 18 online",
+      "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "game-clm-30",
+    "department": "Videojuegos & Consolas",
+    "name": "Battlefield 6: Próxima Generación (2026)",
+    "slug": "battlefield-6-proxima-generacion-2026",
+    "category": "videojuegos",
+    "subcategory": "consolas-videojuegos",
+    "platform": "Xbox / PlayStation / PC",
+    "platformTag": "all",
+    "brand": "EA DICE",
+    "badge": "Nueva Era",
+    "badgeType": "new",
+    "price": 1599,
+    "originalPrice": 1799,
+    "rating": 4.9,
+    "reviewsCount": 780,
+    "image": "Productos 3/battlefield 6.jpg",
+    "description": "La guerra total regresa a su máxima gloria. Batallas masivas en línea con físicas de destrucción a gran escala, combate vehicular de aire, tierra y mar y climatología extrema dinámica.",
+    "sku": "GAM-DCE-BF6",
+    "inStock": true,
+    "genre": "Guerra Masiva / FPS",
+    "features": [
+      "Combates de hasta 128 jugadores simultáneos en mapas abiertos gigantescos",
+      "Destrucción ambiental táctica donde cualquier edificio puede ser derribado",
+      "Clima dinámico con tormentas de arena, huracanes e inundaciones"
+    ],
+    "specs": {
+      "genero": "FPS Bélico Masivo",
+      "jugadores": "Hasta 128 en línea",
+      "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "game-clm-31",
+    "department": "Videojuegos & Consolas",
+    "name": "Call of Duty: Black Ops (Original Clásico)",
+    "slug": "call-of-duty-black-ops-original",
+    "category": "videojuegos",
+    "subcategory": "consolas-videojuegos",
+    "platform": "Xbox / PlayStation / PC",
+    "platformTag": "all",
+    "brand": "Activision / Treyarch",
+    "badge": "Clásico de Culto",
+    "badgeType": "bestseller",
+    "price": 599,
+    "originalPrice": 849,
+    "rating": 4.9,
+    "reviewsCount": 9600,
+    "image": "Productos 3/call of duty black ops.jpg",
+    "description": "Adéntrate en los oscuros secretos de la Guerra Fría junto a Alex Mason y Frank Woods. Descubre el significado de los números en una de las mejores historias de espionaje bélico y sobrevive en Kino der Toten.",
+    "sku": "GAM-ACT-CODBO1",
+    "inStock": true,
+    "genre": "FPS / Zombies / Espionaje",
+    "features": [
+      "Inolvidable campaña psicológica ambientada en la Guerra Fría y Vietnam",
+      "El legendario mapa Zombies \"Kino der Toten\"",
+      "Multijugador icónico con partidas de apuestas y contrato de armas"
+    ],
+    "specs": {
+      "genero": "FPS / Zombies",
+      "jugadores": "1 campaña / 4 zombies / 18 multijugador",
+      "clasificacion": "M (Mature) +17 años"
+    }
+  },
+  {
+    "id": "gaming-acc-5",
+    "department": "Videojuegos & Consolas",
+    "name": "Control Inalámbrico Xbox Series X|S — Carbon Black",
+    "slug": "control-xbox-series-carbon-black",
     "category": "videojuegos",
     "subcategory": "accesorios",
     "platform": "Xbox",
@@ -8257,47 +8447,113 @@ const PRODUCTS_DATA = [
     "price": 1399,
     "originalPrice": 1699,
     "rating": 4.9,
-    "reviewsCount": 3820,
-    "image": "Productos 3/control inalambrico xbox serie x-s.jpg",
-    "description": "Experimenta la comodidad modernizada del control inalámbrico Xbox, con superficies esculpidas y geometría refinada para mayor comodidad durante el juego. Incluye pad direccional híbrido, agarre texturizado en gatillos y botones y botón Compartir dedicado.",
-    "sku": "GAM-MS-XBCON01",
+    "reviewsCount": 4120,
+    "image": "Productos 3/control inalambrico xbox.jpg",
+    "description": "El clásico atemporal en elegante acabado Carbon Black mate. Ergonomía optimizada para largas sesiones de juego con agarre antideslizante y gatillos de respuesta ultra rápida.",
+    "sku": "GAM-MS-XBCON-BLK",
     "inStock": true,
     "genre": "Accesorio / Control",
-    "sizes": [
-      "Mando Inalámbrico Oficial Xbox"
-    ],
-    "colors": [
-      "Robot White Clásico",
-      "Verde Lima Pulse",
-      "Verde Militar Velocity",
-      "Negro Carbón Carbon Black",
-      "Edición Inalámbrica Pro"
-    ],
-    "colorHex": [
-      "#ffffff",
-      "#84cc16",
-      "#15803d",
-      "#09090b",
-      "#3b82f6"
-    ],
-    "colorImages": {
-      "Robot White Clásico": "Productos 3/control inalambrico xbox serie x-s.jpg",
-      "Verde Lima Pulse": "Productos 3/control inalambrico xbox verde lima.jpg",
-      "Verde Militar Velocity": "Productos 3/control inalambrico xbox verde.jpg",
-      "Negro Carbón Carbon Black": "Productos 3/control inalambrico xbox.jpg",
-      "Edición Inalámbrica Pro": "Productos 3/control inalambrico.jpg"
-    },
     "features": [
-      "Tecnología inalámbrica de Xbox y Bluetooth para jugar en consolas, PC con Windows, Android e iOS",
-      "Pad direccional híbrido de alta precisión y respuesta táctil inmediata",
-      "Captura y comparte contenido fácilmente con el botón Share integrado",
-      "Conector para auriculares de audio de 3.5 mm"
+      "Acabado mate antihuellas y agarre texturizado en laterales y gatillos",
+      "Compatibilidad nativa con consolas Xbox Series X|S, Xbox One y Windows 10/11",
+      "Mapeo de botones personalizable a través de la app Accesorios de Xbox"
     ],
     "specs": {
-      "bateria": "Hasta 40 horas de autonomía con pilas AA o batería recargable",
-      "conexion": "Inalámbrico Xbox Wireless / Bluetooth / USB-C",
-      "compatibilidad": "Xbox Series X, Xbox Series S, Xbox One, Windows 10/11, iOS y Android",
-      "peso": "Aprox. 287 gramos con pilas"
+      "bateria": "Hasta 40 horas de juego",
+      "conexion": "Bluetooth / USB-C"
+    }
+  },
+  {
+    "id": "gaming-acc-6",
+    "department": "Videojuegos & Consolas",
+    "name": "Control Inalámbrico Xbox Series X|S — Edición Especial Verde Lima Pulse",
+    "slug": "control-xbox-series-verde-lima-pulse",
+    "category": "videojuegos",
+    "subcategory": "accesorios",
+    "platform": "Xbox",
+    "platformTag": "xbox",
+    "brand": "Microsoft / Xbox",
+    "badge": "Edición Especial",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": 1799,
+    "rating": 4.9,
+    "reviewsCount": 1620,
+    "image": "Productos 3/control inalambrico xbox verde lima.jpg",
+    "description": "Destaca con el vibrante acabado Electric Volt Verde Lima. Diseñado para ofrecer una estética llamativa con la misma precisión competitiva y autonomía duradera de Xbox.",
+    "sku": "GAM-MS-XBCON-LIME",
+    "inStock": true,
+    "genre": "Accesorio / Control",
+    "features": [
+      "Color verde lima eléctrico exclusivo con parte trasera blanca en contraste",
+      "Gatillos texturizados y pad híbrido refinado",
+      "Conexión instantánea con consolas, PC y teléfonos inteligentes"
+    ],
+    "specs": {
+      "bateria": "Hasta 40 horas de juego",
+      "conexion": "Inalámbrico Xbox / Bluetooth"
+    }
+  },
+  {
+    "id": "gaming-acc-7",
+    "department": "Videojuegos & Consolas",
+    "name": "Control Inalámbrico Xbox Series X|S — Edición Militar Verde Velocity",
+    "slug": "control-xbox-series-verde-militar-velocity",
+    "category": "videojuegos",
+    "subcategory": "accesorios",
+    "platform": "Xbox",
+    "platformTag": "xbox",
+    "brand": "Microsoft / Xbox",
+    "badge": "Popular",
+    "badgeType": "bestseller",
+    "price": 1499,
+    "originalPrice": 1799,
+    "rating": 4.8,
+    "reviewsCount": 1980,
+    "image": "Productos 3/control inalambrico xbox verde.jpg",
+    "description": "Inspirado en la temática táctica militar. Color verde oliva con detalles en negro, agarre mejorado en mangos y gatillos para una sujeción firme durante intensas partidas.",
+    "sku": "GAM-MS-XBCON-GRN",
+    "inStock": true,
+    "genre": "Accesorio / Control",
+    "features": [
+      "Estilo militar táctico con tonos verdes mate y botones oscuros",
+      "Textura en gatillos y botones superiores que evita resbalones",
+      "Conexión rápida mediante Bluetooth para juego en la nube"
+    ],
+    "specs": {
+      "bateria": "Hasta 40 horas de juego",
+      "conexion": "Bluetooth / Xbox Wireless"
+    }
+  },
+  {
+    "id": "gaming-acc-8",
+    "department": "Videojuegos & Consolas",
+    "name": "Control Inalámbrico Pro para Xbox y PC con Grip Ergonómico",
+    "slug": "control-inalambrico-pro-xbox-pc",
+    "category": "videojuegos",
+    "subcategory": "accesorios",
+    "platform": "Xbox / PC",
+    "platformTag": "all",
+    "brand": "Microsoft / Xbox Pro",
+    "badge": "Gamer Pro",
+    "badgeType": "bestseller",
+    "price": 1699,
+    "originalPrice": 2099,
+    "rating": 5,
+    "reviewsCount": 2450,
+    "image": "Productos 3/control inalambrico.jpg",
+    "description": "Control de alta gama diseñado para gamers exigentes. Sticks analógicos de ultra precisión con tensión balanceada, carátula pulida y conexión inalámbrica de baja latencia.",
+    "sku": "GAM-MS-PROCON",
+    "inStock": true,
+    "genre": "Accesorio / Control",
+    "features": [
+      "Latencia ultrabaja para juegos competitivos y shooters en primera persona",
+      "Empuñaduras de goma envolventes de tacto prémium",
+      "Batería recargable integrada con carga rápida por USB-C"
+    ],
+    "specs": {
+      "bateria": "Batería recargable hasta 30 horas continuas",
+      "conexion": "USB-C y Bluetooth 5.2"
     }
   }
 ];
