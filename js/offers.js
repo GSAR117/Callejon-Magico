@@ -800,9 +800,6 @@
           <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; text-align: right;">
             <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
               ${!isExpired ? `
-                <button type="button" class="btn-table-action" onclick="window.CallejonOffers.expireOffer('${id}')" title="Hacer que termine ahora y vuelva a su precio original" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.76rem; font-weight: 700; cursor: pointer;">
-                  ⏱️ Terminar ahora
-                </button>
                 <button type="button" class="btn-table-action" onclick="window.CallejonOffers.setCustomOfferDate('${id}', 2)" title="Hacer que venza en 2 minutos para ver la cuenta regresiva rápida" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.76rem; font-weight: 700; cursor: pointer;">
                   ⚡ Vence en 2m
                 </button>
