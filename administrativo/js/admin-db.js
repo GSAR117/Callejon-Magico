@@ -47,7 +47,7 @@
 
         return users.map(user => {
           const emailKey = (user.email || '').trim().toLowerCase();
-          const card = allCards[emailKey] || allCards[user.id] || (user.email === 'carlos@callejonmagico.com' ? { balance: 28450, points: 1420 } : null);
+          const card = allCards[emailKey] || allCards[user.id] || null;
           const userOrders = allOrders.filter(o => (o.userEmail || '').trim().toLowerCase() === emailKey || o.userId === user.id);
           const totalSpent = userOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
 
@@ -196,45 +196,11 @@
           }
         }
 
-        // Si no hay pedidos, insertar pedido demo para visualización
-        if (ordersMap.size === 0) {
-          const demoOrder = {
-            orderNum: 'CLM-784210',
-            userId: 'usr_demo_1',
-            userEmail: 'carlos@callejonmagico.com',
-            username: 'davanti_orion99',
-            date: '28 de Octubre, 2026, 04:30 PM',
-            timestamp: 1793200000000,
-            status: 'in-transit',
-            statusText: '🚚 En Ruta de Entrega',
-            recipient: {
-              name: 'Carlos Mendoza',
-              email: 'carlos@callejonmagico.com',
-              phone: '55 9876 5432',
-              street: '8A Avenida Sur no. 54 col. Centro (Plantel Centro)',
-              city: 'Tapachula, Chiapas'
-            },
-            paymentMethod: 'Tarjeta Callejón Mágico (18 MSI)',
-            subtotal: 5499.00,
-            discount: 549.90,
-            total: 4949.10,
-            items: [
-              {
-                id: 'reloj-tissot-prx',
-                name: 'Reloj Tissot PRX Powermatic 80',
-                price: 4949.10,
-                quantity: 1,
-                size: '40mm',
-                image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80'
-              }
-            ]
-          };
-          ordersMap.set(demoOrder.orderNum, demoOrder);
-          localStorage.setItem(KEYS.ORDERS_GLOBAL, JSON.stringify([demoOrder]));
-        }
+        // Filtrar pedidos reales (excluir pedido de demostración estático si existe)
+        const orders = Array.from(ordersMap.values()).filter(o => o && o.orderNum && o.orderNum !== 'CLM-784210');
 
         // Ordenar por timestamp descendente
-        return Array.from(ordersMap.values()).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        return orders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
       } catch (e) {
         console.error('AdminDB: Error al cargar pedidos:', e);
         return [];
