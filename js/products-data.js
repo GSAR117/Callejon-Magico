@@ -421,7 +421,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 4399,
     "rating": 5,
     "reviewsCount": 204,
-    "image": "assets/images/fashion/reloj_hombre.jpg",
+    "image": "Productos 2/Reloj Festina Timeless Chronograph hombre.jpg",
     "description": "Caja de acero quirúrgico 316L con baño de oro ionizado de 18K, esfera con índices facetados a mano, cristal de zafiro irrayable y movimiento de cuarzo japonés.",
     "sku": "JOY-RLJ-GLD",
     "inStock": true,
@@ -429,10 +429,14 @@ const PRODUCTS_DATA = [
       "Caja 42 mm"
     ],
     "colors": [
-      "Dorado / Esfera Negra"
+      "Dorado & Negro Chronograph",
+      "Negro Minimalista",
+      "Acero Inoxidable"
     ],
     "colorHex": [
-      "#c59942"
+      "#eab308",
+      "#09090b",
+      "#cbd5e1"
     ],
     "features": [
       "Cristal de zafiro irrayable",
@@ -442,7 +446,12 @@ const PRODUCTS_DATA = [
     ],
     "offerTitle": "Edición Limitada Cronógrafo D'Avanti",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-20T23:59:59-06:00"
+    "offerEndDate": "2026-11-20T23:59:59-06:00",
+    "colorImages": {
+      "Dorado & Negro Chronograph": "Productos 2/Reloj Festina Timeless Chronograph hombre.jpg",
+      "Negro Minimalista": "Productos 2/Reloj - FIZILI - Para Hombre - 08.jpg",
+      "Acero Inoxidable": "Productos 2/reloj de hombre.jpg"
+    }
   },
   {
     "id": "fashion-11",
@@ -459,7 +468,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 1799,
     "rating": 4.8,
     "reviewsCount": 52,
-    "image": "assets/images/fashion/lentes_sol.jpg",
+    "image": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar.jpg",
     "description": "Armazón ultraligero de aleación de titanio con micas de cristal mineral polarizado que bloquean el 100% de los rayos UVA/UVB eliminando reflejos molestos.",
     "sku": "MOD-ACC-LNT11",
     "inStock": true,
@@ -468,19 +477,26 @@ const PRODUCTS_DATA = [
       "Grande 62mm"
     ],
     "colors": [
-      "Dorado / Verde G-15",
-      "Negro Mate / Gris"
+      "Gris Cañón Polarizado",
+      "Carey Dorado Mujer",
+      "Negro Urbano Hombre"
     ],
     "colorHex": [
-      "#d4af37",
-      "#222222"
+      "#475569",
+      "#b45309",
+      "#09090b"
     ],
     "features": [
       "Micas polarizadas de cristal",
       "Protección UV400 total",
       "Almohadillas nasales de silicona",
       "Estuche de piel incluido"
-    ]
+    ],
+    "colorImages": {
+      "Gris Cañón Polarizado": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar.jpg",
+      "Carey Dorado Mujer": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar mujer.jpg",
+      "Negro Urbano Hombre": "Productos 2/Lentes de sol para hombres modernos.jpg"
+    }
   },
   {
     "id": "tech-1",
@@ -1781,7 +1797,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 62,
     "age": "3-5 años",
-    "image": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg",
     "description": "Aventura todoterreno para pequeños pilotos. Batería de 12V recargable, doble motor con suspensión en las 4 ruedas, luces LED, bocina y control remoto inalámbrico para padres.",
     "sku": "MNT-JEP-12V4X",
     "inStock": true,
@@ -1789,12 +1805,12 @@ const PRODUCTS_DATA = [
       "12V Biplaza"
     ],
     "colors": [
-      "Rojo Fuego",
-      "Negro Matte"
+      "Rojo Deportivo Sport",
+      "Gris ATV Can Am Todo Terreno"
     ],
     "colorHex": [
-      "#d32f2f",
-      "#212121"
+      "#dc2626",
+      "#4b5563"
     ],
     "specs": {
       "motor": "Doble motor de 12V con tracción asistida",
@@ -1807,7 +1823,11 @@ const PRODUCTS_DATA = [
       "Conexión Bluetooth / USB para reproducir música favorita mientras conduce",
       "Faros LED delanteros y luces traseras funcionales",
       "Cinturón de seguridad de tres puntos y puertas con cerrojo de protección"
-    ]
+    ],
+    "colorImages": {
+      "Rojo Deportivo Sport": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg",
+      "Gris ATV Can Am Todo Terreno": "Productos 3/Vehículo Montable a Batería Xootz Can Am ATV 12V con Licencia Gris Electrico.jpg"
+    }
   },
   {
     "id": "toy-9",
@@ -2533,7 +2553,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 310,
     "beautyType": "Serum Activador del Microbioma",
-    "image": "https://images.unsplash.com/photo-1608248597359-2e652a23332b?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/Lancôme Advanced Génifique Serum Rejuvenecedor 50ml.jpg",
     "description": "Inspirado en la ciencia del microbioma de la piel. Enriquecido con una fórmula patentada de 7 fracciones pre y probióticas, refuerza la barrera cutánea y mejora visiblemente la elasticidad, luminosidad y textura en tan solo 7 días.",
     "sku": "LAN-GEN-SER50",
     "inStock": true,
@@ -2804,7 +2824,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 421,
     "beautyType": "Crema 24h Hidratación Profunda",
-    "image": "https://images.unsplash.com/photo-1556228722-d0b5d0337c64?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/Kiehl's Ultra Facial Cream con Escualano 125ml.jpg",
     "description": "La crema hidratante más aclamada de la botica neoyorquina desde 1851. Proporciona hidratación continua por 24 horas incluso en condiciones climáticas extremas. Formulada con Escualano vegetal de oliva y Glicoproteína Glacial de la Antártida.",
     "sku": "KHL-UFC-125",
     "inStock": true,
@@ -3338,7 +3358,7 @@ const PRODUCTS_DATA = [
     "rating": 5,
     "reviewsCount": 112,
     "discipline": "Running, Triatlón & Ciclismo",
-    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/reloj inteligente para hombre color negro.jpg",
     "description": "Entrena de forma más inteligente con su brillante pantalla táctil AMOLED de 1.3 pulgadas. Proporciona métricas avanzadas de entrenamiento como dinámica de carrera en muñeca, potencia de zancada, estado de variabilidad de frecuencia cardíaca (VFC) y batería de hasta 13 días.",
     "sku": "GRM-FR265-BLK",
     "inStock": true,
@@ -3346,12 +3366,12 @@ const PRODUCTS_DATA = [
       "Caja 46mm Pantalla 1.3\""
     ],
     "colors": [
-      "Negro / Gris Piedra",
-      "Blanco / Azul Turquesa"
+      "Negro Carbón GPS",
+      "Rosa Cuarzo Smart"
     ],
     "colorHex": [
-      "#18181b",
-      "#06b6d4"
+      "#09090b",
+      "#f472b6"
     ],
     "specs": {
       "pantalla": "AMOLED táctil a color de 1.3 pulgadas ultra nítida con cristal Gorilla Glass 3",
@@ -3366,7 +3386,11 @@ const PRODUCTS_DATA = [
       "Planes de entrenamiento adaptables gratuitos con Garmin Coach para 5K, 10K y 21K",
       "Pagos contactless Garmin Pay directo desde el reloj en terminales bancarias",
       "Hasta 18 Mensualidades Sin Intereses con Tarjeta D'Avanti"
-    ]
+    ],
+    "colorImages": {
+      "Negro Carbón GPS": "Productos 2/reloj inteligente para hombre color negro.jpg",
+      "Rosa Cuarzo Smart": "Productos 2/reloj inteligente para mujer color rosa.jpg"
+    }
   },
   {
     "id": "sport-11",
@@ -3383,7 +3407,7 @@ const PRODUCTS_DATA = [
     "rating": 4.8,
     "reviewsCount": 94,
     "discipline": "Spinning & Cardio Intensivo",
-    "image": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/Bicicleta Fija de Spinning Profesional Magnética con Volante de Inercia 18kg.jpg",
     "description": "Entrenamiento de estudio en la comodidad de tu hogar. Equipada con resistencia magnética silenciosa de precisión, volante de inercia de acero de 18 kg para pedaleo suave, transmisión por banda Poly-V sin mantenimiento y conectividad Bluetooth con apps como Zwift y Kinomap.",
     "sku": "SPO-SPIN-MAG18",
     "inStock": true,
@@ -3426,7 +3450,7 @@ const PRODUCTS_DATA = [
     "rating": 4.9,
     "reviewsCount": 86,
     "discipline": "Tenis de Competición",
-    "image": "https://images.unsplash.com/photo-1617083934555-ac7d4fed8880?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/Raqueta de Tenis Wilson Pro Staff 97 v14 Grafito Trenzado.jpg",
     "description": "La heredera de la legendaria raqueta de Roger Federer. Con construcción Braid 45 que orienta las fibras de grafito a 45 grados para una sensación de impacto suprema y estabilidad torsional incomparable en cada golpe plano o con efecto.",
     "sku": "WIL-PS97-V14",
     "inStock": true,
@@ -3929,7 +3953,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 23999,
     "rating": 4.7,
     "reviewsCount": 41,
-    "image": "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/conjunto de mesa y sillas para cocina.jpg",
     "description": "Diseño orgánico y refinado que celebra la belleza natural de la madera. Mesa rectangular de 180 cm con cantos redondeados y vetas naturales a la vista, acompañada por 6 sillas ergonómicas con respaldo curvado y asiento tapizado en lino de textura cálida.",
     "sku": "HGR-ASHL-DIN6P",
     "inStock": true,
@@ -4118,7 +4142,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 4899,
     "rating": 4.8,
     "reviewsCount": 45,
-    "image": "https://images.unsplash.com/photo-1593618998160-e34014e67546?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/set de cuchillos 1.jpg",
     "description": "Corte quirúrgico y belleza milenaria en tu cocina. Forjados con núcleo central de acero japonés VG-10 envuelto en 67 capas de acero damasco de alto carbono. Filo afilado artesanalmente a 15 grados por lado mediante el método tradicional japonés Honbazuke.",
     "sku": "HGR-GRD-KN6SET",
     "inStock": true,
@@ -4126,10 +4150,14 @@ const PRODUCTS_DATA = [
       "Kit 6 Piezas + Bloque Magnético"
     ],
     "colors": [
-      "Madera Pakkawood Oscura"
+      "Acero Damasco Ébano",
+      "Acero Damasco Nogal",
+      "Edición Tradicional"
     ],
     "colorHex": [
-      "#3b2219"
+      "#1c1917",
+      "#78350f",
+      "#94a3b8"
     ],
     "specs": {
       "acero": "Núcleo de acero japonés VG-10 con 67 capas de forja Damasco",
@@ -4143,7 +4171,12 @@ const PRODUCTS_DATA = [
       "Equilibrio perfecto de peso entre hoja y mango para cortar sin fatiga",
       "Bloque magnético vertical de doble vista en madera maciza de acacia",
       "Presentado en caja de lujo acolchada para regalo con protectores de punta"
-    ]
+    ],
+    "colorImages": {
+      "Acero Damasco Ébano": "Productos 2/set de cuchillos 1.jpg",
+      "Acero Damasco Nogal": "Productos 2/set de cuchillos 2.jpg",
+      "Edición Tradicional": "Productos 2/set de cuchillos.jpg"
+    }
   },
   {
     "id": "home-12",
@@ -4193,7 +4226,7 @@ const PRODUCTS_DATA = [
   },
   {
     "id": "home-13",
-    "name": "Lámpara de Pie Arco Regulable en Mármol de Carrara y Latón Oro Cepillado",
+    "name": "Lámpara de Techo Colgante Moderna LED en Cristal y Acero",
     "slug": "lampara-de-pie-arco-marmol-laton-boconcept",
     "category": "hogar",
     "subcategory": "decoracion",
@@ -4205,7 +4238,7 @@ const PRODUCTS_DATA = [
     "originalPrice": 7999,
     "rating": 4.7,
     "reviewsCount": 39,
-    "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80",
+    "image": "Productos 2/Lámpara De Techo Cristal Moderna.jpg",
     "description": "Una obra maestra de diseño y presencia visual. La icónica silueta de arco flotante se extiende grácilmente sobre tu sala o comedor. Su base sólida de mármol blanco de Carrara aporta estabilidad escultural, combinada con tubos telescópicos regulables en latón cepillado acabado oro mate.",
     "sku": "HGR-BOCP-LAMP01",
     "inStock": true,
@@ -4213,12 +4246,14 @@ const PRODUCTS_DATA = [
       "Arco Extensible (185 a 220 cm altura)"
     ],
     "colors": [
-      "Latón Dorado Cepillado",
-      "Negro Mate"
+      "Cristal Ahumado Moderno",
+      "Cristal Transparente Élite",
+      "LED Minimalista"
     ],
     "colorHex": [
-      "#d4af37",
-      "#18181b"
+      "#64748b",
+      "#e2e8f0",
+      "#f59e0b"
     ],
     "specs": {
       "base": "Bloque sólido de mármol blanco natural de Carrara de 26 kg",
@@ -4232,7 +4267,12 @@ const PRODUCTS_DATA = [
       "Base de mármol con orificio biselado tradicional que facilita su reubicación",
       "Proyección de luz suave, envolvente y sin deslumbramientos para lectura",
       "Cable de alimentación textil trenzado de 2.5 metros con alta resistencia"
-    ]
+    ],
+    "colorImages": {
+      "Cristal Ahumado Moderno": "Productos 2/Lámpara De Techo Cristal Moderna.jpg",
+      "Cristal Transparente Élite": "Productos 2/Lámpara de techo de vidrio moderna.jpg",
+      "LED Minimalista": "Productos 2/lampara de techo LED.jpg"
+    }
   },
   {
     "id": "home-14",
@@ -7148,6 +7188,688 @@ const PRODUCTS_DATA = [
       "Teñido reactivo profundo resistente al desvanecimiento",
       "Cuello acanalado indeformable",
       "Aberturas laterales reforzadas y corte Classic Fit"
+    ]
+  },
+  {
+    "id": "fash-clm-18",
+    "department": "Moda · Bolsos & Accesorios",
+    "name": "Bolso Crossbody Elegante para Dama con Cadena y Broche",
+    "slug": "bolso-crossbody-dama-elegante",
+    "category": "ropa",
+    "subcategory": "bolsas",
+    "gender": "mujer",
+    "brand": "D'Avanti Atelier",
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": 1899,
+    "rating": 4.9,
+    "reviewsCount": 168,
+    "image": "Productos 2/Bolso Crossbody para Mujer.jpg",
+    "description": "Bolso bandolera crossbody de estructura compacta en piel sintética suave con correa de eslabones pulidos y herrajes dorados inoxidables.",
+    "sku": "BLS-CRSB-W01",
+    "inStock": true,
+    "sizes": [
+      "Unitalla (24 x 16 x 8 cm)"
+    ],
+    "colors": [
+      "Negro Azabache",
+      "Café Tostado",
+      "Rosa Pastel",
+      "Beige Crema"
+    ],
+    "colorHex": [
+      "#09090b",
+      "#78350f",
+      "#f472b6",
+      "#fef3c7"
+    ],
+    "colorImages": {
+      "Negro Azabache": "Productos 2/bolso para dama negro.jpg",
+      "Café Tostado": "Productos 2/bolso para dama cafe.jpg",
+      "Rosa Pastel": "Productos 2/bolso para dama rosa.jpg",
+      "Beige Crema": "Productos 2/bolso para dama.jpg"
+    },
+    "features": [
+      "Correa ajustable para llevar al hombro o cruzada",
+      "Bolsillo interior con cremallera y compartimento para celular",
+      "Herrajes reforzados con baño dorado resistente al desgaste"
+    ]
+  },
+  {
+    "id": "fash-clm-19",
+    "department": "Moda · Accesorios de Hombre",
+    "name": "Cartera Bifold de Piel Genuina para Hombre con Bloqueo RFID y Soporte AirTag",
+    "slug": "cartera-hombre-piel-rfid-airtag",
+    "category": "ropa",
+    "subcategory": "accesorios",
+    "gender": "hombre",
+    "brand": "D'Avanti Sartorial",
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 699,
+    "originalPrice": 999,
+    "rating": 4.9,
+    "reviewsCount": 312,
+    "image": "Productos 2/Airtag Cartera para Hombre RFID Bloqueo Tarjetero.jpg",
+    "description": "Cartera de caballero extrafina elaborada en piel genuina con ranura integrada para Apple AirTag, tecnología de blindaje contra clonación RFID y tarjetero de extracción rápida.",
+    "sku": "ACC-CRT-HMB01",
+    "inStock": true,
+    "sizes": [
+      "Slim Fit (11 x 8.5 cm)"
+    ],
+    "colors": [
+      "Negro Carbón AirTag",
+      "Café Miel RFID",
+      "Negro Clásico Antirrobo"
+    ],
+    "colorHex": [
+      "#18181b",
+      "#92400e",
+      "#09090b"
+    ],
+    "colorImages": {
+      "Negro Carbón AirTag": "Productos 2/Airtag Cartera para Hombre RFID Bloqueo Tarjetero.jpg",
+      "Café Miel RFID": "Productos 2/cartera para caballero cafe.jpg",
+      "Negro Clásico Antirrobo": "Productos 2/cartera para caballero negro.jpg"
+    },
+    "features": [
+      "Protección certificada RFID contra lectores electrónicos no deseados",
+      "Espacio dedicado para 8 tarjetas bancarias, billetes y credencial con visor",
+      "Perfil ultradelgado que no abulta en el bolsillo"
+    ]
+  },
+  {
+    "id": "fash-clm-20",
+    "department": "Moda · Accesorios de Mujer",
+    "name": "Cartera Billetera Larga para Dama con Cierre Perimetral y Monedero",
+    "slug": "cartera-larga-dama-cierre",
+    "category": "ropa",
+    "subcategory": "accesorios",
+    "gender": "mujer",
+    "brand": "D'Avanti Atelier",
+    "badge": "Popular",
+    "badgeType": "bestseller",
+    "price": 799,
+    "originalPrice": 1099,
+    "rating": 4.8,
+    "reviewsCount": 220,
+    "image": "Productos 2/cartera para mujer cafe.jpg",
+    "description": "Billetera larga tipo clutch confeccionada en textura suave con múltiples divisiones para tarjetas, billetes extendidos y monedero central con cremallera.",
+    "sku": "ACC-CRT-MJR01",
+    "inStock": true,
+    "sizes": [
+      "Largo 19 x 10 cm"
+    ],
+    "colors": [
+      "Café Caramelo",
+      "Rosa Rubor",
+      "Negro Noche"
+    ],
+    "colorHex": [
+      "#92400e",
+      "#f472b6",
+      "#18181b"
+    ],
+    "colorImages": {
+      "Café Caramelo": "Productos 2/cartera para mujer cafe.jpg",
+      "Rosa Rubor": "Productos 2/cartera mujer rosa.jpg",
+      "Negro Noche": "Productos 2/cartera para mujer.jpg"
+    },
+    "features": [
+      "Cierre perimetral de acero dorado suave y duradero",
+      "12 ranuras para tarjetas bancarias y ventana de identificación",
+      "Compartimento amplio para teléfonos de hasta 6.7 pulgadas"
+    ]
+  },
+  {
+    "id": "fash-clm-21",
+    "department": "Moda · Ropa de Mujer",
+    "name": "Vestido de Cóctel Elegante con Vuelo y Escote Cruzado",
+    "slug": "vestido-coctel-elegante-escote",
+    "category": "ropa",
+    "subcategory": "vestidos",
+    "gender": "mujer",
+    "brand": "D'Avanti Studio",
+    "badge": "Tendencia",
+    "badgeType": "new",
+    "price": 1399,
+    "originalPrice": 1799,
+    "rating": 4.9,
+    "reviewsCount": 185,
+    "image": "Productos 2/vestido coctel rojo vino.jpg",
+    "description": "Silueta femenina y sofisticada con escote sensual cruzado, falda con vuelo suave y tejido elástico que se adapta a la figura.",
+    "sku": "VST-CCT-01",
+    "inStock": true,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Rojo Vino",
+      "Azul Real",
+      "Blanco Puro",
+      "Rosa Palo"
+    ],
+    "colorHex": [
+      "#881337",
+      "#1d4ed8",
+      "#f8fafc",
+      "#fbcfe8"
+    ],
+    "colorImages": {
+      "Rojo Vino": "Productos 2/vestido coctel rojo vino.jpg",
+      "Azul Real": "Productos 2/vestido coctel azul.jpg",
+      "Blanco Puro": "Productos 2/vestido coctel blanco.jpg",
+      "Rosa Palo": "Productos 2/vestido coctel rosa.jpg"
+    },
+    "features": [
+      "Tejido crepé elástico de alta densidad que no transparenta",
+      "Escote en V cruzado que realza el busto con comodidad",
+      "Largo a la rodilla perfecto para bodas, cócteles y cenas"
+    ]
+  },
+  {
+    "id": "fash-clm-22",
+    "department": "Moda · Ropa de Mujer",
+    "name": "Vestido Largo de Noche de Gala Alta Costura con Escote",
+    "slug": "vestido-largo-noche-gala-escote",
+    "category": "ropa",
+    "subcategory": "vestidos",
+    "gender": "mujer",
+    "brand": "D'Avanti Alta Costura",
+    "badge": "Colección Gala",
+    "badgeType": "bestseller",
+    "price": 2499,
+    "originalPrice": 3299,
+    "rating": 5,
+    "reviewsCount": 140,
+    "image": "Productos 2/vestido de noche.jpg",
+    "description": "Vestido largo de fiesta de diseño imperial con caída fluida hasta el suelo, abertura lateral pronunciada y escote elegante.",
+    "sku": "VST-NCH-02",
+    "inStock": true,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Azul Marino Gala",
+      "Verde Esmeralda",
+      "Amarillo Sol Naciente"
+    ],
+    "colorHex": [
+      "#0f172a",
+      "#065f46",
+      "#eab308"
+    ],
+    "colorImages": {
+      "Azul Marino Gala": "Productos 2/vestido azul marino.jpg",
+      "Verde Esmeralda": "Productos 2/vestido de noche verde.jpg",
+      "Amarillo Sol Naciente": "Productos 2/vestido de noche amarillo.jpg"
+    },
+    "features": [
+      "Caída espectacular con forro interior sedoso antiestático",
+      "Abertura sutil en pierna que estiliza el movimiento al caminar",
+      "Ideal para alfombras rojas, graduaciones y galas nocturnas"
+    ]
+  },
+  {
+    "id": "fash-clm-23",
+    "department": "Moda · Ropa de Mujer",
+    "name": "Traje Formal Sastre para Mujer Conjunto Saco y Pantalón Slim",
+    "slug": "traje-formal-sastre-mujer-conjunto",
+    "category": "ropa",
+    "subcategory": "trajes",
+    "gender": "mujer",
+    "brand": "D'Avanti Sartorial",
+    "badge": "Ejecutivo",
+    "badgeType": "new",
+    "price": 2199,
+    "originalPrice": 2799,
+    "rating": 4.9,
+    "reviewsCount": 118,
+    "image": "Productos 2/traje formal mujer.jpg",
+    "description": "Conjunto formal sastre de 2 piezas compuesto por blazer entallado con solapas en punta y pantalón de corte recto que estiliza la silueta.",
+    "sku": "TRJ-SST-W01",
+    "inStock": true,
+    "sizes": [
+      "XS (28)",
+      "S (30)",
+      "M (32)",
+      "L (34)",
+      "XL (36)"
+    ],
+    "colors": [
+      "Negro Ejecutivo",
+      "Blanco Nieve Formal"
+    ],
+    "colorHex": [
+      "#09090b",
+      "#f8fafc"
+    ],
+    "colorImages": {
+      "Negro Ejecutivo": "Productos 2/traje formal mujer.jpg",
+      "Blanco Nieve Formal": "Productos 2/traje formal feminino blanco.jpg"
+    },
+    "features": [
+      "Corte de sastrería profesional con hombreras estructuradas ligeras",
+      "Pantalón de tiro medio con bolsillos laterales funcionales",
+      "Tejido bielástico resistente a las arrugas para jornadas completas"
+    ]
+  },
+  {
+    "id": "fash-clm-24",
+    "department": "Moda · Ropa de Hombre",
+    "name": "Chamarra de Mezclilla Clásica Denim Trucker para Hombre",
+    "slug": "chamarra-mezclilla-clasica-hombre",
+    "category": "ropa",
+    "subcategory": "chamarras",
+    "gender": "hombre",
+    "brand": "D'Avanti Denim",
+    "badge": "Clásico Esencial",
+    "badgeType": "bestseller",
+    "price": 1299,
+    "originalPrice": 1699,
+    "rating": 4.8,
+    "reviewsCount": 205,
+    "image": "Productos 2/chamarra de mezclilla de hombre.jpg",
+    "description": "La chamarra vaquera imprescindible. Denim de algodón grueso de 13 oz con lavado vintage, botones metálicos reforzados y cuatro bolsillos exteriores.",
+    "sku": "CHM-DEN-H01",
+    "inStock": true,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "colors": [
+      "Azul Denim Vintage",
+      "Negro Urbano",
+      "Azul Marino"
+    ],
+    "colorHex": [
+      "#2563eb",
+      "#09090b",
+      "#1e3a8a"
+    ],
+    "colorImages": {
+      "Azul Denim Vintage": "Productos 2/chamarra de mezclilla de hombre.jpg",
+      "Negro Urbano": "Productos 2/chamarra negra hombre.jpg",
+      "Azul Marino": "Productos 2/chamarra azul marino hombre.jpg"
+    },
+    "features": [
+      "Algodón 100% resistente y duradero que mejora con el tiempo",
+      "Ajustadores de cintura traseros con botones de presilla",
+      "Costuras dobles reforzadas en hombros y espalda"
+    ]
+  },
+  {
+    "id": "fash-clm-25",
+    "department": "Moda · Ropa de Mujer",
+    "name": "Chamarra Biker en Piel Sintética Café Tostado para Mujer",
+    "slug": "chamarra-biker-piel-cafe-mujer",
+    "category": "ropa",
+    "subcategory": "chamarras",
+    "gender": "mujer",
+    "brand": "D'Avanti Studio",
+    "badge": "Popular",
+    "badgeType": "new",
+    "price": 1599,
+    "originalPrice": 1999,
+    "rating": 4.9,
+    "reviewsCount": 134,
+    "image": "Productos 2/chamarra cafe de mujer.jpg",
+    "description": "Chamarra estilo motero con cremallera asimétrica, solapas con broches metálicos y textura suave que emula la piel natural.",
+    "sku": "CHM-BKR-WCF01",
+    "inStock": true,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Café Tostado"
+    ],
+    "colorHex": [
+      "#78350f"
+    ],
+    "features": [
+      "Corte entallado favorecedor a la cintura",
+      "Bolsillos laterales con cremallera de uso rudo",
+      "Forro interior de tafetán suave que brinda confort térmico"
+    ]
+  },
+  {
+    "id": "home-clm-8",
+    "department": "Hogar · Muebles & Decoración",
+    "name": "Mesa de Centro Moderna para Sala en Madera y Acabado Nórdico",
+    "slug": "mesa-centro-moderna-sala-nordica",
+    "category": "hogar",
+    "subcategory": "muebles",
+    "brand": "Marbilia Interiorismo",
+    "badge": "Diseño Exclusivo",
+    "badgeType": "bestseller",
+    "price": 3899,
+    "originalPrice": 4799,
+    "rating": 4.9,
+    "reviewsCount": 76,
+    "image": "Productos 2/mesa de centro en madera Marbilia interiorismo.jpg",
+    "description": "Mesa de centro contemporánea fabricada con cubierta en chapa de roble natural y estructura sólida con repisa inferior de apoyo.",
+    "sku": "MBL-MSC-01",
+    "inStock": true,
+    "sizes": [
+      "110 x 60 x 45 cm"
+    ],
+    "colors": [
+      "Roble Marbilia Natural",
+      "Blanco Minimalista",
+      "Redonda Contemporánea"
+    ],
+    "colorHex": [
+      "#92400e",
+      "#f8fafc",
+      "#a8a29e"
+    ],
+    "colorImages": {
+      "Roble Marbilia Natural": "Productos 2/mesa de centro en madera Marbilia interiorismo.jpg",
+      "Blanco Minimalista": "Productos 2/Mesa de Centro Moderna en Blanco.jpg",
+      "Redonda Contemporánea": "Productos 2/mesa redonda.jpg"
+    },
+    "features": [
+      "Madera sustentable certificada con barniz protector contra manchas y líquidos",
+      "Bordes suavemente redondeados que brindan seguridad familiar",
+      "Estructura reforzada que soporta hasta 80 kg de peso"
+    ]
+  },
+  {
+    "id": "home-clm-9",
+    "department": "Hogar · Recámara & Muebles",
+    "name": "Buró Mesa de Noche para Recámara con Cajón y Repisa Inferior",
+    "slug": "buro-mesa-noche-recamara-cajon",
+    "category": "hogar",
+    "subcategory": "muebles",
+    "brand": "D'Avanti Home",
+    "badge": "Esencial",
+    "badgeType": "new",
+    "price": 1899,
+    "originalPrice": 2399,
+    "rating": 4.8,
+    "reviewsCount": 92,
+    "image": "Productos 2/buro para recamara.jpg",
+    "description": "Mesa de noche compacta ideal para dormitorios modernos. Incluye cajón espacioso con guías telescópicas y repisa inferior para libros o decoración.",
+    "sku": "MBL-BRO-01",
+    "inStock": true,
+    "sizes": [
+      "45 x 40 x 55 cm"
+    ],
+    "colors": [
+      "Madera Natural Escandinava",
+      "Café Oscuro Wengue"
+    ],
+    "colorHex": [
+      "#d97706",
+      "#451a03"
+    ],
+    "colorImages": {
+      "Madera Natural Escandinava": "Productos 2/buro para recamara.jpg",
+      "Café Oscuro Wengue": "Productos 2/mesa de noche color cade oscuro.jpg"
+    },
+    "features": [
+      "Cajón con correderas metálicas de cierre suave",
+      "Patas estilizadas de madera maciza con niveladores de piso",
+      "Superficie resistente a raspaduras y fácil de limpiar"
+    ]
+  },
+  {
+    "id": "fash-clm-26",
+    "department": "Moda · Joyería & Relojes",
+    "name": "Reloj Analógico de Cuarzo Clásico para Caballero Carátula Negra",
+    "slug": "reloj-analogico-cuarzo-caballero",
+    "category": "ropa",
+    "subcategory": "accesorios",
+    "gender": "hombre",
+    "brand": "Curren Chrono",
+    "badge": "Popular",
+    "badgeType": "bestseller",
+    "price": 899,
+    "originalPrice": 1299,
+    "rating": 4.8,
+    "reviewsCount": 245,
+    "image": "Productos 2/reloj curen hombre.jpg",
+    "description": "Reloj de pulsera con maquinaria de cuarzo japonesa de alta precisión, caja de acero con fechador automático y correa metálica ajustable.",
+    "sku": "RLJ-CRN-H01",
+    "inStock": true,
+    "sizes": [
+      "Caja 44 mm"
+    ],
+    "colors": [
+      "Negro Elegance",
+      "Acero Clásico Casio",
+      "Digital Táctico"
+    ],
+    "colorHex": [
+      "#09090b",
+      "#94a3b8",
+      "#1c1917"
+    ],
+    "colorImages": {
+      "Negro Elegance": "Productos 2/reloj curen hombre.jpg",
+      "Acero Clásico Casio": "Productos 2/reloj hombre casio.jpg",
+      "Digital Táctico": "Productos 2/reloj digital negro hombre.jpg"
+    },
+    "features": [
+      "Cristal mineral Hardlex antiarañazos",
+      "Resistencia al agua 3 ATM contra salpicaduras y lluvia",
+      "Fechador a las 3 en punto funcional"
+    ]
+  },
+  {
+    "id": "fash-clm-27",
+    "department": "Moda · Joyería & Relojes",
+    "name": "Reloj de Pulsera Femenino en Acero Inoxidable Estilo Joya Cartier",
+    "slug": "reloj-pulsera-mujer-joya-acero",
+    "category": "ropa",
+    "subcategory": "accesorios",
+    "gender": "mujer",
+    "brand": "D'Avanti Timepieces",
+    "badge": "Lujo Accesible",
+    "badgeType": "new",
+    "price": 1199,
+    "originalPrice": 1599,
+    "rating": 4.9,
+    "reviewsCount": 178,
+    "image": "Productos 2/reloj para mujer tipo cartier.jpg",
+    "description": "Reloj de joyería para dama con diseño clásico rectangular y brazalete de eslabones pulidos, números romanos y corona con cabujón azul.",
+    "sku": "RLJ-CRT-W01",
+    "inStock": true,
+    "sizes": [
+      "Caja 28 mm"
+    ],
+    "colors": [
+      "Plateado Espejo",
+      "Dorado Rosa Joya"
+    ],
+    "colorHex": [
+      "#e2e8f0",
+      "#fb7185"
+    ],
+    "colorImages": {
+      "Plateado Espejo": "Productos 2/reloj para mujer tipo cartier.jpg",
+      "Dorado Rosa Joya": "Productos 2/reloj para mujer.jpg"
+    },
+    "features": [
+      "Brazalete con broche mariposa invisible de doble seguridad",
+      "Cristal biselado resistente a impactos",
+      "Hermético al agua para uso cotidiano"
+    ]
+  },
+  {
+    "id": "fash-clm-28",
+    "department": "Moda · Accesorios",
+    "name": "Lentes de Sol Polarizados UV400 Montura Retro Unisex",
+    "slug": "lentes-sol-polarizados-uv400-retro",
+    "category": "ropa",
+    "subcategory": "accesorios",
+    "gender": "unisex",
+    "brand": "D'Avanti Eyewear",
+    "badge": "Protección UV400",
+    "badgeType": "bestseller",
+    "price": 699,
+    "originalPrice": 999,
+    "rating": 4.9,
+    "reviewsCount": 380,
+    "image": "Productos 2/gafas de sol.jpg",
+    "description": "Gafas de sol con micas polarizadas TAC de alta fidelidad que eliminan destellos molestos y ofrecen protección total UVA/UVB 400.",
+    "sku": "OPT-SOL-01",
+    "inStock": true,
+    "sizes": [
+      "Unitalla Estándar"
+    ],
+    "colors": [
+      "Negro Clásico Polar",
+      "Carey Modelo Penélope Dama"
+    ],
+    "colorHex": [
+      "#09090b",
+      "#78350f"
+    ],
+    "colorImages": {
+      "Negro Clásico Polar": "Productos 2/gafas de sol.jpg",
+      "Carey Modelo Penélope Dama": "Productos 2/Lentes de Sol Mujer Modelo Penelope.jpg"
+    },
+    "features": [
+      "Micas polarizadas de 7 capas con filtro antirreflejante",
+      "Bisagras flexibles con resorte que no aprietan las sienes",
+      "Incluye funda rígida magnética y paño de microfibra"
+    ]
+  },
+  {
+    "id": "fash-clm-29",
+    "department": "Moda · Ropa de Hombre",
+    "name": "Playera Básica Cuello Redondo 100% Algodón Peinado",
+    "slug": "playera-basica-cuello-redondo-algodon",
+    "category": "ropa",
+    "subcategory": "camisas",
+    "gender": "hombre",
+    "brand": "D'Avanti Essentials",
+    "badge": "Básico",
+    "badgeType": "new",
+    "price": 399,
+    "originalPrice": 549,
+    "rating": 4.8,
+    "reviewsCount": 420,
+    "image": "Productos 2/playera blanca de hombre.jpg",
+    "description": "Playera esencial en algodón peinado premium suave al tacto y transpirable, corte regular cómodo para uso diario.",
+    "sku": "PLY-BSC-H01",
+    "inStock": true,
+    "sizes": [
+      "CH",
+      "M",
+      "G",
+      "XG"
+    ],
+    "colors": [
+      "Blanco Puro",
+      "Manga Larga Gris"
+    ],
+    "colorHex": [
+      "#ffffff",
+      "#9ca3af"
+    ],
+    "colorImages": {
+      "Blanco Puro": "Productos 2/playera blanca de hombre.jpg",
+      "Manga Larga Gris": "Productos 2/playera de manga larga color gris hombre.jpg"
+    },
+    "features": [
+      "Algodón 100% peinado de 180 g/m² sin costuras laterales incómodas",
+      "Cuello en canalé reforzado con cinta de hombro a hombro",
+      "Prelavada para evitar encogimiento tras los lavados"
+    ]
+  },
+  {
+    "id": "toy-clm-19",
+    "name": "Rompecabezas 4D Build Pokémon Charmander 241 Piezas Modelo 3D Coleccionable",
+    "slug": "rompecabezas-4d-pokemon-charmander-241-piezas",
+    "category": "juguetes",
+    "subcategory": "construccion",
+    "brand": "Pokémon",
+    "department": "Juguetes · Rompecabezas & Colección",
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 699,
+    "originalPrice": 899,
+    "rating": 4.9,
+    "reviewsCount": 88,
+    "age": "+12 años",
+    "image": "Productos 3/Rompecabezas 4D Puzzles Pokémon Charmander 241 Piezas.jpg",
+    "description": "Arma tu propio Charmander tridimensional con este increíble kit de precisión 4D Build. Incluye 241 piezas troqueladas de alta calidad y base para exhibición.",
+    "sku": "PKM-4D-CHRM241",
+    "inStock": true,
+    "sizes": [
+      "241 Piezas Troqueladas"
+    ],
+    "colors": [
+      "Naranja Fuego Charmander"
+    ],
+    "colorHex": [
+      "#ea580c"
+    ],
+    "specs": {
+      "piezas": "241 piezas de precisión numeradas",
+      "dimensiones": "27 cm alto x 18 cm ancho ensamblado",
+      "dificultad": "Media-Avanzada (tiempo estimado 2 a 3 horas)",
+      "licencia": "Oficial The Pokémon Company / Spin Master"
+    },
+    "features": [
+      "No requiere pegamento ni herramientas de corte",
+      "Incluye folleto con instrucciones paso a paso a todo color",
+      "Pintura y acabado mate de colección para vitrina"
+    ]
+  },
+  {
+    "id": "gaming-game-5",
+    "name": "Pokémon Edición Roja Original Game Boy Nuevo en Caja con Protector Acrílico UV",
+    "slug": "pokemon-edicion-roja-game-boy-coleccionista",
+    "category": "videojuegos",
+    "subcategory": "retro",
+    "brand": "Nintendo",
+    "department": "Videojuegos · Retro & Joyas de Colección",
+    "badge": "Joya Retro",
+    "badgeType": "bestseller",
+    "price": 4999,
+    "originalPrice": 5999,
+    "rating": 5,
+    "reviewsCount": 165,
+    "image": "Productos 3/Pokémon Red Versión Game Boy Nuevo En Caja Con Acrílico.jpg",
+    "description": "El juego que inició el fenómeno mundial. Cartucho clásico Pokémon Red Version para Game Boy / Game Boy Color en su caja original sellada de colección protegida en vitrina de acrílico grado archivo con filtro UV.",
+    "sku": "NIN-GB-PKMRED",
+    "inStock": true,
+    "sizes": [
+      "Caja Colección con Vitrina Acrílica"
+    ],
+    "colors": [
+      "Rojo Charizard Original"
+    ],
+    "colorHex": [
+      "#dc2626"
+    ],
+    "specs": {
+      "plataforma": "Nintendo Game Boy / Game Boy Color / Game Boy Advance",
+      "estado": "Nuevo en caja original con inserto y manual",
+      "protector": "Caja de acrílico transparente de 4mm con cierre magnético y protección UV",
+      "region": "NTSC-U/C (Edición en Inglés oficial)"
+    },
+    "features": [
+      "Pieza definitiva de colección para aficionados de Pokémon y videojuegos clásicos",
+      "Acrílico grado archivo que previene decoloración solar y polvo",
+      "Certificado de autenticidad y envío con embalaje reforzado de alta seguridad"
     ]
   }
 ];
