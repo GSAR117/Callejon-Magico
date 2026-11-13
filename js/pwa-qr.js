@@ -369,6 +369,61 @@
           justify-content: center;
           padding: 0 4px;
         }
+        /* Correcciones de tamaño y centrado para pantallas móviles */
+        .user-profile-menu {
+          position: fixed !important;
+          top: 105px !important;
+          left: 12px !important;
+          right: 12px !important;
+          width: calc(100vw - 24px) !important;
+          max-width: 340px !important;
+          margin: 0 auto !important;
+          z-index: 10050 !important;
+          box-shadow: 0 20px 50px rgba(7, 19, 43, 0.45) !important;
+          border: 1.5px solid rgba(197, 143, 56, 0.45) !important;
+        }
+        .section-header-row {
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          flex-wrap: wrap !important;
+          gap: 0.35rem 0.75rem !important;
+          margin-bottom: 1rem !important;
+          padding-bottom: 0.65rem !important;
+        }
+        .section-title {
+          font-size: 1.22rem !important;
+          line-height: 1.2 !important;
+        }
+        .section-view-all-link {
+          font-size: 0.78rem !important;
+          white-space: nowrap !important;
+        }
+        .promo-bento-card {
+          height: 165px !important;
+          padding: 1rem 1.15rem !important;
+          border-radius: 12px !important;
+        }
+        .promo-bento-title {
+          font-size: 1.05rem !important;
+          line-height: 1.2 !important;
+          margin-bottom: 0.6rem !important;
+        }
+        .hero-slider-wrapper,
+        .hero-slide.active {
+          min-height: 320px !important;
+        }
+        .hero-title {
+          font-size: 1.45rem !important;
+          line-height: 1.18 !important;
+        }
+        .nav-all-categories-btn {
+          font-size: 0.76rem !important;
+          padding: 0.55rem 0.65rem 0.55rem 0 !important;
+          margin-right: 0.65rem !important;
+          gap: 0.35rem !important;
+          white-space: nowrap !important;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -451,7 +506,9 @@
       if (cartBtn) cartBtn.click();
     });
 
-    document.getElementById('cmNavAccount')?.addEventListener('click', () => {
+    document.getElementById('cmNavAccount')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const accBtn = document.getElementById('btnUserAccount');
       if (accBtn) accBtn.click();
     });

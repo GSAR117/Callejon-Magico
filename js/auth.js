@@ -516,15 +516,15 @@
           </div>
 
           <div class="user-menu-links">
-            <a href="#pedidos" class="user-menu-item open-orders-modal-btn" onclick="if(window.CallejonOrders){CallejonOrders.openModal();}else if(window.DavantiApp&&window.DavantiApp.openOrdersModal){DavantiApp.openOrdersModal();}">
+            <a href="#pedidos" class="user-menu-item open-orders-modal-btn" onclick="document.getElementById('userProfileMenu')?.classList.remove('active'); if(window.CallejonOrders){CallejonOrders.openModal();}else if(window.DavantiApp&&window.DavantiApp.openOrdersModal){DavantiApp.openOrdersModal();}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
               <span>Mis Pedidos & Rastreo</span>
             </a>
-            <a href="#favoritos" class="user-menu-item" onclick="document.getElementById('btnOpenWishlist')?.click();">
+            <a href="#favoritos" class="user-menu-item" onclick="document.getElementById('userProfileMenu')?.classList.remove('active'); document.getElementById('btnOpenWishlist')?.click();">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               <span>Lista de Deseos</span>
             </a>
-            <a href="#tarjeta-callejon" class="user-menu-item open-card-modal-btn" onclick="if(window.CallejonCard){CallejonCard.openModal();}else{DavantiAuth.showToast('Tarjeta Callejón Mágico: Tienes $35,000 de crédito disponible.');}">
+            <a href="#tarjeta-callejon" class="user-menu-item open-card-modal-btn" onclick="document.getElementById('userProfileMenu')?.classList.remove('active'); if(window.CallejonCard){CallejonCard.openModal();}else{DavantiAuth.showToast('Tarjeta Callejón Mágico: Tienes $35,000 de crédito disponible.');}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
               <span>Tarjeta Callejón Mágico & MSI</span>
             </a>
