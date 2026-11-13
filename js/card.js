@@ -503,13 +503,22 @@
         }
 
         // ====================================================================
-        // PROTOCOLO CUANDO LLEGA AL LÍMITE (SALDO DISPONIBLE <= 0)
+        // PROTOCOLO CUANDO LLEGA AL LÍMITE (SALDO <= 0 O SALDO >= LÍMITE MÁXIMO)
         // ====================================================================
-        if (card.balance <= 0) {
+        const numBalance = Number(card.balance) || 0;
+        const numLimit = Number(card.creditLimit) || 60000;
+
+        if (numBalance <= 0) {
           if (!limitAlert && metricsGrid) {
             limitAlert = document.createElement('div');
             limitAlert.id = 'cardLimitAlertBanner';
             limitAlert.className = 'card-limit-alert-banner';
+            metricsGrid.insertAdjacentElement('beforebegin', limitAlert);
+          }
+          if (limitAlert) {
+            limitAlert.style.background = '#fef2f2';
+            limitAlert.style.borderColor = '#f87171';
+            limitAlert.style.color = '#991b1b';
             limitAlert.innerHTML = `
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -521,7 +530,29 @@
                 Has dispuesto del total de tu crédito. Por políticas de seguridad departamental, para abonar a tu saldo y rehabilitar tu tarjeta acude a tu <strong>sucursal Callejón Mágico</strong> más cercana.
               </div>
             `;
+          }
+        } else if (numBalance >= numLimit) {
+          if (!limitAlert && metricsGrid) {
+            limitAlert = document.createElement('div');
+            limitAlert.id = 'cardLimitAlertBanner';
+            limitAlert.className = 'card-limit-alert-banner';
             metricsGrid.insertAdjacentElement('beforebegin', limitAlert);
+          }
+          if (limitAlert) {
+            limitAlert.style.background = '#fffbeb';
+            limitAlert.style.borderColor = '#f59e0b';
+            limitAlert.style.color = '#92400e';
+            limitAlert.innerHTML = `
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <div>
+                <strong style="color: #92400e;">⚠️ Límite máximo de saldo alcanzado ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)</strong>
+                Tu tarjeta ya cuenta con el 100% de su crédito disponible. No es necesario ni posible abonar más saldo hasta que realices una compra.
+              </div>
+            `;
           }
         } else {
           if (limitAlert) limitAlert.remove();
@@ -721,19 +752,25 @@
         }
 
         const card = CardEngine.getCard();
+        const numBalance = Number(card.balance) || 0;
+        const numLimit = Number(card.creditLimit) || 60000;
 
         // 2. Si el saldo disponible es 0 o menor (ha agotado su crédito y llegó al límite)
-        if (card.balance <= 0) {
+        if (numBalance <= 0) {
+          this.showToast('⚠️ Has alcanzado el límite de tu tarjeta ($0.00 MXN disponible). Acude a sucursal para abonar.');
           this.showSucursalModal(
-            'Has alcanzado el límite de tu Tarjeta Callejón Mágico ($0.00 MXN disponible). Para abonar a tu saldo y rehabilitar tu línea de crédito, por favor acude a tu sucursal departamental Callejón Mágico más cercana.'
+            'Has alcanzado el límite de tu Tarjeta Callejón Mágico ($0.00 MXN disponible). Para abonar a tu saldo y rehabilitar tu línea de crédito, por favor acude a tu sucursal departamental Callejón Mágico más cercana.',
+            '⚠️ Límite de Crédito Agotado'
           );
           return;
         }
 
-        // 3. Si ya llegó al límite máximo de crédito permitido ($35,000)
-        if (card.balance >= card.creditLimit) {
+        // 3. Si ya llegó al límite máximo de crédito permitido ($60,000)
+        if (numBalance >= numLimit) {
+          this.showToast(`⚠️ Tu tarjeta ya alcanzó el límite máximo de $${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN.`);
           this.showSucursalModal(
-            `Tu Tarjeta Callejón Mágico ya cuenta con el límite total de saldo disponible ($${card.creditLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). No es necesario realizar más abonos. Si deseas una ampliación de tu línea de crédito, acude a tu sucursal Callejón Mágico más cercana.`
+            `Tu Tarjeta Callejón Mágico ya cuenta con el límite máximo de saldo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). No es posible realizar más abonos. Si deseas una ampliación de tu línea de crédito, acude a tu sucursal Callejón Mágico más cercana.`,
+            '⚠️ Límite Máximo de Saldo Alcanzado'
           );
           return;
         }
@@ -747,13 +784,15 @@
           if (res.reachedLimit) {
             setTimeout(() => {
               this.showSucursalModal(
-                `¡Excelente! Con este abono tu tarjeta ha alcanzado el límite total de saldo disponible ($${card.creditLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). Si deseas una ampliación de tu línea de crédito, por favor acude a tu sucursal Callejón Mágico más cercana.`
+                `¡Excelente! Con este abono tu tarjeta ha alcanzado el límite máximo de saldo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). Si deseas una ampliación de tu línea de crédito, por favor acude a tu sucursal Callejón Mágico más cercana.`,
+                '⚠️ Límite Máximo de Saldo Alcanzado'
               );
-            }, 700);
+            }, 400);
           }
         } else {
           if (res.limitReached || res.atLimit) {
-            this.showSucursalModal(res.message);
+            this.showToast(res.message);
+            this.showSucursalModal(res.message, '⚠️ Límite de Saldo Alcanzado');
           } else {
             this.showToast(res.message);
           }
