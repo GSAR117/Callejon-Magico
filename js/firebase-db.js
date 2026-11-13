@@ -258,6 +258,18 @@
             } catch (e) {}
 
             const merged = { ...localCards, ...remoteCards };
+            // Normalizar topes de crédito: Ningún saldo puede superar la línea autorizada
+            Object.values(merged).forEach(card => {
+              if (card) {
+                const limit = Number(card.creditLimit) || 60000;
+                card.creditLimit = limit;
+                if (Number(card.balance) > limit) {
+                  card.balance = limit;
+                  card.debt = 0;
+                  card.daysOverdue = 0;
+                }
+              }
+            });
             localStorage.setItem(STORAGE_KEYS.CARDS, JSON.stringify(merged));
             notifyLocal('cards');
           } else {

@@ -44,21 +44,47 @@
         // Enriquecer cada usuario con su saldo de tarjeta actual y total de compras
         const allCards = this.getAllCards();
         const allOrders = this.getAllOrders();
+        let cardsNeedSave = false;
 
-        return users.map((user, idx) => {
+        const mappedUsers = users.map((user, idx) => {
           const emailKey = (user.email || '').trim().toLowerCase();
-          const card = allCards[emailKey] || allCards[user.id] || null;
+          let card = allCards[emailKey] || allCards[user.id] || null;
           const userOrders = allOrders.filter(o => (o.userEmail || '').trim().toLowerCase() === emailKey || o.userId === user.id);
           const totalSpent = userOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
 
           const creditLimit = card ? (Number(card.creditLimit) || 60000) : 60000;
-          const balance = card ? (Number(card.balance) || 0) : 0;
-          const debt = card && typeof card.debt === 'number'
-            ? Math.max(0, Number(card.debt))
-            : Math.max(0, creditLimit - balance);
-          const daysOverdue = card && typeof card.daysOverdue === 'number'
-            ? Math.max(0, parseInt(card.daysOverdue, 10) || 0)
-            : Math.max(0, parseInt(user.daysOverdue, 10) || 0);
+          let balance = creditLimit;
+
+          if (card && typeof card.balance === 'number') {
+            balance = Number(card.balance);
+          } else if (card && typeof card.debt === 'number') {
+            balance = Math.max(0, creditLimit - Number(card.debt));
+          }
+
+          // Corrección para usuario demo o cuentas sin pedidos: su crédito disponible es el 100% de la línea ($60,000)
+          if ((!userOrders || userOrders.length === 0) && (emailKey === 'carlos@callejonmagico.com' || user.id === 'usr_demo_1' || balance === 0)) {
+            balance = creditLimit;
+          }
+
+          // REGLA FINANCIERA ESTRICTA: El saldo disponible NUNCA puede exceder la línea de crédito autorizada
+          if (balance > creditLimit) {
+            balance = creditLimit;
+          }
+          if (balance < 0) {
+            balance = 0;
+          }
+
+          const debt = Math.max(0, creditLimit - balance);
+          const daysOverdue = debt > 0 ? (card && typeof card.daysOverdue === 'number' ? Math.max(0, parseInt(card.daysOverdue, 10) || 0) : 0) : 0;
+
+          // Si la tarjeta guardada tenía valores inconsistentes (por ejemplo saldo mayor a la línea), normalizarla
+          if (card && (card.balance !== balance || card.debt !== debt || (debt === 0 && card.daysOverdue !== 0))) {
+            card.balance = balance;
+            card.debt = debt;
+            if (debt === 0) card.daysOverdue = 0;
+            allCards[emailKey] = card;
+            cardsNeedSave = true;
+          }
 
           let creditStatus = 'al-corriente';
           let creditStatusLabel = 'Al corriente';
@@ -110,6 +136,15 @@
             totalSpent: totalSpent
           };
         });
+
+        if (cardsNeedSave) {
+          localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
+          if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncAllCards === 'function') {
+            window.CallejonFirebase.syncAllCards(allCards);
+          }
+        }
+
+        return mappedUsers;
       } catch (e) {
         console.error('AdminDB: Error al cargar usuarios:', e);
         return [];
@@ -197,7 +232,7 @@
         const oldBalance = Number(card.balance) || 0;
         const creditLimit = Number(card.creditLimit) || 60000;
         card.creditLimit = creditLimit;
-        card.balance = Math.max(0, Number(newBalance));
+        card.balance = Math.max(0, Math.min(creditLimit, Number(newBalance)));
         card.debt = Math.max(0, creditLimit - card.balance);
         if (card.debt === 0) {
           card.daysOverdue = 0;
@@ -253,8 +288,8 @@
         };
 
         const limit = Number(card.creditLimit) || 60000;
-        const currentBal = Number(card.balance) || 0;
-        const currentDebt = typeof card.debt === 'number' ? Math.max(0, Number(card.debt)) : Math.max(0, limit - currentBal);
+        const currentBal = Math.max(0, Math.min(limit, Number(card.balance) || 0));
+        const currentDebt = Math.max(0, limit - currentBal);
 
         let payAmt = Number(paymentAmount) || 0;
         if (payAmt <= 0 || payAmt > currentDebt) {
@@ -263,6 +298,10 @@
 
         // Aumentar saldo disponible hasta el límite máximo de crédito
         card.balance = Math.min(limit, currentBal + payAmt);
+        card.debt = Math.max(0, limit - card.balance);
+        if (card.debt === 0) {
+          card.daysOverdue = 0;
+        }
         card.debt = Math.max(0, limit - card.balance);
         if (card.debt === 0) {
           card.daysOverdue = 0;
