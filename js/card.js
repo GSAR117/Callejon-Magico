@@ -376,7 +376,6 @@
       const numberEl = document.getElementById('cardDisplayNumber');
       const holderEl = document.getElementById('cardDisplayHolder');
       const expiryEl = document.getElementById('cardDisplayExpiry');
-      const btnAbonar = document.getElementById('btnAbonarTarjeta');
       const metricsGrid = document.querySelector('.card-metrics-grid');
       const reqText = document.getElementById('sucursalRequirementsText');
 
@@ -482,13 +481,6 @@
         // 3. Remover alerta de límite si estaba presente
         if (limitAlert) limitAlert.remove();
 
-        // 4. Deshabilitar opción de abonar al saldo
-        if (btnAbonar) {
-          btnAbonar.className = 'btn-card-action-primary btn-card-action-disabled';
-          btnAbonar.innerHTML = '<span>🔒 Inicia sesión para abonar</span>';
-          btnAbonar.title = 'Debes iniciar sesión para consultar saldo y realizar abonos';
-        }
-
       } else {
         // Con usuario en sesión: Revelar datos reales
         if (limitEl) limitEl.textContent = `$${card.creditLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
@@ -497,19 +489,6 @@
 
         // Remover aviso de visitante
         if (guestNotice) guestNotice.remove();
-
-        // Restaurar botón de abono
-        if (btnAbonar) {
-          btnAbonar.className = 'btn-card-action-primary';
-          btnAbonar.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <span>Abonar a mi Tarjeta</span>
-          `;
-          btnAbonar.title = 'Abonar saldo a tu tarjeta departamental';
-        }
 
         // ====================================================================
         // PROTOCOLO CUANDO LLEGA AL LÍMITE (SALDO <= 0 O SALDO >= LÍMITE MÁXIMO)
@@ -712,22 +691,18 @@
           </div>
 
           <!-- ACTION BUTTONS -->
-          <div class="card-modal-actions-row">
-            <button type="button" class="btn-card-action-primary" id="btnAbonarTarjeta">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-              <span>Abonar a mi Tarjeta</span>
-            </button>
-            <button type="button" class="btn-card-action-secondary" id="btnCopiarDatosTarjeta">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <div class="card-modal-actions-row" style="display: flex; justify-content: center;">
+            <button type="button" class="btn-card-action-primary" id="btnCopiarDatosTarjeta" style="width: 100%; justify-content: center; height: 48px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
-              <span>Copiar Número</span>
+              <span>Copiar Número de Tarjeta</span>
             </button>
           </div>
+          <p style="text-align: center; font-size: 0.78rem; color: #64748b; margin-top: 0.85rem; margin-bottom: 0;">
+            ℹ️ Los abonos y pagos a tu cuenta departamental se gestionan en el área de cajas del Panel Administrativo.
+          </p>
         </div>
       `;
 
@@ -743,68 +718,6 @@
         this.closeModal();
         if (window.DavantiAuth && typeof window.DavantiAuth.openAuth === 'function') {
           window.DavantiAuth.openAuth('login');
-        }
-      });
-
-      // Bind Abonar button
-      document.getElementById('btnAbonarTarjeta')?.addEventListener('click', () => {
-        const holderState = getCardHolderState();
-        
-        // 1. Bloqueo para visitantes sin sesión
-        if (!holderState.isLoggedIn) {
-          this.showToast('🔒 Debes iniciar sesión con tu cuenta para consultar tu saldo y realizar abonos.');
-          this.closeModal();
-          if (window.DavantiAuth && typeof window.DavantiAuth.openAuth === 'function') {
-            window.DavantiAuth.openAuth('login');
-          }
-          return;
-        }
-
-        const card = CardEngine.getCard();
-        const numBalance = Number(card.balance) || 0;
-        const numLimit = Number(card.creditLimit) || 60000;
-
-        // 2. Si el saldo disponible es 0 o menor (ha agotado su crédito y llegó al límite)
-        if (numBalance <= 0) {
-          this.showToast('⚠️ Saldo agotado ($0.00 MXN). Debes acudir personalmente a una sucursal para recargar tu tarjeta.');
-          this.showSucursalModal(
-            'Has alcanzado el límite de tu Tarjeta Callejón Mágico ($0.00 MXN disponible). Para recargar tu tarjeta y rehabilitar tu línea de crédito, debes acudir personalmente a una de nuestras sucursales existentes:',
-            '⚠️ Límite Agotado — Acude a Sucursal'
-          );
-          return;
-        }
-
-        // 3. Si ya llegó al límite máximo de crédito permitido ($60,000)
-        if (numBalance >= numLimit) {
-          this.showToast(`⚠️ Límite alcanzado ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). Acude personalmente a sucursal para recargar o ampliar tu línea.`);
-          this.showSucursalModal(
-            `Tu Tarjeta Callejón Mágico ya alcanzó el límite máximo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). No es posible abonar más saldo en línea; si deseas recargar un monto mayor o ampliar tu línea de crédito, debes acudir personalmente a una de nuestras sucursales existentes:`,
-            '⚠️ Límite Máximo Alcanzado — Acude a Sucursal'
-          );
-          return;
-        }
-
-        // 4. Realizar abono normal
-        const abono = 3000;
-        const res = CardEngine.payBalance(abono);
-
-        if (res.success) {
-          this.showToast(res.message);
-          if (res.reachedLimit) {
-            setTimeout(() => {
-              this.showSucursalModal(
-                `¡Tu tarjeta ha alcanzado el límite máximo de saldo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)! Para recargas adicionales o ampliación de línea de crédito, debes acudir personalmente a una de nuestras sucursales existentes:`,
-                '⚠️ Límite Máximo Alcanzado — Acude a Sucursal'
-              );
-            }, 350);
-          }
-        } else {
-          if (res.limitReached || res.atLimit) {
-            this.showToast(res.message);
-            this.showSucursalModal(res.message, '⚠️ Límite Alcanzado — Acude a Sucursal');
-          } else {
-            this.showToast(res.message);
-          }
         }
       });
 
