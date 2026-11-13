@@ -120,8 +120,9 @@
       return 0;
     },
 
-    async register(fullName, email, password, username) {
+    async register(fullName, email, password, username, phone) {
       const normalizedEmail = email.trim().toLowerCase();
+      const cleanPhone = (phone ? String(phone).trim() : '');
       const cleanNameSlug = fullName.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '.').replace(/(^\.|\.$)/g, '');
       const cleanUsername = (username ? username.trim().toLowerCase().replace(/^@/, '') : '') || cleanNameSlug || normalizedEmail.split('@')[0];
 
@@ -130,7 +131,7 @@
         const res = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fullName, email: normalizedEmail, password, username: cleanUsername })
+          body: JSON.stringify({ fullName, email: normalizedEmail, password, username: cleanUsername, phone: cleanPhone })
         });
         if (res.ok) {
           const data = await res.json();
@@ -139,7 +140,7 @@
             // Save active cart to new account
             this.saveCartForUser(data.user);
             // Sync with local storage
-            this.saveLocalUser({ ...data.user, password });
+            this.saveLocalUser({ ...data.user, password, phone: cleanPhone || data.user.phone || 'No registrado' });
             return { success: true, user: data.user, message: data.message };
           }
         } else if (res.status === 409) {
@@ -167,6 +168,7 @@
         id: 'usr_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
         fullName: fullName.trim(),
         email: normalizedEmail,
+        phone: cleanPhone || 'No registrado',
         username: finalUsername,
         password: password,
         tier: 'Privé Member',
@@ -179,6 +181,7 @@
         id: newUser.id,
         fullName: newUser.fullName,
         email: newUser.email,
+        phone: newUser.phone,
         username: newUser.username,
         tier: newUser.tier,
         createdAt: newUser.createdAt
@@ -455,6 +458,23 @@
                   placeholder="sofia@correo.com" 
                   required 
                   autocomplete="email" 
+                />
+              </div>
+            </div>
+
+            <div class="auth-field-group">
+              <label class="auth-label" for="regPhone">Teléfono / WhatsApp</label>
+              <div class="auth-input-container">
+                <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <input 
+                  type="tel" 
+                  id="regPhone" 
+                  class="auth-input" 
+                  placeholder="Ej: 55 1234 5678 (para tus tickets de WhatsApp)" 
+                  required 
+                  autocomplete="tel" 
                 />
               </div>
             </div>
@@ -772,6 +792,7 @@
         e.preventDefault();
         const name = document.getElementById('regFullName').value;
         const email = document.getElementById('regEmail').value;
+        const phone = (document.getElementById('regPhone')?.value || '').trim();
         const pwd = document.getElementById('regPassword').value;
         const pwdConfirm = document.getElementById('regPasswordConfirm').value;
         const submitBtn = document.getElementById('btnSubmitRegister');
@@ -783,7 +804,7 @@
 
         if (submitBtn) submitBtn.disabled = true;
 
-        const result = await AuthEngine.register(name, email, pwd);
+        const result = await AuthEngine.register(name, email, pwd, null, phone);
         if (submitBtn) submitBtn.disabled = false;
 
         if (result.success) {

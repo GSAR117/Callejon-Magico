@@ -79,8 +79,22 @@
           }
           const clientCode = user.clientCode || ('CL-' + String(10000 + (Math.abs(hash) % 89999)));
 
+          // Resolver teléfono: perfil de cuenta o número registrado en compras (WhatsApp)
+          let userPhone = (user.phone && user.phone.trim() && user.phone !== 'No registrado') ? user.phone.trim() : '';
+          if (!userPhone && userOrders.length > 0) {
+            const orderWithPhone = userOrders.find(o => o.recipient && o.recipient.phone && o.recipient.phone.trim());
+            if (orderWithPhone) {
+              userPhone = orderWithPhone.recipient.phone.trim();
+              user.phone = userPhone;
+              if (window.CallejonFirebase && typeof window.CallejonFirebase.syncUser === 'function') {
+                window.CallejonFirebase.syncUser(user);
+              }
+            }
+          }
+
           return {
             ...user,
+            phone: userPhone || 'No registrado',
             clientCode,
             balance,
             debt,

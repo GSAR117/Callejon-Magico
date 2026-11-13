@@ -2201,6 +2201,26 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
 
+        // Vincular el teléfono de WhatsApp de la compra directamente a la cuenta del cliente
+        if (phone) {
+          try {
+            const rawUsers = JSON.parse(localStorage.getItem('davanti_users') || '[]');
+            const targetEmail = (recipientEmail || activeUser?.email || '').trim().toLowerCase();
+            const uIdx = rawUsers.findIndex(u => (u.email || '').trim().toLowerCase() === targetEmail);
+            if (uIdx !== -1) {
+              rawUsers[uIdx].phone = phone;
+              localStorage.setItem('davanti_users', JSON.stringify(rawUsers));
+              if (window.CallejonFirebase && typeof window.CallejonFirebase.syncUser === 'function') {
+                window.CallejonFirebase.syncUser(rawUsers[uIdx]);
+              }
+            }
+            if (activeUser) {
+              activeUser.phone = phone;
+              localStorage.setItem('davanti_current_user', JSON.stringify(activeUser));
+            }
+          } catch (e) {}
+        }
+
         // Disparar apertura automática de WhatsApp con el ticket oficial al número del usuario usando la orden recién registrada
         if (window.CallejonTicket && typeof window.CallejonTicket.sendWhatsAppFromOrder === 'function') {
           try {
