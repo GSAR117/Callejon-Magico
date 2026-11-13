@@ -16,7 +16,9 @@ const MIME_TYPES = {
   '.png': 'image/png',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.apk': 'application/vnd.android.package-archive',
+  '.webmanifest': 'application/manifest+json'
 };
 
 // Helper: Read users from disk
@@ -259,7 +261,8 @@ const server = http.createServer(async (req, res) => {
   // ==========================================
   // STATIC FILE SERVING
   // ==========================================
-  let filePath = path.join(__dirname, cleanUrl === '/' ? 'index.html' : cleanUrl);
+  const decodedUrl = decodeURIComponent(cleanUrl);
+  let filePath = path.join(__dirname, decodedUrl === '/' ? 'index.html' : decodedUrl);
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
