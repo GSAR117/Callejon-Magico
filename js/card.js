@@ -19,8 +19,8 @@
     expiry: '08/30',
     cvc: '824',
     tier: 'ORO DEPARTAMENTAL',
-    creditLimit: 35000,
-    balance: 28450,
+    creditLimit: 60000,
+    balance: 60000,
     points: 1420,
     statementDay: 15,
     isActive: true,
@@ -36,7 +36,7 @@
     expiry: '••/••',
     cvc: '•••',
     tier: 'ORO DEPARTAMENTAL',
-    creditLimit: 35000,
+    creditLimit: 60000,
     balance: 0,
     points: 0,
     statementDay: 15,
@@ -108,8 +108,8 @@
       expiry: expiry,
       cvc: cvc,
       tier: 'ORO DEPARTAMENTAL',
-      creditLimit: 35000,
-      balance: 35000,
+      creditLimit: 60000,
+      balance: 60000,
       points: 500, // Bono de bienvenida por apertura de cuenta
       statementDay: 15,
       isActive: true,
@@ -180,6 +180,12 @@
 
       if (!userCard) {
         userCard = generateCardForUser(user);
+        allCards[userKey] = userCard;
+        this.saveAllCards(allCards);
+      } else if (Number(userCard.creditLimit) < 60000) {
+        const diff = 60000 - (Number(userCard.creditLimit) || 35000);
+        userCard.creditLimit = 60000;
+        userCard.balance = Math.min(60000, (Number(userCard.balance) || 0) + diff);
         allCards[userKey] = userCard;
         this.saveAllCards(allCards);
       }

@@ -55,7 +55,7 @@
             ...user,
             balance: card ? (Number(card.balance) || 0) : 0,
             points: card ? (Number(card.points) || 0) : 0,
-            creditLimit: card ? (Number(card.creditLimit) || 35000) : 35000,
+            creditLimit: card ? (Number(card.creditLimit) || 60000) : 60000,
             cardActive: card ? Boolean(card.isActive !== false) : false,
             ordersCount: userOrders.length,
             totalSpent: totalSpent
@@ -126,7 +126,7 @@
         const card = allCards[emailKey] || {
           cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
           tier: 'ORO DEPARTAMENTAL',
-          creditLimit: 35000,
+          creditLimit: 60000,
           balance: 0,
           points: 0,
           statementDay: 15,

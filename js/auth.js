@@ -1,32 +1,13 @@
 /**
  * ==========================================================================
- * D'AVANTI MAISON & DEPARTAMENTAL - AUTHENTICATION & USER MANAGEMENT SYSTEM
- * Sistema de usuarios real con generación de nombre de usuario al azar,
+ * CALLEJÓN MÁGICO - AUTHENTICATION & USER MANAGEMENT SYSTEM
+ * Sistema de usuarios real usando el nombre ingresado por el usuario,
  * persistencia dual (API + LocalStorage) y sincronización con UI de perfil.
  * ==========================================================================
  */
 
 (function () {
   'use strict';
-
-  // Words for Random Luxury Username Generation
-  const LUXURY_PREFIXES = ['davanti', 'atelier', 'maison', 'luxe', 'prive', 'velvet', 'aurora', 'orion', 'zenith', 'satin', 'soleil', 'marfil'];
-  const LUXURY_SUFFIXES = ['noir', 'gold', 'silk', 'chic', 'pure', 'amber', 'ivory', 'royal', 'claire', 'celeste', 'elite', 'paris'];
-
-  function generateRandomUsername(nameHint) {
-    const prefix = LUXURY_PREFIXES[Math.floor(Math.random() * LUXURY_PREFIXES.length)];
-    const suffix = LUXURY_SUFFIXES[Math.floor(Math.random() * LUXURY_SUFFIXES.length)];
-    const num = Math.floor(Math.random() * 900) + 100;
-
-    if (nameHint) {
-      const cleanHint = nameHint.trim().toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, '');
-      if (cleanHint.length >= 3 && Math.random() > 0.4) {
-        return `${cleanHint}_${suffix}${num}`;
-      }
-    }
-
-    return `${prefix}_${suffix}${num}`;
-  }
 
   // ==========================================
   // STORAGE & API ENGINE
@@ -136,7 +117,8 @@
 
     async register(fullName, email, password, username) {
       const normalizedEmail = email.trim().toLowerCase();
-      const cleanUsername = username.trim().toLowerCase().replace(/^@/, '');
+      const cleanNameSlug = fullName.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '.').replace(/(^\.|\.$)/g, '');
+      const cleanUsername = (username ? username.trim().toLowerCase().replace(/^@/, '') : '') || cleanNameSlug || normalizedEmail.split('@')[0];
 
       // 1. Try Server API first
       try {
@@ -169,7 +151,7 @@
         return { success: false, message: 'Este correo electrónico ya está registrado en Callejón Mágico.' };
       }
 
-      let finalUsername = cleanUsername || generateRandomUsername(fullName);
+      let finalUsername = cleanUsername || normalizedEmail.split('@')[0];
       let count = 1;
       let base = finalUsername;
       while (localUsers.some(u => u.username.toLowerCase() === finalUsername.toLowerCase())) {
@@ -298,10 +280,7 @@
   // UI CONTROLLER & MODAL INJECTION
   // ==========================================
   const AuthUI = {
-    currentRandomUsername: '',
-
     init() {
-      this.currentRandomUsername = generateRandomUsername();
       this.injectAuthModal();
       this.injectProfileMenu();
       this.updateHeaderAccountBtn();
@@ -459,29 +438,6 @@
               </div>
             </div>
 
-            <!-- EXCLUSIVE RANDOM USERNAME GENERATOR CARD -->
-            <div class="random-username-box">
-              <div class="random-username-header">
-                <span>✨ Tu Nombre de Usuario al Azar</span>
-                <button type="button" class="btn-reroll-username" id="btnRerollUsername" title="Generar otro nombre de usuario al azar">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="23 4 23 10 17 10"></polyline>
-                    <polyline points="1 20 1 14 7 14"></polyline>
-                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                  </svg>
-                  <span>🎲 Generar otro</span>
-                </button>
-              </div>
-              <div class="random-username-row">
-                <div class="random-username-tag">
-                  <span class="at-symbol">@</span>
-                  <span id="displayRandomUsername">${this.currentRandomUsername}</span>
-                </div>
-              </div>
-              <input type="hidden" id="regUsernameHidden" value="${this.currentRandomUsername}" />
-              <p class="random-username-hint">Nombre de usuario boutique exclusivo generado automáticamente para tu perfil.</p>
-            </div>
-
             <div class="auth-field-group">
               <label class="auth-label" for="regPassword">Contraseña</label>
               <div class="auth-input-container">
@@ -606,7 +562,7 @@
         const tierEl = document.getElementById('userMenuTier');
 
         if (nameEl) nameEl.textContent = user.fullName;
-        if (handleEl) handleEl.textContent = `@${user.username}`;
+        if (handleEl) handleEl.textContent = user.email || user.fullName;
         if (tierEl) tierEl.textContent = `${user.tier || 'Privé Member'} ✨`;
         if (avatarEl) avatarEl.textContent = (user.fullName.charAt(0) || 'D').toUpperCase();
 
@@ -628,23 +584,6 @@
       }
     },
 
-    // Reroll random username
-    rerollUsername() {
-      const nameInput = document.getElementById('regFullName');
-      const hint = nameInput ? nameInput.value : '';
-      this.currentRandomUsername = generateRandomUsername(hint);
-
-      const displayEl = document.getElementById('displayRandomUsername');
-      const hiddenInput = document.getElementById('regUsernameHidden');
-
-      if (displayEl) {
-        displayEl.textContent = this.currentRandomUsername;
-      }
-      if (hiddenInput) {
-        hiddenInput.value = this.currentRandomUsername;
-      }
-    },
-
     switchTab(tab) {
       const tabLogin = document.getElementById('tabBtnLogin');
       const tabReg = document.getElementById('tabBtnRegister');
@@ -659,7 +598,6 @@
         if (tabReg) tabReg.classList.add('active');
         if (formLogin) formLogin.style.display = 'none';
         if (formReg) formReg.style.display = 'block';
-        this.rerollUsername();
       } else {
         if (tabReg) tabReg.classList.remove('active');
         if (tabLogin) tabLogin.classList.add('active');
@@ -763,9 +701,6 @@
       document.getElementById('btnCloseAuthModal')?.addEventListener('click', () => this.closeModal());
       document.getElementById('modalBackdrop')?.addEventListener('click', () => this.closeModal());
 
-      // Dice roll username button
-      document.getElementById('btnRerollUsername')?.addEventListener('click', () => this.rerollUsername());
-
       // Toggle password eye buttons
       document.querySelectorAll('.auth-toggle-pwd-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -775,13 +710,6 @@
             input.type = input.type === 'password' ? 'text' : 'password';
           }
         });
-      });
-
-      // Name typing adapts random username smoothly
-      document.getElementById('regFullName')?.addEventListener('input', (e) => {
-        if (e.target.value.length > 2 && Math.random() > 0.6) {
-          this.rerollUsername();
-        }
       });
 
       // Submit Login Form
@@ -825,7 +753,6 @@
         const email = document.getElementById('regEmail').value;
         const pwd = document.getElementById('regPassword').value;
         const pwdConfirm = document.getElementById('regPasswordConfirm').value;
-        const username = document.getElementById('regUsernameHidden').value;
         const submitBtn = document.getElementById('btnSubmitRegister');
 
         if (pwd !== pwdConfirm) {
@@ -835,7 +762,7 @@
 
         if (submitBtn) submitBtn.disabled = true;
 
-        const result = await AuthEngine.register(name, email, pwd, username);
+        const result = await AuthEngine.register(name, email, pwd);
         if (submitBtn) submitBtn.disabled = false;
 
         if (result.success) {
@@ -844,7 +771,7 @@
           if (window.DavantiApp && typeof window.DavantiApp.updateCartUI === 'function') {
             window.DavantiApp.updateCartUI();
           }
-          this.showToast(`✨ ¡Bienvenido/a a Callejón Mágico, ${name.split(' ')[0]}! Tu usuario asignado es @${result.user.username}`);
+          this.showToast(`✨ ¡Bienvenido/a a Callejón Mágico, ${name.trim()}!`);
 
           // Reanudar checkout si el cliente había solicitado pagar antes de crear su cuenta
           if (sessionStorage.getItem('callejon_pending_checkout') === 'true') {
@@ -883,8 +810,7 @@
     openAuth: (tab) => AuthUI.openModal(tab),
     openModal: (tab) => AuthUI.openModal(tab),
     showToast: (msg) => AuthUI.showToast(msg),
-    getCurrentUser: () => AuthEngine.getCurrentUser(),
-    generateRandomUsername
+    getCurrentUser: () => AuthEngine.getCurrentUser()
   };
 
   // Auto-init when DOM is ready

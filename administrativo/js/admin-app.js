@@ -228,7 +228,7 @@
             <div style="font-size: 0.95rem; font-weight: 800; color: var(--admin-gold);">
               $${Number(u.balance || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
             </div>
-            <span style="font-size: 0.72rem; color: var(--admin-text-muted);">Límite: $${Number(u.creditLimit || 35000).toLocaleString('es-MX')}</span>
+            <span style="font-size: 0.72rem; color: var(--admin-text-muted);">Límite: $${Number(u.creditLimit || 60000).toLocaleString('es-MX')}</span>
           </td>
           <td>
             <span style="font-weight: 700; color: #ffffff;">${u.ordersCount || 0} pedido(s)</span>
