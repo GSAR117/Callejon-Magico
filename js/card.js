@@ -160,6 +160,9 @@
     saveAllCards(allCards) {
       try {
         localStorage.setItem(STORAGE_USERS_CARDS_KEY, JSON.stringify(allCards));
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncAllCards === 'function') {
+          window.CallejonFirebase.syncAllCards(allCards);
+        }
       } catch (e) {
         console.error('Error al guardar mapa de tarjetas de usuarios:', e);
       }

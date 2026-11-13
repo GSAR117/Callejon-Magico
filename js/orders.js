@@ -255,6 +255,11 @@
       allOrders.unshift(newOrder);
       this.saveAllRawOrders(allOrders);
 
+      // Sincronizar en vivo con Firebase
+      if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncOrder === 'function') {
+        window.CallejonFirebase.syncOrder(newOrder);
+      }
+
       // 2. Guardar en clave aislada por email de usuario
       const targetEmail = userEmail || recipientEmail;
       if (targetEmail) {

@@ -67,6 +67,11 @@
       const users = this.getLocalUsers();
       users.push(user);
       localStorage.setItem('davanti_users', JSON.stringify(users));
+
+      // Sincronización en la nube con Firebase
+      if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncUser === 'function') {
+        window.CallejonFirebase.syncUser(user);
+      }
     },
 
     saveCartForUser(user) {
@@ -210,12 +215,28 @@
         // Fallback to localStorage
       }
 
-      // 2. LocalStorage Fallback
-      const localUsers = this.getLocalUsers();
-      const user = localUsers.find(u => 
+      // 2. LocalStorage Fallback (con consulta a Firebase en la nube)
+      let localUsers = this.getLocalUsers();
+      let user = localUsers.find(u => 
         u.email.toLowerCase() === cleanIdent || 
         u.username.toLowerCase() === cleanIdent
       );
+
+      // Si no se encuentra en almacenamiento local, intentar consultar Firebase en tiempo real
+      if (!user && typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.fetchUserByEmailOrUsername === 'function') {
+        try {
+          const remoteUser = await window.CallejonFirebase.fetchUserByEmailOrUsername(cleanIdent);
+          if (remoteUser) {
+            user = remoteUser;
+            // Guardar en copia local
+            const exists = localUsers.some(u => u.id === remoteUser.id || u.email.toLowerCase() === remoteUser.email.toLowerCase());
+            if (!exists) {
+              localUsers.push(remoteUser);
+              localStorage.setItem('davanti_users', JSON.stringify(localUsers));
+            }
+          }
+        } catch (e) {}
+      }
 
       if (!user || user.password !== password) {
         return { success: false, message: 'Credenciales inválidas. Verifica tu correo/usuario y contraseña.' };

@@ -117,6 +117,11 @@
 
         localStorage.setItem(KEYS.USERS, JSON.stringify(users));
 
+        // Sincronizar con Firebase en la nube
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncUser === 'function') {
+          window.CallejonFirebase.syncUser(userData);
+        }
+
         // Inicializar o actualizar tarjeta para el usuario si se proporcionó saldo
         if (typeof userData.balance !== 'undefined') {
           this.updateUserBalance(userData.email, Number(userData.balance), 'Inicialización / Modificación en Panel Admin', 0);
@@ -135,6 +140,12 @@
         let users = JSON.parse(localStorage.getItem(KEYS.USERS) || '[]');
         users = users.filter(u => u.id !== userId);
         localStorage.setItem(KEYS.USERS, JSON.stringify(users));
+
+        // Sincronizar eliminación con Firebase
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.deleteUser === 'function') {
+          window.CallejonFirebase.deleteUser(userId);
+        }
+
         this.notifyChange('users');
         return true;
       } catch (e) {
@@ -185,6 +196,11 @@
         allCards[emailKey] = card;
         localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
 
+        // Sincronizar tarjeta con Firebase
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncCard === 'function') {
+          window.CallejonFirebase.syncCard(emailKey, card);
+        }
+
         // Si es el usuario demo activo o el usuario en sesión actual, sincronizar
         try {
           const current = JSON.parse(localStorage.getItem('davanti_current_user') || 'null');
@@ -232,6 +248,11 @@
 
         allCards[emailKey] = card;
         localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
+
+        // Sincronizar tarjeta con Firebase
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncCard === 'function') {
+          window.CallejonFirebase.syncCard(emailKey, card);
+        }
 
         try {
           const current = JSON.parse(localStorage.getItem('davanti_current_user') || 'null');
@@ -300,6 +321,11 @@
 
         // Guardar en la clave global
         localStorage.setItem(KEYS.ORDERS_GLOBAL, JSON.stringify(orders));
+
+        // Sincronizar pedido con Firebase
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncOrder === 'function') {
+          window.CallejonFirebase.syncOrder(order);
+        }
 
         // Sincronizar en la clave aislada del usuario
         if (order.userEmail) {
