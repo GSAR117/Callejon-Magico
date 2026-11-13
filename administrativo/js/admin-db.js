@@ -45,17 +45,52 @@
         const allCards = this.getAllCards();
         const allOrders = this.getAllOrders();
 
-        return users.map(user => {
+        return users.map((user, idx) => {
           const emailKey = (user.email || '').trim().toLowerCase();
           const card = allCards[emailKey] || allCards[user.id] || null;
           const userOrders = allOrders.filter(o => (o.userEmail || '').trim().toLowerCase() === emailKey || o.userId === user.id);
           const totalSpent = userOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
 
+          const creditLimit = card ? (Number(card.creditLimit) || 60000) : 60000;
+          const balance = card ? (Number(card.balance) || 0) : 0;
+          const debt = card && typeof card.debt === 'number'
+            ? Math.max(0, Number(card.debt))
+            : Math.max(0, creditLimit - balance);
+          const daysOverdue = card && typeof card.daysOverdue === 'number'
+            ? Math.max(0, parseInt(card.daysOverdue, 10) || 0)
+            : Math.max(0, parseInt(user.daysOverdue, 10) || 0);
+
+          let creditStatus = 'al-corriente';
+          let creditStatusLabel = 'Al corriente';
+          if (daysOverdue >= 30) {
+            creditStatus = 'vencida-30';
+            creditStatusLabel = 'Vencida +30';
+          } else if (daysOverdue > 0) {
+            creditStatus = 'vencida';
+            creditStatusLabel = 'Vencida';
+          }
+
+          // Generar código CL-XXXXX determinístico si no tiene uno
+          let hash = 0;
+          const seedStr = emailKey || String(user.id || idx);
+          for (let i = 0; i < seedStr.length; i++) {
+            hash = ((hash << 5) - hash) + seedStr.charCodeAt(i);
+            hash |= 0;
+          }
+          const clientCode = user.clientCode || ('CL-' + String(10000 + (Math.abs(hash) % 89999)));
+
           return {
             ...user,
-            balance: card ? (Number(card.balance) || 0) : 0,
+            clientCode,
+            balance,
+            debt,
             points: card ? (Number(card.points) || 0) : 0,
-            creditLimit: card ? (Number(card.creditLimit) || 60000) : 60000,
+            creditLimit,
+            daysOverdue,
+            creditStatus,
+            creditStatusLabel,
+            cardNumber: card && card.cardNumber ? card.cardNumber : '4152 •••• •••• 8842',
+            transactions: card && Array.isArray(card.transactions) ? card.transactions : [],
             cardActive: card ? Boolean(card.isActive !== false) : false,
             ordersCount: userOrders.length,
             totalSpent: totalSpent
@@ -162,6 +197,53 @@
         return card;
       } catch (e) {
         console.error('AdminDB: Error al actualizar saldo:', e);
+        return null;
+      }
+    },
+
+    updateCreditAccount(userEmail, { creditLimit, daysOverdue, resetOverdueOnPay } = {}) {
+      try {
+        const emailKey = (userEmail || '').trim().toLowerCase();
+        const allCards = this.getAllCards();
+        const card = allCards[emailKey] || {
+          cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
+          tier: 'ORO DEPARTAMENTAL',
+          creditLimit: 60000,
+          balance: 60000,
+          points: 500,
+          statementDay: 15,
+          daysOverdue: 0,
+          isActive: true,
+          transactions: []
+        };
+
+        if (typeof creditLimit === 'number' && creditLimit > 0) {
+          card.creditLimit = creditLimit;
+          if (card.balance > creditLimit) {
+            card.balance = creditLimit;
+          }
+        }
+        if (typeof daysOverdue === 'number' && daysOverdue >= 0) {
+          card.daysOverdue = Math.floor(daysOverdue);
+        }
+        if (resetOverdueOnPay) {
+          card.daysOverdue = 0;
+        }
+
+        allCards[emailKey] = card;
+        localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
+
+        try {
+          const current = JSON.parse(localStorage.getItem('davanti_current_user') || 'null');
+          if (current && (current.email || '').toLowerCase() === emailKey) {
+            localStorage.setItem(KEYS.LEGACY_CARD, JSON.stringify(card));
+          }
+        } catch (e) {}
+
+        this.notifyChange('balance');
+        return card;
+      } catch (e) {
+        console.error('AdminDB: Error al actualizar cuenta de crédito:', e);
         return null;
       }
     },

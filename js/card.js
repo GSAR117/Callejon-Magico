@@ -188,6 +188,12 @@
         userCard.balance = Math.min(60000, (Number(userCard.balance) || 0) + diff);
         allCards[userKey] = userCard;
         this.saveAllCards(allCards);
+      } else if (Number(userCard.balance) > (Number(userCard.creditLimit) || 60000)) {
+        userCard.balance = Number(userCard.creditLimit) || 60000;
+        delete userCard.debt;
+        delete userCard.creditInFavor;
+        allCards[userKey] = userCard;
+        this.saveAllCards(allCards);
       }
 
       // Validar valores numéricos mínimos

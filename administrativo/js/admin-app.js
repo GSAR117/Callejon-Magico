@@ -35,6 +35,7 @@
 
     // Buscadores y Filtros
     searchUsers: document.getElementById('searchUsersInput'),
+    filterCreditStatus: document.getElementById('filterCreditStatus'),
     searchOrders: document.getElementById('searchOrdersInput'),
     filterOrderStatus: document.getElementById('filterOrderStatus'),
     searchStock: document.getElementById('searchStockInput'),
@@ -44,6 +45,7 @@
 
     // Modales
     modalBalance: document.getElementById('modalAdjustBalance'),
+    modalStatement: document.getElementById('modalClientStatement'),
     modalProduct: document.getElementById('modalProductForm'),
     modalCustomer: document.getElementById('modalCustomerForm'),
     modalOrderTicket: document.getElementById('modalOrderTicket')
@@ -188,28 +190,41 @@
   }
 
   // =========================================================================
-  // 3. TABLA DE CLIENTES & SALDOS
+  // 3. TABLA DE CLIENTES & SALDOS (CUENTAS DE CRÉDITO)
   // =========================================================================
   function renderUsersTable() {
     if (!DOM.tableUsersBody) return;
     const users = window.AdminDB.getUsers();
     const query = (DOM.searchUsers ? DOM.searchUsers.value : '').trim().toLowerCase();
+    const statusFilter = (DOM.filterCreditStatus ? DOM.filterCreditStatus.value : 'all');
 
     const filtered = users.filter(u => {
       const matchName = (u.fullName || '').toLowerCase().includes(query);
       const matchEmail = (u.email || '').toLowerCase().includes(query);
       const matchPhone = (u.phone || '').toLowerCase().includes(query);
-      return matchName || matchEmail || matchPhone;
+      const matchCode = (u.clientCode || '').toLowerCase().includes(query);
+      const matchSearch = matchName || matchEmail || matchPhone || matchCode;
+
+      let matchStatus = true;
+      if (statusFilter !== 'all') {
+        matchStatus = (u.creditStatus || 'al-corriente') === statusFilter;
+      }
+      return matchSearch && matchStatus;
     });
 
     if (!filtered.length) {
-      DOM.tableUsersBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--admin-text-muted);">No se encontraron clientes con el criterio de búsqueda.</td></tr>`;
+      DOM.tableUsersBody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--admin-text-muted);">No se encontraron cuentas de crédito con el criterio seleccionado.</td></tr>`;
       return;
     }
 
     DOM.tableUsersBody.innerHTML = filtered.map(u => {
       const initial = (u.fullName || u.email || 'U').charAt(0).toUpperCase();
       const dateStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Reciente';
+      const limitFmt = '$' + Number(u.creditLimit || 60000).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+      const balFmt = '$' + Number(u.balance || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+      const debtFmt = '$' + Number(u.debt || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+      const statusClass = u.creditStatus || 'al-corriente';
+      const statusLabel = u.creditStatusLabel || 'Al corriente';
 
       return `
         <tr>
@@ -218,26 +233,40 @@
               <div class="user-cell-avatar">${initial}</div>
               <div>
                 <strong style="font-size: 0.9rem; color: #ffffff;">${escapeHtml(u.fullName || 'Sin nombre')}</strong>
-                <span style="font-size: 0.75rem; color: var(--admin-text-muted); display: block;">${escapeHtml(u.email)}</span>
+                <span style="font-size: 0.73rem; color: var(--admin-text-muted); display: block;">
+                  <strong style="color: #94a3b8; font-family: monospace;">${escapeHtml(u.clientCode || 'CL-10001')}</strong> · ${escapeHtml(u.email)}
+                </span>
               </div>
             </div>
           </td>
           <td>${escapeHtml(u.phone || 'No registrado')}</td>
           <td>${dateStr}</td>
           <td>
-            <div style="font-size: 0.95rem; font-weight: 800; color: var(--admin-gold);">
-              $${Number(u.balance || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
+            <span class="credit-line-cell">${limitFmt}</span>
+          </td>
+          <td>
+            <div style="font-size: 0.94rem; font-weight: 800; color: var(--admin-gold);">
+              ${balFmt} MXN
             </div>
-            <span style="font-size: 0.72rem; color: var(--admin-text-muted);">Límite: $${Number(u.creditLimit || 60000).toLocaleString('es-MX')}</span>
+            <span style="font-size: 0.72rem; color: var(--admin-text-muted);">Deuda: ${debtFmt}</span>
+          </td>
+          <td>
+            <span class="overdue-days-cell">${Number(u.daysOverdue || 0)} d</span>
+          </td>
+          <td>
+            <span class="badge-credit-status ${statusClass}">${escapeHtml(statusLabel)}</span>
           </td>
           <td>
             <span style="font-weight: 700; color: #ffffff;">${u.ordersCount || 0} pedido(s)</span>
             <div style="font-size: 0.72rem; color: var(--admin-success);">$${Number(u.totalSpent || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</div>
           </td>
           <td style="text-align: right;">
-            <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+            <div style="display: flex; gap: 0.45rem; justify-content: flex-end; align-items: center;">
               <button type="button" class="btn-admin btn-admin-primary btn-admin-sm btn-open-balance" data-email="${escapeHtml(u.email)}" data-name="${escapeHtml(u.fullName || '')}" data-balance="${u.balance || 0}">
-                💳 Recargar Saldo
+                Abonar
+              </button>
+              <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm btn-open-statement" data-email="${escapeHtml(u.email)}">
+                Estado
               </button>
             </div>
           </td>
@@ -245,10 +274,16 @@
       `;
     }).join('');
 
-    // Eventos de botones de recargar saldo
+    // Eventos de botones de Abonar y Estado
     DOM.tableUsersBody.querySelectorAll('.btn-open-balance').forEach(btn => {
       btn.addEventListener('click', () => {
         openBalanceModal(btn.dataset.email, btn.dataset.name, parseFloat(btn.dataset.balance));
+      });
+    });
+
+    DOM.tableUsersBody.querySelectorAll('.btn-open-statement').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openStatementModal(btn.dataset.email);
       });
     });
   }
@@ -509,8 +544,38 @@
         }
 
         window.AdminDB.updateUserBalance(activeBalanceUser.email, newBalance, reason, changeDelta);
+        if (action === 'add' && typeof window.AdminDB.updateCreditAccount === 'function') {
+          window.AdminDB.updateCreditAccount(activeBalanceUser.email, { resetOverdueOnPay: true });
+        }
         closeAllModals();
         showToast(`Saldo de ${activeBalanceUser.name || activeBalanceUser.email} actualizado a $${newBalance.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`, 'success');
+      });
+    }
+
+    // Formulario de parámetros de línea y atraso en Modal Estado de Cuenta
+    const formCreditParams = document.getElementById('formUpdateCreditParams');
+    if (formCreditParams) {
+      formCreditParams.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!activeBalanceUser || !activeBalanceUser.email) return;
+        const newLimit = parseFloat(document.getElementById('stmtInputLimit').value) || 60000;
+        const newOverdue = Math.max(0, parseInt(document.getElementById('stmtInputOverdue').value, 10) || 0);
+        window.AdminDB.updateCreditAccount(activeBalanceUser.email, {
+          creditLimit: newLimit,
+          daysOverdue: newOverdue
+        });
+        openStatementModal(activeBalanceUser.email);
+        showToast('Parámetros de crédito (Línea y Atraso) actualizados correctamente', 'success');
+      });
+    }
+
+    const btnStmtAbonar = document.getElementById('btnStmtOpenAbonar');
+    if (btnStmtAbonar) {
+      btnStmtAbonar.addEventListener('click', () => {
+        if (!activeBalanceUser) return;
+        const { email, name, currentBalance } = activeBalanceUser;
+        closeAllModals();
+        openBalanceModal(email, name, currentBalance);
       });
     }
 
@@ -629,6 +694,68 @@
     openModal(DOM.modalBalance);
   }
 
+  function openStatementModal(email) {
+    const users = window.AdminDB.getUsers();
+    const u = users.find(x => (x.email || '').toLowerCase() === (email || '').toLowerCase());
+    if (!u) return;
+
+    activeBalanceUser = { email: u.email, name: u.fullName, currentBalance: u.balance };
+
+    const fmt = (n) => '$' + Number(n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+    const codeEl = document.getElementById('stmtClientCode');
+    const nameEl = document.getElementById('stmtClientName');
+    const metaEl = document.getElementById('stmtClientMeta');
+    const badgeEl = document.getElementById('stmtStatusBadge');
+    const cardNumEl = document.getElementById('stmtCardNumber');
+    const limitEl = document.getElementById('stmtCreditLimit');
+    const availEl = document.getElementById('stmtAvailableBalance');
+    const debtEl = document.getElementById('stmtUsedDebt');
+    const overdueEl = document.getElementById('stmtDaysOverdue');
+    const inputLimit = document.getElementById('stmtInputLimit');
+    const inputOverdue = document.getElementById('stmtInputOverdue');
+    const txListEl = document.getElementById('stmtTransactionsList');
+
+    if (codeEl) codeEl.textContent = u.clientCode || 'CL-10001';
+    if (nameEl) nameEl.textContent = u.fullName || 'Sin nombre';
+    if (metaEl) metaEl.textContent = `${u.email} · Tel: ${u.phone || 'No registrado'}`;
+    if (badgeEl) {
+      badgeEl.className = `badge-credit-status ${u.creditStatus || 'al-corriente'}`;
+      badgeEl.textContent = u.creditStatusLabel || 'Al corriente';
+    }
+    if (cardNumEl) cardNumEl.textContent = `Tarjeta: ${u.cardNumber || '4152 •••• •••• 8842'}`;
+    if (limitEl) limitEl.textContent = fmt(u.creditLimit || 60000);
+    if (availEl) availEl.textContent = fmt(u.balance || 0);
+    if (debtEl) debtEl.textContent = fmt(u.debt || 0);
+    if (overdueEl) overdueEl.textContent = `${Number(u.daysOverdue || 0)} d`;
+    if (inputLimit) inputLimit.value = Number(u.creditLimit || 60000);
+    if (inputOverdue) inputOverdue.value = Number(u.daysOverdue || 0);
+
+    if (txListEl) {
+      const txs = Array.isArray(u.transactions) ? u.transactions : [];
+      if (!txs.length) {
+        txListEl.innerHTML = `<div style="padding: 1.25rem; text-align: center; color: var(--admin-text-muted); font-size: 0.84rem;">No hay movimientos registrados en la tarjeta de este cliente.</div>`;
+      } else {
+        txListEl.innerHTML = txs.slice(0, 15).map(tx => {
+          const amt = Number(tx.amount) || 0;
+          const isPositive = amt > 0;
+          return `
+            <div class="statement-tx-row">
+              <div>
+                <strong style="color: #ffffff; font-size: 0.85rem; display: block;">${escapeHtml(tx.concept || 'Movimiento de tarjeta')}</strong>
+                <span style="color: var(--admin-text-muted); font-size: 0.74rem;">${escapeHtml(tx.date || 'Reciente')}</span>
+              </div>
+              <strong style="font-size: 0.9rem; color: ${isPositive ? 'var(--admin-success)' : 'var(--admin-gold)'};">
+                ${isPositive ? '+' : ''}${fmt(amt)} MXN
+              </strong>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    openModal(DOM.modalStatement);
+  }
+
   function openEditProductModal(productId) {
     const products = window.AdminDB.getAllProductsWithStock();
     const p = products.find(x => x.id === productId);
@@ -664,6 +791,7 @@
   // =========================================================================
   function setupFiltersAndSearches() {
     if (DOM.searchUsers) DOM.searchUsers.addEventListener('input', () => renderUsersTable());
+    if (DOM.filterCreditStatus) DOM.filterCreditStatus.addEventListener('change', () => renderUsersTable());
     if (DOM.searchOrders) DOM.searchOrders.addEventListener('input', () => renderOrdersTable());
     if (DOM.filterOrderStatus) DOM.filterOrderStatus.addEventListener('change', () => renderOrdersTable());
     if (DOM.searchStock) DOM.searchStock.addEventListener('input', () => renderStockTable());

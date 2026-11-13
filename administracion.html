@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="administrativo/css/admin.css" />
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23dfb743'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#07142a">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
 
 <body>
@@ -234,14 +237,14 @@
         </section>
 
         <!-- ==================================================================
-             VISTA 2: GESTIÓN DE CLIENTES & SALDOS
+             VISTA 2: GESTIÓN DE CLIENTES & SALDOS (CUENTAS DE CRÉDITO)
              ================================================================== -->
         <section class="admin-view" id="view-clients">
           <div class="admin-card">
             <div class="admin-card-header">
               <div class="card-title-group">
-                <h3>👥 Base de Datos de Clientes</h3>
-                <p>Monitoreo de datos personales, historial y saldos en Tarjeta Callejón Mágico</p>
+                <h3>👥 Cuentas de Crédito y Clientes</h3>
+                <p>Control de línea, saldo, atraso, estatus y compras en Tarjeta Callejón Mágico</p>
               </div>
               <div class="admin-card-actions">
                 <div class="search-input-box">
@@ -249,8 +252,14 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" class="admin-search-input" id="searchUsersInput" placeholder="Buscar por nombre, correo o teléfono..." />
+                  <input type="text" class="admin-search-input" id="searchUsersInput" placeholder="Buscar por nombre, CL-ID, correo o teléfono..." />
                 </div>
+                <select class="admin-select" id="filterCreditStatus">
+                  <option value="all">Estatus: Todos</option>
+                  <option value="al-corriente">Al corriente</option>
+                  <option value="vencida">Vencida</option>
+                  <option value="vencida-30">Vencida +30</option>
+                </select>
                 <button type="button" class="btn-admin btn-admin-primary" id="btnOpenNewCustomerModal">
                   + Nuevo Cliente
                 </button>
@@ -264,7 +273,10 @@
                     <th>Cliente</th>
                     <th>Teléfono</th>
                     <th>Registro</th>
+                    <th>Línea</th>
                     <th>Saldo Tarjeta Tienda</th>
+                    <th>Atraso</th>
+                    <th>Estatus</th>
                     <th>Compras Totales</th>
                     <th style="text-align: right;">Acciones</th>
                   </tr>
@@ -555,6 +567,79 @@
     </div>
   </div>
 
+  <!-- Modal 4: Estado de Cuenta del Cliente -->
+  <div class="admin-modal-backdrop" id="modalClientStatement">
+    <div class="admin-modal" style="max-width: 680px;">
+      <div class="admin-modal-header">
+        <h3>📄 Estado de Cuenta — Crédito Departamental</h3>
+        <button type="button" class="btn-close-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <!-- Cabecera del cliente -->
+        <div class="statement-client-banner">
+          <div>
+            <div class="statement-client-code" id="stmtClientCode">CL-00000</div>
+            <h4 class="statement-client-name" id="stmtClientName">-</h4>
+            <div class="statement-client-meta" id="stmtClientMeta">-</div>
+          </div>
+          <div style="text-align: right;">
+            <span class="badge-credit-status al-corriente" id="stmtStatusBadge">Al corriente</span>
+            <div style="font-size: 0.76rem; color: var(--admin-text-muted); margin-top: 0.35rem;" id="stmtCardNumber">4152 •••• •••• 8842</div>
+          </div>
+        </div>
+
+        <!-- 4 Indicadores de la Cuenta -->
+        <div class="statement-kpi-grid">
+          <div class="statement-kpi-box">
+            <span class="statement-kpi-label">Línea Autorizada</span>
+            <strong class="statement-kpi-value" id="stmtCreditLimit">$60,000.00</strong>
+          </div>
+          <div class="statement-kpi-box">
+            <span class="statement-kpi-label">Saldo Disponible</span>
+            <strong class="statement-kpi-value gold" id="stmtAvailableBalance">$60,000.00</strong>
+          </div>
+          <div class="statement-kpi-box">
+            <span class="statement-kpi-label">Deuda Utilizada</span>
+            <strong class="statement-kpi-value debt" id="stmtUsedDebt">$0.00</strong>
+          </div>
+          <div class="statement-kpi-box">
+            <span class="statement-kpi-label">Días de Atraso</span>
+            <strong class="statement-kpi-value" id="stmtDaysOverdue">0 d</strong>
+          </div>
+        </div>
+
+        <!-- Controles administrativos de Línea y Atraso -->
+        <form id="formUpdateCreditParams" class="statement-params-form">
+          <div class="admin-form-group" style="margin-bottom: 0;">
+            <label for="stmtInputLimit">Línea de Crédito ($ MXN)</label>
+            <input type="number" id="stmtInputLimit" class="admin-form-control" min="1000" step="500" required />
+          </div>
+          <div class="admin-form-group" style="margin-bottom: 0;">
+            <label for="stmtInputOverdue">Días de Atraso (0 = Al corriente)</label>
+            <input type="number" id="stmtInputOverdue" class="admin-form-control" min="0" max="365" step="1" required />
+          </div>
+          <button type="submit" class="btn-admin btn-admin-secondary" style="height: 42px; align-self: end;">
+            💾 Guardar Parámetros
+          </button>
+        </form>
+
+        <!-- Historial de Movimientos -->
+        <div style="margin-top: 1.25rem;">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--admin-text-muted); margin-bottom: 0.65rem;">
+            📋 Movimientos Recientes de la Cuenta
+          </h4>
+          <div class="statement-tx-list" id="stmtTransactionsList">
+            <!-- Dinámico -->
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cerrar</button>
+        <button type="button" class="btn-admin btn-admin-primary" id="btnStmtOpenAbonar">💳 Abonar a esta Cuenta</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Contenedor de Alertas Toast -->
   <div class="admin-toast-container" id="adminToastContainer"></div>
 
@@ -562,6 +647,7 @@
   <script src="js/products-data.js"></script>
   <script src="administrativo/js/admin-db.js"></script>
   <script src="administrativo/js/admin-app.js"></script>
+  <script src="js/pwa-qr.js"></script>
 </body>
 
 </html>
