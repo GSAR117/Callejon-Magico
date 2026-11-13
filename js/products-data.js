@@ -1,6 +1,6 @@
 /**
  * CALLEJÓN MÁGICO — Catálogo Departamental Completo
- * Evento Especial: BUEN FIN MÁGICO (13 al 21 de Noviembre de 2026) · 50%, 60% y 75% OFF.
+ * Evento Especial: BUEN FIN MÁGICO (13 al 21 de Noviembre de 2026) · 50%, 60% y 75% OFF en artículos seleccionados.
  * Total de productos integrados desde las carpetas Productos/, Productos 2/ y Productos 3/.
  */
 
@@ -14,10 +14,10 @@ const PRODUCTS_DATA = [
     "gender": "hombre",
     "subcategory": "chamarras",
     "brand": "D'Avanti Signature",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1150,
-    "originalPrice": 2299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 84,
     "image": "Productos/chamarra de piel sintetica hombre.jpg",
@@ -41,10 +41,7 @@ const PRODUCTS_DATA = [
       "Cierres reforzados",
       "Bolsillo interior de seguridad",
       "Corte entallado moderno"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-2",
@@ -55,10 +52,10 @@ const PRODUCTS_DATA = [
     "gender": "mujer",
     "subcategory": "vestidos",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 680,
-    "originalPrice": 1699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 46,
     "image": "Productos/Vestido Midi Plisado de Satín azul.jpg",
@@ -97,10 +94,7 @@ const PRODUCTS_DATA = [
     },
     "gallery": [
       "Productos/vestido midi pisado de satin negro.jpg"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-3",
@@ -111,10 +105,10 @@ const PRODUCTS_DATA = [
     "gender": "hombre",
     "subcategory": "trajes",
     "brand": "Hugo Boss Selection",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3150,
-    "originalPrice": 6299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 6299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 32,
     "image": "Productos/Traje Formal Slim Fit de Lana Italiana.jpg",
@@ -143,10 +137,7 @@ const PRODUCTS_DATA = [
     ],
     "gallery": [
       "Productos/Traje Formal Slim Fit de Lana Italiana 2.jpg"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-4",
@@ -157,13 +148,11 @@ const PRODUCTS_DATA = [
     "gender": "mujer",
     "subcategory": "bolsas",
     "brand": "Michael Kors",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
+    "badge": "Nuevo",
+    "badgeType": "new",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "price": 975,
-    "originalPrice": 3899,
+    "price": 3899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 71,
     "image": "Productos/Bolso Tote de Piel Genuina.jpg",
@@ -193,8 +182,7 @@ const PRODUCTS_DATA = [
       "Habano Cuero": "Productos/Bolso Tote de Piel Genuina.jpg",
       "Café Tostado": "Productos/Bolso Tote de Piel Cafe.jpg",
       "Blanco Marfil": "Productos/Bolso Tote de Piel blanco.jpg"
-    },
-    "buenFinDiscount": 75
+    }
   },
   {
     "id": "fashion-5",
@@ -205,10 +193,10 @@ const PRODUCTS_DATA = [
     "gender": "mujer",
     "subcategory": "calzado",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 800,
-    "originalPrice": 1999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 58,
     "image": "Productos/zapatillas de tacon negro.jpg",
@@ -246,10 +234,7 @@ const PRODUCTS_DATA = [
     "gallery": [
       "Productos/zapatillas rojas.jpg",
       "Productos/zapatillas cafe oscuro.jpg"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-6",
@@ -260,10 +245,10 @@ const PRODUCTS_DATA = [
     "gender": "hombre",
     "subcategory": "camisas",
     "brand": "Ralph Lauren",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 600,
-    "originalPrice": 1199,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 63,
     "image": "Productos/camisa casual de manga larga.jpg",
@@ -292,10 +277,7 @@ const PRODUCTS_DATA = [
       "Botones de concha natural",
       "Puño ajustable",
       "Corte relajado sofisticado"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-7",
@@ -306,10 +288,10 @@ const PRODUCTS_DATA = [
     "gender": "hombre",
     "subcategory": "pantalones",
     "brand": "Levi's",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 800,
-    "originalPrice": 1599,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1599,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 115,
     "image": "Productos/Jeans skinny.jpg",
@@ -340,10 +322,7 @@ const PRODUCTS_DATA = [
       "Productos/jean 1.jpg",
       "Productos/jean 2.jpg",
       "Productos/jean 3.jpg"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-8",
@@ -354,10 +333,10 @@ const PRODUCTS_DATA = [
     "gender": "unisex",
     "subcategory": "calzado",
     "brand": "Nike",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 375,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 128,
     "image": "assets/images/prod_sneakers.jpg",
@@ -383,10 +362,7 @@ const PRODUCTS_DATA = [
       "Suela tipo waffle antideslizante",
       "Malla ultra transpirable",
       "Envío express disponible"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-9",
@@ -397,10 +373,10 @@ const PRODUCTS_DATA = [
     "gender": "infantil",
     "subcategory": "ninos",
     "brand": "Tommy Hilfiger Kids",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 600,
-    "originalPrice": 1199,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 39,
     "image": "assets/images/fashion/ropa_infantil.jpg",
@@ -426,10 +402,7 @@ const PRODUCTS_DATA = [
       "Algodón peinado hipoalergénico",
       "Cintura con jareta ajustable",
       "Costuras planas ultrasuaves"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fashion-10",
@@ -440,10 +413,10 @@ const PRODUCTS_DATA = [
     "gender": "hombre",
     "subcategory": "accesorios",
     "brand": "D'Avanti Horlogerie",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2200,
-    "originalPrice": 4399,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4399,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 204,
     "image": "Productos 2/Reloj Festina Timeless Chronograph hombre.jpg",
@@ -469,15 +442,12 @@ const PRODUCTS_DATA = [
       "Garantía oficial de 3 años",
       "Estuche conmemorativo"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
     "colorImages": {
       "Dorado & Negro Chronograph": "Productos 2/Reloj Festina Timeless Chronograph hombre.jpg",
       "Negro Minimalista": "Productos 2/Reloj - FIZILI - Para Hombre - 08.jpg",
       "Acero Inoxidable": "Productos 2/reloj de hombre.jpg"
-    },
-    "buenFinDiscount": 50
+    }
   },
   {
     "id": "fashion-11",
@@ -488,10 +458,10 @@ const PRODUCTS_DATA = [
     "gender": "unisex",
     "subcategory": "accesorios",
     "brand": "Ray-Ban",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 720,
-    "originalPrice": 1799,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 52,
     "image": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar.jpg",
@@ -522,10 +492,7 @@ const PRODUCTS_DATA = [
       "Gris Cañón Polarizado": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar.jpg",
       "Carey Dorado Mujer": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar mujer.jpg",
       "Negro Urbano Hombre": "Productos 2/Lentes de sol para hombres modernos.jpg"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "tech-1",
@@ -535,10 +502,10 @@ const PRODUCTS_DATA = [
     "subcategory": "telefonia",
     "brand": "Apple",
     "department": "Tecnología · Telefonía Móvil",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 7625,
-    "originalPrice": 30499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 30499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 168,
     "image": "Productos/Apple iPhone 15 Pro Max 256GB.jpg",
@@ -574,10 +541,7 @@ const PRODUCTS_DATA = [
       "Dynamic Island interactiva con alertas en vivo",
       "Grabación de video espacial y formato ProRes 4K a 60 fps",
       "Conector USB-C universal de alta velocidad"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-2",
@@ -587,10 +551,10 @@ const PRODUCTS_DATA = [
     "subcategory": "telefonia",
     "brand": "Samsung",
     "department": "Tecnología · Telefonía Móvil",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 15500,
-    "originalPrice": 30999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 30999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 124,
     "image": "Productos/Samsung Galaxy S24 Ultra 512GB.jpg",
@@ -630,10 +594,7 @@ const PRODUCTS_DATA = [
     "gallery": [
       "Productos/Samsung Galaxy S24 Ultra 512GB 1.jpg"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-3",
@@ -643,10 +604,10 @@ const PRODUCTS_DATA = [
     "subcategory": "computo",
     "brand": "Apple",
     "department": "Tecnología · Cómputo",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 19200,
-    "originalPrice": 47999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 47999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 92,
     "image": "Productos/Apple MacBook Pro 14 pulgadas.jpg",
@@ -681,10 +642,7 @@ const PRODUCTS_DATA = [
     ],
     "gallery": [
       "Productos/Apple MacBook Pro 14 pulgadas 1.jpg"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-4",
@@ -694,10 +652,10 @@ const PRODUCTS_DATA = [
     "subcategory": "pantallas",
     "brand": "Samsung",
     "department": "Tecnología · Pantallas",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 5250,
-    "originalPrice": 10499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 10499,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 142,
     "image": "Productos/Smart TV Samsung 55 pulgadas.jpg",
@@ -728,10 +686,7 @@ const PRODUCTS_DATA = [
       "Control remoto ecológico SolarCell recargable con luz ambiental",
       "Modo Filmmaker para ver películas exactamente como el director las concibió"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-5",
@@ -741,10 +696,10 @@ const PRODUCTS_DATA = [
     "subcategory": "pantallas",
     "brand": "LG",
     "department": "Tecnología · Pantallas",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 9750,
-    "originalPrice": 38999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 38999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 110,
     "image": "Productos/Pantalla LG OLED evo 65 pulgadas.jpg",
@@ -775,10 +730,7 @@ const PRODUCTS_DATA = [
       "webOS Re:New Program con 5 años garantizados de actualizaciones",
       "Magic Remote con puntero de navegación por movimiento"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-6",
@@ -788,9 +740,9 @@ const PRODUCTS_DATA = [
     "subcategory": "audio",
     "brand": "Sony",
     "department": "Tecnología · Audio",
-    "badge": "Buen Fin -60%",
+    "badge": "Buen Fin -50%",
     "badgeType": "offer",
-    "price": 3400,
+    "price": 4250,
     "originalPrice": 8499,
     "rating": 4.9,
     "reviewsCount": 215,
@@ -832,8 +784,8 @@ const PRODUCTS_DATA = [
       "Blanco": "Productos/Audífonos Sony WH-1000XM5 blanco.jpg",
       "Morado": "Productos/Audífonos Sony WH-1000XM5 morado.jpg"
     },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
+    "buenFinDiscount": 50,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -844,10 +796,10 @@ const PRODUCTS_DATA = [
     "subcategory": "audio",
     "brand": "Apple",
     "department": "Tecnología · Audio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2650,
-    "originalPrice": 5299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 340,
     "image": "Productos/Apple AirPods Pro de 2.ª Generación.jpg",
@@ -878,10 +830,7 @@ const PRODUCTS_DATA = [
     ],
     "gallery": [
       "Productos/Apple AirPods Pro de 2.ª Generación 1.jpg"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-8",
@@ -891,10 +840,10 @@ const PRODUCTS_DATA = [
     "subcategory": "videojuegos",
     "brand": "Sony",
     "department": "Tecnología · Videojuegos",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 6000,
-    "originalPrice": 11999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 11999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 295,
     "image": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=800&q=80",
@@ -922,10 +871,7 @@ const PRODUCTS_DATA = [
       "Ray Tracing por hardware para reflejos y sombras fotorrealistas",
       "Lector de discos Blu-ray Ultra HD 4K integrado",
       "Juego preinstalado ASTRO's PLAYROOM para estrenar el control"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-9",
@@ -935,10 +881,10 @@ const PRODUCTS_DATA = [
     "subcategory": "videojuegos",
     "brand": "Nintendo",
     "department": "Tecnología · Videojuegos",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1750,
-    "originalPrice": 6999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 6999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 180,
     "image": "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=800&q=80",
@@ -969,10 +915,7 @@ const PRODUCTS_DATA = [
       "Incluye dos controles Joy-Con y correas de seguridad",
       "Acceso a la enorme librería exclusiva de Mario, Zelda, Pokémon y más"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-10",
@@ -982,10 +925,10 @@ const PRODUCTS_DATA = [
     "subcategory": "wearables",
     "brand": "Apple",
     "department": "Tecnología · Smartwatches",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 10000,
-    "originalPrice": 19999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 19999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 63,
     "image": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=800&q=80",
@@ -1016,10 +959,7 @@ const PRODUCTS_DATA = [
       "GPS de precisión de doble frecuencia (L1 y L5) para rutas exactas",
       "Sirena de emergencia integrada de 86 decibeles audible a 180 metros",
       "Botón de Acción naranja de acceso directo configurable"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-11",
@@ -1029,10 +969,10 @@ const PRODUCTS_DATA = [
     "subcategory": "wearables",
     "brand": "Samsung",
     "department": "Tecnología · Smartwatches",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3500,
-    "originalPrice": 6999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 6999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 82,
     "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
@@ -1064,10 +1004,7 @@ const PRODUCTS_DATA = [
       "Entrenador de sueño con medición de oxígeno continuo y ronquidos",
       "Compatible con correas estándar One-Click de fácil cambio"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-12",
@@ -1077,10 +1014,10 @@ const PRODUCTS_DATA = [
     "subcategory": "computo",
     "brand": "ASUS",
     "department": "Tecnología · Cómputo",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 17600,
-    "originalPrice": 43999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 43999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 57,
     "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=800&q=80",
@@ -1112,10 +1049,7 @@ const PRODUCTS_DATA = [
       "Sistema de 6 bocinas con woofers duales con cancelación de fuerza",
       "Carga rápida por USB-C de 100W además del cargador de alto voltaje"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 60
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-13",
@@ -1125,10 +1059,10 @@ const PRODUCTS_DATA = [
     "subcategory": "audio",
     "brand": "Sonos",
     "department": "Tecnología · Audio",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 5000,
-    "originalPrice": 19999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 19999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 88,
     "image": "Productos/Barra de Sonido Sonos Arc Dolby Atmos.jpg",
@@ -1161,10 +1095,7 @@ const PRODUCTS_DATA = [
     ],
     "gallery": [
       "Productos/1. Barra de Sonido Sonos Arc Dolby Atmos.jpg"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-14",
@@ -1174,10 +1105,10 @@ const PRODUCTS_DATA = [
     "subcategory": "fotografia",
     "brand": "Canon",
     "department": "Tecnología · Fotografía",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 8750,
-    "originalPrice": 17499,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 17499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 45,
     "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80",
@@ -1207,10 +1138,7 @@ const PRODUCTS_DATA = [
       "Modo para demostración en primer plano ideal para creadores y unboxing",
       "Transmisión en vivo por USB plug & play como webcam de alta gama",
       "Cuerpo ultracompacto que cabe en la palma de tu mano con solo 375 gramos"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-15",
@@ -1220,10 +1148,10 @@ const PRODUCTS_DATA = [
     "subcategory": "fotografia",
     "brand": "DJI",
     "department": "Tecnología · Drones",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 10000,
-    "originalPrice": 24999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 24999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 71,
     "image": "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=800&q=80",
@@ -1251,10 +1179,7 @@ const PRODUCTS_DATA = [
       "Tomas verticales reales: la cámara gira físicamente para historias y TikTok",
       "ActiveTrack 360° para planificar trayectorias de seguimiento automáticas",
       "Control remoto DJI RC 2 con pantalla FHD de 700 nits incorporada"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-16",
@@ -1264,10 +1189,10 @@ const PRODUCTS_DATA = [
     "subcategory": "pantallas",
     "brand": "Samsung",
     "department": "Tecnología · Monitores",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 16500,
-    "originalPrice": 32999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 32999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 39,
     "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80",
@@ -1296,10 +1221,7 @@ const PRODUCTS_DATA = [
       "Diseño delgado en acabado metálico de apenas 4.5 mm de grosor",
       "Gaming Hub y Smart TV Apps integradas con control remoto"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-17",
@@ -1309,9 +1231,9 @@ const PRODUCTS_DATA = [
     "subcategory": "audio",
     "brand": "Bose",
     "department": "Tecnología · Audio",
-    "badge": "Buen Fin -75%",
+    "badge": "Buen Fin -60%",
     "badgeType": "offer",
-    "price": 2250,
+    "price": 3600,
     "originalPrice": 8999,
     "rating": 4.8,
     "reviewsCount": 54,
@@ -1343,8 +1265,8 @@ const PRODUCTS_DATA = [
       "Compatible con Bose SimpleSync para emparejar con barras de sonido del hogar",
       "Ecualizador ajustable de graves, medios y agudos en la app Bose"
     ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
+    "buenFinDiscount": 60,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -1355,10 +1277,10 @@ const PRODUCTS_DATA = [
     "subcategory": "computo",
     "brand": "Dell",
     "department": "Tecnología · Cómputo",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 14800,
-    "originalPrice": 36999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 36999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 41,
     "image": "Productos/Laptop Dell XPS 13 Plus Blanca.jpg",
@@ -1396,10 +1318,7 @@ const PRODUCTS_DATA = [
       "Blanco Platino": "Productos/Laptop Dell XPS 13 Plus Blanca.jpg",
       "Negro Grafito": "Productos/Laptop Dell XPS 13 Plus Negra.jpg",
       "Rojo Carmesí": "Productos/Laptop Dell XPS 13 Plus Roja.jpg"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "prod-3",
@@ -1409,10 +1328,10 @@ const PRODUCTS_DATA = [
     "subcategory": "muebles",
     "brand": "D'Avanti Maison",
     "department": "Hogar · Salas & Muebles",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 5150,
-    "originalPrice": 10299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 10299,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 64,
     "image": "Productos/Sofa seccional modula 3 plazas gris.jpg",
@@ -1445,10 +1364,7 @@ const PRODUCTS_DATA = [
       "Módulo de chaise longue reversible que se adapta a cualquier esquina",
       "Patas de madera maciza con regatones plásticos que no rayan el piso",
       "Cojines con fundas removibles y cierres ocultos para lavado"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "prod-5",
@@ -1458,10 +1374,10 @@ const PRODUCTS_DATA = [
     "slug": "perfume-para-hombre",
     "category": "belleza",
     "department": "Belleza · Perfumería",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 650,
-    "originalPrice": 1299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 78,
     "image": "Productos/Bleu de Chanel Parfum.jpg",
@@ -1477,10 +1393,7 @@ const PRODUCTS_DATA = [
     "features": [
       "Alta concentración EDP"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "prod-6",
@@ -1490,10 +1403,10 @@ const PRODUCTS_DATA = [
     "slug": "set-de-maquillaje",
     "category": "belleza",
     "department": "Belleza · Maquillaje",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 162,
-    "originalPrice": 649,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 649,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 52,
     "image": "assets/images/prod_makeup.jpg",
@@ -1508,10 +1421,7 @@ const PRODUCTS_DATA = [
     ],
     "features": [
       "Cruelty-free"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "prod-9",
@@ -1521,10 +1431,10 @@ const PRODUCTS_DATA = [
     "subcategory": "muebles",
     "brand": "BoConcept",
     "department": "Hogar · Salas & Muebles",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 7750,
-    "originalPrice": 15499,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 15499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 43,
     "image": "Productos/Sala Modular Nórdica de Diseño Escandinavo.jpg",
@@ -1559,10 +1469,7 @@ const PRODUCTS_DATA = [
     ],
     "gallery": [
       "Productos/Sala Modular Nórdica de Diseño Escandinavo 1.jpg"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-1",
@@ -1572,10 +1479,10 @@ const PRODUCTS_DATA = [
     "subcategory": "construccion",
     "brand": "LEGO",
     "department": "Juguetes · Construcción & Bloques",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 9500,
-    "originalPrice": 18999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 18999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 142,
     "age": "+16 años",
@@ -1603,10 +1510,7 @@ const PRODUCTS_DATA = [
       "Interior minuciosamente recreado con mesa de holoajedrez de Dejarik",
       "Torretas láser cuádruples giratorias superiores e inferiores",
       "Cabina con parabrisas desmontable para 4 minifiguras"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-2",
@@ -1616,10 +1520,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Barbie",
     "department": "Juguetes · Muñecas & Accesorios",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2080,
-    "originalPrice": 5199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5199,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 188,
     "age": "3-5 años",
@@ -1648,10 +1552,7 @@ const PRODUCTS_DATA = [
       "Efectos de sonido y 8 opciones de iluminación ambiental día/noche",
       "Elevador operable con capacidad para 4 muñecas o silla de ruedas",
       "Mobiliario transformable para fiesta en la terraza del techo"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-3",
@@ -1661,10 +1562,10 @@ const PRODUCTS_DATA = [
     "subcategory": "vehiculos",
     "brand": "Hot Wheels",
     "department": "Juguetes · Pistas & Carritos",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 875,
-    "originalPrice": 3499,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 3499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 95,
     "age": "6-8 años",
@@ -1694,10 +1595,7 @@ const PRODUCTS_DATA = [
       "Puntos de conexión para unir a otras pistas Hot Wheels City",
       "Incluye 2 vehículos Hot Wheels metálicos de colección"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-4",
@@ -1707,10 +1605,10 @@ const PRODUCTS_DATA = [
     "subcategory": "juegos-mesa",
     "brand": "Devir",
     "department": "Juguetes · Juegos de Mesa",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 650,
-    "originalPrice": 1299,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 230,
     "age": "+12 años",
@@ -1738,10 +1636,7 @@ const PRODUCTS_DATA = [
       "Desarrolla visión estratégica, gestión de recursos y diplomacia",
       "Piezas esculpidas en madera natural no tóxica de calidad europea",
       "Reglamento y manual didáctico completamente en español"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-5",
@@ -1751,10 +1646,10 @@ const PRODUCTS_DATA = [
     "subcategory": "construccion",
     "brand": "LEGO",
     "department": "Juguetes · Construcción & Bloques",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 4400,
-    "originalPrice": 10999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 10999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 78,
     "age": "+16 años",
@@ -1782,10 +1677,7 @@ const PRODUCTS_DATA = [
       "Motor V12 atmosférico con pistones de movimiento mecánico",
       "Elegantes puertas de mariposa que se elevan suavemente",
       "Incluye placa de exhibición numerada y acceso a contenidos en línea"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-6",
@@ -1795,10 +1687,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Marvel",
     "department": "Juguetes · Figuras de Acción",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 750,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 310,
     "age": "+4 años",
@@ -1827,10 +1719,7 @@ const PRODUCTS_DATA = [
       "Articulación avanzada en hombros tipo mariposa, codos dobles y rodillas",
       "Manos intercambiables para recrear las poses más icónicas del Hombre Araña",
       "Empaque de colección con diseño gráfico cinematográfico de Marvel"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-7",
@@ -1840,10 +1729,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Hasbro",
     "department": "Juguetes · Figuras de Acción",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 225,
-    "originalPrice": 899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 165,
     "age": "6-8 años",
@@ -1873,10 +1762,7 @@ const PRODUCTS_DATA = [
       "Empaque conmemorativo retro estilo blister vintage",
       "Plástico duradero de alta densidad resistente a caídas"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-8",
@@ -1886,10 +1772,10 @@ const PRODUCTS_DATA = [
     "subcategory": "vehiculos",
     "brand": "Action Wheels",
     "department": "Juguetes · Montables Eléctricos",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 3200,
-    "originalPrice": 7999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 7999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 62,
     "age": "3-5 años",
@@ -1932,10 +1818,7 @@ const PRODUCTS_DATA = [
       "Negro Extremo": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños.jpg",
       "Gris Can-Am ATV": "Productos 3/Vehículo Montable a Batería Xootz Can Am ATV 12V con Licencia Gris Electrico.jpg",
       "Deportivo Infantil": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "toy-9",
@@ -1945,10 +1828,10 @@ const PRODUCTS_DATA = [
     "subcategory": "juegos-mesa",
     "brand": "Hasbro",
     "department": "Juguetes · Juegos de Mesa",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 550,
-    "originalPrice": 1099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1099,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 140,
     "age": "+8 años",
@@ -1976,10 +1859,7 @@ const PRODUCTS_DATA = [
       "Valores inmobiliarios que suben y bajan de acuerdo a las acciones",
       "Partidas dinámicas y más rápidas (aproximadamente 45 minutos)",
       "Incluye 4 peones exclusivos y 22 casas de diseño moderno"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-10",
@@ -1989,10 +1869,10 @@ const PRODUCTS_DATA = [
     "subcategory": "didacticos",
     "brand": "Play-Doh",
     "department": "Juguetes · Arte & Creatividad",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 400,
-    "originalPrice": 799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 799,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 115,
     "age": "3-5 años",
@@ -2023,10 +1903,7 @@ const PRODUCTS_DATA = [
       "Moldes para crear galletas, fresas, chispas y cerezas",
       "Estimula el desarrollo sensorial y la imaginación gastronómica"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-11",
@@ -2036,10 +1913,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Nerf",
     "department": "Juguetes · Lanzadores & Deportes",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 375,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 92,
     "age": "+8 años",
@@ -2068,10 +1945,7 @@ const PRODUCTS_DATA = [
       "Clip transparente para monitorear la munición restante en combate",
       "4 rieles tácticos para instalar miras, linternas y bípodes Nerf",
       "Dardos de punta suave seguros diseñados para máximo vuelo aerodinámico"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-12",
@@ -2081,10 +1955,10 @@ const PRODUCTS_DATA = [
     "subcategory": "juegos-mesa",
     "brand": "Ravensburger",
     "department": "Juguetes · Rompecabezas",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 325,
-    "originalPrice": 649,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 649,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 84,
     "age": "+12 años",
@@ -2112,10 +1986,7 @@ const PRODUCTS_DATA = [
       "Ilustración histórica con constelaciones y carabelas de época",
       "Piezas resistentes que no se doblan ni pierden color con el tiempo",
       "Actividad antiestrés para ejercitar la memoria visual y concentración"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-13",
@@ -2125,10 +1996,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Hasbro",
     "department": "Juguetes · Figuras de Acción",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 950,
-    "originalPrice": 1899,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 73,
     "age": "+8 años",
@@ -2157,10 +2028,7 @@ const PRODUCTS_DATA = [
       "Pecho que se abre para almacenar la legendaria Matriz de Liderazgo",
       "El remolque se despliega como estación de batalla con rampa de lanzamiento",
       "Articulación avanzada en tobillos y muñecas para poses de batalla"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-14",
@@ -2170,10 +2038,10 @@ const PRODUCTS_DATA = [
     "subcategory": "didacticos",
     "brand": "Discovery Kids",
     "department": "Juguetes · Ciencia & Exploración",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 920,
-    "originalPrice": 2299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2299,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 51,
     "age": "+8 años",
@@ -2201,10 +2069,7 @@ const PRODUCTS_DATA = [
       "Buscador óptico 5x24 para localizar astros rápidamente en el cielo",
       "Adaptador universal para celular para tomar fotos de la luna y compartirlas",
       "Mochila de transporte impermeable incluida para excursiones de campamento"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-15",
@@ -2214,10 +2079,10 @@ const PRODUCTS_DATA = [
     "subcategory": "vehiculos",
     "brand": "Monster RC",
     "department": "Juguetes · Radiocontrol",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 600,
-    "originalPrice": 2399,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2399,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 68,
     "age": "+8 años",
@@ -2248,10 +2113,7 @@ const PRODUCTS_DATA = [
       "Neumáticos de caucho hueco con grabado agresivo para agarre superior",
       "Chasis flexible compuesto de nylon ultrarresistente a impactos frontales"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-16",
@@ -2261,10 +2123,10 @@ const PRODUCTS_DATA = [
     "subcategory": "bebes",
     "brand": "D'Avanti Kids",
     "department": "Juguetes · Peluches & Bebés",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 155,
     "age": "0-2 años",
@@ -2294,10 +2156,7 @@ const PRODUCTS_DATA = [
       "Costuras dobles reforzadas para máxima durabilidad",
       "Elegante moño satinado en tono dorado clásico D'Avanti",
       "Ideal como regalo para baby showers, cumpleaños y fechas especiales"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-1",
@@ -2307,10 +2166,10 @@ const PRODUCTS_DATA = [
     "subcategory": "perfumeria-hombre",
     "brand": "Dior",
     "department": "Belleza · Perfumería Masculina",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1716,
-    "originalPrice": 4290,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4290,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 342,
     "beautyType": "Eau de Parfum Concentrado",
@@ -2342,10 +2201,7 @@ const PRODUCTS_DATA = [
       "Estuche de alta costura Dior con grabado dorado auténtico",
       "Muestra de lujo de 5ml de cortesía incluida con tu compra",
       "Ideal para eventos formales, galas y veladas especiales"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-2",
@@ -2355,10 +2211,10 @@ const PRODUCTS_DATA = [
     "subcategory": "perfumeria-mujer",
     "brand": "Chanel",
     "department": "Belleza · Perfumería Femenina",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2395,
-    "originalPrice": 4790,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 4790,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 289,
     "beautyType": "Eau de Toilette Floral Luminoso",
@@ -2391,10 +2247,7 @@ const PRODUCTS_DATA = [
       "Bolsa de regalo de boutique Chanel con cinta de grosgrain incluida",
       "Garantía de originalidad con sello holográfico de importación oficial"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "beauty-3",
@@ -2404,10 +2257,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cuidado-piel",
     "brand": "Estée Lauder",
     "department": "Belleza · Cuidado Facial Antiedad",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 873,
-    "originalPrice": 3490,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3490,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 512,
     "beautyType": "Serum Reparador Noche & Día",
@@ -2439,10 +2292,7 @@ const PRODUCTS_DATA = [
       "Incrementa la firmeza y elasticidad cutánea en solo 3 semanas de uso",
       "Hidratación profunda comprobada por estudios clínicos con ácido hialurónico",
       "Testado dermatológica y oftalmológicamente, no comedogénico"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-4",
@@ -2452,10 +2302,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cuidado-capilar",
     "brand": "Dyson",
     "department": "Belleza · Estilizado Capilar Tecnológico",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 6200,
-    "originalPrice": 15499,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 15499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 187,
     "beautyType": "Moldeador de Aire Coanda",
@@ -2487,10 +2337,7 @@ const PRODUCTS_DATA = [
       "Acabado sedoso y brillante sin quemar la fibra capilar",
       "Incluye estuche de lujo acolchado y cepillo de limpieza de filtro",
       "Hasta 18 Mensualidades Sin Intereses con Tarjeta D'Avanti"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-5",
@@ -2500,10 +2347,10 @@ const PRODUCTS_DATA = [
     "subcategory": "perfumeria-hombre",
     "brand": "Tom Ford",
     "department": "Belleza · Perfumería de Nicho",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2945,
-    "originalPrice": 5890,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5890,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 142,
     "beautyType": "Parfum Oriental Ambarino",
@@ -2535,10 +2382,7 @@ const PRODUCTS_DATA = [
       "Diseño arquitectónico con placa frontal metálica grabada",
       "Efecto envolvente con estela cálida y seductora",
       "Envío express asegurado en empaque negro mate con lacre"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-6",
@@ -2548,10 +2392,10 @@ const PRODUCTS_DATA = [
     "subcategory": "perfumeria-mujer",
     "brand": "Yves Saint Laurent",
     "department": "Belleza · Perfumería Femenina",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2095,
-    "originalPrice": 4190,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4190,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 265,
     "beautyType": "Le Parfum Floral Especiado",
@@ -2584,10 +2428,7 @@ const PRODUCTS_DATA = [
       "Fragancia premiada internacionalmente como fragancia del año",
       "Muestra de lujo de 7.5ml incluida de regalo"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "beauty-7",
@@ -2645,10 +2486,10 @@ const PRODUCTS_DATA = [
     "subcategory": "maquillaje",
     "brand": "Charlotte Tilbury",
     "department": "Belleza · Maquillaje de Alta Gama",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1975,
-    "originalPrice": 3950,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 3950,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 167,
     "beautyType": "Dúo Preparación & Maquillaje",
@@ -2679,10 +2520,7 @@ const PRODUCTS_DATA = [
       "Libre de crueldad animal certificado por Leaping Bunny",
       "Estuche dorado de coleccionista con espejo incorporado"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "beauty-9",
@@ -2692,10 +2530,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cuidado-piel",
     "brand": "Lancôme",
     "department": "Belleza · Cuidado Facial",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1575,
-    "originalPrice": 3150,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3150,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 310,
     "beautyType": "Serum Activador del Microbioma",
@@ -2728,10 +2566,7 @@ const PRODUCTS_DATA = [
       "Dermatológicamente probado en mujeres de todos los fototipos",
       "Recibe muestras premium Lancôme en cada compra"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "beauty-10",
@@ -2741,10 +2576,10 @@ const PRODUCTS_DATA = [
     "subcategory": "perfumeria-hombre",
     "brand": "Chanel",
     "department": "Belleza · Perfumería Masculina",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1956,
-    "originalPrice": 4890,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4890,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 420,
     "beautyType": "Parfum Amaderado Aromático",
@@ -2777,10 +2612,7 @@ const PRODUCTS_DATA = [
       "Equilibrio perfecto entre elegancia formal y frescura moderna",
       "Tapón con cierre magnético y grabado del doble logo entrelazado de Chanel",
       "Envío asegurado en caja acolchada D'Avanti de alta perfumería"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-11",
@@ -2790,10 +2622,10 @@ const PRODUCTS_DATA = [
     "subcategory": "perfumeria-mujer",
     "brand": "Carolina Herrera",
     "department": "Belleza · Perfumería Femenina",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 973,
-    "originalPrice": 3890,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3890,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 295,
     "beautyType": "Eau de Parfum Oriental Goloso",
@@ -2825,10 +2657,7 @@ const PRODUCTS_DATA = [
       "Estela hipnótica perfecta para fiestas, cócteles y salidas nocturnas",
       "Fórmula duradera con aceites florales y gourmands de alta tenacidad",
       "Envoltorio de regalo con lazo rojo y tarjeta de felicitación disponible"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-12",
@@ -2838,10 +2667,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cuidado-capilar",
     "brand": "Dyson",
     "department": "Belleza · Cuidado Capilar Tecnológico",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 6500,
-    "originalPrice": 12999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 12999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 96,
     "beautyType": "Secadora con Sensores Nural",
@@ -2873,10 +2702,7 @@ const PRODUCTS_DATA = [
       "Cápsula iluminada que cambia de color según la distancia y temperatura",
       "Detección de pausa: se apaga automáticamente al soltarla en el tocador",
       "Hasta 18 Mensualidades Sin Intereses con Tarjeta D'Avanti"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-13",
@@ -2886,10 +2712,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cuidado-capilar",
     "brand": "Kérastase",
     "department": "Belleza · Tratamiento Capilar de Salón",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 676,
-    "originalPrice": 1690,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1690,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 388,
     "beautyType": "Aceite Sublimador Capilar Recargable",
@@ -2920,10 +2746,7 @@ const PRODUCTS_DATA = [
       "Puede utilizarse como prelavado, protector térmico previo al secado o serum de acabado",
       "Controla el encrespamiento incluso en climas con 80% de humedad ambiental",
       "Producto oficial con holograma de seguridad de L'Oréal Luxe México"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-14",
@@ -2933,10 +2756,10 @@ const PRODUCTS_DATA = [
     "subcategory": "maquillaje",
     "brand": "NARS",
     "department": "Belleza · Maquillaje Rostro",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1125,
-    "originalPrice": 2250,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2250,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 176,
     "beautyType": "Base Híbrida Tratamiento + Corrector",
@@ -2966,10 +2789,7 @@ const PRODUCTS_DATA = [
       "Mejora la claridad y luminosidad de la piel con el uso continuo diario",
       "Fórmula no comedogénica aprobada por dermatólogos para uso diario",
       "Incluye esponja de precisión de microfibra de regalo"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-15",
@@ -2979,10 +2799,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cuidado-piel",
     "brand": "Kiehl's",
     "department": "Belleza · Cuidado Facial Hidratante",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 448,
-    "originalPrice": 1790,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1790,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 421,
     "beautyType": "Crema 24h Hidratación Profunda",
@@ -3013,10 +2833,7 @@ const PRODUCTS_DATA = [
       "Absorción inmediata sin dejar brillo graso, ideal antes del maquillaje",
       "Tarro de gran tamaño de 125ml con rendimiento para más de 4 meses de uso",
       "Incluye 3 muestras botánicas Kiehl's de bienvenida"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "beauty-16",
@@ -3026,10 +2843,10 @@ const PRODUCTS_DATA = [
     "subcategory": "maquillaje",
     "brand": "Fenty Beauty",
     "department": "Belleza · Labiales y Brillos",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 596,
-    "originalPrice": 1490,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1490,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 367,
     "beautyType": "Trío de Brillos Labiales Nutritivos",
@@ -3059,10 +2876,7 @@ const PRODUCTS_DATA = [
       "Seleccionado personalmente por Rihanna para lucir espectacular en todos los tonos de piel",
       "Fórmula hidratante que nutre los labios secos a la vez que proporciona brillo espejo",
       "Presentado en caja de edición especial para regalo"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-1",
@@ -3072,10 +2886,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "brand": "Nike",
     "department": "Deportes · Calzado de Running",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3000,
-    "originalPrice": 5999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 5999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 218,
     "discipline": "Running & Maratón",
@@ -3121,10 +2935,7 @@ const PRODUCTS_DATA = [
       "Rosa Flúor": "Productos/Nike Vaporfly 3 Tenis de Carrera rosado.jpg",
       "Rojo con Blanco": "Productos/Nike Vaporfly 3 Tenis de Carrera rojo con blanco.jpg",
       "Blanco con Amarillo": "Productos/Nike Vaporfly 3 Tenis de Carrera blanco con amarillo.jpg"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "sport-2",
@@ -3134,10 +2945,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "brand": "Adidas",
     "department": "Deportes · Calzado de Running",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2150,
-    "originalPrice": 4299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 312,
     "discipline": "Running & Entrenamiento Diario",
@@ -3176,10 +2987,7 @@ const PRODUCTS_DATA = [
       "Parte superior que abraza el pie como un calcetín ergonómico adaptable",
       "Fabricado con al menos un 50% de materiales reciclados de los océanos"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "sport-3",
@@ -3189,10 +2997,10 @@ const PRODUCTS_DATA = [
     "subcategory": "fitness",
     "brand": "NordicTrack",
     "department": "Deportes · Fitness & Máquinas de Gimnasio",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 5750,
-    "originalPrice": 22999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 22999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 88,
     "discipline": "Cardio & Gimnasio en Casa",
@@ -3222,10 +3030,7 @@ const PRODUCTS_DATA = [
       "Amortiguadores regulables que reducen el impacto en articulaciones hasta un 30%",
       "Altavoces estéreo duales de 2 pulgadas y soporte para tableta integrado",
       "Hasta 18 Meses Sin Intereses y servicio de entrega a domicilio asegurado"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-4",
@@ -3235,10 +3040,10 @@ const PRODUCTS_DATA = [
     "subcategory": "fitness",
     "brand": "Bowflex",
     "department": "Deportes · Pesas & Fuerza",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 5250,
-    "originalPrice": 10499,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 10499,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 265,
     "discipline": "Crossfit, Fuerza & Hipertrofia",
@@ -3268,10 +3073,7 @@ const PRODUCTS_DATA = [
       "Recubrimiento especial que evita ruidos metálicos y no raya el piso de tu hogar",
       "Empuñadura ergonómica de agarre texturizado antideslizante",
       "Garantía oficial de 2 años en discos y mecanismo de selección"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-5",
@@ -3281,10 +3083,10 @@ const PRODUCTS_DATA = [
     "subcategory": "ciclismo",
     "brand": "Trek",
     "department": "Deportes · Ciclismo & Montaña",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 11000,
-    "originalPrice": 21999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 21999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 74,
     "discipline": "Ciclismo MTB & Senderos",
@@ -3328,10 +3130,7 @@ const PRODUCTS_DATA = [
       "Blanco Glaciar": "Productos/bicicleta de montaña blanca.jpg",
       "Naranja Lava": "Productos/bicicleta de montaña naranja.jpg",
       "Rojo & Naranja Sport": "Productos/bicicleta de montaña roja y naranja.jpg"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "sport-6",
@@ -3341,10 +3140,10 @@ const PRODUCTS_DATA = [
     "subcategory": "raqueta",
     "brand": "Bullpadel",
     "department": "Deportes · Pádel & Raquetas",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2920,
-    "originalPrice": 7299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 7299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 146,
     "discipline": "Pádel Profesional",
@@ -3374,10 +3173,7 @@ const PRODUCTS_DATA = [
       "Grip Hesacore premontado que reduce vibraciones y previene lesiones de codo de tenista",
       "Acabado rugoso 3D Grain para imprimir efectos endemoniados a la pelota",
       "Incluye funda térmica de lujo oficial Bullpadel de regalo"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-7",
@@ -3387,10 +3183,10 @@ const PRODUCTS_DATA = [
     "subcategory": "outdoor",
     "brand": "Coleman",
     "department": "Deportes · Camping & Senderismo",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1425,
-    "originalPrice": 5699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 189,
     "discipline": "Camping & Aventura Outdoor",
@@ -3425,10 +3221,7 @@ const PRODUCTS_DATA = [
       "Productos/Tienda de Campaña Coleman Instant Cabin 1.jpg",
       "Productos/Tienda de Campaña Coleman Instant Cabin 2.jpg",
       "Productos/Tienda de Campaña Coleman Instant Cabin 3.jpg"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-8",
@@ -3438,9 +3231,9 @@ const PRODUCTS_DATA = [
     "subcategory": "outdoor",
     "brand": "Stanley",
     "department": "Deportes · Hidratación & Accesorios",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -75%",
     "badgeType": "offer",
-    "price": 700,
+    "price": 350,
     "originalPrice": 1399,
     "rating": 5,
     "reviewsCount": 489,
@@ -3480,7 +3273,7 @@ const PRODUCTS_DATA = [
       "Sello hermético que previene salpicaduras durante el ejercicio o traslados",
       "Garantía de por vida Stanley Built for Life™ contra defectos térmicos"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
     "offerEndDate": "2026-11-21T23:59:59-06:00",
     "colorImages": {
@@ -3490,7 +3283,7 @@ const PRODUCTS_DATA = [
       "Gris Glaciar": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L gris.jpg",
       "Rojo Escarlata": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L  rojo.jpg"
     },
-    "buenFinDiscount": 50
+    "buenFinDiscount": 75
   },
   {
     "id": "sport-9",
@@ -3500,10 +3293,10 @@ const PRODUCTS_DATA = [
     "subcategory": "ropa-tecnica",
     "brand": "Adidas",
     "department": "Deportes · Ropa Técnica & Fútbol",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1200,
-    "originalPrice": 2999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 165,
     "discipline": "Fútbol & Deporte en Equipo",
@@ -3538,10 +3331,7 @@ const PRODUCTS_DATA = [
       "Material que absorbe el sudor y se seca en cuestión de minutos",
       "Costuras planas que eliminan roces en el pecho y hombros",
       "Etiqueta de autenticidad holográfica numerada de Adidas Oficial"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-10",
@@ -3551,10 +3341,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "brand": "Garmin",
     "department": "Deportes · Wearables & Tecnología Running",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 5000,
-    "originalPrice": 9999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 9999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 112,
     "discipline": "Running, Triatlón & Ciclismo",
@@ -3590,10 +3380,7 @@ const PRODUCTS_DATA = [
     "colorImages": {
       "Negro Carbón GPS": "Productos 2/reloj inteligente para hombre color negro.jpg",
       "Rosa Cuarzo Smart": "Productos 2/reloj inteligente para mujer color rosa.jpg"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "sport-11",
@@ -3603,10 +3390,10 @@ const PRODUCTS_DATA = [
     "subcategory": "fitness",
     "brand": "D'Avanti Pro Sport",
     "department": "Deportes · Ciclismo Indoor & Cardio",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 3000,
-    "originalPrice": 11999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 11999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 94,
     "discipline": "Spinning & Cardio Intensivo",
@@ -3636,10 +3423,7 @@ const PRODUCTS_DATA = [
       "Pedales dobles: clips para calzado deportivo estándar y calas SPD para zapatillas de ciclismo",
       "Ruedas delanteras de transporte para moverla fácilmente por la habitación",
       "Monitor LCD que registra tiempo, distancia, calorías quemadas, velocidad y pulso"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-12",
@@ -3649,10 +3433,10 @@ const PRODUCTS_DATA = [
     "subcategory": "raqueta",
     "brand": "Wilson",
     "department": "Deportes · Tenis & Raquetas",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2400,
-    "originalPrice": 5999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 86,
     "discipline": "Tenis de Competición",
@@ -3684,10 +3468,7 @@ const PRODUCTS_DATA = [
       "Sensación clásica de control milimétrico al contacto con la pelota",
       "Tapa ergonómica de extremo suave para mayor confort en el saque y revés",
       "Encordado profesional opcional de cortesía disponible en boutiques D'Avanti"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-13",
@@ -3697,10 +3478,10 @@ const PRODUCTS_DATA = [
     "subcategory": "outdoor",
     "brand": "Osprey",
     "department": "Deportes · Montañismo & Mochilas",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3650,
-    "originalPrice": 7299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 7299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 134,
     "discipline": "Trekking & Senderismo",
@@ -3733,10 +3514,7 @@ const PRODUCTS_DATA = [
       "Respaldada por la famosa garantía de por vida All Mighty Guarantee de Osprey",
       "Tejidos con certificación bluesign® libres de químicos perfluorados (PFC/PFAS)",
       "Bolsillos dobles con cremallera en el cinturón lumbar para barritas y teléfono"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-14",
@@ -3746,9 +3524,9 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "brand": "Nike",
     "department": "Deportes · Baloncesto & Calzado Urbano",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -60%",
     "badgeType": "offer",
-    "price": 2450,
+    "price": 1960,
     "originalPrice": 4899,
     "rating": 5,
     "reviewsCount": 387,
@@ -3789,8 +3567,8 @@ const PRODUCTS_DATA = [
       "Emblema Wings en relieve en el lateral del cuello del tobillo",
       "Uno de los modelos más cotizados y reconocibles de la historia del deporte"
     ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "buenFinDiscount": 60,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -3801,10 +3579,10 @@ const PRODUCTS_DATA = [
     "subcategory": "fitness",
     "brand": "D'Avanti Pro Sport",
     "department": "Deportes · Pesas & Gimnasio en Casa",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1125,
-    "originalPrice": 4499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 154,
     "discipline": "Hipertrofia, Mancuernas & Pecho",
@@ -3835,10 +3613,7 @@ const PRODUCTS_DATA = [
       "Acabado con pintura electrostática en polvo negro mate resistente a rayones",
       "Fácil ensamblaje en menos de 20 minutos con herramientas incluidas"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "sport-16",
@@ -3901,10 +3676,10 @@ const PRODUCTS_DATA = [
     "subcategory": "electrodomesticos",
     "brand": "Breville",
     "department": "Hogar · Gourmet & Café",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 11250,
-    "originalPrice": 22499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 22499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 95,
     "image": "Productos/Cafetera Espresso Automática Barista Touch.jpg",
@@ -3934,10 +3709,7 @@ const PRODUCTS_DATA = [
       "Texturizado de leche automático que crea microespuma calidad de cafetería",
       "Menú preprogramado para Espresso, Americano, Latte, Flat White y Cappuccino",
       "Incluye portafiltro de 54 mm en acero inoxidable y prensador magnético integrado"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-2",
@@ -3947,10 +3719,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cocina",
     "brand": "Le Creuset",
     "department": "Hogar · Cocina & Culinaria",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 6920,
-    "originalPrice": 17299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 17299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 68,
     "image": "Productos/Batería de Cocina Esmaltada.jpg",
@@ -3983,10 +3755,7 @@ const PRODUCTS_DATA = [
       "Asas ergonómicas diseñadas para un agarre seguro incluso con guantes térmicos",
       "Perillas fenólicas y metálicas resistentes a temperaturas extremas de horneado"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 60
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "home-3",
@@ -3996,10 +3765,10 @@ const PRODUCTS_DATA = [
     "subcategory": "electrodomesticos",
     "brand": "iRobot",
     "department": "Hogar · Smart Home & Limpieza",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 6500,
-    "originalPrice": 25999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 25999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 54,
     "image": "Productos/robot aspirador blanco.jpg",
@@ -4027,10 +3796,7 @@ const PRODUCTS_DATA = [
       "Mapeo 3D ultrarrápido con zonas de exclusión y limpieza personalizada por habitación",
       "Detección y evasión de cables, calcetines y accidentes de mascotas garantizada por P.O.O.P.",
       "Base de diseño premium con acabado tipo mueble nórdico que decora el hogar"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-4",
@@ -4040,10 +3806,10 @@ const PRODUCTS_DATA = [
     "subcategory": "recamara",
     "brand": "Tempur-Pedic",
     "department": "Hogar · Recámara & Descanso",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 15000,
-    "originalPrice": 29999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 29999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 112,
     "image": "Productos/Colchón Híbrido Supreme King Size.jpg",
@@ -4072,10 +3838,7 @@ const PRODUCTS_DATA = [
       "Aislamiento de movimiento absoluto: los movimientos de tu pareja no se sienten",
       "Tejido técnico termorregulador que disipa el calor corporal durante la noche",
       "Tratamiento antimicrobiano y barrera hipoalergénica contra ácaros"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-5",
@@ -4085,10 +3848,10 @@ const PRODUCTS_DATA = [
     "subcategory": "electrodomesticos",
     "brand": "Dyson",
     "department": "Hogar · Climatización & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 7200,
-    "originalPrice": 17999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 17999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 88,
     "image": "Productos/Purificador y Calefactor Dyson Purifier Hot+Cool.jpg",
@@ -4118,10 +3881,7 @@ const PRODUCTS_DATA = [
       "Flujo de aire divergente para purificar sin corriente de aire directo en frío",
       "Modo nocturno ultrasilencioso con atenuación de pantalla para descanso",
       "Oscilación suave programable hasta 350 grados para envolver todo el ambiente"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-6",
@@ -4131,10 +3891,10 @@ const PRODUCTS_DATA = [
     "subcategory": "electrodomesticos",
     "brand": "KitchenAid",
     "department": "Hogar · Cocina & Repostería",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 5750,
-    "originalPrice": 11499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 11499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 130,
     "image": "https://images.unsplash.com/photo-1594385208974-2e75f8d7bb48?auto=format&fit=crop&w=800&q=80",
@@ -4167,10 +3927,7 @@ const PRODUCTS_DATA = [
       "Capacidad para amasar hasta 2 kg de masa de pan o batir 12 claras de huevo",
       "Acabado esmaltado electrostático resistente a rayaduras y fácil de limpiar"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "home-7",
@@ -4180,10 +3937,10 @@ const PRODUCTS_DATA = [
     "subcategory": "muebles",
     "brand": "Ashley Furniture",
     "department": "Hogar · Comedores & Mesas",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 6000,
-    "originalPrice": 23999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 23999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 41,
     "image": "Productos 2/conjunto de mesa y sillas para cocina.jpg",
@@ -4213,10 +3970,7 @@ const PRODUCTS_DATA = [
       "Uniones en caja y espiga reforzadas que garantizan solidez de por vida",
       "Esquinas biseladas seguras para hogares con niños",
       "Servicio de armado y colocación en tu comedor sin costo adicional"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-8",
@@ -4226,10 +3980,10 @@ const PRODUCTS_DATA = [
     "subcategory": "muebles",
     "brand": "BoConcept",
     "department": "Hogar · Salas & Muebles",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 8000,
-    "originalPrice": 19999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 19999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 37,
     "image": "Productos/Sillón Reclinable Eléctrico de Piel Genuina.jpg",
@@ -4269,10 +4023,7 @@ const PRODUCTS_DATA = [
       "Piel Café Tabaco": "Productos/Sillón Reclinable Eléctrico de Piel Genuina cafe.jpg",
       "Lino Beige Arena": "Productos/Sillón Reclinable Eléctrico beige.jpg",
       "Chenille Gris": "Productos/Sillón Reclinable Eléctrico Gris.jpg"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "home-9",
@@ -4282,10 +4033,10 @@ const PRODUCTS_DATA = [
     "subcategory": "recamara",
     "brand": "D'Avanti Blancos",
     "department": "Hogar · Blancos de Lujo",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1950,
-    "originalPrice": 3899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 160,
     "image": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
@@ -4319,10 +4070,7 @@ const PRODUCTS_DATA = [
       "Costuras de doble pespunte con dobladillo festoneado tipo boutique",
       "Tejido anti-pilling de fibra larga que no genera motas ni bolitas"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "home-10",
@@ -4332,10 +4080,10 @@ const PRODUCTS_DATA = [
     "subcategory": "electrodomesticos",
     "brand": "Ninja",
     "department": "Hogar · Cocina Eléctrica",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2950,
-    "originalPrice": 5899,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 5899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 178,
     "image": "Productos/Freidora de Aire DualZone 9.5 Litros Doble Canastilla Smart XL.jpg",
@@ -4364,10 +4112,7 @@ const PRODUCTS_DATA = [
       "Función Match Cook para copiar fácilmente tiempo y temperatura en ambas zonas",
       "Componentes desmontables aptos para lavavajillas que facilitan la limpieza diaria"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "home-11",
@@ -4377,10 +4122,10 @@ const PRODUCTS_DATA = [
     "subcategory": "cocina",
     "brand": "D'Avanti Gourmet",
     "department": "Hogar · Cuchillería de Precisión",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1225,
-    "originalPrice": 4899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4899,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 45,
     "image": "Productos 2/set de cuchillos 1.jpg",
@@ -4417,10 +4162,7 @@ const PRODUCTS_DATA = [
       "Acero Damasco Ébano": "Productos 2/set de cuchillos 1.jpg",
       "Acero Damasco Nogal": "Productos 2/set de cuchillos 2.jpg",
       "Edición Tradicional": "Productos 2/set de cuchillos.jpg"
-    },
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "home-12",
@@ -4430,10 +4172,10 @@ const PRODUCTS_DATA = [
     "subcategory": "electrodomesticos",
     "brand": "Nespresso",
     "department": "Hogar · Gourmet & Café",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2600,
-    "originalPrice": 5199,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5199,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 110,
     "image": "Productos/Cafetera Nespresso Vertuo Next Deluxe con Espumador de Leche Aeroccino.jpg",
@@ -4464,10 +4206,7 @@ const PRODUCTS_DATA = [
       "Apagado automático tras 2 minutos de inactividad para máximo ahorro energético",
       "Incluye kit de bienvenida con cápsulas Vertuo de tuestes variados"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "home-13",
@@ -4477,10 +4216,10 @@ const PRODUCTS_DATA = [
     "subcategory": "decoracion",
     "brand": "BoConcept",
     "department": "Hogar · Iluminación & Decoración",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 4000,
-    "originalPrice": 7999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 7999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 39,
     "image": "Productos 2/Lámpara De Techo Cristal Moderna.jpg",
@@ -4517,10 +4256,7 @@ const PRODUCTS_DATA = [
       "Cristal Ahumado Moderno": "Productos 2/Lámpara De Techo Cristal Moderna.jpg",
       "Cristal Transparente Élite": "Productos 2/Lámpara de techo de vidrio moderna.jpg",
       "LED Minimalista": "Productos 2/lampara de techo LED.jpg"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "home-14",
@@ -4530,10 +4266,10 @@ const PRODUCTS_DATA = [
     "subcategory": "decoracion",
     "brand": "West Elm",
     "department": "Hogar · Tapetes & Decoración",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 3800,
-    "originalPrice": 9499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 9499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 29,
     "image": "Productos/Tapete Monumental Geométrico Nórdico Tejido a Mano en Lana 200x300 cm.jpg",
@@ -4564,10 +4300,7 @@ const PRODUCTS_DATA = [
       "Lana repelente natural a manchas y suciedad gracias a su lanolina biológica",
       "Tacto ultrasuave y denso que invita a caminar descalzo con total placer",
       "Bordes reforzados con ribete cosido a mano para evitar deshilachados"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-15",
@@ -4577,10 +4310,10 @@ const PRODUCTS_DATA = [
     "subcategory": "recamara",
     "brand": "D'Avanti Blancos",
     "department": "Hogar · Blancos de Lujo",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1575,
-    "originalPrice": 6299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 6299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 76,
     "image": "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80",
@@ -4609,10 +4342,7 @@ const PRODUCTS_DATA = [
       "8 lazos esquineros y laterales para sujetar firmemente cualquier funda nórdica duvet",
       "Tratamiento hipoalergénico de 8 lavados térmicos libre de polvo y olores",
       "Doble costura perimetral con vivo satinado elegante para máxima durabilidad"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-16",
@@ -4622,10 +4352,10 @@ const PRODUCTS_DATA = [
     "subcategory": "decoracion",
     "brand": "Zara Home",
     "department": "Hogar · Aromaterapia & Ambientes",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 850,
-    "originalPrice": 1699,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 83,
     "image": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80",
@@ -4655,10 +4385,7 @@ const PRODUCTS_DATA = [
       "Diseño minimalista y zen que decora estanterías, burós y mesas auxiliares",
       "Incluye adaptador de corriente y vaso dosificador de precisión"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "gaming-con-1",
@@ -4670,10 +4397,10 @@ const PRODUCTS_DATA = [
     "platform": "PlayStation",
     "platformTag": "ps",
     "brand": "Sony",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 4800,
-    "originalPrice": 11999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 11999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1248,
     "image": "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=800&q=80",
@@ -4698,10 +4425,7 @@ const PRODUCTS_DATA = [
       "audio": "Tempest 3D Audio",
       "conectividad": "WiFi 6 / Bluetooth 5.1 / USB-C"
     },
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 60
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "gaming-con-2",
@@ -4713,10 +4437,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Microsoft",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 7500,
-    "originalPrice": 14999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 14999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 876,
     "image": "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?auto=format&fit=crop&w=800&q=80",
@@ -4739,10 +4463,7 @@ const PRODUCTS_DATA = [
       "gpu": "AMD RDNA 2 / 12 TFLOPS",
       "ram": "16GB GDDR6",
       "conectividad": "WiFi 6E / Bluetooth 5.1 / USB-C"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-con-3",
@@ -4754,10 +4475,10 @@ const PRODUCTS_DATA = [
     "platform": "Nintendo",
     "platformTag": "nintendo",
     "brand": "Nintendo",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 2250,
-    "originalPrice": 8999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 8999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 2134,
     "image": "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=800&q=80",
@@ -4778,10 +4499,7 @@ const PRODUCTS_DATA = [
       "almacenamiento": "64GB + MicroSD",
       "bateria": "4310 mAh / hasta 9h",
       "conectividad": "WiFi 5 / Bluetooth 4.1 / USB-C"
-    },
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-game-1",
@@ -4793,10 +4511,10 @@ const PRODUCTS_DATA = [
     "platform": "PlayStation",
     "platformTag": "ps",
     "brand": "Sony Interactive Entertainment",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 680,
-    "originalPrice": 1699,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 3456,
     "image": "Productos 3/Marvel's Spider-Man 2 — PS5.jpg",
@@ -4817,10 +4535,7 @@ const PRODUCTS_DATA = [
       "clasificacion": "T (Teen) +13 años",
       "espacio": "98GB",
       "resolucion": "4K @ 60fps con Ray Tracing"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-game-2",
@@ -4832,10 +4547,10 @@ const PRODUCTS_DATA = [
     "platform": "Nintendo",
     "platformTag": "nintendo",
     "brand": "Nintendo",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 550,
-    "originalPrice": 1099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1099,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 8921,
     "image": "Productos 3/The Legend of Zelda.jpg",
@@ -4856,10 +4571,7 @@ const PRODUCTS_DATA = [
       "clasificacion": "E10+ (Mayores de 10)",
       "espacio": "18.2GB",
       "resolucion": "900p portátil / 1080p TV"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-game-3",
@@ -4871,10 +4583,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Activision / Treyarch",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 2840,
     "image": "Productos 3/call of duty black ops 3.jpg",
@@ -4894,10 +4606,7 @@ const PRODUCTS_DATA = [
       "clasificacion": "M (Mature) +17 años",
       "desarrollador": "Treyarch / Activision",
       "resolucion": "1080p @ 60fps de alta fluidez"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-game-4",
@@ -4909,10 +4618,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Bandai Namco / FromSoftware",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 300,
-    "originalPrice": 1199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 5643,
     "image": "Productos/Elden Ring Shadow of the Erdtree — Multiplatforma.jpg",
@@ -4934,10 +4643,7 @@ const PRODUCTS_DATA = [
       "espacio": "60GB (Base + DLC)",
       "plataformas": "PS5 / PS4 / Xbox / PC"
     },
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "gaming-acc-1",
@@ -4989,10 +4695,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "SteelSeries",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3250,
-    "originalPrice": 6499,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 6499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 987,
     "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
@@ -5013,10 +4719,7 @@ const PRODUCTS_DATA = [
       "microfono": "ClearCast Gen2 retráctil",
       "conexion": "USB-C 2.4GHz / Bluetooth 5.3 / Jack 3.5mm",
       "bateria": "Intercambiable 36 horas por batería"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-pc-1",
@@ -5028,10 +4731,10 @@ const PRODUCTS_DATA = [
     "platform": "PC",
     "platformTag": "pc",
     "brand": "ASUS ROG",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 28000,
-    "originalPrice": 69999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 69999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 234,
     "image": "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=800&q=80",
@@ -5053,10 +4756,7 @@ const PRODUCTS_DATA = [
       "ram": "64GB DDR5-5600",
       "almacenamiento": "2TB PCIe 5.0 NVMe",
       "bateria": "90Wh / adaptador 330W"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-pc-2",
@@ -5068,10 +4768,10 @@ const PRODUCTS_DATA = [
     "platform": "PC",
     "platformTag": "pc",
     "brand": "Razer",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 700,
-    "originalPrice": 2799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2799,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 1543,
     "image": "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=800&q=80",
@@ -5093,10 +4793,7 @@ const PRODUCTS_DATA = [
       "conexion": "HyperSpeed 2.4GHz / Bluetooth / USB-C",
       "peso": "63g",
       "bateria": "Hasta 90 horas"
-    },
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-vr-1",
@@ -5108,10 +4805,10 @@ const PRODUCTS_DATA = [
     "platform": "PlayStation",
     "platformTag": "ps",
     "brand": "Sony",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 7500,
-    "originalPrice": 14999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 14999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 654,
     "image": "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=800&q=80",
@@ -5132,10 +4829,7 @@ const PRODUCTS_DATA = [
       "fov": "110 grados horizontal",
       "conexion": "USB-C (PS5 directo)",
       "sensores": "6 DOF / Seguimiento ocular integrado"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-1",
@@ -5147,10 +4841,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Activision",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 720,
-    "originalPrice": 1799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1420,
     "image": "Productos/BLACK OPS 6.jpg",
@@ -5163,10 +4857,7 @@ const PRODUCTS_DATA = [
       "Campaña de espionaje cinematográfica",
       "Modo Zombis tradicional por rondas",
       "16 mapas multijugador desde el día 1"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-2",
@@ -5178,10 +4869,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Activision",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1000,
-    "originalPrice": 1999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 890,
     "image": "Productos/BLACK OPS 7.jpg",
@@ -5194,10 +4885,7 @@ const PRODUCTS_DATA = [
       "Nuevas mecánicas de combate táctico",
       "Paquete de operadores BlackCell incluido",
       "Resolución 4K nativa a 120 FPS"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-3",
@@ -5209,10 +4897,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Activision",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 400,
-    "originalPrice": 1599,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1599,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 2310,
     "image": "Productos/Call OF DUTY MORDEN WARFARE 3.jpg",
@@ -5226,10 +4914,7 @@ const PRODUCTS_DATA = [
       "Misiones de combate abierto",
       "Personalización de armas Gunsmith 2.0"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "game-clm-4",
@@ -5241,10 +4926,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Xbox Game Studios",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 680,
-    "originalPrice": 1699,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 3120,
     "image": "Productos/HALO CE 2026.jpg",
@@ -5257,10 +4942,7 @@ const PRODUCTS_DATA = [
       "Audio espacial Dolby Atmos 3D",
       "Multijugador clásico reimaginado",
       "Modo campaña cooperativa en línea y pantalla dividida"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-5",
@@ -5272,10 +4954,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Xbox Game Studios",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 750,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 4500,
     "image": "Productos/halo infinite.jpg",
@@ -5288,10 +4970,7 @@ const PRODUCTS_DATA = [
       "Gancho de agarre Grappleshot dinámico",
       "Optimizado para 4K 60fps en Xbox Series X",
       "Soporte Smart Delivery incluido"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-6",
@@ -5303,10 +4982,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Xbox Game Studios",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 550,
-    "originalPrice": 1099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1099,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 5200,
     "image": "Productos/HALO REACH.jpg",
@@ -5319,10 +4998,7 @@ const PRODUCTS_DATA = [
       "Modo Tiroteo (Firefight) cooperativo",
       "Personalización completa de armadura Spartan",
       "Sonido remasterizado"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-7",
@@ -5334,10 +5010,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Xbox Game Studios",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 325,
-    "originalPrice": 1299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 2840,
     "image": "Productos/GEARS 5.jpg",
@@ -5350,10 +5026,7 @@ const PRODUCTS_DATA = [
       "Multijugador hasta 120 FPS en Xbox Series X",
       "Modo Horda cooperativo de 5 jugadores",
       "Modo Escape de ritmo frenético"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-8",
@@ -5365,10 +5038,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Xbox Game Studios",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 899,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1980,
     "image": "Productos/GEARS OF WAR 3.jpg",
@@ -5382,10 +5055,7 @@ const PRODUCTS_DATA = [
       "Mejoras de rendimiento automáticas en Series X",
       "Caja física de colección"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "game-clm-9",
@@ -5397,10 +5067,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Xbox Game Studios",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 2200,
     "image": "Productos/GEARS OF WAR ULTIMATE EDITION.jpg",
@@ -5413,10 +5083,7 @@ const PRODUCTS_DATA = [
       "5 capítulos de campaña exclusivos",
       "Multijugador a 60 FPS en servidores dedicados",
       "Controles suaves inspirados en Gears 3"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-10",
@@ -5428,10 +5095,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Ubisoft",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 520,
-    "originalPrice": 1299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 1740,
     "image": "Productos/ghost recon breakpoint.jpg",
@@ -5445,10 +5112,7 @@ const PRODUCTS_DATA = [
       "Cooperativo sin interrupciones para 4 jugadores",
       "Personalización táctica total"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 60
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "game-clm-11",
@@ -5460,10 +5124,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Ubisoft",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 275,
-    "originalPrice": 1099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1099,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 3100,
     "image": "Productos/ghost recon wildlands.jpg",
@@ -5476,10 +5140,7 @@ const PRODUCTS_DATA = [
       "Total libertad táctica en cada misión",
       "Ciclo dinámico de día/noche y clima",
       "Cooperativo de hasta 4 jugadores"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-12",
@@ -5491,10 +5152,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Ubisoft",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 400,
-    "originalPrice": 799,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 799,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 950,
     "image": "Productos/ghost recon.jpg",
@@ -5508,10 +5169,7 @@ const PRODUCTS_DATA = [
       "Combate táctico realista en entornos urbanos",
       "Armamento militar avanzado"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "game-clm-13",
@@ -5523,10 +5181,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Warner Bros. Games",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 680,
-    "originalPrice": 1699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 4200,
     "image": "Productos/harry potter legacy.jpg",
@@ -5539,10 +5197,7 @@ const PRODUCTS_DATA = [
       "Sistema de magia y combate dinámico",
       "Vuelo en escoba y monturas mágicas",
       "Personalización completa de mago o bruja"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-14",
@@ -5554,10 +5209,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Ninja Theory / Xbox",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 750,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 1650,
     "image": "Productos/Hellblade II.jpg",
@@ -5570,10 +5225,7 @@ const PRODUCTS_DATA = [
       "Audio espacial binaural 360°",
       "Combate visceral y cinematográfico",
       "Captura de movimiento de vanguardia"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-15",
@@ -5585,10 +5237,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Bethesda Game Studios",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 1799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 3800,
     "image": "Productos/Starfield.jpg",
@@ -5601,10 +5253,7 @@ const PRODUCTS_DATA = [
       "Construcción y personalización de naves espaciales",
       "Combate espacial y terrestre estratégico",
       "Compañeros de tripulación y puestos de avanzada"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-16",
@@ -5616,10 +5265,10 @@ const PRODUCTS_DATA = [
     "platform": "Nintendo",
     "platformTag": "nintendo",
     "brand": "Nintendo",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 600,
-    "originalPrice": 1499,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 6100,
     "image": "Productos/Super Mario Bros. Wonder.jpg",
@@ -5632,10 +5281,7 @@ const PRODUCTS_DATA = [
       "Transformación Mario Elefante",
       "Multijugador local de hasta 4 jugadores",
       "Insignias con habilidades especiales"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-17",
@@ -5647,10 +5293,10 @@ const PRODUCTS_DATA = [
     "platform": "Nintendo",
     "platformTag": "nintendo",
     "brand": "Nintendo",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 700,
-    "originalPrice": 1399,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1399,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 8900,
     "image": "Productos/Super Mario Odyssey.jpg",
@@ -5663,10 +5309,7 @@ const PRODUCTS_DATA = [
       "Mundos sandbox repletos de secretos",
       "Minijuegos y modo foto integrado",
       "Trajes y atuendos coleccionables"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-18",
@@ -5678,9 +5321,9 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Electronic Arts / Respawn",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -60%",
     "badgeType": "offer",
-    "price": 600,
+    "price": 480,
     "originalPrice": 1199,
     "rating": 4.8,
     "reviewsCount": 3400,
@@ -5695,10 +5338,10 @@ const PRODUCTS_DATA = [
       "Planetas icónicos de Star Wars para explorar",
       "Compañero droide BD-1 interactivo"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
     "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "buenFinDiscount": 60
   },
   {
     "id": "game-clm-19",
@@ -5710,10 +5353,10 @@ const PRODUCTS_DATA = [
     "platform": "Multiplataforma",
     "platformTag": "multi",
     "brand": "Lucasfilm Games / Aspyr",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 225,
-    "originalPrice": 899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 899,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 1520,
     "image": "Productos/STAR WARS CLASSIC COLLECTION.jpg",
@@ -5726,10 +5369,7 @@ const PRODUCTS_DATA = [
       "Batallas espaciales con naves X-Wing y TIE Fighters",
       "Juega como héroes y villanos legendarios",
       "Hasta 64 jugadores en línea simultáneos"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-20",
@@ -5741,10 +5381,10 @@ const PRODUCTS_DATA = [
     "platform": "PlayStation",
     "platformTag": "ps",
     "brand": "Warner Bros. Games / TT Games",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 425,
-    "originalPrice": 849,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 849,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 1100,
     "image": "Productos/LEGO HARRY POTTER PS3.jpg",
@@ -5758,10 +5398,7 @@ const PRODUCTS_DATA = [
       "Más de 200 personajes jugables",
       "Castillo de Hogwarts interactivo en bloques"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-clm-1",
@@ -5771,10 +5408,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "figuras",
     "brand": "Barbie / Mattel",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 550,
-    "originalPrice": 1099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1099,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 780,
     "image": "Productos/Barbie Coffee Shop.jpg",
@@ -5789,10 +5426,7 @@ const PRODUCTS_DATA = [
       "Más de 20 accesorios incluidos",
       "Muñeca Barbie vestida de barista",
       "Fomenta el juego de rol y la creatividad"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-2",
@@ -5802,9 +5436,9 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "figuras",
     "brand": "Barbie / Mattel",
-    "badge": "Buen Fin -60%",
+    "badge": "Buen Fin -75%",
     "badgeType": "offer",
-    "price": 720,
+    "price": 450,
     "originalPrice": 1799,
     "rating": 4.9,
     "reviewsCount": 540,
@@ -5821,8 +5455,8 @@ const PRODUCTS_DATA = [
       "Certificado de autenticidad para coleccionistas",
       "Caja con ventana transparente de lujo"
     ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
+    "buenFinDiscount": 75,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -5833,10 +5467,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "figuras",
     "brand": "Jazwares / Halo",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 325,
-    "originalPrice": 1299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1320,
     "image": "Productos/HALO Master Chief Figure.jpg",
@@ -5851,10 +5485,7 @@ const PRODUCTS_DATA = [
       "Arma rifle de asalto MA40 incluida",
       "14 puntos de articulación dinámica",
       "Pintura con textura de desgaste de batalla"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-4",
@@ -5864,10 +5495,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "Mega Construx",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2850,
-    "originalPrice": 5699,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5699,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 620,
     "image": "Productos/Mega Construx Halo UNSC Infinity.jpg",
@@ -5883,10 +5514,7 @@ const PRODUCTS_DATA = [
       "Pedestal de exhibición de lujo",
       "Microfiguras de Master Chief y Cortana"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-clm-5",
@@ -5896,10 +5524,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "Mega Construx",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1560,
-    "originalPrice": 3899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 410,
     "image": "Productos/Mega Construx  Halo UNSC Elephant Sandnest.jpg",
@@ -5914,10 +5542,7 @@ const PRODUCTS_DATA = [
       "Grúa mecánica operativa 360°",
       "Interior modular con sala de comando",
       "4 microfiguras tácticas articuladas"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-6",
@@ -5927,10 +5552,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "Mega Construx",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 880,
     "image": "Productos/Mega Construx Halo Banshee Breakout Vehicle Halo Infinite.jpg",
@@ -5946,10 +5571,7 @@ const PRODUCTS_DATA = [
       "Cañones dobles con lanzadores de proyectiles",
       "Soporte de vuelo transparente"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 50
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-clm-7",
@@ -5959,10 +5581,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "LEGO Custom / Halo",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 375,
-    "originalPrice": 1499,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 390,
     "image": "Productos/Lego HALO.jpg",
@@ -5977,10 +5599,7 @@ const PRODUCTS_DATA = [
       "Torreta de defensa pesada 360°",
       "Armas modulares intercambiables",
       "Compatible con bloques estándar"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-8",
@@ -5990,10 +5609,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "LEGO Star Wars",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 280,
-    "originalPrice": 699,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 940,
     "image": "Productos/LEGO STAR WARS ROBOT.jpg",
@@ -6008,10 +5627,7 @@ const PRODUCTS_DATA = [
       "Cabina abatible frontal",
       "Cañón disparador de proyectiles",
       "Minifigura de piloto estelar incluida"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-9",
@@ -6021,10 +5637,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "LEGO Star Wars",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1000,
-    "originalPrice": 1999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1150,
     "image": "Productos/LEGO Star Wars Galactic Adventures Pack.jpg",
@@ -6039,10 +5655,7 @@ const PRODUCTS_DATA = [
       "5 minifiguras icónicas de la saga",
       "Efectos translúcidos de propulsión",
       "Armas bláster y sables de luz incluidos"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-10",
@@ -6052,10 +5665,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "construccion",
     "brand": "LEGO Star Wars",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 700,
-    "originalPrice": 1399,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1399,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 820,
     "image": "Productos/lEGO STAR WARS.jpg",
@@ -6070,10 +5683,7 @@ const PRODUCTS_DATA = [
       "Espacio para droide R2 en el fuselaje",
       "Lanza-misiles de resorte",
       "Tren de aterrizaje retráctil"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-11",
@@ -6083,10 +5693,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "figuras",
     "brand": "Hasbro Marvel Legends",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 212,
-    "originalPrice": 849,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 849,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1850,
     "image": "Productos/Figura Marvel Legends Spider-Man.jpg",
@@ -6101,10 +5711,7 @@ const PRODUCTS_DATA = [
       "Manos intercambiables de puño y telaraña",
       "Líneas de traje grabadas con precisión",
       "Empaque retro de colección"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-12",
@@ -6114,10 +5721,10 @@ const PRODUCTS_DATA = [
     "category": "juguetes",
     "subcategory": "vehiculos",
     "brand": "Hot Wheels / Mattel",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 300,
-    "originalPrice": 599,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 599,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 3100,
     "image": "Productos/Hot Wheels.jpg",
@@ -6132,10 +5739,7 @@ const PRODUCTS_DATA = [
       "Compatible con todas las pistas Hot Wheels",
       "Pintura brillante y acabados de precisión",
       "Empaque con ventana exhibidora"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-10",
@@ -6145,10 +5749,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "muebles",
     "brand": "D'Avanti Home / Callejón",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 8000,
-    "originalPrice": 15999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 15999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 142,
     "image": "Productos/Juego de mesa blanco.jpg",
@@ -6176,10 +5780,7 @@ const PRODUCTS_DATA = [
       "estructura": "Patas de acero inoxidable con acabado cromado brillante",
       "sillas": "6 sillas con respaldo ergonómico alto y acojinado indeformable",
       "tapiz": "Ecopiel blanca de alta densidad lavable y antimanchas"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "home-clm-11",
@@ -6189,10 +5790,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "muebles",
     "brand": "D'Avanti Home / Callejón",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 10000,
-    "originalPrice": 24999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 24999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 186,
     "image": "Productos/juego de mesa gris.jpg",
@@ -6208,9 +5809,7 @@ const PRODUCTS_DATA = [
       "Confort excepcional para cenas formales y reuniones familiares prolongadas",
       "Hasta 18 Meses Sin Intereses con tarjetas participantes y garantía de 5 años"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
     "colors": [
       "Gris Grafito & Madera Oscura"
     ],
@@ -6223,8 +5822,7 @@ const PRODUCTS_DATA = [
       "cubierta": "Marco de madera con panel central de cristal templado esmerilado",
       "sillas": "8 sillas capitoné con botones tapizados y relleno de espuma de memoria",
       "tapiz": "Terciopelo tecnológico repelente a líquidos y fácil de aspirar"
-    },
-    "buenFinDiscount": 60
+    }
   },
   {
     "id": "tech-clm-1",
@@ -6234,10 +5832,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Backdrop Audio",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 375,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 640,
     "image": "Productos/Bocina Bluetooth Portátil Backdrop BD92 Inalámbrica.jpg",
@@ -6250,10 +5848,7 @@ const PRODUCTS_DATA = [
       "Conexión Bluetooth 5.3 de baja latencia",
       "Resistencia a salpicaduras IPX5"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-clm-2",
@@ -6263,10 +5858,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Kaiser",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1050,
-    "originalPrice": 2099,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2099,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 920,
     "image": "Productos/bocina kaiser.jpg",
@@ -6278,10 +5873,7 @@ const PRODUCTS_DATA = [
       "Luces LED multicolores audiorrítmicas",
       "Incluye micrófono inalámbrico para karaoke",
       "Batería recargable integrada con asa de transporte"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-clm-3",
@@ -6291,10 +5883,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Ginga",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 240,
-    "originalPrice": 599,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 599,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 380,
     "image": "Productos/ginga mini bocina.jpg",
@@ -6306,10 +5898,7 @@ const PRODUCTS_DATA = [
       "Correa integrada para colgar",
       "Micrófono con cancelación de eco para llamadas",
       "Hasta 6 horas de música continua"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-clm-4",
@@ -6319,10 +5908,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Callejón Sound",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 899,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 710,
     "image": "Productos/mini bocina portatil negra.jpg",
@@ -6334,10 +5923,7 @@ const PRODUCTS_DATA = [
       "Sonido envolvente 360 grados",
       "Carga rápida por puerto USB-C",
       "Cubierta de goma anti-golpes"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-clm-5",
@@ -6347,10 +5933,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Callejón Sound",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 300,
-    "originalPrice": 1199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 460,
     "image": "Productos/bocina bluetooth azul.jpg",
@@ -6363,10 +5949,7 @@ const PRODUCTS_DATA = [
       "Conexión Bluetooth 5.2 de 15 metros de alcance",
       "Controles táctiles superiores"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "tech-clm-6",
@@ -6376,10 +5959,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Sony",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 640,
-    "originalPrice": 1599,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1599,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 1640,
     "image": "Productos/Audífonos Sony.jpg",
@@ -6391,10 +5974,7 @@ const PRODUCTS_DATA = [
       "Diseño plegable giratorio para fácil transporte",
       "Almohadillas acolchadas anti-fatiga",
       "Aislamiento pasivo de ruido superior"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-clm-7",
@@ -6404,10 +5984,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "audio",
     "brand": "Audio-Technica / Callejón",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1000,
-    "originalPrice": 1999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 580,
     "image": "Productos/Audífonos.jpg",
@@ -6419,10 +5999,7 @@ const PRODUCTS_DATA = [
       "Cable desmontable con conector chapado en oro",
       "Diadema ergonómica con distribución uniforme de peso",
       "Claridad cristalina en voces e instrumentos"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-1",
@@ -6433,10 +6010,10 @@ const PRODUCTS_DATA = [
     "subcategory": "chamarras",
     "gender": "hombre",
     "brand": "D'Avanti Sartoria",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2350,
-    "originalPrice": 4699,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 4699,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 420,
     "image": "Productos/chamarra de piel premium.jpg",
@@ -6460,10 +6037,7 @@ const PRODUCTS_DATA = [
       "Cierres metálicos YKK de uso rudo",
       "Bolsillos interiores de seguridad",
       "Corte entallado clásico atemporal"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-2",
@@ -6474,10 +6048,10 @@ const PRODUCTS_DATA = [
     "subcategory": "chamarras",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 575,
-    "originalPrice": 2299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2299,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 890,
     "image": "Productos/chamarra de piel sintetica mujer.jpg",
@@ -6508,10 +6082,7 @@ const PRODUCTS_DATA = [
       "Forro térmico satinado",
       "Lavable en seco con facilidad"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "fash-clm-3",
@@ -6522,10 +6093,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 310,
     "image": "Productos/blusa con lineas.jpg",
@@ -6549,10 +6120,7 @@ const PRODUCTS_DATA = [
       "Cuello barco amplio y estilizado",
       "Manga 3/4 versátil para toda estación",
       "Caída suave que no se arruga"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-4",
@@ -6563,10 +6131,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "hombre",
     "brand": "D'Avanti Signature",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 575,
-    "originalPrice": 1149,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1149,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 540,
     "image": "Productos/camisa casual de manga corta.jpg",
@@ -6590,10 +6158,7 @@ const PRODUCTS_DATA = [
       "Cuello camp estilo resort",
       "Bolsillo en pecho funcional",
       "Corte relajado confortable"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-5",
@@ -6604,10 +6169,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "hombre",
     "brand": "D'Avanti Signature",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 480,
-    "originalPrice": 1199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 780,
     "image": "Productos/camiseta polo clasica color celeste.jpg",
@@ -6632,10 +6197,7 @@ const PRODUCTS_DATA = [
       "Cuello tejido que mantiene la forma",
       "Aberturas laterales reforzadas",
       "Corte Classic Fit cómodo"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-6",
@@ -6646,10 +6208,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "hombre",
     "brand": "D'Avanti Signature",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 325,
-    "originalPrice": 1299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1120,
     "image": "Productos/polo clasica azul marino.jpg",
@@ -6674,10 +6236,7 @@ const PRODUCTS_DATA = [
       "Botones de nácar genuino",
       "Tratamiento anti-pilling",
       "Ideal para combinaciones formales y casuales"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-7",
@@ -6688,10 +6247,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 575,
-    "originalPrice": 1149,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1149,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 450,
     "image": "Productos/sueter azul mujer.jpg",
@@ -6718,10 +6277,7 @@ const PRODUCTS_DATA = [
       "Cuello redondo con ribete suave",
       "Corte ligeramente holgado moderno",
       "Fácil mantenimiento en lavadora"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-8",
@@ -6732,10 +6288,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "unisex",
     "brand": "D'Avanti Maison",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 480,
-    "originalPrice": 1199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 680,
     "image": "Productos/sueter negro unisex.jpg",
@@ -6760,10 +6316,7 @@ const PRODUCTS_DATA = [
       "Tejido térmico ultra suave",
       "Pretina y puños reforzados",
       "Resistente a deformaciones"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-9",
@@ -6774,10 +6327,10 @@ const PRODUCTS_DATA = [
     "subcategory": "vestidos",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 750,
-    "originalPrice": 1499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1499,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 520,
     "image": "Productos/vestido floral.jpg",
@@ -6801,10 +6354,7 @@ const PRODUCTS_DATA = [
       "Cintura elástica que enmarca la figura",
       "Volantes inferiores con movimiento",
       "Cierre con lazo en espalda"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-10",
@@ -6815,10 +6365,10 @@ const PRODUCTS_DATA = [
     "subcategory": "pantalones",
     "gender": "hombre",
     "brand": "Dockers / D'Avanti",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 400,
-    "originalPrice": 1599,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1599,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1460,
     "image": "Productos/Pantalón Chino Slim Fit.jpg",
@@ -6851,10 +6401,7 @@ const PRODUCTS_DATA = [
       "Pretina interior flexible de confort",
       "Bolsillos traseros con botones de ojal",
       "Planchado fácil resistente a arrugas"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-11",
@@ -6912,10 +6459,10 @@ const PRODUCTS_DATA = [
     "subcategory": "pantalones",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 899,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 430,
     "image": "Productos/short mezclilla mujer.jpg",
@@ -6945,10 +6492,7 @@ const PRODUCTS_DATA = [
       "Dobladillo deshilachado moderno",
       "Botones y remaches de latón dorado",
       "Corte relajado cómodo en piernas"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-13",
@@ -6959,10 +6503,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 600,
-    "originalPrice": 1199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 370,
     "image": "Productos/sandalias negro.jpg",
@@ -6986,10 +6530,7 @@ const PRODUCTS_DATA = [
       "Plantilla con memoria de espuma",
       "Suela antideslizante de perfil bajo",
       "Hebilla lateral ajustable en tobillo"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-14",
@@ -7000,10 +6541,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "gender": "hombre",
     "brand": "D'Avanti Sartoria",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 750,
-    "originalPrice": 2999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 480,
     "image": "Productos/zapatos oxford cafe.jpg",
@@ -7028,10 +6569,7 @@ const PRODUCTS_DATA = [
       "Piel teñida a mano con acabado degradado",
       "Suela de cuero legítimo con inserto de goma",
       "Interior forrado en piel transpirable"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-15",
@@ -7042,10 +6580,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "gender": "hombre",
     "brand": "Cole Haan / D'Avanti",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1400,
-    "originalPrice": 2799,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 310,
     "image": "Productos/zapatos azules con suela cafe.jpg",
@@ -7070,10 +6608,7 @@ const PRODUCTS_DATA = [
       "Cerco cosido artesanal en contraste",
       "Plantilla de amortiguación anatómica",
       "Cordones encerados de alta resistencia"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-16",
@@ -7084,10 +6619,10 @@ const PRODUCTS_DATA = [
     "subcategory": "calzado",
     "gender": "hombre",
     "brand": "Florsheim / D'Avanti",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1300,
-    "originalPrice": 2599,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2599,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 650,
     "image": "Productos/zapatos negros.jpg",
@@ -7112,10 +6647,7 @@ const PRODUCTS_DATA = [
       "Horma europea elegante y entallada",
       "Suela de piel con tacón de goma antideslizante",
       "Ideal para eventos de etiqueta y negocios"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-1",
@@ -7125,10 +6657,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "cocina",
     "brand": "T-fal / Callejón Gourmet",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1280,
-    "originalPrice": 3199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3199,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 840,
     "image": "Productos/Batería de Cocina 1.jpg",
@@ -7143,10 +6675,7 @@ const PRODUCTS_DATA = [
       "Recubrimiento antiadherente de partículas minerales",
       "Apta para estufas de gas, inducción y vitrocerámica",
       "Mangos ergonómicos que no se calientan"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-2",
@@ -7156,10 +6685,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "cocina",
     "brand": "Cuisinart / Callejón",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 975,
-    "originalPrice": 3899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 490,
     "image": "Productos/set de cocina.jpg",
@@ -7171,10 +6700,7 @@ const PRODUCTS_DATA = [
       "Base triple fondo difusora termo-conductora",
       "Marcas medidoras de volumen en el interior",
       "Apta para horno hasta 260°C y lavavajillas"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-3",
@@ -7184,9 +6710,9 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "electrodomesticos",
     "brand": "Oster Gourmet / Callejón",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -75%",
     "badgeType": "offer",
-    "price": 950,
+    "price": 475,
     "originalPrice": 1899,
     "rating": 4.7,
     "reviewsCount": 670,
@@ -7200,8 +6726,8 @@ const PRODUCTS_DATA = [
       "Selector de fuerza de aroma para café intenso o suave",
       "Filtro permanente lavable de malla dorada"
     ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "buenFinDiscount": 75,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -7212,10 +6738,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "electrodomesticos",
     "brand": "De'Longhi / Callejón",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1400,
-    "originalPrice": 3499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 910,
     "image": "Productos/Cafetera Espresso.jpg",
@@ -7227,10 +6753,7 @@ const PRODUCTS_DATA = [
       "Portafiltro dual para café molido o monodosis ESE",
       "Espumador manual giratorio de leche Panarello",
       "Depósito de agua transparente desmontable de 1.1L"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-5",
@@ -7240,10 +6763,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "recamara",
     "brand": "Spring Air / Callejón",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2150,
-    "originalPrice": 4299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 4299,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 520,
     "image": "Productos/colchon individual.jpg",
@@ -7255,10 +6778,7 @@ const PRODUCTS_DATA = [
       "Tratamiento anti-ácaros y antibacterial",
       "No necesita voltearse gracias a su sistema Never Turn",
       "Garantía de confort de 5 años"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-6",
@@ -7268,9 +6788,9 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "recamara",
     "brand": "Sealy Posturepedic / Callejón",
-    "badge": "Buen Fin -75%",
+    "badge": "Buen Fin -50%",
     "badgeType": "offer",
-    "price": 2125,
+    "price": 4250,
     "originalPrice": 8499,
     "rating": 4.9,
     "reviewsCount": 780,
@@ -7284,8 +6804,8 @@ const PRODUCTS_DATA = [
       "Refuerzo perimetral que evita hundimientos en los bordes",
       "Altura total de 32 cm de confort de lujo"
     ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
+    "buenFinDiscount": 50,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -7296,10 +6816,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "electrodomesticos",
     "brand": "Xiaomi / Callejón Smart",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2080,
-    "originalPrice": 5199,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5199,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 630,
     "image": "Productos/robot aspirador 1.jpg",
@@ -7314,10 +6834,7 @@ const PRODUCTS_DATA = [
       "Potencia de succión ciclónica de 4000 Pa",
       "Retorno automático a base de carga inteligente",
       "Zonas prohibidas y barreras virtuales configurables en app"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-clm-1",
@@ -7327,10 +6844,10 @@ const PRODUCTS_DATA = [
     "category": "deportes",
     "subcategory": "calzado",
     "brand": "Nike",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1650,
-    "originalPrice": 3299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1650,
     "image": "Productos/teni nike air max blanco con gris.jpg",
@@ -7358,10 +6875,7 @@ const PRODUCTS_DATA = [
       "Malla ventilada de secado rápido",
       "Suela de caucho con patrón waffle de tracción superior",
       "Diseño deportivo versátil para correr y vestir"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-clm-2",
@@ -7371,10 +6885,10 @@ const PRODUCTS_DATA = [
     "category": "deportes",
     "subcategory": "calzado",
     "brand": "Nike",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1450,
-    "originalPrice": 2899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2899,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 890,
     "image": "Productos/nike us negro.jpg",
@@ -7400,10 +6914,7 @@ const PRODUCTS_DATA = [
       "Talón plano y ancho que brinda estabilidad en levantamientos",
       "Parte superior de malla resistente a la abrasión",
       "Acabado Total Black discreto y elegante"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "sport-clm-3",
@@ -7413,10 +6924,10 @@ const PRODUCTS_DATA = [
     "category": "deportes",
     "subcategory": "fitness",
     "brand": "Nike Training",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 300,
-    "originalPrice": 1199,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1199,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 320,
     "image": "Productos/red nike.jpg",
@@ -7432,10 +6943,7 @@ const PRODUCTS_DATA = [
       "Borde reforzado con costuras dobles de seguridad",
       "Instalación rápida en cualquier estructura estándar"
     ],
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerStartDate": "2026-11-06T00:00:00-06:00",
-    "offerEndDate": "2026-11-21T23:59:59-06:00",
-    "buenFinDiscount": 75
+    "offerStartDate": "2026-11-06T00:00:00-06:00"
   },
   {
     "id": "toy-clm-15",
@@ -7445,10 +6953,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Nerf",
     "department": "Juguetes · Lanzadores & Deportes",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 850,
-    "originalPrice": 1699,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 84,
     "age": "+8 años",
@@ -7475,10 +6983,7 @@ const PRODUCTS_DATA = [
       "Lanzamiento motorizado por ráfagas de 10 dardos",
       "Mira de precisión integrada en el armazón",
       "Envoltorio oficial con licencia Fortnite Epic Games"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-16",
@@ -7488,10 +6993,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Nerf",
     "department": "Juguetes · Lanzadores & Deportes",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 625,
-    "originalPrice": 1249,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1249,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 112,
     "age": "+8 años",
@@ -7519,10 +7024,7 @@ const PRODUCTS_DATA = [
       "Tambor giratorio de 15 dardos para fuego continuo rápido",
       "3 rieles tácticos y puntos de unión para culata y cañón",
       "Mecanismo de acción por bombeo suave y resistente"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-17",
@@ -7532,10 +7034,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Nerf",
     "department": "Juguetes · Lanzadores & Deportes",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 920,
-    "originalPrice": 2299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 156,
     "age": "+8 años",
@@ -7562,10 +7064,7 @@ const PRODUCTS_DATA = [
       "Réplica con licencia oficial de 343 Industries / Halo Infinite",
       "Motor de alta aceleración para disparo semiautomático veloz",
       "Incluye tarjeta con código de contenido descargable para Halo Infinite"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-18",
@@ -7575,10 +7074,10 @@ const PRODUCTS_DATA = [
     "subcategory": "figuras",
     "brand": "Nerf",
     "department": "Juguetes · Lanzadores & Deportes",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 1999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 97,
     "age": "+8 años",
@@ -7607,10 +7106,7 @@ const PRODUCTS_DATA = [
       "Tambor motorizado de 25 dardos para ráfagas continuas masivas",
       "Tecnología Aerofin de vuelo ultra recto y veloz",
       "Porta dardos en culata para recargas inmediatas"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-17",
@@ -7621,10 +7117,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "hombre",
     "brand": "D'Avanti Signature",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 650,
-    "originalPrice": 1299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 940,
     "image": "Productos/Playera tipo polo color negro.jpg",
@@ -7649,10 +7145,7 @@ const PRODUCTS_DATA = [
       "Teñido reactivo profundo resistente al desvanecimiento",
       "Cuello acanalado indeformable",
       "Aberturas laterales reforzadas y corte Classic Fit"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-18",
@@ -7663,10 +7156,10 @@ const PRODUCTS_DATA = [
     "subcategory": "bolsas",
     "gender": "mujer",
     "brand": "D'Avanti Atelier",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 760,
-    "originalPrice": 1899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 168,
     "image": "Productos 2/Bolso Crossbody para Mujer.jpg",
@@ -7698,10 +7191,7 @@ const PRODUCTS_DATA = [
       "Correa ajustable para llevar al hombro o cruzada",
       "Bolsillo interior con cremallera y compartimento para celular",
       "Herrajes reforzados con baño dorado resistente al desgaste"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-19",
@@ -7712,10 +7202,10 @@ const PRODUCTS_DATA = [
     "subcategory": "accesorios",
     "gender": "hombre",
     "brand": "D'Avanti Sartorial",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 500,
-    "originalPrice": 999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 312,
     "image": "Productos 2/Airtag Cartera para Hombre RFID Bloqueo Tarjetero.jpg",
@@ -7744,10 +7234,7 @@ const PRODUCTS_DATA = [
       "Protección certificada RFID contra lectores electrónicos no deseados",
       "Espacio dedicado para 8 tarjetas bancarias, billetes y credencial con visor",
       "Perfil ultradelgado que no abulta en el bolsillo"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-20",
@@ -7758,10 +7245,10 @@ const PRODUCTS_DATA = [
     "subcategory": "accesorios",
     "gender": "mujer",
     "brand": "D'Avanti Atelier",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 275,
-    "originalPrice": 1099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1099,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 220,
     "image": "Productos 2/cartera para mujer cafe.jpg",
@@ -7790,10 +7277,7 @@ const PRODUCTS_DATA = [
       "Cierre perimetral de acero dorado suave y duradero",
       "12 ranuras para tarjetas bancarias y ventana de identificación",
       "Compartimento amplio para teléfonos de hasta 6.7 pulgadas"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-21",
@@ -7804,10 +7288,10 @@ const PRODUCTS_DATA = [
     "subcategory": "vestidos",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 720,
-    "originalPrice": 1799,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 185,
     "image": "Productos 2/vestido coctel rojo vino.jpg",
@@ -7843,10 +7327,7 @@ const PRODUCTS_DATA = [
       "Tejido crepé elástico de alta densidad que no transparenta",
       "Escote en V cruzado que realza el busto con comodidad",
       "Largo a la rodilla perfecto para bodas, cócteles y cenas"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-22",
@@ -7857,10 +7338,10 @@ const PRODUCTS_DATA = [
     "subcategory": "vestidos",
     "gender": "mujer",
     "brand": "D'Avanti Alta Costura",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1650,
-    "originalPrice": 3299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 3299,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 140,
     "image": "Productos 2/vestido de noche.jpg",
@@ -7892,10 +7373,7 @@ const PRODUCTS_DATA = [
       "Caída espectacular con forro interior sedoso antiestático",
       "Abertura sutil en pierna que estiliza el movimiento al caminar",
       "Ideal para alfombras rojas, graduaciones y galas nocturnas"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-23",
@@ -7906,10 +7384,10 @@ const PRODUCTS_DATA = [
     "subcategory": "trajes",
     "gender": "mujer",
     "brand": "D'Avanti Sartorial",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1400,
-    "originalPrice": 2799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 118,
     "image": "Productos 2/traje formal mujer.jpg",
@@ -7939,10 +7417,7 @@ const PRODUCTS_DATA = [
       "Corte de sastrería profesional con hombreras estructuradas ligeras",
       "Pantalón de tiro medio con bolsillos laterales funcionales",
       "Tejido bielástico resistente a las arrugas para jornadas completas"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-24",
@@ -7953,10 +7428,10 @@ const PRODUCTS_DATA = [
     "subcategory": "chamarras",
     "gender": "hombre",
     "brand": "D'Avanti Denim",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 425,
-    "originalPrice": 1699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 205,
     "image": "Productos 2/chamarra de mezclilla de hombre.jpg",
@@ -7989,10 +7464,7 @@ const PRODUCTS_DATA = [
       "Algodón 100% resistente y duradero que mejora con el tiempo",
       "Ajustadores de cintura traseros con botones de presilla",
       "Costuras dobles reforzadas en hombros y espalda"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-25",
@@ -8003,10 +7475,10 @@ const PRODUCTS_DATA = [
     "subcategory": "chamarras",
     "gender": "mujer",
     "brand": "D'Avanti Studio",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1000,
-    "originalPrice": 1999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 134,
     "image": "Productos 2/chamarra cafe de mujer.jpg",
@@ -8029,10 +7501,7 @@ const PRODUCTS_DATA = [
       "Corte entallado favorecedor a la cintura",
       "Bolsillos laterales con cremallera de uso rudo",
       "Forro interior de tafetán suave que brinda confort térmico"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-8",
@@ -8042,10 +7511,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "muebles",
     "brand": "Marbilia Interiorismo",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2400,
-    "originalPrice": 4799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 4799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 76,
     "image": "Productos 2/mesa de centro en madera Marbilia interiorismo.jpg",
@@ -8074,10 +7543,7 @@ const PRODUCTS_DATA = [
       "Madera sustentable certificada con barniz protector contra manchas y líquidos",
       "Bordes suavemente redondeados que brindan seguridad familiar",
       "Estructura reforzada que soporta hasta 80 kg de peso"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "home-clm-9",
@@ -8087,10 +7553,10 @@ const PRODUCTS_DATA = [
     "category": "hogar",
     "subcategory": "muebles",
     "brand": "D'Avanti Home",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 960,
-    "originalPrice": 2399,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2399,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 92,
     "image": "Productos 2/buro para recamara.jpg",
@@ -8116,10 +7582,7 @@ const PRODUCTS_DATA = [
       "Cajón con correderas metálicas de cierre suave",
       "Patas estilizadas de madera maciza con niveladores de piso",
       "Superficie resistente a raspaduras y fácil de limpiar"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-26",
@@ -8130,10 +7593,10 @@ const PRODUCTS_DATA = [
     "subcategory": "accesorios",
     "gender": "hombre",
     "brand": "Curren Chrono",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 325,
-    "originalPrice": 1299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 245,
     "image": "Productos 2/reloj curen hombre.jpg",
@@ -8162,10 +7625,7 @@ const PRODUCTS_DATA = [
       "Cristal mineral Hardlex antiarañazos",
       "Resistencia al agua 3 ATM contra salpicaduras y lluvia",
       "Fechador a las 3 en punto funcional"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-27",
@@ -8176,10 +7636,10 @@ const PRODUCTS_DATA = [
     "subcategory": "accesorios",
     "gender": "mujer",
     "brand": "D'Avanti Timepieces",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 800,
-    "originalPrice": 1599,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1599,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 178,
     "image": "Productos 2/reloj para mujer tipo cartier.jpg",
@@ -8205,10 +7665,7 @@ const PRODUCTS_DATA = [
       "Brazalete con broche mariposa invisible de doble seguridad",
       "Cristal biselado resistente a impactos",
       "Hermético al agua para uso cotidiano"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-28",
@@ -8219,10 +7676,10 @@ const PRODUCTS_DATA = [
     "subcategory": "accesorios",
     "gender": "unisex",
     "brand": "D'Avanti Eyewear",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 400,
-    "originalPrice": 999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 380,
     "image": "Productos 2/gafas de sol.jpg",
@@ -8248,10 +7705,7 @@ const PRODUCTS_DATA = [
       "Micas polarizadas de 7 capas con filtro antirreflejante",
       "Bisagras flexibles con resorte que no aprietan las sienes",
       "Incluye funda rígida magnética y paño de microfibra"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "fash-clm-29",
@@ -8262,10 +7716,10 @@ const PRODUCTS_DATA = [
     "subcategory": "camisas",
     "gender": "hombre",
     "brand": "D'Avanti Essentials",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 275,
-    "originalPrice": 549,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 549,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 420,
     "image": "Productos 2/playera blanca de hombre.jpg",
@@ -8294,10 +7748,7 @@ const PRODUCTS_DATA = [
       "Algodón 100% peinado de 180 g/m² sin costuras laterales incómodas",
       "Cuello en canalé reforzado con cinta de hombro a hombro",
       "Prelavada para evitar encogimiento tras los lavados"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-19",
@@ -8307,10 +7758,10 @@ const PRODUCTS_DATA = [
     "subcategory": "construccion",
     "brand": "Pokémon",
     "department": "Juguetes · Rompecabezas & Colección",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 225,
-    "originalPrice": 899,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 88,
     "age": "+12 años",
@@ -8340,10 +7791,7 @@ const PRODUCTS_DATA = [
     ],
     "gallery": [
       "Productos 3/Rompecabezas 4D Puzzles Pokémon Charmander 241 Piezas 1.jpg"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "gaming-game-5",
@@ -8353,10 +7801,10 @@ const PRODUCTS_DATA = [
     "subcategory": "consolas-videojuegos",
     "brand": "Nintendo",
     "department": "Videojuegos & Consolas",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2400,
-    "originalPrice": 5999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5999,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 165,
     "image": "Productos 3/Pokémon Red Versión Game Boy Nuevo En Caja Con Acrílico.jpg",
@@ -8382,10 +7830,7 @@ const PRODUCTS_DATA = [
       "Pieza definitiva de colección para aficionados de Pokémon y videojuegos clásicos",
       "Acrílico grado archivo que previene decoloración solar y polvo",
       "Certificado de autenticidad y envío con embalaje reforzado de alta seguridad"
-    ],
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "toy-clm-20",
@@ -8438,9 +7883,9 @@ const PRODUCTS_DATA = [
     "subcategory": "construccion",
     "brand": "LEGO",
     "department": "Juguetes · Construcción & LEGO City",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -60%",
     "badgeType": "offer",
-    "price": 400,
+    "price": 320,
     "originalPrice": 799,
     "rating": 4.9,
     "reviewsCount": 142,
@@ -8475,8 +7920,8 @@ const PRODUCTS_DATA = [
       "Moto deportiva policial con neumáticos de alta tracción",
       "Guía didáctica ilustrada paso a paso e interactiva en app LEGO Builder"
     ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "buenFinDiscount": 60,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -8487,10 +7932,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "celulares",
     "brand": "Honor",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 975,
-    "originalPrice": 3899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3899,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 175,
     "image": "Productos 3/Movistar Honor X6e 128 GB Negro.jpg",
@@ -8516,10 +7961,7 @@ const PRODUCTS_DATA = [
       "Cámara ultra clara de 50 megapíxeles con modo retrato y noche",
       "Memoria expandible hasta 1TB mediante tarjeta MicroSD",
       "Desbloqueado para cualquier compañía telefónica"
-    ],
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "tech-clm-9",
@@ -8529,10 +7971,10 @@ const PRODUCTS_DATA = [
     "category": "electronica",
     "subcategory": "tablets",
     "brand": "Lenovo",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 4000,
-    "originalPrice": 7999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 7999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 120,
     "image": "Productos 3/Tablet Lenovo Ideatab 11 + Keyboard 11 Pulgadas 128 GB 8 GB RAM.jpg",
@@ -8558,10 +8000,7 @@ const PRODUCTS_DATA = [
       "Incluye funda protectora con soporte y teclado magnético desmontable en español",
       "Modo lectura inmersivo con simulación de papel para cuidar la vista",
       "Cuerpo unibody de aleación de aluminio pulido ultra delgado de solo 7.4 mm"
-    ],
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    ]
   },
   {
     "id": "game-clm-21",
@@ -8573,10 +8012,10 @@ const PRODUCTS_DATA = [
     "platform": "PlayStation / Xbox / PC",
     "platformTag": "all",
     "brand": "Rockstar Games",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 899,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 15420,
     "image": "Productos 3/GTA 5.jpg",
@@ -8595,10 +8034,7 @@ const PRODUCTS_DATA = [
       "jugadores": "1 historia / hasta 30 online",
       "clasificacion": "M (Mature) +18 años",
       "desarrollador": "Rockstar North"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-22",
@@ -8610,10 +8046,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "EA DICE",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 320,
-    "originalPrice": 799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 4210,
     "image": "Productos 3/battlefield 1.jpg",
@@ -8631,10 +8067,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS Táctico / Guerra",
       "jugadores": "1 campaña / hasta 64 multijugador online",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-23",
@@ -8646,10 +8079,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "EA DICE",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 212,
-    "originalPrice": 849,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 849,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 3105,
     "image": "Productos 3/battlefield V.jpg",
@@ -8666,10 +8099,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS Bélico",
       "jugadores": "Hasta 64 en línea",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-24",
@@ -8681,10 +8111,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "Activision / Infinity Ward",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 800,
-    "originalPrice": 1599,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1599,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 5400,
     "image": "Productos 3/call of duty modern warfare 2 2022.jpg",
@@ -8701,10 +8131,7 @@ const PRODUCTS_DATA = [
       "genero": "Shooter Militar",
       "jugadores": "1 campaña / online multijugador",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-25",
@@ -8716,10 +8143,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "4A Games / Deep Silver",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 240,
-    "originalPrice": 599,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 599,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 2900,
     "image": "Productos 3/metro 2033.jpg",
@@ -8736,10 +8163,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS / Survival Horror Atmosférico",
       "jugadores": "1 jugador (offline)",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-acc-4",
@@ -8751,10 +8175,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Microsoft / Xbox",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 850,
-    "originalPrice": 1699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1699,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 3820,
     "image": "Productos 3/control inalambrico xbox serie x-s.jpg",
@@ -8770,10 +8194,7 @@ const PRODUCTS_DATA = [
     "specs": {
       "bateria": "Hasta 40 horas de autonomía",
       "conexion": "Inalámbrico Xbox / Bluetooth / USB-C"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-26",
@@ -8785,10 +8206,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "Activision / Infinity Ward",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 325,
-    "originalPrice": 1299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 6890,
     "image": "Productos 3/call of duty modern warfare 2019.jpg",
@@ -8805,10 +8226,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS Militar Táctico",
       "jugadores": "1 campaña / multijugador online",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-27",
@@ -8820,10 +8238,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "Activision",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 899,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 899,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 8410,
     "image": "Productos 3/call of duty 4 morden warfare.jpg",
@@ -8840,10 +8258,7 @@ const PRODUCTS_DATA = [
       "genero": "Shooter Clásico",
       "jugadores": "1 jugador / multijugador online",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-28",
@@ -8855,10 +8270,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "Activision / Infinity Ward",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 900,
-    "originalPrice": 1799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 920,
     "image": "Productos 3/call of duty modern warfare 4 2026.jpg",
@@ -8875,10 +8290,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS Next-Gen",
       "jugadores": "1 campaña / hasta 128 online",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-29",
@@ -8890,10 +8302,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "Activision / Infinity Ward",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 899,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 899,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 11200,
     "image": "Productos 3/call of duty modern warfare 2.jpg",
@@ -8910,10 +8322,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS Acción",
       "jugadores": "1 historia / hasta 18 online",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "game-clm-30",
@@ -8960,10 +8369,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PlayStation / PC",
     "platformTag": "all",
     "brand": "Activision / Treyarch",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 425,
-    "originalPrice": 849,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 849,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 9600,
     "image": "Productos 3/call of duty black ops.jpg",
@@ -8980,10 +8389,7 @@ const PRODUCTS_DATA = [
       "genero": "FPS / Zombies",
       "jugadores": "1 campaña / 4 zombies / 18 multijugador",
       "clasificacion": "M (Mature) +17 años"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-acc-5",
@@ -8995,9 +8401,9 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Microsoft / Xbox",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -60%",
     "badgeType": "offer",
-    "price": 850,
+    "price": 680,
     "originalPrice": 1699,
     "rating": 4.9,
     "reviewsCount": 4120,
@@ -9015,8 +8421,8 @@ const PRODUCTS_DATA = [
       "bateria": "Hasta 40 horas de juego",
       "conexion": "Bluetooth / USB-C"
     },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "buenFinDiscount": 60,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -9029,10 +8435,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Microsoft / Xbox",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 720,
-    "originalPrice": 1799,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 1620,
     "image": "Productos 3/control inalambrico xbox verde lima.jpg",
@@ -9048,10 +8454,7 @@ const PRODUCTS_DATA = [
     "specs": {
       "bateria": "Hasta 40 horas de juego",
       "conexion": "Inalámbrico Xbox / Bluetooth"
-    },
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-acc-7",
@@ -9063,10 +8466,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox",
     "platformTag": "xbox",
     "brand": "Microsoft / Xbox",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 450,
-    "originalPrice": 1799,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1799,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 1980,
     "image": "Productos 3/control inalambrico xbox verde.jpg",
@@ -9082,10 +8485,7 @@ const PRODUCTS_DATA = [
     "specs": {
       "bateria": "Hasta 40 horas de juego",
       "conexion": "Bluetooth / Xbox Wireless"
-    },
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "gaming-acc-8",
@@ -9097,10 +8497,10 @@ const PRODUCTS_DATA = [
     "platform": "Xbox / PC",
     "platformTag": "all",
     "brand": "Microsoft / Xbox Pro",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1050,
-    "originalPrice": 2099,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2099,
+    "originalPrice": null,
     "rating": 5,
     "reviewsCount": 2450,
     "image": "Productos 3/control inalambrico.jpg",
@@ -9116,10 +8516,7 @@ const PRODUCTS_DATA = [
     "specs": {
       "bateria": "Batería recargable hasta 30 horas continuas",
       "conexion": "USB-C y Bluetooth 5.2"
-    },
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    }
   },
   {
     "id": "prod-productos-218",
@@ -9128,19 +8525,16 @@ const PRODUCTS_DATA = [
     "slug": "barra-de-sonido-sonos-arc-dolby-atmos-218",
     "category": "electronica",
     "brand": "Sonos",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 8040,
-    "originalPrice": 20099,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 20099,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 156,
     "image": "Productos/1. Barra de Sonido Sonos Arc Dolby Atmos.jpg",
     "description": "Barra de Sonido Sonos Arc Dolby Atmos con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0218",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-219",
@@ -9149,19 +8543,16 @@ const PRODUCTS_DATA = [
     "slug": "apple-airpods-pro-de-2-generacion-1-219",
     "category": "electronica",
     "brand": "Apple",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1950,
-    "originalPrice": 3899,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 3899,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 163,
     "image": "Productos/Apple AirPods Pro de 2.ª Generación 1.jpg",
     "description": "Apple AirPods Pro de 2.ª Generación 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0219",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-220",
@@ -9170,19 +8561,16 @@ const PRODUCTS_DATA = [
     "slug": "apple-macbook-pro-14-pulgadas-1-220",
     "category": "electronica",
     "brand": "Apple",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 10325,
-    "originalPrice": 41299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 41299,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 170,
     "image": "Productos/Apple MacBook Pro 14 pulgadas 1.jpg",
     "description": "Apple MacBook Pro 14 pulgadas 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0220",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-221",
@@ -9191,19 +8579,16 @@ const PRODUCTS_DATA = [
     "slug": "audifonos-sony-wh-1000xm5-azul-221",
     "category": "electronica",
     "brand": "Sony",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 3080,
-    "originalPrice": 7699,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 7699,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 177,
     "image": "Productos/Audífonos Sony WH-1000XM5 azul.jpg",
     "description": "Audífonos Sony WH-1000XM5 azul con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0221",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-222",
@@ -9212,19 +8597,16 @@ const PRODUCTS_DATA = [
     "slug": "audifonos-sony-wh-1000xm5-blanco-222",
     "category": "electronica",
     "brand": "Sony",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3850,
-    "originalPrice": 7699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 7699,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 184,
     "image": "Productos/Audífonos Sony WH-1000XM5 blanco.jpg",
     "description": "Audífonos Sony WH-1000XM5 blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0222",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-223",
@@ -9233,19 +8615,16 @@ const PRODUCTS_DATA = [
     "slug": "audifonos-sony-wh-1000xm5-morado-223",
     "category": "electronica",
     "brand": "Sony",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3850,
-    "originalPrice": 7699,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 7699,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 191,
     "image": "Productos/Audífonos Sony WH-1000XM5 morado.jpg",
     "description": "Audífonos Sony WH-1000XM5 morado con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0223",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-224",
@@ -9254,19 +8633,16 @@ const PRODUCTS_DATA = [
     "slug": "bateria-de-cocina-224",
     "category": "hogar",
     "brand": "T-fal Heritage",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 457,
-    "originalPrice": 1829,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1829,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 198,
     "image": "Productos/Batería de Cocina.jpg",
     "description": "Batería de Cocina con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS-0224",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-225",
@@ -9275,19 +8651,16 @@ const PRODUCTS_DATA = [
     "slug": "bicicleta-de-montana-blanca-225",
     "category": "deportes",
     "brand": "Pro Fitness",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 4500,
-    "originalPrice": 8999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 8999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 205,
     "image": "Productos/bicicleta de montaña blanca.jpg",
     "description": "Bicicleta de montaña blanca con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0225",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-226",
@@ -9296,19 +8669,16 @@ const PRODUCTS_DATA = [
     "slug": "bicicleta-de-montana-naranja-226",
     "category": "deportes",
     "brand": "Pro Fitness",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 4500,
-    "originalPrice": 8999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 8999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 212,
     "image": "Productos/bicicleta de montaña naranja.jpg",
     "description": "Bicicleta de montaña naranja con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0226",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-227",
@@ -9317,19 +8687,16 @@ const PRODUCTS_DATA = [
     "slug": "bicicleta-de-montana-roja-y-naranja-227",
     "category": "deportes",
     "brand": "Pro Fitness",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 3600,
-    "originalPrice": 8999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 8999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 219,
     "image": "Productos/bicicleta de montaña roja y naranja.jpg",
     "description": "Bicicleta de montaña roja y naranja con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0227",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-228",
@@ -9338,19 +8705,16 @@ const PRODUCTS_DATA = [
     "slug": "bolso-tote-de-piel-blanco-228",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 1679,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1679,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 226,
     "image": "Productos/Bolso Tote de Piel blanco.jpg",
     "description": "Bolso Tote de Piel blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0228",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-229",
@@ -9359,19 +8723,16 @@ const PRODUCTS_DATA = [
     "slug": "bolso-tote-de-piel-cafe-229",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 840,
-    "originalPrice": 1679,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1679,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 233,
     "image": "Productos/Bolso Tote de Piel Cafe.jpg",
     "description": "Bolso Tote de Piel Cafe con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0229",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-230",
@@ -9380,19 +8741,16 @@ const PRODUCTS_DATA = [
     "slug": "chamarra-de-piel-sintetica-roja-mujer-230",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 912,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 240,
     "image": "Productos/chamarra de piel sintetica roja mujer.jpg",
     "description": "Chamarra de piel sintetica roja mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0230",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-231",
@@ -9401,19 +8759,16 @@ const PRODUCTS_DATA = [
     "slug": "jean-1-231",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 247,
     "image": "Productos/jean 1.jpg",
     "description": "Jean 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0231",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-232",
@@ -9422,19 +8777,16 @@ const PRODUCTS_DATA = [
     "slug": "jean-2-232",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 180,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 254,
     "image": "Productos/jean 2.jpg",
     "description": "Jean 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0232",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-233",
@@ -9443,19 +8795,16 @@ const PRODUCTS_DATA = [
     "slug": "jean-3-233",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 288,
-    "originalPrice": 719,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 261,
     "image": "Productos/jean 3.jpg",
     "description": "Jean 3 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0233",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-234",
@@ -9464,19 +8813,16 @@ const PRODUCTS_DATA = [
     "slug": "laptop-dell-xps-13-plus-negra-234",
     "category": "electronica",
     "brand": "Dell",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 17100,
-    "originalPrice": 34199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 34199,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 268,
     "image": "Productos/Laptop Dell XPS 13 Plus Negra.jpg",
     "description": "Laptop Dell XPS 13 Plus Negra con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0234",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-235",
@@ -9485,19 +8831,16 @@ const PRODUCTS_DATA = [
     "slug": "laptop-dell-xps-13-plus-roja-235",
     "category": "electronica",
     "brand": "Dell",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 17100,
-    "originalPrice": 34199,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 34199,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 275,
     "image": "Productos/Laptop Dell XPS 13 Plus Roja.jpg",
     "description": "Laptop Dell XPS 13 Plus Roja con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0235",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-236",
@@ -9506,19 +8849,16 @@ const PRODUCTS_DATA = [
     "slug": "nike-vaporfly-3-tenis-de-carrera-blanco-con-amarillo-236",
     "category": "deportes",
     "brand": "Nike",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1590,
-    "originalPrice": 6359,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 6359,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 282,
     "image": "Productos/Nike Vaporfly 3 Tenis de Carrera blanco con amarillo.jpg",
     "description": "Nike Vaporfly 3 Tenis de Carrera blanco con amarillo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0236",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-237",
@@ -9527,19 +8867,16 @@ const PRODUCTS_DATA = [
     "slug": "nike-vaporfly-3-tenis-de-carrera-rojo-con-blanco-237",
     "category": "deportes",
     "brand": "Nike",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3180,
-    "originalPrice": 6359,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 6359,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 289,
     "image": "Productos/Nike Vaporfly 3 Tenis de Carrera rojo con blanco.jpg",
     "description": "Nike Vaporfly 3 Tenis de Carrera rojo con blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0237",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-238",
@@ -9548,19 +8885,16 @@ const PRODUCTS_DATA = [
     "slug": "pantalon-de-meclilla-negro-mujer-238",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 296,
     "image": "Productos/pantalon de meclilla negro mujer.jpg",
     "description": "Pantalon de meclilla negro mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0238",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-239",
@@ -9569,19 +8903,16 @@ const PRODUCTS_DATA = [
     "slug": "pantalon-chino-slim-fit-blanco-239",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 288,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 303,
     "image": "Productos/Pantalón Chino Slim Fit blanco.jpg",
     "description": "Pantalón Chino Slim Fit blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0239",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-240",
@@ -9590,19 +8921,16 @@ const PRODUCTS_DATA = [
     "slug": "pantalon-chino-slim-fit-nergo-240",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 180,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 310,
     "image": "Productos/Pantalón Chino Slim Fit nergo.jpg",
     "description": "Pantalón Chino Slim Fit nergo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0240",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-241",
@@ -9611,19 +8939,16 @@ const PRODUCTS_DATA = [
     "slug": "robot-aspirador-2-241",
     "category": "hogar",
     "brand": "iRobot Roomba",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 915,
-    "originalPrice": 1829,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1829,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 317,
     "image": "Productos/robot aspirador 2.jpg",
     "description": "Robot aspirador 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS-0241",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-242",
@@ -9632,19 +8957,16 @@ const PRODUCTS_DATA = [
     "slug": "sala-modular-nordica-de-diseno-escandinavo-1-242",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 9760,
-    "originalPrice": 24399,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 24399,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 324,
     "image": "Productos/Sala Modular Nórdica de Diseño Escandinavo 1.jpg",
     "description": "Sala Modular Nórdica de Diseño Escandinavo 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS-0242",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-243",
@@ -9653,19 +8975,16 @@ const PRODUCTS_DATA = [
     "slug": "samsung-galaxy-s24-ultra-512gb-1-243",
     "category": "electronica",
     "brand": "Samsung",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 14750,
-    "originalPrice": 29499,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 29499,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 331,
     "image": "Productos/Samsung Galaxy S24 Ultra 512GB 1.jpg",
     "description": "Samsung Galaxy S24 Ultra 512GB 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "TEC-PRODUCTOS-0243",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-244",
@@ -9674,19 +8993,16 @@ const PRODUCTS_DATA = [
     "slug": "short-mezclilla-rosa-mujer-244",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 180,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 338,
     "image": "Productos/short mezclilla rosa mujer.jpg",
     "description": "Short mezclilla rosa mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0244",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-245",
@@ -9695,19 +9011,16 @@ const PRODUCTS_DATA = [
     "slug": "sillon-reclinable-electrico-beige-245",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 7320,
-    "originalPrice": 18299,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 18299,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 345,
     "image": "Productos/Sillón Reclinable Eléctrico beige.jpg",
     "description": "Sillón Reclinable Eléctrico beige con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS-0245",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-246",
@@ -9716,19 +9029,16 @@ const PRODUCTS_DATA = [
     "slug": "sillon-reclinable-electrico-de-piel-genuina-cafe-246",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 9150,
-    "originalPrice": 18299,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 18299,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 352,
     "image": "Productos/Sillón Reclinable Eléctrico de Piel Genuina cafe.jpg",
     "description": "Sillón Reclinable Eléctrico de Piel Genuina cafe con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS-0246",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-247",
@@ -9737,19 +9047,16 @@ const PRODUCTS_DATA = [
     "slug": "sillon-reclinable-electrico-gris-247",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 9150,
-    "originalPrice": 18299,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 18299,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 359,
     "image": "Productos/Sillón Reclinable Eléctrico Gris.jpg",
     "description": "Sillón Reclinable Eléctrico Gris con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS-0247",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-248",
@@ -9758,19 +9065,16 @@ const PRODUCTS_DATA = [
     "slug": "sueter-azul-mujer-2-248",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 180,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 366,
     "image": "Productos/sueter azul mujer 2.jpg",
     "description": "Sueter azul mujer 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0248",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-249",
@@ -9779,19 +9083,16 @@ const PRODUCTS_DATA = [
     "slug": "tenis-nike-249",
     "category": "deportes",
     "brand": "Nike",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 373,
     "image": "Productos/tenis nike.jpg",
     "description": "Tenis nike con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0249",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-250",
@@ -9800,19 +9101,16 @@ const PRODUCTS_DATA = [
     "slug": "tienda-de-campana-coleman-instant-cabin-1-250",
     "category": "deportes",
     "brand": "Coleman",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2580,
-    "originalPrice": 5159,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5159,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 30,
     "image": "Productos/Tienda de Campaña Coleman Instant Cabin 1.jpg",
     "description": "Tienda de Campaña Coleman Instant Cabin 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0250",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-251",
@@ -9821,19 +9119,16 @@ const PRODUCTS_DATA = [
     "slug": "tienda-de-campana-coleman-instant-cabin-2-251",
     "category": "deportes",
     "brand": "Coleman",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2064,
-    "originalPrice": 5159,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 5159,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 37,
     "image": "Productos/Tienda de Campaña Coleman Instant Cabin 2.jpg",
     "description": "Tienda de Campaña Coleman Instant Cabin 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0251",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-252",
@@ -9842,19 +9137,16 @@ const PRODUCTS_DATA = [
     "slug": "tienda-de-campana-coleman-instant-cabin-3-252",
     "category": "deportes",
     "brand": "Coleman",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1290,
-    "originalPrice": 5159,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5159,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 44,
     "image": "Productos/Tienda de Campaña Coleman Instant Cabin 3.jpg",
     "description": "Tienda de Campaña Coleman Instant Cabin 3 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS-0252",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-253",
@@ -9863,19 +9155,16 @@ const PRODUCTS_DATA = [
     "slug": "traje-formal-slim-fit-de-lana-italiana-2-253",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2700,
-    "originalPrice": 5399,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5399,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 51,
     "image": "Productos/Traje Formal Slim Fit de Lana Italiana 2.jpg",
     "description": "Traje Formal Slim Fit de Lana Italiana 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0253",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-254",
@@ -9884,19 +9173,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-midi-pisado-de-satin-negro-254",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1104,
-    "originalPrice": 2759,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 58,
     "image": "Productos/vestido midi pisado de satin negro.jpg",
     "description": "Vestido midi pisado de satin negro con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0254",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-255",
@@ -9905,19 +9191,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-midi-plisado-celeste-255",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1380,
-    "originalPrice": 2759,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 65,
     "image": "Productos/vestido midi plisado celeste.jpg",
     "description": "Vestido midi plisado celeste con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0255",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-256",
@@ -9926,19 +9209,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-midi-plisado-de-satin-negro-256",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 690,
-    "originalPrice": 2759,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 72,
     "image": "Productos/Vestido Midi Plisado de Satín negro.jpg",
     "description": "Vestido Midi Plisado de Satín negro con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0256",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-257",
@@ -9947,19 +9227,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-midi-plisado-de-satin-rojo-257",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1104,
-    "originalPrice": 2759,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 79,
     "image": "Productos/Vestido Midi Plisado de Satín rojo.jpg",
     "description": "Vestido Midi Plisado de Satín rojo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0257",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-258",
@@ -9968,19 +9245,16 @@ const PRODUCTS_DATA = [
     "slug": "zapatillas-cafe-oscuro-258",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 86,
     "image": "Productos/zapatillas cafe oscuro.jpg",
     "description": "Zapatillas cafe oscuro con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0258",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos-259",
@@ -9989,19 +9263,16 @@ const PRODUCTS_DATA = [
     "slug": "zapatillas-rojas-259",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 93,
     "image": "Productos/zapatillas rojas.jpg",
     "description": "Zapatillas rojas con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS-0259",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-260",
@@ -10010,19 +9281,16 @@ const PRODUCTS_DATA = [
     "slug": "bolso-para-dama-1-260",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 1679,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1679,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 100,
     "image": "Productos 2/bolso para dama 1.jpg",
     "description": "Bolso para dama 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0260",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-261",
@@ -10031,19 +9299,16 @@ const PRODUCTS_DATA = [
     "slug": "bolso-para-dama-cafe-261",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 840,
-    "originalPrice": 1679,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1679,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 107,
     "image": "Productos 2/bolso para dama cafe.jpg",
     "description": "Bolso para dama cafe con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0261",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-262",
@@ -10073,19 +9338,16 @@ const PRODUCTS_DATA = [
     "slug": "bolso-para-dama-rosa-263",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 672,
-    "originalPrice": 1679,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1679,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 121,
     "image": "Productos 2/bolso para dama rosa.jpg",
     "description": "Bolso para dama rosa con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0263",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-264",
@@ -10094,19 +9356,16 @@ const PRODUCTS_DATA = [
     "slug": "bolso-para-dama-264",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 1679,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1679,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 128,
     "image": "Productos 2/bolso para dama.jpg",
     "description": "Bolso para dama con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0264",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-265",
@@ -10115,19 +9374,16 @@ const PRODUCTS_DATA = [
     "slug": "cartera-de-hombre-con-rfid-bloqueo-265",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 839,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 135,
     "image": "Productos 2/Cartera de Hombre con RFID Bloqueo.jpg",
     "description": "Cartera de Hombre con RFID Bloqueo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0265",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-266",
@@ -10136,19 +9392,16 @@ const PRODUCTS_DATA = [
     "slug": "cartera-mujer-rosa-266",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 336,
-    "originalPrice": 839,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 142,
     "image": "Productos 2/cartera mujer rosa.jpg",
     "description": "Cartera mujer rosa con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0266",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-267",
@@ -10157,19 +9410,16 @@ const PRODUCTS_DATA = [
     "slug": "cartera-para-caballero-cafe-267",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 839,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 149,
     "image": "Productos 2/cartera para caballero cafe.jpg",
     "description": "Cartera para caballero cafe con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0267",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-268",
@@ -10178,19 +9428,16 @@ const PRODUCTS_DATA = [
     "slug": "cartera-para-caballero-negro-268",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 210,
-    "originalPrice": 839,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 156,
     "image": "Productos 2/cartera para caballero negro.jpg",
     "description": "Cartera para caballero negro con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0268",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-269",
@@ -10199,19 +9446,16 @@ const PRODUCTS_DATA = [
     "slug": "cartera-para-hombre-cartera-de-piel-para-hombre-rfid-bloqueo-antirrobo-269",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 336,
-    "originalPrice": 839,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 163,
     "image": "Productos 2/Cartera para Hombre, Cartera de Piel para Hombre RFID Bloqueo Antirrobo.jpg",
     "description": "Cartera para Hombre, Cartera de Piel para Hombre RFID Bloqueo Antirrobo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0269",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-270",
@@ -10220,19 +9464,16 @@ const PRODUCTS_DATA = [
     "slug": "cartera-para-mujer-1-270",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 839,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 170,
     "image": "Productos 2/cartera para mujer 1.jpg",
     "description": "Cartera para mujer 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0270",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-271",
@@ -10262,19 +9503,16 @@ const PRODUCTS_DATA = [
     "slug": "chamarra-azul-marino-hombre-272",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 570,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 184,
     "image": "Productos 2/chamarra azul marino hombre.jpg",
     "description": "Chamarra azul marino hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0272",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-273",
@@ -10283,19 +9521,16 @@ const PRODUCTS_DATA = [
     "slug": "chamarra-de-mesclilla-hombre-273",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 191,
     "image": "Productos 2/chamarra de mesclilla hombre.jpg",
     "description": "Chamarra de mesclilla hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0273",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-274",
@@ -10304,19 +9539,16 @@ const PRODUCTS_DATA = [
     "slug": "chamarra-negra-hombre-274",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 198,
     "image": "Productos 2/chamarra negra hombre.jpg",
     "description": "Chamarra negra hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0274",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-275",
@@ -10325,19 +9557,16 @@ const PRODUCTS_DATA = [
     "slug": "comoda-para-recamara-275",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2096,
-    "originalPrice": 5239,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5239,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 205,
     "image": "Productos 2/comoda para recamara.jpg",
     "description": "Comoda para recamara con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0275",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-276",
@@ -10346,19 +9575,16 @@ const PRODUCTS_DATA = [
     "slug": "conjunto-de-chaqueta-y-pantalones-formales-para-mujer-traje-de-2-276",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1350,
-    "originalPrice": 5399,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 5399,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 212,
     "image": "Productos 2/Conjunto de chaqueta y pantalones formales para mujer, traje de 2.jpg",
     "description": "Conjunto de chaqueta y pantalones formales para mujer, traje de 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0276",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-277",
@@ -10367,19 +9593,16 @@ const PRODUCTS_DATA = [
     "slug": "conjunto-de-chaqueta-y-pantalones-formales-para-mujer-277",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 219,
     "image": "Productos 2/Conjunto de chaqueta y pantalones formales para mujer.jpg",
     "description": "Conjunto de chaqueta y pantalones formales para mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0277",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-278",
@@ -10388,19 +9611,16 @@ const PRODUCTS_DATA = [
     "slug": "gafas-de-sol-rb4418d-en-gris-transparente-sobre-bronce-de-canon-y-polar-mujer-278",
     "category": "ropa",
     "brand": "Ray-Ban",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1200,
-    "originalPrice": 2999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 226,
     "image": "Productos 2/Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar mujer.jpg",
     "description": "Gafas de Sol Rb4418d en Gris transparente sobre bronce de cañón y Polar mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0278",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-279",
@@ -10409,19 +9629,16 @@ const PRODUCTS_DATA = [
     "slug": "lampara-colgante-led-279",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1160,
-    "originalPrice": 2319,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2319,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 233,
     "image": "Productos 2/lampara colgante led.jpg",
     "description": "Lampara colgante led con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0279",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-280",
@@ -10430,19 +9647,16 @@ const PRODUCTS_DATA = [
     "slug": "lampara-de-techo-led-280",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 580,
-    "originalPrice": 2319,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2319,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 240,
     "image": "Productos 2/lampara de techo LED.jpg",
     "description": "Lampara de techo LED con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0280",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-281",
@@ -10451,19 +9665,16 @@ const PRODUCTS_DATA = [
     "slug": "lamparas-colgantes-281",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 928,
-    "originalPrice": 2319,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2319,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 247,
     "image": "Productos 2/lamparas colgantes.jpg",
     "description": "Lamparas colgantes con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0281",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-282",
@@ -10472,9 +9683,9 @@ const PRODUCTS_DATA = [
     "slug": "lentes-de-sol-mujer-modelo-penelope-282",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -75%",
     "badgeType": "offer",
-    "price": 1500,
+    "price": 750,
     "originalPrice": 2999,
     "rating": 4.8,
     "reviewsCount": 254,
@@ -10482,8 +9693,8 @@ const PRODUCTS_DATA = [
     "description": "Lentes de Sol Mujer Modelo Penelope con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0282",
     "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "buenFinDiscount": 75,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -10493,19 +9704,16 @@ const PRODUCTS_DATA = [
     "slug": "lentes-de-sol-mujer-283",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1500,
-    "originalPrice": 2999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 261,
     "image": "Productos 2/lentes de sol mujer.jpg",
     "description": "Lentes de sol mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0283",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-284",
@@ -10514,19 +9722,16 @@ const PRODUCTS_DATA = [
     "slug": "lentes-de-sol-para-hombres-modernos-284",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 750,
-    "originalPrice": 2999,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 268,
     "image": "Productos 2/Lentes de sol para hombres modernos.jpg",
     "description": "Lentes de sol para hombres modernos con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0284",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-285",
@@ -10535,19 +9740,16 @@ const PRODUCTS_DATA = [
     "slug": "lentes-de-sol-para-mujer-285",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1500,
-    "originalPrice": 2999,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 275,
     "image": "Productos 2/lentes de sol para mujer.jpg",
     "description": "Lentes de sol para mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0285",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-286",
@@ -10556,19 +9758,16 @@ const PRODUCTS_DATA = [
     "slug": "lentes-para-sol-mujer-286",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1500,
-    "originalPrice": 2999,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2999,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 282,
     "image": "Productos 2/lentes para sol mujer.jpg",
     "description": "Lentes para sol mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0286",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-287",
@@ -10577,19 +9776,16 @@ const PRODUCTS_DATA = [
     "slug": "lampara-de-techo-de-vidrio-moderna-287",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 928,
-    "originalPrice": 2319,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2319,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 289,
     "image": "Productos 2/Lámpara de techo de vidrio moderna.jpg",
     "description": "Lámpara de techo de vidrio moderna con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0287",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-288",
@@ -10598,19 +9794,16 @@ const PRODUCTS_DATA = [
     "slug": "lamparas-de-techo-de-cristal-luminacion-elegante-para-tu-hogar-288",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 580,
-    "originalPrice": 2319,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2319,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 296,
     "image": "Productos 2/Lámparas de techo de cristal, luminación elegante para tu hogar.jpg",
     "description": "Lámparas de techo de cristal, luminación elegante para tu hogar con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0288",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-289",
@@ -10619,19 +9812,16 @@ const PRODUCTS_DATA = [
     "slug": "mesa-de-centro-moderna-en-blanco-289",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 2620,
-    "originalPrice": 5239,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 5239,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 303,
     "image": "Productos 2/Mesa de Centro Moderna en Blanco.jpg",
     "description": "Mesa de Centro Moderna en Blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0289",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-290",
@@ -10640,19 +9830,16 @@ const PRODUCTS_DATA = [
     "slug": "mesa-de-centro-para-sala-290",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 9760,
-    "originalPrice": 24399,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 24399,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 310,
     "image": "Productos 2/mesa de centro para sala.jpg",
     "description": "Mesa de centro para sala con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0290",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-291",
@@ -10661,9 +9848,9 @@ const PRODUCTS_DATA = [
     "slug": "mesa-de-noche-color-cade-oscuro-291",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -50%",
+    "badge": "Buen Fin -60%",
     "badgeType": "offer",
-    "price": 2620,
+    "price": 2096,
     "originalPrice": 5239,
     "rating": 4.9,
     "reviewsCount": 317,
@@ -10671,8 +9858,8 @@ const PRODUCTS_DATA = [
     "description": "Mesa de noche color cade oscuro con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0291",
     "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
+    "buenFinDiscount": 60,
+    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
     "offerEndDate": "2026-11-21T23:59:59-06:00"
   },
   {
@@ -10682,19 +9869,16 @@ const PRODUCTS_DATA = [
     "slug": "mesa-redonda-292",
     "category": "hogar",
     "brand": "Maison & Confort",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1310,
-    "originalPrice": 5239,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5239,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 324,
     "image": "Productos 2/mesa redonda.jpg",
     "description": "Mesa redonda con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0292",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-293",
@@ -10703,19 +9887,16 @@ const PRODUCTS_DATA = [
     "slug": "mesita-de-noche-1-293",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 288,
-    "originalPrice": 719,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 331,
     "image": "Productos 2/mesita de noche 1.jpg",
     "description": "Mesita de noche 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0293",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-294",
@@ -10724,19 +9905,16 @@ const PRODUCTS_DATA = [
     "slug": "otto-cartera-para-hombre-con-monedero-y-bloqueo-rfid-fal221-294",
     "category": "ropa",
     "brand": "Otto",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 420,
-    "originalPrice": 839,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 839,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 338,
     "image": "Productos 2/otto Cartera Para Hombre Con Monedero Y Bloqueo Rfid Fal221.jpg",
     "description": "Otto Cartera Para Hombre Con Monedero Y Bloqueo Rfid Fal221 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0294",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-295",
@@ -10745,19 +9923,16 @@ const PRODUCTS_DATA = [
     "slug": "playera-de-manga-larga-color-gris-hombre-295",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 345,
     "image": "Productos 2/playera de manga larga color gris hombre.jpg",
     "description": "Playera de manga larga color gris hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0295",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-296",
@@ -10766,19 +9941,16 @@ const PRODUCTS_DATA = [
     "slug": "playera-gris-mujer-296",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 180,
-    "originalPrice": 719,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 352,
     "image": "Productos 2/playera gris mujer.jpg",
     "description": "Playera gris mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0296",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-297",
@@ -10787,19 +9959,16 @@ const PRODUCTS_DATA = [
     "slug": "playera-polo-azul-marino-297",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 359,
     "image": "Productos 2/playera polo azul marino.jpg",
     "description": "Playera polo azul marino con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0297",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-298",
@@ -10808,19 +9977,16 @@ const PRODUCTS_DATA = [
     "slug": "playera-polo-naranja-de-hombre-298",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 366,
     "image": "Productos 2/playera polo naranja de hombre.jpg",
     "description": "Playera polo naranja de hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0298",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-299",
@@ -10829,19 +9995,16 @@ const PRODUCTS_DATA = [
     "slug": "playera-roja-de-mujer-299",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 288,
-    "originalPrice": 719,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 719,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 373,
     "image": "Productos 2/playera roja de mujer.jpg",
     "description": "Playera roja de mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0299",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-300",
@@ -10850,19 +10013,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-fizili-para-hombre-08-300",
     "category": "ropa",
     "brand": "FIZILI",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 570,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 30,
     "image": "Productos 2/Reloj - FIZILI - Para Hombre - 08.jpg",
     "description": "Reloj - FIZILI - Para Hombre - 08 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0300",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-301",
@@ -10871,19 +10031,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-de-hombre-301",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 37,
     "image": "Productos 2/reloj de hombre.jpg",
     "description": "Reloj de hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0301",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-302",
@@ -10892,19 +10049,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-digital-hombre-302",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 912,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 44,
     "image": "Productos 2/reloj digital hombre.jpg",
     "description": "Reloj digital hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0302",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-303",
@@ -10913,19 +10067,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-digital-mujer-303",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 51,
     "image": "Productos 2/reloj digital mujer.jpg",
     "description": "Reloj digital mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0303",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-304",
@@ -10934,19 +10085,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-digital-negro-hombre-304",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 570,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 58,
     "image": "Productos 2/reloj digital negro hombre.jpg",
     "description": "Reloj digital negro hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0304",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-305",
@@ -10955,19 +10103,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-hombre-casio-305",
     "category": "ropa",
     "brand": "Casio",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 912,
-    "originalPrice": 2279,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 65,
     "image": "Productos 2/reloj hombre casio.jpg",
     "description": "Reloj hombre casio con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0305",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-306",
@@ -10976,19 +10121,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-inteligente-para-mujer-color-rosa-306",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 72,
     "image": "Productos 2/reloj inteligente para mujer color rosa.jpg",
     "description": "Reloj inteligente para mujer color rosa con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0306",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-307",
@@ -10997,19 +10139,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-mujer-2-307",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 79,
     "image": "Productos 2/reloj mujer 2.jpg",
     "description": "Reloj mujer 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0307",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-308",
@@ -11018,19 +10157,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-mujer-308",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 570,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 86,
     "image": "Productos 2/reloj mujer.jpg",
     "description": "Reloj mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0308",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-309",
@@ -11039,19 +10175,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-para-hombre-309",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 93,
     "image": "Productos 2/reloj para hombre.jpg",
     "description": "Reloj para hombre con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0309",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-310",
@@ -11060,19 +10193,16 @@ const PRODUCTS_DATA = [
     "slug": "reloj-para-mujer-310",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1140,
-    "originalPrice": 2279,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2279,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 100,
     "image": "Productos 2/reloj para mujer.jpg",
     "description": "Reloj para mujer con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0310",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-311",
@@ -11081,19 +10211,16 @@ const PRODUCTS_DATA = [
     "slug": "set-de-cuchillos-2-311",
     "category": "hogar",
     "brand": "Zwilling J.A. Henckels",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 732,
-    "originalPrice": 1829,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1829,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 107,
     "image": "Productos 2/set de cuchillos 2.jpg",
     "description": "Set de cuchillos 2 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0311",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-312",
@@ -11102,19 +10229,16 @@ const PRODUCTS_DATA = [
     "slug": "set-de-cuchillos-312",
     "category": "hogar",
     "brand": "Zwilling J.A. Henckels",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 457,
-    "originalPrice": 1829,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1829,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 114,
     "image": "Productos 2/set de cuchillos.jpg",
     "description": "Set de cuchillos con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "HOG-PRODUCTOS2-0312",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-313",
@@ -11123,19 +10247,16 @@ const PRODUCTS_DATA = [
     "slug": "tainrunse-vestido-largo-elegante-con-escote-313",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1380,
-    "originalPrice": 2759,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 121,
     "image": "Productos 2/tainrunse vestido largo elegante con escote.jpg",
     "description": "Tainrunse vestido largo elegante con escote con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0313",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-314",
@@ -11144,19 +10265,16 @@ const PRODUCTS_DATA = [
     "slug": "traje-formal-feminino-blanco-314",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2160,
-    "originalPrice": 5399,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 5399,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 128,
     "image": "Productos 2/traje formal feminino blanco.jpg",
     "description": "Traje formal feminino blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0314",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-315",
@@ -11165,19 +10283,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-azul-marino-315",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1380,
-    "originalPrice": 2759,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 135,
     "image": "Productos 2/vestido azul marino.jpg",
     "description": "Vestido azul marino con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0315",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-316",
@@ -11186,19 +10301,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-coctel-azul-316",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 690,
-    "originalPrice": 2759,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 142,
     "image": "Productos 2/vestido coctel azul.jpg",
     "description": "Vestido coctel azul con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0316",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-317",
@@ -11207,19 +10319,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-coctel-blanco-317",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 1104,
-    "originalPrice": 2759,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 149,
     "image": "Productos 2/vestido coctel blanco.jpg",
     "description": "Vestido coctel blanco con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0317",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-318",
@@ -11228,19 +10337,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-coctel-escotado-318",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1380,
-    "originalPrice": 2759,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 156,
     "image": "Productos 2/vestido coctel escotado.jpg",
     "description": "Vestido coctel escotado con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0318",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-319",
@@ -11249,19 +10355,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-coctel-rosa-319",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1380,
-    "originalPrice": 2759,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 163,
     "image": "Productos 2/vestido coctel rosa.jpg",
     "description": "Vestido coctel rosa con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0319",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-320",
@@ -11270,19 +10373,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-de-noche-amarillo-320",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 690,
-    "originalPrice": 2759,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 170,
     "image": "Productos 2/vestido de noche amarillo.jpg",
     "description": "Vestido de noche amarillo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0320",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos2-321",
@@ -11291,19 +10391,16 @@ const PRODUCTS_DATA = [
     "slug": "vestido-de-noche-verde-321",
     "category": "ropa",
     "brand": "D'Avanti Exclusive",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 1380,
-    "originalPrice": 2759,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 2759,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 177,
     "image": "Productos 2/vestido de noche verde.jpg",
     "description": "Vestido de noche verde con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "MOD-PRODUCTOS2-0321",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-322",
@@ -11312,19 +10409,16 @@ const PRODUCTS_DATA = [
     "slug": "carro-buggy-electrico-montable-de-bateria-para-ninos-rojo-322",
     "category": "juguetes",
     "brand": "Kids World",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3060,
-    "originalPrice": 6119,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 6119,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 184,
     "image": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños rojo.jpg",
     "description": "Carro Buggy Electrico Montable De Bateria para Niños rojo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "JUG-PRODUCTOS3-0322",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-323",
@@ -11333,19 +10427,16 @@ const PRODUCTS_DATA = [
     "slug": "carro-buggy-electrico-montable-de-bateria-para-ninos-verde-323",
     "category": "juguetes",
     "brand": "Kids World",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 2448,
-    "originalPrice": 6119,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 6119,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 191,
     "image": "Productos 3/Carro Buggy Electrico Montable De Bateria para Niños verde.jpg",
     "description": "Carro Buggy Electrico Montable De Bateria para Niños verde con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "JUG-PRODUCTOS3-0323",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-324",
@@ -11354,19 +10445,16 @@ const PRODUCTS_DATA = [
     "slug": "montable-electrico-para-ninos-carro-deportivo-bluetooth-luz-led-control-remoto-12v-324",
     "category": "juguetes",
     "brand": "Kids World",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 1530,
-    "originalPrice": 6119,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 6119,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 198,
     "image": "Productos 3/Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v.jpg",
     "description": "Montable Electrico para Niños Carro Deportivo Bluetooth Luz Led Control Remoto 12v con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "JUG-PRODUCTOS3-0324",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-325",
@@ -11375,19 +10463,16 @@ const PRODUCTS_DATA = [
     "slug": "rompecabezas-4d-puzzles-pokemon-charmander-241-piezas-1-325",
     "category": "juguetes",
     "brand": "Kids World",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 310,
-    "originalPrice": 619,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 619,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 205,
     "image": "Productos 3/Rompecabezas 4D Puzzles Pokémon Charmander 241 Piezas 1.jpg",
     "description": "Rompecabezas 4D Puzzles Pokémon Charmander 241 Piezas 1 con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "JUG-PRODUCTOS3-0325",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-326",
@@ -11396,19 +10481,16 @@ const PRODUCTS_DATA = [
     "slug": "set-lego-city-persecucion-en-moto-de-policia-326",
     "category": "juguetes",
     "brand": "LEGO",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 448,
-    "originalPrice": 1119,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 1119,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 212,
     "image": "Productos 3/Set LEGO City Persecución en Moto de Policía.jpg",
     "description": "Set LEGO City Persecución en Moto de Policía con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "JUG-PRODUCTOS3-0326",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-327",
@@ -11417,19 +10499,16 @@ const PRODUCTS_DATA = [
     "slug": "termo-stanley-quencher-h2-0-flowstate-1-18l-rojo-327",
     "category": "deportes",
     "brand": "Stanley",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 720,
-    "originalPrice": 1439,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1439,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 219,
     "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L  rojo.jpg",
     "description": "Termo Stanley Quencher H2.0 FlowState 1.18L rojo con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS3-0327",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-328",
@@ -11438,19 +10517,16 @@ const PRODUCTS_DATA = [
     "slug": "termo-stanley-quencher-h2-0-flowstate-1-18l-gris-328",
     "category": "deportes",
     "brand": "Stanley",
-    "badge": "Buen Fin -75%",
-    "badgeType": "offer",
-    "price": 360,
-    "originalPrice": 1439,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1439,
+    "originalPrice": null,
     "rating": 4.6,
     "reviewsCount": 226,
     "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L gris.jpg",
     "description": "Termo Stanley Quencher H2.0 FlowState 1.18L gris con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS3-0328",
-    "inStock": true,
-    "buenFinDiscount": 75,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 75% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-329",
@@ -11459,19 +10535,16 @@ const PRODUCTS_DATA = [
     "slug": "termo-stanley-quencher-h2-0-flowstate-1-18l-negro-329",
     "category": "deportes",
     "brand": "Stanley",
-    "badge": "Buen Fin -60%",
-    "badgeType": "offer",
-    "price": 576,
-    "originalPrice": 1439,
+    "badge": "Envío Gratis",
+    "badgeType": "shipping",
+    "price": 1439,
+    "originalPrice": null,
     "rating": 4.7,
     "reviewsCount": 233,
     "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L negro.jpg",
     "description": "Termo Stanley Quencher H2.0 FlowState 1.18L negro con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS3-0329",
-    "inStock": true,
-    "buenFinDiscount": 60,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 60% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-330",
@@ -11480,19 +10553,16 @@ const PRODUCTS_DATA = [
     "slug": "termo-stanley-quencher-h2-0-flowstate-1-18l-rosa-330",
     "category": "deportes",
     "brand": "Stanley",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 720,
-    "originalPrice": 1439,
+    "badge": "Nuevo",
+    "badgeType": "new",
+    "price": 1439,
+    "originalPrice": null,
     "rating": 4.8,
     "reviewsCount": 240,
     "image": "Productos 3/Termo Stanley Quencher H2.0 FlowState 1.18L rosa.jpg",
     "description": "Termo Stanley Quencher H2.0 FlowState 1.18L rosa con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "DEP-PRODUCTOS3-0330",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   },
   {
     "id": "prod-productos3-331",
@@ -11501,19 +10571,16 @@ const PRODUCTS_DATA = [
     "slug": "vehiculo-montable-a-bateria-xootz-can-am-atv-12v-con-licencia-gris-electrico-331",
     "category": "juguetes",
     "brand": "Can-Am Licensed",
-    "badge": "Buen Fin -50%",
-    "badgeType": "offer",
-    "price": 3060,
-    "originalPrice": 6119,
+    "badge": "Más vendido",
+    "badgeType": "bestseller",
+    "price": 6119,
+    "originalPrice": null,
     "rating": 4.9,
     "reviewsCount": 247,
     "image": "Productos 3/Vehículo Montable a Batería Xootz Can Am ATV 12V con Licencia Gris Electrico.jpg",
     "description": "Vehículo Montable a Batería Xootz Can Am ATV 12V con Licencia Gris Electrico con acabados de primera calidad y diseño departamental oficial de Callejón Mágico.",
     "sku": "JUG-PRODUCTOS3-0331",
-    "inStock": true,
-    "buenFinDiscount": 50,
-    "offerTitle": "🔥 BUEN FIN MÁGICO · 50% OFF",
-    "offerEndDate": "2026-11-21T23:59:59-06:00"
+    "inStock": true
   }
 ];
 
