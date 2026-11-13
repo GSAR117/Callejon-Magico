@@ -3,7 +3,9 @@
   "target": {
     "namespace": "android_app",
     "package_name": "io.github.gsar117.twa",
-    "sha256_cert_fingerprints": ["99:3E:81:5E:55:9B:E0:29:BE:29:0F:E0:64:8E:3F:0A:B7:5C:EA:BE:5F:33:B1:29:10:1C:02:AC:BA:CA:60:98"]
+    "sha256_cert_fingerprints": [
+      "0B:6D:DC:8C:9B:2F:69:EF:71:3C:AE:10:1D:D1:69:9B:93:76:18:06:5B:0E:C4:FA:22:BE:0F:E6:7C:46:AA:B6",
+      "99:3E:81:5E:55:9B:E0:29:BE:29:0F:E0:64:8E:3F:0A:B7:5C:EA:BE:5F:33:B1:29:10:1C:02:AC:BA:CA:60:98"
+    ]
   }
 }]
-

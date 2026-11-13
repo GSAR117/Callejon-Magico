@@ -35,7 +35,7 @@
   }
 
   function getApkDownloadUrl() {
-    return getBasePublicUrl() + APK_FILENAME;
+    return getBasePublicUrl() + APK_FILENAME + '?v=2';
   }
 
   function registerServiceWorker() {
