@@ -195,12 +195,18 @@
         };
 
         const oldBalance = Number(card.balance) || 0;
+        const creditLimit = Number(card.creditLimit) || 60000;
+        card.creditLimit = creditLimit;
         card.balance = Math.max(0, Number(newBalance));
+        card.debt = Math.max(0, creditLimit - card.balance);
+        if (card.debt === 0) {
+          card.daysOverdue = 0;
+        }
         card.transactions = card.transactions || [];
 
         card.transactions.unshift({
           id: 'tx-adm-' + Date.now(),
-          concept: reason,
+          concept: reason + (card.debt === 0 ? ' (Deuda Liquidada)' : ''),
           amount: changeAmount !== 0 ? changeAmount : (card.balance - oldBalance),
           pointsEarned: 0,
           date: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -231,6 +237,70 @@
       }
     },
 
+    payUserDebt(userEmail, paymentAmount, reason = 'Abono / Pago de deuda en sucursal') {
+      try {
+        const emailKey = (userEmail || '').trim().toLowerCase();
+        const allCards = this.getAllCards();
+        const card = allCards[emailKey] || {
+          cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
+          tier: 'ORO DEPARTAMENTAL',
+          creditLimit: 60000,
+          balance: 60000,
+          points: 500,
+          statementDay: 15,
+          isActive: true,
+          transactions: []
+        };
+
+        const limit = Number(card.creditLimit) || 60000;
+        const currentBal = Number(card.balance) || 0;
+        const currentDebt = typeof card.debt === 'number' ? Math.max(0, Number(card.debt)) : Math.max(0, limit - currentBal);
+
+        let payAmt = Number(paymentAmount) || 0;
+        if (payAmt <= 0 || payAmt > currentDebt) {
+          payAmt = currentDebt;
+        }
+
+        // Aumentar saldo disponible hasta el límite máximo de crédito
+        card.balance = Math.min(limit, currentBal + payAmt);
+        card.debt = Math.max(0, limit - card.balance);
+        if (card.debt === 0) {
+          card.daysOverdue = 0;
+        }
+
+        card.transactions = card.transactions || [];
+        card.transactions.unshift({
+          id: 'tx-pay-' + Date.now(),
+          concept: reason + (card.debt === 0 ? ' — Deuda Liquidada' : ` (Deuda restante: $${card.debt.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`),
+          amount: payAmt,
+          pointsEarned: 0,
+          date: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+          msi: 1
+        });
+
+        allCards[emailKey] = card;
+        localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
+
+        // Sincronizar en la nube con Firebase
+        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncCard === 'function') {
+          window.CallejonFirebase.syncCard(emailKey, card);
+        }
+
+        try {
+          const current = JSON.parse(localStorage.getItem('davanti_current_user') || 'null');
+          if (current && (current.email || '').toLowerCase() === emailKey) {
+            localStorage.setItem(KEYS.LEGACY_CARD, JSON.stringify(card));
+          }
+        } catch (e) {}
+
+        this.notifyChange('balance');
+        return card;
+      } catch (e) {
+        console.error('AdminDB: Error al pagar deuda:', e);
+        return null;
+      }
+    },
+
     updateCreditAccount(userEmail, { creditLimit, daysOverdue, resetOverdueOnPay } = {}) {
       try {
         const emailKey = (userEmail || '').trim().toLowerCase();
@@ -249,8 +319,10 @@
 
         if (typeof creditLimit === 'number' && creditLimit > 0) {
           card.creditLimit = creditLimit;
+          card.debt = Math.max(0, card.creditLimit - (Number(card.balance) || 0));
           if (card.balance > creditLimit) {
             card.balance = creditLimit;
+            card.debt = 0;
           }
         }
         if (typeof daysOverdue === 'number' && daysOverdue >= 0) {

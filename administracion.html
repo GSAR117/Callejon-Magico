@@ -419,28 +419,56 @@
        MODALES DE ADMINISTRACIÓN
        ====================================================================== -->
 
-  <!-- Modal 1: Recargar / Ajustar Saldo de Cliente -->
+  <!-- Modal 1: Recargar / Abonar a Deuda de Cliente -->
   <div class="admin-modal-backdrop" id="modalAdjustBalance">
-    <div class="admin-modal">
+    <div class="admin-modal" style="max-width: 530px;">
       <div class="admin-modal-header">
-        <h3>💳 Recargar Saldo — Tarjeta Callejón Mágico</h3>
+        <h3>💳 Cobro de Deuda & Abonos — Tarjeta Callejón Mágico</h3>
         <button type="button" class="btn-close-modal" aria-label="Cerrar">&times;</button>
       </div>
       <form id="formAdjustBalance">
         <div class="admin-modal-body">
-          <div style="background: rgba(223, 183, 67, 0.1); border: 1px solid rgba(223, 183, 67, 0.25); padding: 1rem; border-radius: 8px; margin-bottom: 1.25rem;">
-            <div style="font-size: 0.78rem; color: var(--admin-text-muted); text-transform: uppercase;">Cliente Seleccionado</div>
-            <strong style="font-size: 1.05rem; color: #ffffff;" id="balanceClientName">-</strong>
-            <div style="font-size: 0.8rem; color: var(--admin-gold);" id="balanceClientEmail">-</div>
-            <div style="margin-top: 0.5rem; font-size: 0.85rem;">
-              Saldo actual: <strong style="color: #ffffff;" id="balanceCurrentDisplay">$0.00 MXN</strong>
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(223, 183, 67, 0.3); padding: 1.15rem; border-radius: 10px; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <div>
+                <div style="font-size: 0.75rem; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Cliente Seleccionado</div>
+                <strong style="font-size: 1.1rem; color: #ffffff;" id="balanceClientName">-</strong>
+                <div style="font-size: 0.8rem; color: var(--admin-gold);" id="balanceClientEmail">-</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="badge-credit-status al-corriente" id="balanceStatusBadge">Al corriente</span>
+              </div>
             </div>
+
+            <!-- Resumen Financiero de la Cuenta -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); text-align: center;">
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 0.5rem; border-radius: 6px;">
+                <span style="font-size: 0.7rem; color: var(--admin-text-muted); display: block;">Línea Total</span>
+                <strong style="font-size: 0.88rem; color: #ffffff;" id="balanceLimitDisplay">$60,000.00</strong>
+              </div>
+              <div style="background: rgba(223, 183, 67, 0.06); padding: 0.5rem; border-radius: 6px;">
+                <span style="font-size: 0.7rem; color: var(--admin-gold); display: block;">Saldo Disponible</span>
+                <strong style="font-size: 0.88rem; color: var(--admin-gold);" id="balanceCurrentDisplay">$0.00 MXN</strong>
+              </div>
+              <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.5rem; border-radius: 6px;">
+                <span style="font-size: 0.7rem; color: #f87171; display: block; font-weight: 700;">Deuda Actual</span>
+                <strong style="font-size: 0.92rem; color: #ef4444; font-weight: 800;" id="balanceDebtDisplay">$0.00 MXN</strong>
+              </div>
+            </div>
+
+            <!-- Botón Rápido: Liquidar Deuda Completa -->
+            <button type="button" id="btnQuickPayAllDebt" style="display: none; margin-top: 0.85rem; width: 100%; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; padding: 0.65rem 1rem; border-radius: 7px; font-weight: 700; font-size: 0.85rem; cursor: pointer; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+              <span>💵 Liquidar Deuda Total</span>
+              <strong id="btnQuickPayAmountText">($0.00 MXN)</strong>
+            </button>
           </div>
 
           <div class="admin-form-group">
             <label for="balanceActionType">Tipo de Operación</label>
             <select id="balanceActionType" class="admin-form-control">
-              <option value="add">➕ Abonar / Recargar saldo al cliente</option>
+              <option value="pay-debt">💳 Abonar a la Deuda (Reduce la deuda y libera saldo de crédito)</option>
+              <option value="liquidate">✨ Liquidar Deuda Completa (Dejar en $0.00 de deuda)</option>
+              <option value="add">➕ Recargar saldo / crédito directo</option>
               <option value="subtract">➖ Restar / Deducir saldo</option>
               <option value="set">🎯 Fijar saldo exacto</option>
             </select>
@@ -448,17 +476,17 @@
 
           <div class="admin-form-group">
             <label for="balanceAmountInput">Monto ($ MXN)</label>
-            <input type="number" id="balanceAmountInput" class="admin-form-control" placeholder="Ej: 1500.00" min="1" step="0.50" required />
+            <input type="number" id="balanceAmountInput" class="admin-form-control" placeholder="Ej: 1500.00" min="0.50" step="0.50" required />
           </div>
 
           <div class="admin-form-group">
             <label for="balanceReasonInput">Concepto / Motivo</label>
-            <input type="text" id="balanceReasonInput" class="admin-form-control" placeholder="Ej: Abono en efectivo en sucursal / Devolución" required />
+            <input type="text" id="balanceReasonInput" class="admin-form-control" placeholder="Ej: Pago de abono a cuenta departamental en caja" required />
           </div>
         </div>
         <div class="admin-modal-footer">
           <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cancelar</button>
-          <button type="submit" class="btn-admin btn-admin-primary">Confirmar Saldo</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Confirmar Pago / Abono</button>
         </div>
       </form>
     </div>
@@ -635,6 +663,7 @@
       </div>
       <div class="admin-modal-footer">
         <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cerrar</button>
+        <button type="button" class="btn-admin btn-admin-secondary" id="btnStmtPayAllDebt" style="display: none; background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1.5px solid #10b981; font-weight: 700;">💵 Liquidar Deuda</button>
         <button type="button" class="btn-admin btn-admin-primary" id="btnStmtOpenAbonar">💳 Abonar a esta Cuenta</button>
       </div>
     </div>

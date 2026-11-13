@@ -372,6 +372,7 @@
       // Elementos de métricas del modal
       const limitEl = document.getElementById('cardMetricLimit');
       const balanceEl = document.getElementById('cardMetricBalance');
+      const debtEl = document.getElementById('cardMetricDebt');
       const pointsEl = document.getElementById('cardMetricPoints');
       const numberEl = document.getElementById('cardDisplayNumber');
       const holderEl = document.getElementById('cardDisplayHolder');
@@ -461,6 +462,7 @@
         // 1. Ocultar los datos de saldo y puntos
         if (limitEl) limitEl.innerHTML = '<span class="metric-locked">••••••</span>';
         if (balanceEl) balanceEl.innerHTML = '<span class="metric-locked">••••••</span>';
+        if (debtEl) debtEl.innerHTML = '<span class="metric-locked">••••••</span>';
         if (pointsEl) pointsEl.innerHTML = '<span class="metric-locked">•••• pts</span>';
 
         // 2. Mostrar aviso informativo de protección
@@ -483,8 +485,13 @@
 
       } else {
         // Con usuario en sesión: Revelar datos reales
+        const numDebt = typeof card.debt === 'number' ? Math.max(0, Number(card.debt)) : Math.max(0, (Number(card.creditLimit) || 60000) - (Number(card.balance) || 0));
         if (limitEl) limitEl.textContent = `$${card.creditLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
         if (balanceEl) balanceEl.textContent = `$${card.balance.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+        if (debtEl) {
+          debtEl.textContent = `$${numDebt.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+          debtEl.style.color = numDebt > 0 ? '#ef4444' : '#10b981';
+        }
         if (pointsEl) pointsEl.textContent = `${card.points.toLocaleString()} pts`;
 
         // Remover aviso de visitante
@@ -662,6 +669,10 @@
             <div class="card-metric-card">
               <span class="card-metric-label">Saldo Disponible</span>
               <span class="card-metric-value highlight" id="cardMetricBalance">$${card.balance.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div class="card-metric-card">
+              <span class="card-metric-label">Deuda Actual</span>
+              <span class="card-metric-value" id="cardMetricDebt" style="color: ${((Number(card.creditLimit) || 60000) - (Number(card.balance) || 0)) > 0 ? '#ef4444' : '#10b981'}; font-weight: 800;">$${Math.max(0, (Number(card.creditLimit) || 60000) - (Number(card.balance) || 0)).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
             </div>
             <div class="card-metric-card">
               <span class="card-metric-label">Puntos Mágicos</span>

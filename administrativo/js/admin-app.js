@@ -517,6 +517,37 @@
     // Formulario de Recargar / Ajustar Saldo
     const formBalance = document.getElementById('formAdjustBalance');
     if (formBalance) {
+      // Cambio de tipo de operación en modal de abono
+      const actionSelect = document.getElementById('balanceActionType');
+      if (actionSelect) {
+        actionSelect.addEventListener('change', () => {
+          if (!activeBalanceUser) return;
+          const val = actionSelect.value;
+          const amountInput = document.getElementById('balanceAmountInput');
+          const reasonInput = document.getElementById('balanceReasonInput');
+          if (val === 'liquidate' || val === 'pay-debt') {
+            if (activeBalanceUser.debt > 0) {
+              amountInput.value = activeBalanceUser.debt.toFixed(2);
+            }
+            reasonInput.value = val === 'liquidate' ? 'Liquidación total de deuda departamental en caja' : 'Abono a la deuda departamental en caja';
+          } else if (val === 'add') {
+            reasonInput.value = 'Recarga / Incremento de crédito en caja';
+          }
+        });
+      }
+
+      // Botón rápido de liquidar deuda completa
+      const quickPayBtn = document.getElementById('btnQuickPayAllDebt');
+      if (quickPayBtn) {
+        quickPayBtn.addEventListener('click', () => {
+          if (!activeBalanceUser) return;
+          document.getElementById('balanceActionType').value = 'liquidate';
+          document.getElementById('balanceAmountInput').value = (activeBalanceUser.debt || 0).toFixed(2);
+          document.getElementById('balanceReasonInput').value = 'Liquidación total de deuda departamental en caja';
+          formBalance.dispatchEvent(new Event('submit'));
+        });
+      }
+
       formBalance.addEventListener('submit', (e) => {
         e.preventDefault();
         if (!activeBalanceUser) return;
@@ -525,8 +556,17 @@
         const amount = parseFloat(document.getElementById('balanceAmountInput').value) || 0;
         const reason = document.getElementById('balanceReasonInput').value.trim() || 'Ajuste en Panel Administrativo';
 
-        if (amount <= 0) {
+        if (amount <= 0 && action !== 'liquidate') {
           alert('Por favor ingresa un monto válido mayor a 0');
+          return;
+        }
+
+        // Operación 1: Pago o liquidación de deuda
+        if (action === 'pay-debt' || action === 'liquidate') {
+          const payAmt = action === 'liquidate' ? (activeBalanceUser.debt || 0) : amount;
+          window.AdminDB.payUserDebt(activeBalanceUser.email, payAmt, reason);
+          closeAllModals();
+          showToast(`✅ Pago de $${payAmt.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN aplicado exitosamente a la cuenta de ${activeBalanceUser.name || activeBalanceUser.email}`, 'success');
           return;
         }
 
@@ -684,13 +724,65 @@
     }
   }
 
-  function openBalanceModal(email, name, currentBalance) {
-    activeBalanceUser = { email, name, currentBalance };
-    document.getElementById('balanceClientName').textContent = name || email;
+  function openBalanceModal(email, name, currentBalance, initialAction = 'pay-debt') {
+    const users = window.AdminDB.getUsers();
+    const u = users.find(x => (x.email || '').toLowerCase() === (email || '').toLowerCase()) || {};
+    const limit = Number(u.creditLimit) || 60000;
+    const balance = typeof currentBalance !== 'undefined' ? Number(currentBalance) : (Number(u.balance) || 0);
+    const debt = typeof u.debt === 'number' ? Math.max(0, Number(u.debt)) : Math.max(0, limit - balance);
+
+    activeBalanceUser = {
+      email,
+      name: name || u.fullName || email,
+      currentBalance: balance,
+      debt: debt,
+      creditLimit: limit
+    };
+
+    const fmt = (n) => '$' + Number(n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 }) + ' MXN';
+
+    document.getElementById('balanceClientName').textContent = activeBalanceUser.name;
     document.getElementById('balanceClientEmail').textContent = email;
-    document.getElementById('balanceCurrentDisplay').textContent = '$' + Number(currentBalance || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 }) + ' MXN';
-    document.getElementById('balanceAmountInput').value = '';
-    document.getElementById('balanceReasonInput').value = 'Abono en sucursal / Recarga de saldo';
+
+    const limitEl = document.getElementById('balanceLimitDisplay');
+    if (limitEl) limitEl.textContent = fmt(limit);
+
+    const balanceEl = document.getElementById('balanceCurrentDisplay');
+    if (balanceEl) balanceEl.textContent = fmt(balance);
+
+    const debtEl = document.getElementById('balanceDebtDisplay');
+    if (debtEl) {
+      debtEl.textContent = fmt(debt);
+      debtEl.style.color = debt > 0 ? '#ef4444' : '#10b981';
+    }
+
+    const badgeEl = document.getElementById('balanceStatusBadge');
+    if (badgeEl) {
+      badgeEl.className = `badge-credit-status ${u.creditStatus || (debt > 0 ? 'al-corriente' : 'al-corriente')}`;
+      badgeEl.textContent = u.creditStatusLabel || (debt > 0 ? 'Con saldo deudor' : 'Al corriente');
+    }
+
+    const actionSelect = document.getElementById('balanceActionType');
+    const amountInput = document.getElementById('balanceAmountInput');
+    const reasonInput = document.getElementById('balanceReasonInput');
+    const quickPayBtn = document.getElementById('btnQuickPayAllDebt');
+    const quickPayText = document.getElementById('btnQuickPayAmountText');
+
+    if (debt > 0) {
+      if (actionSelect) actionSelect.value = initialAction;
+      if (quickPayBtn) {
+        quickPayBtn.style.display = 'flex';
+        if (quickPayText) quickPayText.textContent = `(${fmt(debt)})`;
+      }
+      amountInput.value = debt.toFixed(2);
+      reasonInput.value = initialAction === 'liquidate' ? 'Liquidación total de deuda departamental' : 'Abono a la deuda departamental en caja';
+    } else {
+      if (actionSelect) actionSelect.value = 'add';
+      if (quickPayBtn) quickPayBtn.style.display = 'none';
+      amountInput.value = '';
+      reasonInput.value = 'Recarga / Incremento de crédito en caja';
+    }
+
     openModal(DOM.modalBalance);
   }
 
@@ -699,7 +791,13 @@
     const u = users.find(x => (x.email || '').toLowerCase() === (email || '').toLowerCase());
     if (!u) return;
 
-    activeBalanceUser = { email: u.email, name: u.fullName, currentBalance: u.balance };
+    activeBalanceUser = {
+      email: u.email,
+      name: u.fullName,
+      currentBalance: u.balance,
+      debt: u.debt || 0,
+      creditLimit: u.creditLimit || 60000
+    };
 
     const fmt = (n) => '$' + Number(n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 });
     const codeEl = document.getElementById('stmtClientCode');
@@ -728,6 +826,22 @@
     if (debtEl) debtEl.textContent = fmt(u.debt || 0);
     if (overdueEl) overdueEl.textContent = `${Number(u.daysOverdue || 0)} d`;
     if (inputLimit) inputLimit.value = Number(u.creditLimit || 60000);
+    if (inputOverdue) inputOverdue.value = Number(u.daysOverdue || 0);
+
+    // Botón Liquidar Deuda en el modal de estado de cuenta
+    const btnStmtPayDebt = document.getElementById('btnStmtPayAllDebt');
+    if (btnStmtPayDebt) {
+      if ((u.debt || 0) > 0) {
+        btnStmtPayDebt.style.display = 'inline-block';
+        btnStmtPayDebt.textContent = `💵 Liquidar Deuda (${fmt(u.debt)})`;
+        btnStmtPayDebt.onclick = () => {
+          closeAllModals();
+          openBalanceModal(u.email, u.fullName, u.balance, 'liquidate');
+        };
+      } else {
+        btnStmtPayDebt.style.display = 'none';
+      }
+    }
     if (inputOverdue) inputOverdue.value = Number(u.daysOverdue || 0);
 
     if (txListEl) {
