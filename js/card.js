@@ -757,20 +757,20 @@
 
         // 2. Si el saldo disponible es 0 o menor (ha agotado su crédito y llegó al límite)
         if (numBalance <= 0) {
-          this.showToast('⚠️ Has alcanzado el límite de tu tarjeta ($0.00 MXN disponible). Acude a sucursal para abonar.');
+          this.showToast('⚠️ Saldo agotado ($0.00 MXN). Debes acudir personalmente a una sucursal para recargar tu tarjeta.');
           this.showSucursalModal(
-            'Has alcanzado el límite de tu Tarjeta Callejón Mágico ($0.00 MXN disponible). Para abonar a tu saldo y rehabilitar tu línea de crédito, por favor acude a tu sucursal departamental Callejón Mágico más cercana.',
-            '⚠️ Límite de Crédito Agotado'
+            'Has alcanzado el límite de tu Tarjeta Callejón Mágico ($0.00 MXN disponible). Para recargar tu tarjeta y rehabilitar tu línea de crédito, debes acudir personalmente a una de nuestras sucursales existentes:',
+            '⚠️ Límite Agotado — Acude a Sucursal'
           );
           return;
         }
 
         // 3. Si ya llegó al límite máximo de crédito permitido ($60,000)
         if (numBalance >= numLimit) {
-          this.showToast(`⚠️ Tu tarjeta ya alcanzó el límite máximo de $${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN.`);
+          this.showToast(`⚠️ Límite alcanzado ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). Acude personalmente a sucursal para recargar o ampliar tu línea.`);
           this.showSucursalModal(
-            `Tu Tarjeta Callejón Mágico ya cuenta con el límite máximo de saldo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). No es posible realizar más abonos. Si deseas una ampliación de tu línea de crédito, acude a tu sucursal Callejón Mágico más cercana.`,
-            '⚠️ Límite Máximo de Saldo Alcanzado'
+            `Tu Tarjeta Callejón Mágico ya alcanzó el límite máximo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). No es posible abonar más saldo en línea; si deseas recargar un monto mayor o ampliar tu línea de crédito, debes acudir personalmente a una de nuestras sucursales existentes:`,
+            '⚠️ Límite Máximo Alcanzado — Acude a Sucursal'
           );
           return;
         }
@@ -784,15 +784,15 @@
           if (res.reachedLimit) {
             setTimeout(() => {
               this.showSucursalModal(
-                `¡Excelente! Con este abono tu tarjeta ha alcanzado el límite máximo de saldo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN). Si deseas una ampliación de tu línea de crédito, por favor acude a tu sucursal Callejón Mágico más cercana.`,
-                '⚠️ Límite Máximo de Saldo Alcanzado'
+                `¡Tu tarjeta ha alcanzado el límite máximo de saldo disponible ($${numLimit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)! Para recargas adicionales o ampliación de línea de crédito, debes acudir personalmente a una de nuestras sucursales existentes:`,
+                '⚠️ Límite Máximo Alcanzado — Acude a Sucursal'
               );
-            }, 400);
+            }, 350);
           }
         } else {
           if (res.limitReached || res.atLimit) {
             this.showToast(res.message);
-            this.showSucursalModal(res.message, '⚠️ Límite de Saldo Alcanzado');
+            this.showSucursalModal(res.message, '⚠️ Límite Alcanzado — Acude a Sucursal');
           } else {
             this.showToast(res.message);
           }
