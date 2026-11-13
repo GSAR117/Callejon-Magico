@@ -794,19 +794,6 @@
               ⏳ ${remainingLabel}
             </span>
           </td>
-          <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; text-align: right;">
-            <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
-              ${!isExpired ? `
-                <button type="button" class="btn-table-action" onclick="window.CallejonOffers.setCustomOfferDate('${id}', 2)" title="Hacer que venza en 2 minutos para ver la cuenta regresiva rápida" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.76rem; font-weight: 700; cursor: pointer;">
-                  ⚡ Vence en 2m
-                </button>
-              ` : `
-                <button type="button" class="btn-table-action" onclick="window.CallejonOffers.restoreOffer('${id}', 10)" title="Reactivar oferta por 10 minutos" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.76rem; font-weight: 700; cursor: pointer;">
-                  🔄 Reactivar 10m
-                </button>
-              `}
-            </div>
-          </td>
         </tr>
       `;
     }).join('');
@@ -834,7 +821,6 @@
               <th style="padding: 0.75rem 1rem; font-size: 0.78rem; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0;">Producto</th>
               <th style="padding: 0.75rem 1rem; font-size: 0.78rem; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0;">Precio</th>
               <th style="padding: 0.75rem 1rem; font-size: 0.78rem; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0;">Fecha Límite</th>
-              <th style="padding: 0.75rem 1rem; font-size: 0.78rem; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; text-align: right;">Acciones Demo</th>
             </tr>
           </thead>
           <tbody>
@@ -845,11 +831,8 @@
 
       <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <span style="font-size: 0.82rem; color: #64748b;">
-          💡 <em>Puedes cambiar fechas o forzar el fin de cualquier oferta para observar cómo el precio regresa a su valor regular original.</em>
+          🔥 <em>Calendario oficial de ofertas del Buen Fin Mágico (13 al 21 de noviembre de 2026). Al vencer el plazo, los precios regresan automáticamente a su valor regular.</em>
         </span>
-        <button type="button" onclick="window.CallejonOffers.resetAllOffers()" style="background: #0b1b3d; color: #ffffff; border: none; padding: 0.55rem 1.15rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
-          Restablecer cronograma oficial
-        </button>
       </div>
     `;
   }
