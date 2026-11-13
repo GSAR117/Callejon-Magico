@@ -14,30 +14,27 @@
   // Copia de seguridad de los valores originales de los productos en oferta
   const initialOfferBackups = {};
 
-  // Cronograma predeterminado sincronizado con la fecha actual del sistema (Noviembre 2026)
-  // Permite que haya ofertas con diferentes plazos: inmediatas (para prueba en vivo), de hoy y de fin de semana
+  // Cronograma oficial del BUEN FIN MÁGICO: Del 13 al 21 de Noviembre de 2026
+  const BUEN_FIN_END_DATE = '2026-11-21T23:59:59-06:00';
   const DEFAULT_SCHEDULED_DATES = {
-    // ⚡ Ofertas Especiales de Noviembre (Vigentes hasta el 20 de Noviembre)
-    'fashion-4': '2026-11-20T23:59:59-06:00',   // Bolso Tote Michael Kors
-    'tech-4': '2026-11-20T23:59:59-06:00',      // Smart TV Samsung 55"
-    'gaming-con-1': '2026-11-20T23:59:59-06:00',// PS5 Slim Edición Digital
-    'home-2': '2026-11-20T23:59:59-06:00',      // Batería Cocina Hierro Fundido
-    'sport-8': '2026-11-20T23:59:59-06:00',     // Termo Stanley Quencher
-    'beauty-2': '2026-11-20T23:59:59-06:00',    // Perfume Sauvage Dior
-    'toy-3': '2026-11-20T23:59:59-06:00',       // Set Castillo de Construcción
-
-    // 🛍️ Gran Venta Departamental Callejón Mágico (Vigentes hasta el 25 de Noviembre)
-    'fash-clm-2': '2026-11-25T23:59:59-06:00',   // Vestido Satín
-    'tech-clm-1': '2026-11-25T23:59:59-06:00',   // Bocina Backdrop BD92
-    'tech-16': '2026-11-25T23:59:59-06:00',      // Monitor Curvo Gamer Samsung Odyssey OLED G9
-    'home-10': '2026-11-25T23:59:59-06:00',      // Freidora DualZone
-    'sport-clm-3': '2026-11-25T23:59:59-06:00',  // Red Portería Nike Pro
-    'gaming-acc-1': '2026-11-25T23:59:59-06:00', // Headset Razer BlackShark
-    'toy-clm-4': '2026-11-25T23:59:59-06:00',    // Auto Control Remoto
-    'beauty-8': '2026-11-25T23:59:59-06:00'      // Tratamiento Facial
+    'fashion-4': BUEN_FIN_END_DATE,
+    'tech-4': BUEN_FIN_END_DATE,
+    'gaming-con-1': BUEN_FIN_END_DATE,
+    'home-2': BUEN_FIN_END_DATE,
+    'sport-8': BUEN_FIN_END_DATE,
+    'beauty-2': BUEN_FIN_END_DATE,
+    'toy-3': BUEN_FIN_END_DATE,
+    'fash-clm-2': BUEN_FIN_END_DATE,
+    'tech-clm-1': BUEN_FIN_END_DATE,
+    'tech-16': BUEN_FIN_END_DATE,
+    'home-10': BUEN_FIN_END_DATE,
+    'sport-clm-3': BUEN_FIN_END_DATE,
+    'gaming-acc-1': BUEN_FIN_END_DATE,
+    'toy-clm-4': BUEN_FIN_END_DATE,
+    'beauty-8': BUEN_FIN_END_DATE
   };
 
-  const DEFAULT_FUTURE_DATE = '2026-11-25T23:59:59-06:00'; // 25 de Noviembre para el resto de ofertas
+  const DEFAULT_FUTURE_DATE = BUEN_FIN_END_DATE; // Cierre oficial Buen Fin: 21 de Noviembre, 23:59 hrs
 
   /**
    * Obtiene la lista de IDs de ofertas marcadas como expiradas

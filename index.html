@@ -33,8 +33,8 @@
   <div class="top-ticker">
     <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
       <div class="top-ticker-content">
-        <span class="top-ticker-tag">Callejón Mágico</span>
-        <span>✨ Hasta 18 Meses Sin Intereses + Envío de Cortesía en compras mayores a $999</span>
+        <span class="top-ticker-tag" style="background: #dc2626; color: #fff;">BUEN FIN MÁGICO</span>
+        <span>🔥 Del 13 al 21 de Noviembre: <strong>50%, 60% y 75% de Descuento</strong> en toda la tienda + 18 MSI</span>
       </div>
       <div class="top-ticker-links">
         <a href="#pedidos" class="open-orders-modal-btn">📦 Mis Pedidos & Rastreo</a>
@@ -338,21 +338,43 @@
   <section class="hero-section" id="heroSection">
     <div class="hero-slider-wrapper">
 
-      <!-- Slide 1 (The exact photo & headline from user image) -->
+      <!-- Slide 1 (BUEN FIN MÁGICO: 13 al 21 de Noviembre 2026) -->
       <div class="hero-slide active">
-        <img src="assets/images/hero_banner.jpg" alt="Experiencia de compras Callejón Mágico" class="hero-bg-img" />
-        <div class="hero-overlay-gradient"></div>
+        <img src="assets/images/hero_banner.jpg" alt="Buen Fin Mágico Callejón Mágico" class="hero-bg-img" />
+        <div class="hero-overlay-gradient" style="background: linear-gradient(95deg, rgba(7, 14, 30, 0.94) 0%, rgba(15, 23, 42, 0.85) 55%, rgba(185, 28, 28, 0.45) 100%);"></div>
 
         <div class="container" style="position: relative; z-index: 2;">
-          <div class="hero-content">
-            <span class="hero-tagline">TODO LO QUE NECESITAS EN UN SOLO LUGAR</span>
-            <h1 class="hero-title">Tu estilo, tu hogar,<br>tus mejores momentos</h1>
+          <div class="hero-content" style="max-width: 720px;">
+            <span class="hero-tagline" style="background: linear-gradient(90deg, #dc2626, #b91c1c); color: #fff; padding: 6px 14px; border-radius: 999px; display: inline-block; font-weight: 800; letter-spacing: 0.08em;">
+              🔥 BUEN FIN MÁGICO · 13 AL 21 DE NOVIEMBRE 2026
+            </span>
+            <h1 class="hero-title" style="margin-top: 1rem;">
+              Descuentos de locura:<br>
+              <span style="color: #dfb743;">50%, 60% y hasta 75% OFF</span>
+            </h1>
             <p class="hero-description">
-              Ropa, tecnología, hogar, belleza y mucho más.<br>
-              Descubre todo lo que tenemos para ti.
+              9 días exclusivos de rebajas reales en Moda, Tecnología, Videojuegos, Hogar, Belleza, Deportes y Juguetes.<br>
+              ¡Aprovecha antes del 21 de noviembre a las 23:59 hrs!
             </p>
-            <a href="#productos-destacados" class="hero-cta-btn">
-              Comprar ahora
+
+            <!-- Accesos Directos por Porcentaje -->
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem;">
+              <button type="button" onclick="window.filterBuenFin && window.filterBuenFin('discount-50')"
+                style="background: rgba(255,255,255,0.12); border: 1.5px solid #dfb743; color: #fff; padding: 0.55rem 1.2rem; border-radius: 999px; font-weight: 800; font-size: 0.9rem; cursor: pointer; backdrop-filter: blur(8px);">
+                🏷️ Ver 50% OFF
+              </button>
+              <button type="button" onclick="window.filterBuenFin && window.filterBuenFin('discount-60')"
+                style="background: rgba(255,255,255,0.12); border: 1.5px solid #f59e0b; color: #fff; padding: 0.55rem 1.2rem; border-radius: 999px; font-weight: 800; font-size: 0.9rem; cursor: pointer; backdrop-filter: blur(8px);">
+                ⚡ Ver 60% OFF
+              </button>
+              <button type="button" onclick="window.filterBuenFin && window.filterBuenFin('discount-75')"
+                style="background: linear-gradient(135deg, #dc2626, #991b1b); border: 1.5px solid #fca5a5; color: #fff; padding: 0.55rem 1.2rem; border-radius: 999px; font-weight: 800; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 15px rgba(220,38,38,0.4);">
+                💎 Ver 75% OFF
+              </button>
+            </div>
+
+            <a href="#productos-destacados" class="hero-cta-btn" onclick="window.filterBuenFin && window.filterBuenFin('buenfin')">
+              Explorar todo el Buen Fin
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                 stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -564,12 +586,11 @@
         </a>
       </div>
 
-      <!-- Banner de Ofertas por Tiempo Limitado -->
-      <div class="limited-offers-ribbon" id="limitedOffersRibbon">
+      <!-- Banner de Ofertas por Tiempo Limitado (BUEN FIN MÁGICO) -->
+      <div class="limited-offers-ribbon" id="limitedOffersRibbon" style="background: linear-gradient(135deg, #111827 0%, #7f1d1d 100%); border: 1px solid rgba(223, 183, 67, 0.4);">
         <div class="ribbon-left">
-          <span class="ribbon-flash-badge">⚡ OFERTAS POR TIEMPO LIMITADO</span>
-          <span class="ribbon-text">Aprovecha los descuentos exclusivos antes de que finalicen y <strong>vuelvan a su
-              precio original</strong>.</span>
+          <span class="ribbon-flash-badge" style="background: #dc2626; color: #fff;">🔥 BUEN FIN MÁGICO · 13 AL 21 NOV</span>
+          <span class="ribbon-text">Descuentos reales de <strong>50%, 60% y 75% OFF</strong> vigentes hasta el <strong>21 de noviembre</strong> antes de volver a su precio original.</span>
         </div>
         <div class="ribbon-right" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
           <button type="button" class="btn-ribbon-schedule" onclick="window.CallejonOffers.openOffersModal()"
@@ -577,8 +598,8 @@
             📅 Calendario & Fechas
           </button>
           <button type="button" class="btn-ribbon-filter-offer"
-            onclick="document.querySelector('.filter-tab-btn[data-filter=\'offer\']').click()">
-            Ver ofertas activas →
+            onclick="window.filterBuenFin && window.filterBuenFin('discount-75')">
+            Ver 75% OFF →
           </button>
         </div>
       </div>
@@ -586,10 +607,12 @@
       <!-- Quick Filter Pills -->
       <div class="products-filter-tabs">
         <button class="filter-tab-btn active" data-filter="all">Todos los productos</button>
+        <button class="filter-tab-btn" data-filter="buenfin" style="border-color: #dc2626; color: #dc2626; font-weight: 700;">🔥 Buen Fin Mágico</button>
+        <button class="filter-tab-btn" data-filter="discount-50">🏷️ 50% OFF</button>
+        <button class="filter-tab-btn" data-filter="discount-60">⚡ 60% OFF</button>
+        <button class="filter-tab-btn" data-filter="discount-75">💎 75% OFF</button>
         <button class="filter-tab-btn" data-filter="bestseller">Más vendidos</button>
-        <button class="filter-tab-btn" data-filter="offer">En oferta</button>
         <button class="filter-tab-btn" data-filter="shipping">Envío de cortesía</button>
-        <button class="filter-tab-btn" data-filter="new">Nuevos lanzamientos</button>
       </div>
 
       <!-- 6-Column Responsive Product Grid -->

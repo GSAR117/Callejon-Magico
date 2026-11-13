@@ -158,8 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (State.activeFilter === 'bestseller') {
       filtered = filtered.filter(p => p.badgeType === 'bestseller');
-    } else if (State.activeFilter === 'offer') {
-      filtered = filtered.filter(p => p.badgeType === 'offer' || p.originalPrice !== null);
+    } else if (State.activeFilter === 'offer' || State.activeFilter === 'buenfin') {
+      filtered = filtered.filter(p => p.badgeType === 'offer' || (p.originalPrice && p.originalPrice > p.price));
+    } else if (State.activeFilter === 'discount-50') {
+      filtered = filtered.filter(p => p.buenFinDiscount === 50 || (p.originalPrice && Math.round((1 - p.price / p.originalPrice) * 100) === 50));
+    } else if (State.activeFilter === 'discount-60') {
+      filtered = filtered.filter(p => p.buenFinDiscount === 60 || (p.originalPrice && Math.round((1 - p.price / p.originalPrice) * 100) === 60));
+    } else if (State.activeFilter === 'discount-75') {
+      filtered = filtered.filter(p => p.buenFinDiscount === 75 || (p.originalPrice && Math.round((1 - p.price / p.originalPrice) * 100) === 75));
     } else if (State.activeFilter === 'new') {
       filtered = filtered.filter(p => p.badgeType === 'new');
     } else if (State.activeFilter === 'shipping') {
@@ -2296,6 +2302,18 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast,
     openCheckoutModal: () => openModal('checkout'),
     openOrdersModal: (targetNum) => window.CallejonOrders?.openModal(targetNum)
+  };
+
+  window.filterBuenFin = function(filterName) {
+    const targetTab = document.querySelector(`.filter-tab-btn[data-filter="${filterName}"]`);
+    if (targetTab) {
+      targetTab.click();
+    } else {
+      State.activeFilter = filterName || 'buenfin';
+      renderProducts();
+    }
+    const sec = document.getElementById('productos-destacados') || document.getElementById('productsGrid');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   // Run on start
