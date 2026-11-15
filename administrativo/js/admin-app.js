@@ -117,6 +117,9 @@
   // RENDER GENERAL
   // =========================================================================
   function renderAll() {
+    if (window.AdminAuth && typeof window.AdminAuth.isAuthenticated === 'function' && !window.AdminAuth.isAuthenticated()) {
+      return;
+    }
     renderKPIs();
     renderDashboardOverview();
     renderUsersTable();

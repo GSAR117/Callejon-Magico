@@ -1220,3 +1220,370 @@ select.admin-form-control option {
   border-radius: var(--admin-radius-sm);
 }
 
+/* ==========================================================================
+   PORTAL DE LOGIN ADMINISTRATIVO SEGURO (CALLEJÓN MÁGICO)
+   ========================================================================== */
+.admin-login-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 15%, #0f2347 0%, #070e1e 65%, #03060d 100%);
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(11, 23, 48, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(223, 183, 67, 0.35);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75), 0 0 40px rgba(223, 183, 67, 0.15);
+  animation: adminLoginScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+@keyframes adminLoginScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.admin-login-icon-box {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 1.1rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(223, 183, 67, 0.2), rgba(223, 183, 67, 0.05));
+  border: 1.5px solid var(--admin-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--admin-gold);
+  box-shadow: 0 0 25px rgba(223, 183, 67, 0.3);
+}
+
+.admin-login-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.admin-login-badge {
+  font-size: 0.65rem;
+  background: linear-gradient(135deg, #dfb743, #c59b27);
+  color: #070e1e;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-login-subtitle {
+  font-size: 0.85rem;
+  color: var(--admin-text-muted);
+  line-height: 1.45;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.admin-login-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-login-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.admin-login-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-login-input-icon {
+  position: absolute;
+  left: 0.95rem;
+  width: 18px;
+  height: 18px;
+  color: var(--admin-text-dark);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.admin-login-input {
+  width: 100%;
+  height: 48px;
+  background: rgba(7, 14, 30, 0.85);
+  border: 1.5px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  padding: 0 2.75rem 0 2.75rem;
+  font-family: inherit;
+  font-size: 0.94rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.admin-login-input:focus {
+  border-color: var(--admin-gold);
+  box-shadow: 0 0 0 3px rgba(223, 183, 67, 0.22);
+  background: rgba(11, 23, 48, 0.95);
+}
+
+.admin-login-input:focus + .admin-login-input-icon,
+.admin-login-input-wrap:focus-within .admin-login-input-icon {
+  color: var(--admin-gold);
+}
+
+.admin-login-toggle-pwd {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.admin-login-toggle-pwd:hover {
+  color: var(--admin-gold);
+}
+
+.admin-login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--admin-text-muted);
+}
+
+.admin-login-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.admin-login-remember input {
+  accent-color: var(--admin-gold);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.admin-login-btn-submit {
+  height: 50px;
+  width: 100%;
+  background: linear-gradient(135deg, #dfb743, #c59b27);
+  color: #070e1e;
+  border: none;
+  border-radius: var(--admin-radius-sm);
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 18px rgba(223, 183, 67, 0.35);
+  margin-top: 0.35rem;
+}
+
+.admin-login-btn-submit:hover {
+  background: linear-gradient(135deg, #edd06b, #dfb743);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(223, 183, 67, 0.45);
+}
+
+.admin-login-btn-submit:active {
+  transform: translateY(0);
+}
+
+.admin-login-btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.admin-login-error-banner {
+  display: none;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 0.95rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--admin-radius-sm);
+  color: #fca5a5;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  animation: adminLoginShake 0.35s ease;
+}
+
+.admin-login-error-banner.visible {
+  display: flex;
+}
+
+@keyframes adminLoginShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.admin-login-help-card {
+  margin-top: 1.5rem;
+  background: rgba(223, 183, 67, 0.06);
+  border: 1px dashed rgba(223, 183, 67, 0.28);
+  border-radius: var(--admin-radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  line-height: 1.45;
+}
+
+.admin-login-help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--admin-gold);
+  user-select: none;
+}
+
+.admin-login-help-body {
+  margin-top: 0.55rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(223, 183, 67, 0.15);
+}
+
+.admin-login-cred-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.admin-login-cred-badge {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.admin-login-footer-link {
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+.admin-login-footer-link a {
+  color: var(--admin-text-muted);
+  font-size: 0.82rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s ease;
+}
+
+.admin-login-footer-link a:hover {
+  color: var(--admin-gold);
+}
+
+/* ==========================================================================
+   BOTONES DE SESIÓN ADMINISTRATIVA EN TOPBAR
+   ========================================================================== */
+.admin-user-pill-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.btn-admin-logout {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+  height: 38px;
+}
+
+.btn-admin-logout:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-admin-key {
+  background: rgba(223, 183, 67, 0.1);
+  border: 1px solid rgba(223, 183, 67, 0.3);
+  color: var(--admin-gold);
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+  height: 38px;
+}
+
+.btn-admin-key:hover {
+  background: rgba(223, 183, 67, 0.22);
+  border-color: var(--admin-gold);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+
