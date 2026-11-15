@@ -430,7 +430,7 @@
         badgeStockText = `¡Poco stock! (${p.stock})`;
       }
 
-      const folderClass = p.folder === 'Productos 3' ? 'folder-p3' : (p.folder === 'Productos 2' ? 'folder-p2' : 'folder-p1');
+      const folderClass = p.folder === 'Productos 4' ? 'folder-p4' : (p.folder === 'Productos 3' ? 'folder-p3' : (p.folder === 'Productos 2' ? 'folder-p2' : 'folder-p1'));
 
       return `
         <tr>

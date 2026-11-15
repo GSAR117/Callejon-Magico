@@ -577,7 +577,8 @@
           const stock = typeof stockMap[p.id] !== 'undefined' ? stockMap[p.id] : 15;
           const imgLower = String(p.image || '').toLowerCase();
           let folder = 'Productos';
-          if (imgLower.startsWith('productos 3/')) folder = 'Productos 3';
+          if (imgLower.startsWith('productos 4/')) folder = 'Productos 4';
+          else if (imgLower.startsWith('productos 3/')) folder = 'Productos 3';
           else if (imgLower.startsWith('productos 2/')) folder = 'Productos 2';
 
           return {

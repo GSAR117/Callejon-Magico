@@ -770,6 +770,12 @@ body {
   border: 1px solid rgba(223, 183, 67, 0.35);
 }
 
+.badge-folder.folder-p4 {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
 /* Method Badges */
 .badge-method {
   font-size: 0.72rem;
