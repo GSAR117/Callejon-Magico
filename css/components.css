@@ -430,10 +430,6 @@
   transform: translateY(-1px);
   box-shadow: 0 8px 24px rgba(223, 183, 67, 0.4);
 }
-  color: #07132b;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(197, 143, 56, 0.35);
-}
 
 /* ==========================================================================
    MEGA MENU (LIVERPOOL STYLE DEPARTMENTS)
@@ -443,23 +439,48 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #ffffff;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-  border-top: 2px solid var(--color-gold);
-  border-bottom: 1px solid #e5e7eb;
-  z-index: 500;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-8px);
-  transition: all 0.25s ease-out;
+  background: #07142a !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7) !important;
+  border-top: 2px solid var(--color-gold) !important;
+  border-bottom: 2px solid rgba(223, 183, 67, 0.35) !important;
+  z-index: 1200 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(-8px) !important;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease !important;
 }
 
 .megamenu-panel.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+.megamenu-close-btn {
+  position: absolute;
+  top: 0.8rem;
+  right: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(223, 183, 67, 0.35);
+  color: #dfb743;
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 10;
+}
+
+.megamenu-close-btn:hover {
+  background: rgba(223, 183, 67, 0.25);
+  transform: scale(1.05);
 }
 
 .megamenu-inner {
@@ -495,8 +516,8 @@
 .megamenu-dept-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #111827;
-  border-bottom: 1px solid #edf0f3;
+  color: #dfb743 !important;
+  border-bottom: 1px solid rgba(223, 183, 67, 0.25) !important;
   padding-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -514,9 +535,9 @@
 }
 
 .megamenu-cat-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-gold);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f8fafc !important;
   margin-bottom: 0.35rem;
   display: block;
 }
@@ -529,13 +550,14 @@
 
 .megamenu-subitems-list a {
   font-size: 0.82rem;
-  color: #4b5563;
-  transition: color var(--transition-fast);
+  color: #94a3b8 !important;
+  text-decoration: none;
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
 }
 
 .megamenu-subitems-list a:hover {
-  color: #111827;
-  padding-left: 3px;
+  color: #dfb743 !important;
+  padding-left: 4px;
 }
 
 /* ==========================================================================

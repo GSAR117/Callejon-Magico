@@ -960,6 +960,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (DOM.quickViewModal) DOM.quickViewModal.classList.remove('active');
     if (DOM.checkoutModal) DOM.checkoutModal.classList.remove('active');
     if (DOM.megaMenuPanel) DOM.megaMenuPanel.classList.remove('active');
+    const btnAllCat = DOM.btnMegaMenu || document.getElementById('btnAllCategories');
+    if (btnAllCat) btnAllCat.setAttribute('aria-expanded', 'false');
 
     // Cerrar también Tarjeta Callejón Mágico, Rastreo de Pedidos y Calendario de Ofertas
     if (window.CallejonCard) {
@@ -1593,23 +1595,112 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // MegaMenu toggle
+    // MegaMenu toggle & auto-collapse
     const btnMega = DOM.btnMegaMenu || document.getElementById('btnAllCategories');
     const panelMega = DOM.megaMenuPanel || document.getElementById('megaMenuPanel');
 
     if (btnMega && panelMega) {
+      let megaCloseTimer = null;
+
+      const openMegaMenu = () => {
+        if (megaCloseTimer) { clearTimeout(megaCloseTimer); megaCloseTimer = null; }
+        panelMega.classList.add('active');
+        btnMega.setAttribute('aria-expanded', 'true');
+      };
+
+      const closeMegaMenu = () => {
+        if (megaCloseTimer) { clearTimeout(megaCloseTimer); megaCloseTimer = null; }
+        panelMega.classList.remove('active');
+        btnMega.setAttribute('aria-expanded', 'false');
+      };
+
+      const toggleMegaMenu = () => {
+        if (panelMega.classList.contains('active')) {
+          closeMegaMenu();
+        } else {
+          openMegaMenu();
+        }
+      };
+
+      // Inyectar botón de cierre (×) visible si no existe
+      if (!panelMega.querySelector('.megamenu-close-btn')) {
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'megamenu-close-btn';
+        closeBtn.id = 'btnCloseMegaMenu';
+        closeBtn.setAttribute('aria-label', 'Cerrar departamentos');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          closeMegaMenu();
+        });
+        panelMega.appendChild(closeBtn);
+      }
+
+      // 1. Alternar al hacer clic en "Todas las categorías"
       btnMega.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const willBeActive = !panelMega.classList.contains('active');
-        panelMega.classList.toggle('active', willBeActive);
-        btnMega.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+        toggleMegaMenu();
       });
 
+      // 2. Contraer al hacer clic en cualquier parte fuera del menú y del botón
       document.addEventListener('click', (e) => {
-        if (!panelMega.contains(e.target) && !btnMega.contains(e.target)) {
-          panelMega.classList.remove('active');
-          btnMega.setAttribute('aria-expanded', 'false');
+        if (panelMega.classList.contains('active')) {
+          if (!panelMega.contains(e.target) && !btnMega.contains(e.target)) {
+            closeMegaMenu();
+          }
+        }
+      });
+
+      // 3. Contraer al hacer clic en cualquier enlace interno del menú
+      panelMega.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          closeMegaMenu();
+        });
+      });
+
+      // 4. Contraer al hacer clic en cualquier enlace de la barra superior horizontal
+      document.querySelectorAll('.nav-links-list a').forEach((link) => {
+        link.addEventListener('click', () => {
+          closeMegaMenu();
+        });
+      });
+
+      // 5. Contraer al hacer scroll
+      window.addEventListener('scroll', () => {
+        if (panelMega.classList.contains('active')) {
+          closeMegaMenu();
+        }
+      }, { passive: true });
+
+      // 6. Contraer suavemente cuando el cursor abandona el área del menú y la barra
+      const siteNavContainer = btnMega.closest('.site-nav') || btnMega.parentElement;
+      if (siteNavContainer) {
+        siteNavContainer.addEventListener('mouseleave', () => {
+          if (panelMega.classList.contains('active')) {
+            megaCloseTimer = setTimeout(closeMegaMenu, 350);
+          }
+        });
+        siteNavContainer.addEventListener('mouseenter', () => {
+          if (megaCloseTimer) {
+            clearTimeout(megaCloseTimer);
+            megaCloseTimer = null;
+          }
+        });
+      }
+
+      panelMega.addEventListener('mouseenter', () => {
+        if (megaCloseTimer) {
+          clearTimeout(megaCloseTimer);
+          megaCloseTimer = null;
+        }
+      });
+
+      panelMega.addEventListener('mouseleave', () => {
+        if (panelMega.classList.contains('active')) {
+          megaCloseTimer = setTimeout(closeMegaMenu, 350);
         }
       });
     }
