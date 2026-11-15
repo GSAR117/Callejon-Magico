@@ -11,3 +11,11 @@ scratch/
 Thumbs.db
 desktop.ini
 
+# Android build artifacts
+*.apk
+*.aab
+android-app/build/
+android-app/app/build/
+android-app/.gradle/
+android-app/local.properties
+
