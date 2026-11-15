@@ -11,6 +11,7 @@
   let currentView = 'dashboard';
   let activeBalanceUser = null;
   let activeEditProductId = null;
+  let activeEditStaffId = null;
 
   // Elementos DOM principales
   const DOM = {
@@ -25,11 +26,14 @@
     kpiOrders: document.getElementById('kpiTotalOrders'),
     kpiStock: document.getElementById('kpiTotalStock'),
     kpiBalances: document.getElementById('kpiTotalBalances'),
+    kpiStaff: document.getElementById('kpiTotalStaff'),
+    kpiActiveStaffMeta: document.getElementById('kpiActiveStaffMeta'),
 
     // Tablas
     tableUsersBody: document.getElementById('adminUsersTableBody'),
     tableOrdersBody: document.getElementById('adminOrdersTableBody'),
     tableStockBody: document.getElementById('adminStockTableBody'),
+    tableStaffBody: document.getElementById('adminStaffTableBody'),
     recentOrdersBody: document.getElementById('recentOrdersBody'),
     lowStockAlertList: document.getElementById('lowStockAlertList'),
 
@@ -42,12 +46,16 @@
     filterStockFolder: document.getElementById('filterStockFolder'),
     filterStockDept: document.getElementById('filterStockDept'),
     filterStockStatus: document.getElementById('filterStockStatus'),
+    searchStaff: document.getElementById('searchStaffInput'),
+    filterStaffDepartment: document.getElementById('filterStaffDepartment'),
+    filterStaffStatus: document.getElementById('filterStaffStatus'),
 
     // Modales
     modalBalance: document.getElementById('modalAdjustBalance'),
     modalStatement: document.getElementById('modalClientStatement'),
     modalProduct: document.getElementById('modalProductForm'),
     modalCustomer: document.getElementById('modalCustomerForm'),
+    modalStaff: document.getElementById('modalStaffForm'),
     modalOrderTicket: document.getElementById('modalOrderTicket')
   };
 
@@ -105,7 +113,8 @@
       dashboard: { title: 'Dashboard General', subtitle: 'Resumen ejecutivo de ventas, clientes e inventario en tiempo real' },
       clients: { title: 'Gestión de Clientes & Saldos', subtitle: 'Cuentas registradas, saldos de Tarjeta Callejón Mágico y abonos' },
       orders: { title: 'Ventas & Pedidos', subtitle: 'Historial de compras, estados de envío y notas de remisión' },
-      inventory: { title: 'Inventario & Stock Restante', subtitle: 'Control de existencias disponibles y edición de productos' }
+      inventory: { title: 'Inventario & Stock Restante', subtitle: 'Control de existencias disponibles y edición de productos' },
+      staff: { title: 'Personal & Empleados', subtitle: 'Directorio de colaboradores, cargos, turnos y datos de contacto de la tienda' }
     };
 
     const info = titles[viewId] || titles.dashboard;
@@ -125,6 +134,7 @@
     renderUsersTable();
     renderOrdersTable();
     renderStockTable();
+    renderStaffTable();
   }
 
   // 1. KPIs
@@ -136,6 +146,8 @@
     if (DOM.kpiOrders) DOM.kpiOrders.textContent = metrics.totalOrders;
     if (DOM.kpiStock) DOM.kpiStock.textContent = metrics.totalUnitsStock.toLocaleString('es-MX') + ' unidades';
     if (DOM.kpiBalances) DOM.kpiBalances.textContent = '$' + metrics.totalCustomerBalances.toLocaleString('es-MX', { minimumFractionDigits: 2 });
+    if (DOM.kpiStaff) DOM.kpiStaff.textContent = metrics.totalStaff || 0;
+    if (DOM.kpiActiveStaffMeta) DOM.kpiActiveStaffMeta.textContent = `${metrics.activeStaff || 0} activos / ${metrics.totalStaff || 0} total`;
 
     // Insignias en navegación
     const badgeUsers = document.getElementById('navBadgeUsers');
@@ -144,6 +156,8 @@
     if (badgeOrders) badgeOrders.textContent = metrics.totalOrders;
     const badgeStock = document.getElementById('navBadgeStock');
     if (badgeStock) badgeStock.textContent = metrics.totalProductsCount;
+    const badgeStaff = document.getElementById('navBadgeStaff');
+    if (badgeStaff) badgeStaff.textContent = metrics.totalStaff || 0;
   }
 
   // 2. Dashboard Resumen
@@ -503,6 +517,149 @@
   }
 
   // =========================================================================
+  // 5. PERSONAL & EMPLEADOS DE LA TIENDA
+  // =========================================================================
+  function renderStaffTable() {
+    if (!DOM.tableStaffBody) return;
+
+    const staffList = window.AdminDB.getStaff();
+    const query = (DOM.searchStaff ? DOM.searchStaff.value : '').trim().toLowerCase();
+    const deptFilter = DOM.filterStaffDepartment ? DOM.filterStaffDepartment.value : 'all';
+    const statusFilter = DOM.filterStaffStatus ? DOM.filterStaffStatus.value : 'all';
+
+    const filtered = staffList.filter(emp => {
+      if (deptFilter !== 'all' && emp.department !== deptFilter) return false;
+      if (statusFilter !== 'all' && emp.status !== statusFilter) return false;
+
+      if (!query) return true;
+      const matchName = (emp.fullName || '').toLowerCase().includes(query);
+      const matchCode = (emp.code || '').toLowerCase().includes(query);
+      const matchRole = (emp.role || '').toLowerCase().includes(query);
+      const matchDept = (emp.departmentName || '').toLowerCase().includes(query);
+      const matchPhone = (emp.phone || '').toLowerCase().includes(query);
+      const matchEmail = (emp.email || '').toLowerCase().includes(query);
+      const matchBranch = (emp.branch || '').toLowerCase().includes(query);
+
+      return matchName || matchCode || matchRole || matchDept || matchPhone || matchEmail || matchBranch;
+    });
+
+    if (filtered.length === 0) {
+      DOM.tableStaffBody.innerHTML = `
+        <tr>
+          <td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--admin-text-muted);">
+            👔 No se encontraron colaboradores registrados con los criterios seleccionados.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    DOM.tableStaffBody.innerHTML = filtered.map(emp => {
+      const initials = (emp.fullName || 'CM')
+        .split(' ')
+        .filter(Boolean)
+        .map(w => w[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase();
+
+      const rawPhone = (emp.phone || '').replace(/\D/g, '');
+      const waLink = rawPhone ? `https://wa.me/52${rawPhone}` : '#';
+
+      const deptBadgeClass = `badge-dept-${emp.department || 'boutique'}`;
+
+      let statusBadge = '<span class="badge-status active">● Activo</span>';
+      if (emp.status === 'vacaciones') {
+        statusBadge = '<span class="badge-status pending">🏖️ Vacaciones</span>';
+      } else if (emp.status === 'inactivo') {
+        statusBadge = '<span class="badge-status cancelled">Inactivo / Baja</span>';
+      }
+
+      let formattedDate = emp.hireDate || 'Reciente';
+      try {
+        if (emp.hireDate) {
+          const d = new Date(emp.hireDate + 'T00:00:00');
+          if (!isNaN(d.getTime())) {
+            formattedDate = d.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+          }
+        }
+      } catch (e) {}
+
+      return `
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="user-cell-avatar" style="background: linear-gradient(135deg, #1e293b, #0f172a); border: 1.5px solid rgba(223, 183, 67, 0.4); color: #dfb743;">
+                ${initials}
+              </div>
+              <div>
+                <strong style="color: #ffffff; font-size: 0.9rem; display: block;">${escapeHtml(emp.fullName)}</strong>
+                <span style="font-size: 0.75rem; color: var(--admin-gold); font-family: monospace; font-weight: 700;">${escapeHtml(emp.code || 'EMP')}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span style="font-weight: 600; color: #f1f5f9; font-size: 0.85rem;">${escapeHtml(emp.role || '-')}</span>
+          </td>
+          <td>
+            <span class="badge-staff-dept ${deptBadgeClass}">
+              ${escapeHtml(emp.departmentName || emp.department || 'General')}
+            </span>
+          </td>
+          <td>
+            ${emp.phone ? `
+              <a href="${waLink}" target="_blank" class="btn-staff-whatsapp" title="Enviar WhatsApp a ${escapeHtml(emp.fullName)}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+                <span>${escapeHtml(emp.phone)}</span>
+              </a>
+            ` : '<span style="color: var(--admin-text-muted); font-size: 0.78rem;">No registrado</span>'}
+          </td>
+          <td>
+            ${emp.email ? `
+              <a href="mailto:${escapeHtml(emp.email)}" style="color: #93c5fd; font-size: 0.82rem; text-decoration: none;" title="Escribir correo">
+                ${escapeHtml(emp.email)}
+              </a>
+            ` : '<span style="color: var(--admin-text-muted); font-size: 0.78rem;">-</span>'}
+          </td>
+          <td>
+            <span style="font-size: 0.8rem; color: #cbd5e1; display: inline-flex; align-items: center; gap: 0.3rem;">
+              🕒 ${escapeHtml(emp.shiftName || emp.shift || '-')}
+            </span>
+          </td>
+          <td>
+            <span style="font-size: 0.8rem; color: #94a3b8;">${escapeHtml(emp.branch || 'Matriz')}</span>
+          </td>
+          <td>
+            <span style="font-size: 0.8rem; color: #cbd5e1;">${formattedDate}</span>
+          </td>
+          <td>
+            ${statusBadge}
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm btn-edit-staff" data-id="${emp.id}" title="Editar ficha de colaborador">
+              ✏️ Editar
+            </button>
+            <button type="button" class="btn-admin btn-admin-sm btn-delete-staff" data-id="${emp.id}" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); margin-left: 0.35rem;" title="Dar de baja colaborador">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Attach listeners
+    DOM.tableStaffBody.querySelectorAll('.btn-edit-staff').forEach(btn => {
+      btn.addEventListener('click', () => openEditStaffModal(btn.dataset.id));
+    });
+
+    DOM.tableStaffBody.querySelectorAll('.btn-delete-staff').forEach(btn => {
+      btn.addEventListener('click', () => deleteStaffMember(btn.dataset.id));
+    });
+  }
+
+  // =========================================================================
   // MODALES & FORMULARIOS
   // =========================================================================
   function setupModals() {
@@ -710,6 +867,75 @@
       });
     }
 
+    // Botón Nuevo Colaborador
+    const btnNewStaff = document.getElementById('btnOpenNewStaffModal');
+    if (btnNewStaff) {
+      btnNewStaff.addEventListener('click', () => {
+        activeEditStaffId = null;
+        const formStaff = document.getElementById('formStaff');
+        if (formStaff) formStaff.reset();
+        const idInp = document.getElementById('staffIdInput');
+        if (idInp) idInp.value = '';
+        const staffList = window.AdminDB.getStaff();
+        const nextNum = staffList.length + 101;
+        const codeInp = document.getElementById('staffCodeInput');
+        if (codeInp) codeInp.value = 'EMP-' + String(nextNum).padStart(4, '0');
+        const hireInp = document.getElementById('staffHireDateInput');
+        if (hireInp) hireInp.value = new Date().toISOString().slice(0, 10);
+        const branchInp = document.getElementById('staffBranchInput');
+        if (branchInp) branchInp.value = 'Matriz Plantel Centro';
+        const titleEl = document.getElementById('modalStaffTitle');
+        if (titleEl) titleEl.textContent = '👤 Registrar Nuevo Colaborador';
+        openModal(DOM.modalStaff);
+      });
+    }
+
+    // Guardar / Editar Colaborador
+    const formStaff = document.getElementById('formStaff');
+    if (formStaff) {
+      formStaff.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fullName = (document.getElementById('staffFullNameInput').value || '').trim();
+        const code = (document.getElementById('staffCodeInput').value || '').trim();
+        const role = (document.getElementById('staffRoleInput').value || '').trim();
+        const department = document.getElementById('staffDepartmentInput').value;
+        const phone = (document.getElementById('staffPhoneInput').value || '').trim();
+        const email = (document.getElementById('staffEmailInput').value || '').trim();
+        const shift = document.getElementById('staffShiftInput').value;
+        const branch = (document.getElementById('staffBranchInput').value || '').trim();
+        const hireDate = document.getElementById('staffHireDateInput').value;
+        const salary = parseFloat(document.getElementById('staffSalaryInput').value) || 0;
+        const status = document.getElementById('staffStatusInput').value;
+        const notes = (document.getElementById('staffNotesInput').value || '').trim();
+
+        if (!fullName) {
+          alert('Por favor ingresa el nombre del colaborador');
+          return;
+        }
+
+        const staffData = {
+          id: activeEditStaffId || undefined,
+          code,
+          fullName,
+          role,
+          department,
+          phone,
+          email,
+          shift,
+          branch,
+          hireDate,
+          salary,
+          status,
+          notes
+        };
+
+        window.AdminDB.saveStaff(staffData);
+        closeAllModals();
+        showToast(activeEditStaffId ? `Ficha de ${fullName} actualizada con éxito` : `Colaborador ${fullName} registrado en plantilla`, 'success');
+        renderAll();
+      });
+    }
+
     // Backup & Exportación
     const btnExportDB = document.getElementById('btnExportDatabase');
     if (btnExportDB) {
@@ -892,6 +1118,53 @@
     openModal(DOM.modalProduct);
   }
 
+  function openEditStaffModal(staffId) {
+    const emp = window.AdminDB.getStaffById(staffId);
+    if (!emp) return;
+
+    activeEditStaffId = emp.id;
+    const titleEl = document.getElementById('modalStaffTitle');
+    if (titleEl) titleEl.textContent = '✏️ Editar Ficha de Colaborador';
+    const idInp = document.getElementById('staffIdInput');
+    if (idInp) idInp.value = emp.id;
+    const nameInp = document.getElementById('staffFullNameInput');
+    if (nameInp) nameInp.value = emp.fullName || '';
+    const codeInp = document.getElementById('staffCodeInput');
+    if (codeInp) codeInp.value = emp.code || '';
+    const roleInp = document.getElementById('staffRoleInput');
+    if (roleInp) roleInp.value = emp.role || '';
+    const deptInp = document.getElementById('staffDepartmentInput');
+    if (deptInp) deptInp.value = emp.department || 'boutique';
+    const phoneInp = document.getElementById('staffPhoneInput');
+    if (phoneInp) phoneInp.value = emp.phone || '';
+    const emailInp = document.getElementById('staffEmailInput');
+    if (emailInp) emailInp.value = emp.email || '';
+    const shiftInp = document.getElementById('staffShiftInput');
+    if (shiftInp) shiftInp.value = emp.shift || 'completo';
+    const branchInp = document.getElementById('staffBranchInput');
+    if (branchInp) branchInp.value = emp.branch || 'Matriz Plantel Centro';
+    const hireInp = document.getElementById('staffHireDateInput');
+    if (hireInp) hireInp.value = emp.hireDate || '';
+    const salaryInp = document.getElementById('staffSalaryInput');
+    if (salaryInp) salaryInp.value = emp.salary || 0;
+    const statusInp = document.getElementById('staffStatusInput');
+    if (statusInp) statusInp.value = emp.status || 'activo';
+    const notesInp = document.getElementById('staffNotesInput');
+    if (notesInp) notesInp.value = emp.notes || '';
+
+    openModal(DOM.modalStaff);
+  }
+
+  function deleteStaffMember(staffId) {
+    const emp = window.AdminDB.getStaffById(staffId);
+    const name = emp ? emp.fullName : 'este colaborador';
+    if (confirm(`¿Estás seguro de que deseas dar de baja a ${name} de la plantilla de empleados?`)) {
+      window.AdminDB.deleteStaff(staffId);
+      showToast(`Colaborador ${name} eliminado del directorio`, 'danger');
+      renderAll();
+    }
+  }
+
   function openModal(modalEl) {
     if (!modalEl) return;
     modalEl.classList.add('active');
@@ -901,6 +1174,7 @@
     document.querySelectorAll('.admin-modal-backdrop').forEach(m => m.classList.remove('active'));
     activeBalanceUser = null;
     activeEditProductId = null;
+    activeEditStaffId = null;
   }
 
   // =========================================================================
@@ -915,6 +1189,9 @@
     if (DOM.filterStockFolder) DOM.filterStockFolder.addEventListener('change', () => renderStockTable());
     if (DOM.filterStockDept) DOM.filterStockDept.addEventListener('change', () => renderStockTable());
     if (DOM.filterStockStatus) DOM.filterStockStatus.addEventListener('change', () => renderStockTable());
+    if (DOM.searchStaff) DOM.searchStaff.addEventListener('input', () => renderStaffTable());
+    if (DOM.filterStaffDepartment) DOM.filterStaffDepartment.addEventListener('change', () => renderStaffTable());
+    if (DOM.filterStaffStatus) DOM.filterStaffStatus.addEventListener('change', () => renderStaffTable());
   }
 
   // =========================================================================

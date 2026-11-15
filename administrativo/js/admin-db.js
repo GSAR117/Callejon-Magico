@@ -17,7 +17,8 @@
     ORDERS_GLOBAL: 'callejon_user_orders',
     STOCK: 'callejon_stock_db',
     CUSTOM_PRODUCTS: 'callejon_custom_products',
-    DELETED_PRODUCTS: 'callejon_deleted_products'
+    DELETED_PRODUCTS: 'callejon_deleted_products',
+    STAFF: 'callejon_staff_db'
   };
 
   const AdminDB = {
@@ -641,18 +642,240 @@
     },
 
     // =========================================================================
-    // 5. MÉTRICAS GLOBALES (KPIs)
+    // 5. PERSONAL & EMPLEADOS DE LA TIENDA
+    // =========================================================================
+    getStaff() {
+      try {
+        let staff = JSON.parse(localStorage.getItem(KEYS.STAFF) || '[]');
+        if (!staff || !staff.length) {
+          // Plantilla oficial inicial de colaboradores de Callejón Mágico
+          staff = [
+            {
+              id: 'staff_emp_0101',
+              code: 'EMP-0101',
+              fullName: 'Gabriel Sarmiento',
+              role: 'Gerente General & Administrador',
+              department: 'gerencia',
+              departmentName: 'Gerencia & Finanzas',
+              phone: '962 401 4408',
+              email: 'gabriel@callejonmagico.com',
+              shift: 'completo',
+              shiftName: 'Completo (09:00 - 19:00)',
+              branch: 'Matriz Plantel Centro',
+              hireDate: '2024-01-15',
+              salary: 24000,
+              status: 'activo',
+              notes: 'Supervisión integral de operaciones comerciales, inventario y autorización crediticia.'
+            },
+            {
+              id: 'staff_emp_0102',
+              code: 'EMP-0102',
+              fullName: 'Sofía Morales',
+              role: 'Jefa de Cajas & Crédito Departamental',
+              department: 'cajas',
+              departmentName: 'Cajas & Crédito',
+              phone: '962 112 3456',
+              email: 'sofia.cajas@callejonmagico.com',
+              shift: 'matutino',
+              shiftName: 'Matutino (08:30 - 15:30)',
+              branch: 'Matriz Plantel Centro',
+              hireDate: '2024-06-01',
+              salary: 14500,
+              status: 'activo',
+              notes: 'Arqueo de cajas, recepción de pagos/abonos a Tarjetas Callejón Mágico y estados de cuenta.'
+            },
+            {
+              id: 'staff_emp_0103',
+              code: 'EMP-0103',
+              fullName: 'Carlos Herrera',
+              role: 'Supervisor de Bodega & Logística',
+              department: 'bodega',
+              departmentName: 'Almacén & Logística',
+              phone: '962 554 7890',
+              email: 'carlos.bodega@callejonmagico.com',
+              shift: 'completo',
+              shiftName: 'Completo (09:00 - 18:00)',
+              branch: 'Bodega Central & Envíos',
+              hireDate: '2024-08-10',
+              salary: 13800,
+              status: 'activo',
+              notes: 'Control de entradas/salidas de existencias, recepción de proveedores y empaque de paquetería.'
+            },
+            {
+              id: 'staff_emp_0104',
+              code: 'EMP-0104',
+              fullName: 'Valentina Reyes',
+              role: 'Asesora Senior de Alta Perfumería & Joyería',
+              department: 'boutique',
+              departmentName: 'Ventas & Boutique',
+              phone: '962 778 9012',
+              email: 'valentina.boutique@callejonmagico.com',
+              shift: 'vespertino',
+              shiftName: 'Vespertino (13:30 - 21:00)',
+              branch: 'Matriz Plantel Centro',
+              hireDate: '2025-02-01',
+              salary: 12000,
+              status: 'activo',
+              notes: 'Atención personalizada en perfumería fina de diseñador, cosméticos y moda exclusiva.'
+            },
+            {
+              id: 'staff_emp_0105',
+              code: 'EMP-0105',
+              fullName: 'Rodrigo Méndez',
+              role: 'Especialista en Tecnología & Videojuegos',
+              department: 'tecnologia',
+              departmentName: 'Tecnología & Electrónica',
+              phone: '962 334 1122',
+              email: 'rodrigo.tech@callejonmagico.com',
+              shift: 'vespertino',
+              shiftName: 'Vespertino (13:30 - 21:00)',
+              branch: 'Matriz Plantel Centro',
+              hireDate: '2025-05-15',
+              salary: 12000,
+              status: 'activo',
+              notes: 'Asesoría técnica en pantallas 4K, consolas PlayStation/Xbox/Nintendo y smartphones.'
+            }
+          ];
+          localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+
+          if (window.CallejonFirebase && typeof window.CallejonFirebase.syncStaff === 'function') {
+            staff.forEach(st => window.CallejonFirebase.syncStaff(st));
+          }
+        }
+        return staff;
+      } catch (e) {
+        console.error('AdminDB: Error al obtener personal:', e);
+        return [];
+      }
+    },
+
+    getStaffById(id) {
+      if (!id) return null;
+      const staff = this.getStaff();
+      return staff.find(s => s.id === id || s.code === id) || null;
+    },
+
+    saveStaff(staffData) {
+      try {
+        if (!staffData || !staffData.fullName) throw new Error('Nombre del colaborador requerido');
+        const staff = this.getStaff();
+        let savedItem = null;
+
+        const deptNames = {
+          gerencia: 'Gerencia & Finanzas',
+          cajas: 'Cajas & Crédito',
+          bodega: 'Almacén & Logística',
+          boutique: 'Ventas & Boutique',
+          tecnologia: 'Tecnología & Electrónica',
+          atencion: 'Atención a Clientes',
+          seguridad: 'Seguridad & Mantenimiento'
+        };
+
+        const shiftNames = {
+          matutino: 'Matutino (08:30 - 15:30)',
+          vespertino: 'Vespertino (13:30 - 21:00)',
+          completo: 'Completo (09:00 - 19:00)',
+          mixto: 'Mixto Rotativo',
+          nocturno: 'Nocturno (21:00 - 06:00)'
+        };
+
+        const deptKey = staffData.department || 'boutique';
+        const shiftKey = staffData.shift || 'completo';
+
+        if (staffData.id) {
+          // Edición
+          const idx = staff.findIndex(s => s.id === staffData.id);
+          if (idx !== -1) {
+            staff[idx] = {
+              ...staff[idx],
+              ...staffData,
+              departmentName: deptNames[deptKey] || staffData.departmentName || deptKey,
+              shiftName: shiftNames[shiftKey] || staffData.shiftName || shiftKey,
+              updatedAt: new Date().toISOString()
+            };
+            savedItem = staff[idx];
+          }
+        }
+
+        if (!savedItem) {
+          // Nuevo Empleado
+          const nextNum = staff.length + 101;
+          const newCode = staffData.code || ('EMP-' + String(nextNum).padStart(4, '0'));
+          const newId = 'staff_' + Date.now();
+          savedItem = {
+            id: newId,
+            code: newCode,
+            fullName: staffData.fullName.trim(),
+            role: staffData.role ? staffData.role.trim() : 'Colaborador de Tienda',
+            department: deptKey,
+            departmentName: deptNames[deptKey] || deptKey,
+            phone: staffData.phone ? staffData.phone.trim() : '',
+            email: staffData.email ? staffData.email.trim() : '',
+            shift: shiftKey,
+            shiftName: shiftNames[shiftKey] || shiftKey,
+            branch: staffData.branch ? staffData.branch.trim() : 'Matriz Plantel Centro',
+            hireDate: staffData.hireDate || new Date().toISOString().slice(0, 10),
+            salary: Number(staffData.salary) || 0,
+            status: staffData.status || 'activo',
+            notes: staffData.notes ? staffData.notes.trim() : '',
+            createdAt: new Date().toISOString()
+          };
+          staff.unshift(savedItem);
+        }
+
+        localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+
+        if (window.CallejonFirebase && typeof window.CallejonFirebase.syncStaff === 'function') {
+          window.CallejonFirebase.syncStaff(savedItem);
+        }
+
+        this.notifyChange('staff');
+        return savedItem;
+      } catch (e) {
+        console.error('AdminDB: Error al guardar empleado:', e);
+        return null;
+      }
+    },
+
+    deleteStaff(id) {
+      try {
+        if (!id) return false;
+        let staff = this.getStaff();
+        const initialLen = staff.length;
+        staff = staff.filter(s => s.id !== id && s.code !== id);
+
+        if (staff.length < initialLen) {
+          localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+
+          if (window.CallejonFirebase && typeof window.CallejonFirebase.deleteStaff === 'function') {
+            window.CallejonFirebase.deleteStaff(id);
+          }
+
+          this.notifyChange('staff');
+          return true;
+        }
+        return false;
+      } catch (e) {
+        console.error('AdminDB: Error al eliminar empleado:', e);
+        return false;
+      }
+    },
+
+    // =========================================================================
+    // 6. MÉTRICAS GLOBALES (KPIs)
     // =========================================================================
     getMetrics() {
       const users = this.getUsers();
       const orders = this.getAllOrders();
       const products = this.getAllProductsWithStock();
+      const staff = this.getStaff();
 
       const totalSales = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
       const totalUnitsStock = products.reduce((sum, p) => sum + (Number(p.stock) || 0), 0);
       const lowStockCount = products.filter(p => p.stock > 0 && p.stock <= 5).length;
       const outOfStockCount = products.filter(p => p.stock === 0).length;
       const totalCustomerBalances = users.reduce((sum, u) => sum + (Number(u.balance) || 0), 0);
+      const activeStaffCount = staff.filter(s => s.status === 'activo').length;
 
       return {
         totalUsers: users.length,
@@ -662,12 +885,14 @@
         totalProductsCount: products.length,
         lowStockCount: lowStockCount,
         outOfStockCount: outOfStockCount,
-        totalCustomerBalances: totalCustomerBalances
+        totalCustomerBalances: totalCustomerBalances,
+        totalStaff: staff.length,
+        activeStaff: activeStaffCount
       };
     },
 
     // =========================================================================
-    // 6. BACKUP & EXPORTACIÓN
+    // 7. BACKUP & EXPORTACIÓN
     // =========================================================================
     exportFullDatabase() {
       return {
@@ -676,7 +901,8 @@
         cards: this.getAllCards(),
         orders: this.getAllOrders(),
         stock: this.getStockMap(),
-        customProducts: JSON.parse(localStorage.getItem(KEYS.CUSTOM_PRODUCTS) || '[]')
+        customProducts: JSON.parse(localStorage.getItem(KEYS.CUSTOM_PRODUCTS) || '[]'),
+        staff: this.getStaff()
       };
     },
 
@@ -688,6 +914,7 @@
         if (data.orders) localStorage.setItem(KEYS.ORDERS_GLOBAL, JSON.stringify(data.orders));
         if (data.stock) localStorage.setItem(KEYS.STOCK, JSON.stringify(data.stock));
         if (data.customProducts) localStorage.setItem(KEYS.CUSTOM_PRODUCTS, JSON.stringify(data.customProducts));
+        if (data.staff) localStorage.setItem(KEYS.STAFF, JSON.stringify(data.staff));
 
         this.notifyChange('all');
         return true;

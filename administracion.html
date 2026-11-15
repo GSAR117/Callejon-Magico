@@ -193,6 +193,17 @@
           Inventario & Stock
           <span class="nav-badge" id="navBadgeStock">0</span>
         </button>
+
+        <button type="button" class="nav-item" data-view="staff">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Personal & Empleados
+          <span class="nav-badge" id="navBadgeStaff">0</span>
+        </button>
       </nav>
 
       <div class="admin-sidebar-footer">
@@ -313,6 +324,15 @@
               </div>
               <div class="stat-value" id="kpiTotalBalances">$0.00</div>
               <div class="stat-meta">Fondos en Tarjetas Callejón Mágico</div>
+            </div>
+
+            <div class="stat-card" style="cursor: pointer;" onclick="window.AdminApp && window.AdminApp.switchView('staff')" title="Ver directorio completo de empleados">
+              <div class="stat-card-header">
+                <span class="stat-title">Personal de Tienda</span>
+                <div class="stat-icon" style="background: rgba(223, 183, 67, 0.15); color: #dfb743;">👔</div>
+              </div>
+              <div class="stat-value" id="kpiTotalStaff">0</div>
+              <div class="stat-meta" id="kpiActiveStaffMeta">Colaboradores registrados</div>
             </div>
           </div>
 
@@ -534,6 +554,73 @@
                   </tr>
                 </thead>
                 <tbody id="adminStockTableBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VISTA 5: PERSONAL & EMPLEADOS DE LA TIENDA
+             ================================================================== -->
+        <section class="admin-view" id="view-staff">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>👔 Directorio de Personal & Empleados</h3>
+                <p>Nómina operativa, cargos, sucursales, turnos, datos de contacto de colaboradores y estatus en tienda</p>
+              </div>
+              <div class="admin-card-actions">
+                <div class="search-input-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" class="admin-search-input" id="searchStaffInput" placeholder="Buscar por nombre, cargo, ID, teléfono o correo..." />
+                </div>
+
+                <select class="admin-select" id="filterStaffDepartment">
+                  <option value="all" selected>Todos los departamentos</option>
+                  <option value="gerencia">Gerencia & Finanzas</option>
+                  <option value="cajas">Cajas & Crédito</option>
+                  <option value="bodega">Almacén & Logística</option>
+                  <option value="boutique">Ventas & Boutique</option>
+                  <option value="tecnologia">Tecnología & Electrónica</option>
+                  <option value="atencion">Atención a Clientes</option>
+                  <option value="seguridad">Seguridad & Mantenimiento</option>
+                </select>
+
+                <select class="admin-select" id="filterStaffStatus">
+                  <option value="all" selected>Estatus: Todos</option>
+                  <option value="activo">Activo</option>
+                  <option value="vacaciones">Vacaciones / Permiso</option>
+                  <option value="inactivo">Inactivo / Baja</option>
+                </select>
+
+                <button type="button" class="btn-admin btn-admin-primary" id="btnOpenNewStaffModal">
+                  + Nuevo Colaborador
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Colaborador</th>
+                    <th>Cargo / Puesto</th>
+                    <th>Departamento</th>
+                    <th>Teléfono / WhatsApp</th>
+                    <th>Correo Electrónico</th>
+                    <th>Turno / Horario</th>
+                    <th>Sucursal</th>
+                    <th>Ingreso</th>
+                    <th>Estatus</th>
+                    <th style="text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="adminStaffTableBody">
                   <!-- Dinámico -->
                 </tbody>
               </table>
@@ -797,6 +884,106 @@
         <button type="button" class="btn-admin btn-admin-secondary" id="btnStmtPayAllDebt" style="display: none; background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1.5px solid #10b981; font-weight: 700;">💵 Liquidar Deuda</button>
         <button type="button" class="btn-admin btn-admin-primary" id="btnStmtOpenAbonar">💳 Abonar a esta Cuenta</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Agregar / Editar Empleado o Colaborador -->
+  <div class="admin-modal-backdrop" id="modalStaffForm">
+    <div class="admin-modal" style="max-width: 660px;">
+      <div class="admin-modal-header">
+        <h3 id="modalStaffTitle">👤 Ficha de Colaborador / Empleado</h3>
+        <button type="button" class="btn-close-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="formStaff">
+        <input type="hidden" id="staffIdInput" value="" />
+        <div class="admin-modal-body">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="staffFullNameInput">Nombre Completo del Colaborador</label>
+              <input type="text" id="staffFullNameInput" class="admin-form-control" placeholder="Ej: Sofía Morales Hernández" required />
+            </div>
+            <div class="admin-form-group">
+              <label for="staffCodeInput">Código / ID Empleado</label>
+              <input type="text" id="staffCodeInput" class="admin-form-control" placeholder="Ej: EMP-0106" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="staffRoleInput">Cargo / Puesto</label>
+              <input type="text" id="staffRoleInput" class="admin-form-control" placeholder="Ej: Jefa de Cajas & Crédito" required />
+            </div>
+            <div class="admin-form-group">
+              <label for="staffDepartmentInput">Departamento</label>
+              <select id="staffDepartmentInput" class="admin-form-control">
+                <option value="gerencia">Gerencia & Finanzas</option>
+                <option value="cajas">Cajas & Crédito</option>
+                <option value="bodega">Almacén & Logística</option>
+                <option value="boutique" selected>Ventas & Boutique</option>
+                <option value="tecnologia">Tecnología & Electrónica</option>
+                <option value="atencion">Atención a Clientes</option>
+                <option value="seguridad">Seguridad & Mantenimiento</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="staffPhoneInput">Teléfono Móvil / WhatsApp (10 dígitos)</label>
+              <input type="tel" id="staffPhoneInput" class="admin-form-control" placeholder="Ej: 962 112 3456" required />
+            </div>
+            <div class="admin-form-group">
+              <label for="staffEmailInput">Correo Institucional</label>
+              <input type="email" id="staffEmailInput" class="admin-form-control" placeholder="Ej: nombre@callejonmagico.com" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="staffShiftInput">Turno / Horario Laboral</label>
+              <select id="staffShiftInput" class="admin-form-control">
+                <option value="matutino">Matutino (08:30 - 15:30)</option>
+                <option value="vespertino">Vespertino (13:30 - 21:00)</option>
+                <option value="completo" selected>Completo (09:00 - 19:00)</option>
+                <option value="mixto">Mixto Rotativo</option>
+                <option value="nocturno">Nocturno (21:00 - 06:00)</option>
+              </select>
+            </div>
+            <div class="admin-form-group">
+              <label for="staffBranchInput">Sucursal / Ubicación</label>
+              <input type="text" id="staffBranchInput" class="admin-form-control" placeholder="Ej: Matriz Plantel Centro" value="Matriz Plantel Centro" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="staffHireDateInput">Fecha de Ingreso</label>
+              <input type="date" id="staffHireDateInput" class="admin-form-control" />
+            </div>
+            <div class="admin-form-group">
+              <label for="staffSalaryInput">Sueldo Base ($ MXN)</label>
+              <input type="number" id="staffSalaryInput" class="admin-form-control" placeholder="Ej: 14500" min="0" step="100" />
+            </div>
+            <div class="admin-form-group">
+              <label for="staffStatusInput">Estatus Laboral</label>
+              <select id="staffStatusInput" class="admin-form-control">
+                <option value="activo" selected>Activo</option>
+                <option value="vacaciones">Vacaciones / Permiso</option>
+                <option value="inactivo">Inactivo / Baja</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="staffNotesInput">Notas / Funciones Especiales</label>
+            <textarea id="staffNotesInput" class="admin-form-control" rows="2" placeholder="Observaciones, funciones principales, certificaciones..."></textarea>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Guardar Colaborador</button>
+        </div>
+      </form>
     </div>
   </div>
 

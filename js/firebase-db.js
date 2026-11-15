@@ -25,7 +25,8 @@
     CARDS: 'callejon_cards_by_user',
     ORDERS: 'callejon_user_orders',
     STOCK: 'callejon_stock_db',
-    CUSTOM_PRODUCTS: 'callejon_custom_products'
+    CUSTOM_PRODUCTS: 'callejon_custom_products',
+    STAFF: 'callejon_staff_db'
   };
 
   function sanitizeKey(key) {
@@ -193,7 +194,33 @@
     },
 
     // =========================================================================
-    // 5. INICIALIZACIÓN DE ESCUCHADORES EN VIVO (LISTENERS)
+    // 5. SINCRONIZACIÓN DE PERSONAL & EMPLEADOS
+    // =========================================================================
+    async syncStaff(staffMember) {
+      if (!staffMember || !this.isReady()) return;
+      try {
+        const staffKey = sanitizeKey(staffMember.id || staffMember.code || staffMember.email);
+        await db.ref('staff/' + staffKey).set({
+          ...staffMember,
+          _updatedAt: new Date().toISOString()
+        });
+      } catch (e) {
+        console.warn('CallejonFirebase: Error al sincronizar empleado:', e);
+      }
+    },
+
+    async deleteStaff(staffId) {
+      if (!staffId || !this.isReady()) return;
+      try {
+        const staffKey = sanitizeKey(staffId);
+        await db.ref('staff/' + staffKey).remove();
+      } catch (e) {
+        console.warn('CallejonFirebase: Error al borrar empleado en Firebase:', e);
+      }
+    },
+
+    // =========================================================================
+    // 6. INICIALIZACIÓN DE ESCUCHADORES EN VIVO (LISTENERS)
     // =========================================================================
     initListeners() {
       if (!this.isReady()) return;
@@ -339,6 +366,46 @@
           }
         } catch (e) {
           console.warn('CallejonFirebase: Error en listener de stock:', e);
+        }
+      });
+
+      // --- ESCUCHADOR: PERSONAL & EMPLEADOS ---
+      db.ref('staff').on('value', snap => {
+        try {
+          const remoteStaff = snap.val();
+          let localStaff = [];
+          try {
+            localStaff = JSON.parse(localStorage.getItem(STORAGE_KEYS.STAFF) || '[]');
+          } catch (e) {}
+
+          const staffMap = new Map();
+          if (remoteStaff) {
+            Object.values(remoteStaff).forEach(st => {
+              if (st && (st.id || st.code)) {
+                staffMap.set(st.id || st.code, st);
+              }
+            });
+          }
+
+          // Conservar locales no sincronizados y subirlos a la nube
+          localStaff.forEach(ls => {
+            if (ls && (ls.id || ls.code) && !staffMap.has(ls.id || ls.code)) {
+              staffMap.set(ls.id || ls.code, ls);
+              const staffKey = sanitizeKey(ls.id || ls.code);
+              db.ref('staff/' + staffKey).set({
+                ...ls,
+                _updatedAt: new Date().toISOString()
+              }).catch(() => {});
+            }
+          });
+
+          const mergedStaff = Array.from(staffMap.values());
+          if (mergedStaff.length > 0) {
+            localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(mergedStaff));
+            notifyLocal('staff');
+          }
+        } catch (e) {
+          console.warn('CallejonFirebase: Error en listener de empleados:', e);
         }
       });
     }
