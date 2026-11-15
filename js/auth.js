@@ -569,6 +569,10 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
               <span>Tarjeta Callejón Mágico & MSI</span>
             </a>
+            <a href="#app-qr" class="user-menu-item open-pwa-qr-btn" onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('userProfileMenu')?.classList.remove('active'); setTimeout(() => { if(window.CallejonPWA && typeof window.CallejonPWA.openQrModal === 'function'){ CallejonPWA.openQrModal(); } }, 40);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Descargar App & Código QR</span>
+            </a>
           </div>
 
           <button type="button" class="btn-logout-user" id="btnLogoutUser">

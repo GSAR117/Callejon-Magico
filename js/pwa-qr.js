@@ -730,6 +730,9 @@
           <button type="button" class="cm-cat-sheet-btn-action" id="cmCatSheetOpenSucursales">
             📍 Sucursales
           </button>
+          <button type="button" class="cm-cat-sheet-btn-action" id="cmCatSheetOpenQr" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(223, 183, 67, 0.22) 0%, rgba(197, 143, 56, 0.22) 100%); font-weight: 800;">
+            📱 Descargar App Oficial (.APK) / Ver QR
+          </button>
         </div>
       </div>
     `;
@@ -754,6 +757,15 @@
       e.preventDefault();
       e.stopPropagation();
       closeCatSheet();
+    });
+
+    document.getElementById('cmCatSheetOpenQr')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeCatSheet();
+      setTimeout(() => {
+        openQrModal();
+      }, 50);
     });
 
     document.getElementById('cmCatSheetOpenCard')?.addEventListener('click', (e) => {
@@ -959,7 +971,25 @@
       adminFooter.insertBefore(btn, adminFooter.firstChild);
     }
 
-    // 3. Inyectar modal propio aislado (#pwaQrModalOverlay)
+    // 3. Insertar botón en el pie de página (.footer-brand-col)
+    const footerBrand = document.querySelector('.footer-brand-col');
+    if (footerBrand && !document.getElementById('btnFooterPwaQr')) {
+      const qrDiv = document.createElement('div');
+      qrDiv.style.marginTop = '1.1rem';
+      qrDiv.innerHTML = `
+        <button type="button" id="btnFooterPwaQr" class="pwa-qr-trigger-link" style="padding: 7px 16px; font-size: 0.82rem; cursor: pointer;">
+          📱 Descargar App Oficial (.APK) & Ver QR
+        </button>
+      `;
+      qrDiv.querySelector('#btnFooterPwaQr')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openQrModal();
+      });
+      footerBrand.appendChild(qrDiv);
+    }
+
+    // 4. Inyectar modal propio aislado (#pwaQrModalOverlay)
     if (document.getElementById('pwaQrModalOverlay')) return;
     const apkUrl = getApkDownloadUrl();
     const storeUrl = getStoreWebUrl();
