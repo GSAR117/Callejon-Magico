@@ -11,7 +11,7 @@
   inset: 0;
   background-color: rgba(9, 10, 13, 0.65);
   backdrop-filter: blur(4px);
-  z-index: 998;
+  z-index: 9998 !important;
   opacity: 0;
   visibility: hidden;
   transition: all var(--transition-normal);
@@ -33,7 +33,7 @@
   width: 100%;
   max-width: 440px;
   background-color: #ffffff;
-  z-index: 999;
+  z-index: 10000 !important;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-drawer);
@@ -376,9 +376,12 @@
 
 /* Drawer Footer */
 .drawer-footer {
-  padding: 1.25rem 1.5rem 1.5rem;
+  padding: 1.25rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom, 16px)) !important;
   border-top: 1px solid #edf0f3;
   background-color: #ffffff;
+  position: relative;
+  z-index: 10001;
+  flex-shrink: 0;
 }
 
 .cart-summary-row {
@@ -402,22 +405,31 @@
 
 .btn-checkout-primary {
   width: 100%;
-  height: 48px;
-  background-color: var(--color-primary);
-  color: #ffffff;
+  min-height: 52px;
+  background: linear-gradient(135deg, #07142a 0%, #0e2246 100%);
+  color: #dfb743 !important;
+  border: 1.5px solid rgba(223, 183, 67, 0.55);
   border-radius: var(--radius-sm);
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 14px rgba(11, 27, 61, 0.25);
+  gap: 0.6rem;
+  box-shadow: 0 6px 20px rgba(7, 20, 42, 0.35);
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.btn-checkout-primary:hover {
-  background: var(--color-gold-gradient);
+.btn-checkout-primary:hover,
+.btn-checkout-primary:active {
+  background: linear-gradient(135deg, #dfb743 0%, #c58f38 100%);
+  color: #07142a !important;
+  border-color: #dfb743;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(223, 183, 67, 0.4);
+}
   color: #07132b;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(197, 143, 56, 0.35);
@@ -537,7 +549,7 @@
   background-color: #ffffff;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
-  z-index: 999;
+  z-index: 10005 !important;
   width: 90%;
   max-width: 860px;
   max-height: 90vh;

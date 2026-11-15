@@ -1585,7 +1585,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const activeModal = document.querySelector('.modal-window.active, .drawer-panel.active, #quickViewModal.active, #checkoutModal.active, #cardModal.active, #ordersModal.active, #authModal.active');
       if (activeModal) {
         const isTrigger = e.target && typeof e.target.closest === 'function'
-          ? e.target.closest('a, button, input, .product-card, .btn-open-modal, .open-card-modal-btn, .open-orders-modal-btn, .btn-ribbon-schedule')
+          ? e.target.closest('a, button, input, .product-card, .btn-open-modal, .open-card-modal-btn, .open-orders-modal-btn, .btn-ribbon-schedule, #callejonMobileBottomNav, #cmMobileCategoriesSheet, #cmCategoriesSheet, #cmCategoriesSheetBackdrop')
           : null;
         if (!activeModal.contains(e.target) && !isTrigger) {
           closeAllModals();

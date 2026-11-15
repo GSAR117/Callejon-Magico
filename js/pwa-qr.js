@@ -424,6 +424,200 @@
           gap: 0.35rem !important;
           white-space: nowrap !important;
         }
+
+        /* Ocultar barra de navegación inferior cuando el carrito o modales estén abiertos */
+        body.has-active-modal #callejonMobileBottomNav,
+        body.has-drawer-open #callejonMobileBottomNav,
+        .drawer-panel.active ~ #callejonMobileBottomNav,
+        .modal-backdrop.active ~ #callejonMobileBottomNav,
+        #cartDrawer.active ~ #callejonMobileBottomNav {
+          transform: translateY(120%) !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+          transition: transform 0.25s ease, opacity 0.2s ease;
+        }
+
+        /* Mobile Categories Bottom Sheet */
+        .cm-cat-sheet-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(7, 20, 42, 0.72);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          z-index: 10015;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .cm-cat-sheet-backdrop.active {
+          opacity: 1;
+          visibility: visible;
+        }
+        .cm-cat-sheet {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          max-height: 85vh;
+          background: linear-gradient(180deg, #091a38 0%, #07142a 100%);
+          border-top: 2px solid rgba(223, 183, 67, 0.55);
+          border-radius: 22px 22px 0 0;
+          box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.65);
+          z-index: 10020;
+          display: flex;
+          flex-direction: column;
+          transform: translateY(105%);
+          transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+          overflow: hidden;
+        }
+        .cm-cat-sheet.active {
+          transform: translateY(0);
+        }
+        .cm-cat-sheet-drag-handle {
+          width: 44px;
+          height: 4.5px;
+          background: rgba(223, 183, 67, 0.4);
+          border-radius: 999px;
+          margin: 10px auto 4px;
+        }
+        .cm-cat-sheet-header {
+          padding: 0.6rem 1.4rem 0.85rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid rgba(223, 183, 67, 0.2);
+        }
+        .cm-cat-sheet-title-group {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .cm-cat-sheet-pill {
+          font-size: 0.65rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          color: #dfb743;
+        }
+        .cm-cat-sheet-title {
+          font-size: 1.15rem;
+          font-weight: 800;
+          color: #f8fafc;
+          margin: 0;
+          font-family: 'Cinzel', Georgia, serif;
+        }
+        .cm-cat-sheet-close {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(223, 183, 67, 0.3);
+          color: #dfb743;
+          font-size: 1.5rem;
+          line-height: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .cm-cat-sheet-close:active {
+          background: rgba(223, 183, 67, 0.25);
+          transform: scale(0.92);
+        }
+        .cm-cat-sheet-body {
+          padding: 1rem 1.1rem calc(1.5rem + env(safe-area-inset-bottom, 12px));
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.55rem;
+        }
+        .cm-cat-card {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          padding: 0.75rem 0.95rem;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          text-decoration: none;
+          color: #ffffff;
+          transition: all 0.18s ease;
+        }
+        .cm-cat-card:active {
+          background: rgba(223, 183, 67, 0.14);
+          border-color: rgba(223, 183, 67, 0.5);
+          transform: scale(0.985);
+        }
+        .cm-cat-card-special {
+          background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(223, 183, 67, 0.12) 100%);
+          border: 1px solid rgba(239, 68, 68, 0.35);
+        }
+        .cm-cat-card-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.4rem;
+          flex-shrink: 0;
+        }
+        .cm-cat-card-info {
+          flex: 1;
+          min-width: 0;
+        }
+        .cm-cat-card-name {
+          font-size: 0.92rem;
+          font-weight: 700;
+          color: #f8fafc;
+          line-height: 1.25;
+        }
+        .cm-cat-card-desc {
+          font-size: 0.72rem;
+          color: #94a3b8;
+          margin-top: 2px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .cm-cat-card-arrow {
+          width: 18px;
+          height: 18px;
+          stroke: #dfb743;
+          margin-left: auto;
+          flex-shrink: 0;
+        }
+        .cm-cat-sheet-quick-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.6rem;
+          margin-top: 0.5rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .cm-cat-sheet-btn-action {
+          padding: 0.7rem 0.6rem;
+          border-radius: 11px;
+          background: rgba(223, 183, 67, 0.12);
+          border: 1.2px solid rgba(223, 183, 67, 0.35);
+          color: #dfb743;
+          font-size: 0.78rem;
+          font-weight: 700;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
+          transition: all 0.15s ease;
+          font-family: 'Inter', system-ui, sans-serif;
+        }
+        .cm-cat-sheet-btn-action:active {
+          background: rgba(223, 183, 67, 0.28);
+          transform: scale(0.97);
+        }
       }
     `;
     document.head.appendChild(style);
@@ -433,6 +627,163 @@
     return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&color=07142a&bgcolor=ffffff&data=${encodeURIComponent(targetUrl)}`;
   }
 
+  function injectMobileCategoriesSheet() {
+    if (document.getElementById('cmCategoriesSheet')) return;
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'cmCategoriesSheetBackdrop';
+    backdrop.className = 'cm-cat-sheet-backdrop';
+
+    const sheet = document.createElement('div');
+    sheet.id = 'cmCategoriesSheet';
+    sheet.className = 'cm-cat-sheet';
+    sheet.setAttribute('role', 'dialog');
+    sheet.setAttribute('aria-modal', 'true');
+    sheet.setAttribute('aria-label', 'Departamentos Callejón Mágico');
+    sheet.innerHTML = `
+      <div class="cm-cat-sheet-drag-handle"></div>
+      <div class="cm-cat-sheet-header">
+        <div class="cm-cat-sheet-title-group">
+          <span class="cm-cat-sheet-pill">✨ Callejón Mágico</span>
+          <h3 class="cm-cat-sheet-title">Departamentos</h3>
+        </div>
+        <button type="button" class="cm-cat-sheet-close" id="btnCloseCatSheet" aria-label="Cerrar ventana">&times;</button>
+      </div>
+
+      <div class="cm-cat-sheet-body">
+        <a href="moda.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(223, 183, 67, 0.15); color: #dfb743;">👗</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Moda & Calzado</div>
+            <div class="cm-cat-card-desc">Dama, caballero, calzado y accesorios</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="tecnologia.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">📱</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Tecnología & Celulares</div>
+            <div class="cm-cat-card-desc">Smartphones, laptops, Smart TVs y audio</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="hogar.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">🏠</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Hogar & Electrodomésticos</div>
+            <div class="cm-cat-card-desc">Muebles, salas, cocinas y climatización</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="deportes.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">⚽</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Deportes & Fitness</div>
+            <div class="cm-cat-card-desc">Sneakers, ropa deportiva y entrenamiento</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="belleza.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">💄</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Belleza & Perfumería</div>
+            <div class="cm-cat-card-desc">Perfumería fina, skincare y cosméticos</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="juguetes.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">🧸</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Juguetes & Bebés</div>
+            <div class="cm-cat-card-desc">Figuras coleccionables, LEGO y didácticos</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="videojuegos.html" class="cm-cat-card">
+          <div class="cm-cat-card-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">🎮</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Videojuegos & Consolas</div>
+            <div class="cm-cat-card-desc">PlayStation 5, Nintendo Switch, Xbox y juegos</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <a href="tecnologia.html?discount=true" class="cm-cat-card cm-cat-card-special">
+          <div class="cm-cat-card-icon" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">🔥</div>
+          <div class="cm-cat-card-info">
+            <div class="cm-cat-card-name">Ofertas Buen Fin Mágico</div>
+            <div class="cm-cat-card-desc">Hasta 75% OFF + 18 Meses Sin Intereses</div>
+          </div>
+          <svg class="cm-cat-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <div class="cm-cat-sheet-quick-actions">
+          <button type="button" class="cm-cat-sheet-btn-action" id="cmCatSheetOpenCard">
+            💳 Mi Tarjeta
+          </button>
+          <button type="button" class="cm-cat-sheet-btn-action" id="cmCatSheetOpenSucursales">
+            📍 Sucursales
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(sheet);
+
+    const closeCatSheet = () => {
+      sheet.classList.remove('active');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('cmNavCategories')?.classList.remove('active');
+    };
+
+    document.getElementById('btnCloseCatSheet')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeCatSheet();
+    });
+
+    backdrop.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeCatSheet();
+    });
+
+    document.getElementById('cmCatSheetOpenCard')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeCatSheet();
+      setTimeout(() => {
+        if (window.CallejonCard && typeof window.CallejonCard.openModal === 'function') {
+          window.CallejonCard.openModal();
+        } else {
+          document.querySelector('.open-card-modal-btn')?.click();
+        }
+      }, 50);
+    });
+
+    document.getElementById('cmCatSheetOpenSucursales')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeCatSheet();
+      setTimeout(() => {
+        if (window.CallejonCard && typeof window.CallejonCard.showSucursalModal === 'function') {
+          window.CallejonCard.showSucursalModal(
+            'Visita nuestras 2 sucursales oficiales en Tapachula para compras directas, retiro de pedidos Click & Collect Express en 2 hrs, pagos y atención personalizada:',
+            '📍 Sucursales Callejón Mágico'
+          );
+        }
+      }, 50);
+    });
+  }
+
   function injectMobileBottomNav() {
     // No insertar barra de compras en el panel administrativo
     if (/administracion\.html$/i.test(window.location.pathname)) return;
@@ -440,11 +791,17 @@
 
     document.body.classList.add('has-callejon-mobile-nav');
 
+    // Inyectar el menú lateral/inferior de categorías
+    injectMobileCategoriesSheet();
+
+    const currentPath = window.location.pathname.toLowerCase();
+    const isHome = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '';
+
     const nav = document.createElement('nav');
     nav.id = 'callejonMobileBottomNav';
     nav.setAttribute('aria-label', 'Navegación móvil de la App');
     nav.innerHTML = `
-      <a href="index.html" class="cm-bottom-nav-item active" id="cmNavHome">
+      <a href="index.html" class="cm-bottom-nav-item ${isHome ? 'active' : ''}" id="cmNavHome">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -488,20 +845,54 @@
     document.body.appendChild(nav);
 
     // Conectar botones con las funciones nativas de la tienda
-    document.getElementById('cmNavCategories')?.addEventListener('click', () => {
-      const catBtn = document.getElementById('btnAllCategories');
-      if (catBtn) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        catBtn.click();
+    document.getElementById('cmNavCategories')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      injectMobileCategoriesSheet();
+      const sheet = document.getElementById('cmCategoriesSheet');
+      const backdrop = document.getElementById('cmCategoriesSheetBackdrop');
+      if (sheet && backdrop) {
+        const willBeActive = !sheet.classList.contains('active');
+        if (willBeActive) {
+          sheet.classList.add('active');
+          backdrop.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          document.getElementById('cmNavCategories')?.classList.add('active');
+        } else {
+          sheet.classList.remove('active');
+          backdrop.classList.remove('active');
+          document.body.style.overflow = '';
+          document.getElementById('cmNavCategories')?.classList.remove('active');
+        }
       }
     });
 
-    document.getElementById('cmNavCard')?.addEventListener('click', () => {
-      const cardBtn = document.querySelector('.open-card-modal-btn');
-      if (cardBtn) cardBtn.click();
+    document.getElementById('cmNavCard')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const sheet = document.getElementById('cmCategoriesSheet');
+      if (sheet) {
+        sheet.classList.remove('active');
+        document.getElementById('cmCategoriesSheetBackdrop')?.classList.remove('active');
+        document.getElementById('cmNavCategories')?.classList.remove('active');
+      }
+      if (window.CallejonCard && typeof window.CallejonCard.openModal === 'function') {
+        window.CallejonCard.openModal();
+      } else {
+        const cardBtn = document.querySelector('.open-card-modal-btn');
+        if (cardBtn) cardBtn.click();
+      }
     });
 
-    document.getElementById('cmNavCart')?.addEventListener('click', () => {
+    document.getElementById('cmNavCart')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const sheet = document.getElementById('cmCategoriesSheet');
+      if (sheet) {
+        sheet.classList.remove('active');
+        document.getElementById('cmCategoriesSheetBackdrop')?.classList.remove('active');
+        document.getElementById('cmNavCategories')?.classList.remove('active');
+      }
       const cartBtn = document.getElementById('btnOpenCart');
       if (cartBtn) cartBtn.click();
     });
@@ -509,6 +900,12 @@
     document.getElementById('cmNavAccount')?.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+      const sheet = document.getElementById('cmCategoriesSheet');
+      if (sheet) {
+        sheet.classList.remove('active');
+        document.getElementById('cmCategoriesSheetBackdrop')?.classList.remove('active');
+        document.getElementById('cmNavCategories')?.classList.remove('active');
+      }
       const accBtn = document.getElementById('btnUserAccount');
       if (accBtn) accBtn.click();
     });

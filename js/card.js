@@ -869,7 +869,11 @@
     },
 
     openModal() {
-      const modal = document.getElementById('cardModal');
+      let modal = document.getElementById('cardModal');
+      if (!modal) {
+        this.injectModal();
+        modal = document.getElementById('cardModal');
+      }
       const backdrop = document.getElementById('modalBackdrop');
       if (modal) {
         modal.classList.add('active');
@@ -892,11 +896,12 @@
       document.addEventListener('click', (e) => {
         // Enlace de Tarjeta Callejón Mágico
         const cardTrigger = e.target && typeof e.target.closest === 'function'
-          ? e.target.closest('a[href="#tarjeta-davanti"], a[href="#tarjeta-callejon"], a[href="#tarjeta-grande"], .open-card-modal-btn')
+          ? e.target.closest('a[href="#tarjeta-davanti"], a[href="#tarjeta-callejon"], a[href="#tarjeta-grande"], a[href*="tarjeta"], .open-card-modal-btn, #cmNavCard, [data-action="open-card"]')
           : null;
 
         if (cardTrigger) {
           e.preventDefault();
+          e.stopPropagation();
           this.openModal();
           return;
         }
@@ -908,6 +913,7 @@
 
         if (sucursalTrigger) {
           e.preventDefault();
+          e.stopPropagation();
           this.showSucursalModal(
             'Visita nuestras 2 sucursales oficiales en Tapachula para compras directas, retiro de pedidos Click & Collect Express en 2 hrs, pagos y atención personalizada:',
             '📍 Sucursales Callejón Mágico'
@@ -918,7 +924,10 @@
         // 2. Cerrar al hacer clic en cualquier parte fuera del cuadro de la tarjeta cuando esté abierta
         const cardModal = document.getElementById('cardModal');
         if (cardModal && cardModal.classList.contains('active')) {
-          if (!cardModal.contains(e.target)) {
+          const isCardOpener = e.target && typeof e.target.closest === 'function'
+            ? e.target.closest('a[href="#tarjeta-davanti"], a[href="#tarjeta-callejon"], a[href="#tarjeta-grande"], a[href*="tarjeta"], .open-card-modal-btn, #cmNavCard, [data-action="open-card"], .user-profile-menu')
+            : null;
+          if (!isCardOpener && !cardModal.contains(e.target)) {
             this.closeModal();
           }
         }
@@ -926,7 +935,10 @@
         // 3. Cerrar al hacer clic fuera del cuadro de sucursal cuando esté abierto
         const sucursalModal = document.getElementById('cardSucursalModal');
         if (sucursalModal && sucursalModal.classList.contains('active')) {
-          if (!sucursalModal.contains(e.target)) {
+          const isSucursalOpener = e.target && typeof e.target.closest === 'function'
+            ? e.target.closest('a[href*="#click-collect"], .open-sucursales-btn, [data-action="open-sucursales"]')
+            : null;
+          if (!isSucursalOpener && !sucursalModal.contains(e.target)) {
             this.closeSucursalModal();
           }
         }
