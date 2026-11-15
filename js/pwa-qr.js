@@ -299,11 +299,24 @@
       }
 
       /* ====================================================================
-         BARRA INFERIOR ESTILO APP (LIVERPOOL / COPPEL / SHEIN) EN MÓVILES
+         BARRA INFERIOR Y SHEET DE CATEGORÍAS (SÓLO MÓVILES <= 900px)
          ==================================================================== */
-      #callejonMobileBottomNav {
-        display: none;
+      #callejonMobileBottomNav,
+      #cmCategoriesSheet,
+      #cmCategoriesSheetBackdrop,
+      .cm-cat-sheet,
+      .cm-cat-sheet-backdrop {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
       }
+      .cm-cat-card-arrow {
+        width: 18px !important;
+        height: 18px !important;
+        max-width: 18px !important;
+        max-height: 18px !important;
+      }
+
       @media (max-width: 900px) {
         body.has-callejon-mobile-nav {
           padding-bottom: 68px !important;
@@ -318,7 +331,9 @@
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           border-top: 1.5px solid rgba(223, 183, 67, 0.35);
-          display: grid;
+          display: grid !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
           grid-template-columns: repeat(5, 1fr);
           align-items: center;
           z-index: 9500;
@@ -448,10 +463,13 @@
           opacity: 0;
           visibility: hidden;
           transition: opacity 0.3s ease, visibility 0.3s ease;
+          display: block !important;
+          pointer-events: none !important;
         }
         .cm-cat-sheet-backdrop.active {
           opacity: 1;
           visibility: visible;
+          pointer-events: auto !important;
         }
         .cm-cat-sheet {
           position: fixed;
@@ -464,11 +482,13 @@
           border-radius: 22px 22px 0 0;
           box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.65);
           z-index: 10020;
-          display: flex;
+          display: flex !important;
           flex-direction: column;
           transform: translateY(105%);
           transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
           overflow: hidden;
+          visibility: visible !important;
+          pointer-events: auto !important;
         }
         .cm-cat-sheet.active {
           transform: translateY(0);
@@ -619,6 +639,23 @@
           transform: scale(0.97);
         }
       }
+
+      /* AISLAMIENTO RIGUROSO: EN PANTALLAS DE ESCRITORIO (> 900px) NUNCA MOSTRAR ESTOS ELEMENTOS */
+      @media (min-width: 901px) {
+        #callejonMobileBottomNav,
+        #cmCategoriesSheet,
+        #cmCategoriesSheetBackdrop,
+        .cm-cat-sheet,
+        .cm-cat-sheet-backdrop {
+          display: none !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          height: 0 !important;
+          width: 0 !important;
+          opacity: 0 !important;
+          overflow: hidden !important;
+        }
+      }
     `;
     document.head.appendChild(style);
   }
@@ -628,6 +665,7 @@
   }
 
   function injectMobileCategoriesSheet() {
+    if (window.innerWidth > 900) return;
     if (document.getElementById('cmCategoriesSheet')) return;
 
     const backdrop = document.createElement('div');
@@ -797,8 +835,9 @@
   }
 
   function injectMobileBottomNav() {
-    // No insertar barra de compras en el panel administrativo
+    // No insertar barra de compras en el panel administrativo ni en pantallas grandes de escritorio (> 900px)
     if (/administracion\.html$/i.test(window.location.pathname)) return;
+    if (window.innerWidth > 900) return;
     if (document.getElementById('callejonMobileBottomNav')) return;
 
     document.body.classList.add('has-callejon-mobile-nav');
@@ -1122,6 +1161,16 @@
     const overlay = document.getElementById('pwaQrModalOverlay');
     if (overlay) overlay.classList.remove('active');
   }
+
+  let cmResizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(cmResizeTimeout);
+    cmResizeTimeout = setTimeout(() => {
+      if (window.innerWidth <= 900) {
+        injectMobileBottomNav();
+      }
+    }, 200);
+  });
 
   registerServiceWorker();
 

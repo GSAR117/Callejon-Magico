@@ -432,6 +432,30 @@
 }
 
 /* ==========================================================================
+   DESKTOP VS MOBILE NAV ISOLATION
+   ========================================================================== */
+@media (min-width: 901px) {
+  #callejonMobileBottomNav,
+  #cmCategoriesSheet,
+  #cmCategoriesSheetBackdrop,
+  .cm-cat-sheet,
+  .cm-cat-sheet-backdrop {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+.cm-cat-card-arrow {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+}
+
+/* ==========================================================================
    MEGA MENU (LIVERPOOL STYLE DEPARTMENTS)
    ========================================================================== */
 .megamenu-panel {
