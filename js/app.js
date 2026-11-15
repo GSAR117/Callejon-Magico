@@ -856,6 +856,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (postalInput && !postalInput.value) postalInput.value = activeUser?.postal || '';
       if (cityInput && !cityInput.value) cityInput.value = activeUser?.city || '';
 
+      // Sincronizar visibilidad de campos de entrega (oculta calle y número si es Retiro en Sucursal)
+      if (typeof window.setCheckoutDeliveryMode === 'function') {
+        const isPickup = !!document.getElementById('btnModeBranchPickup')?.classList.contains('active');
+        window.setCheckoutDeliveryMode(isPickup ? 'pickup' : 'home');
+      }
+
       // Limpiar campos de tarjeta bancaria
       const ccNum = document.getElementById('ccCardNumber');
       const ccHolder = document.getElementById('ccCardHolder');
@@ -1886,17 +1892,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return fail(emailInput, '✉️ Ingresa un correo electrónico válido para tu ticket digital (ej: tu-nombre@gmail.com).');
       }
 
-      // 4. Calle y número
+      // Si es Retiro en Sucursal (Click & Collect), la dirección de la sucursal ya fue elegida arriba
+      const isBranchPickup = !!document.getElementById('btnModeBranchPickup')?.classList.contains('active');
+      if (isBranchPickup) {
+        const selectedBranch = document.querySelector('input[name="pickupBranchOption"]:checked')?.value || 'centro';
+        const branchStreet = selectedBranch === 'sur'
+          ? '3a. Av. Sur #114, frente a la Unidad Administrativa (Plantel Sur)'
+          : '8A Avenida Sur no. 54 col. Centro entre 4 y 6 poniente (Plantel Centro)';
+        if (streetInput) streetInput.value = branchStreet;
+        if (postalInput) postalInput.value = '30700';
+        if (cityInput) cityInput.value = 'Tapachula, Chiapas';
+        return true;
+      }
+
+      // 4. Calle y número (Sólo para Envío a Domicilio)
       if (!streetVal || streetVal.length < 6) {
         return fail(streetInput, '📍 Ingresa tu calle y número exterior/interior completo (mínimo 6 caracteres).');
       }
 
-      // 5. Código postal
+      // 5. Código postal (Sólo para Envío a Domicilio)
       if (!postalVal || !/^\d{5}$/.test(postalVal)) {
         return fail(postalInput, '📮 El Código Postal debe tener exactamente 5 números (ej: 30700).');
       }
 
-      // 6. Ciudad / Estado
+      // 6. Ciudad / Estado (Sólo para Envío a Domicilio)
       if (!cityVal || cityVal.length < 3 || !/[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(cityVal)) {
         return fail(cityInput, '🏙️ Ingresa tu Ciudad y Estado (ej: Tapachula, Chiapas).');
       }

@@ -1018,25 +1018,14 @@
         }
       };
 
-      if (btnHome && btnPickup) {
-        btnHome.addEventListener('click', () => {
-          btnHome.className = 'delivery-mode-btn active';
-          btnHome.style.border = '2px solid #c58f38';
-          btnHome.style.background = '#fffbf0';
-          btnHome.style.color = '#0b1b3d';
+      const streetGroup = inputStreet ? (inputStreet.closest('.form-group-full') || inputStreet.parentElement) : null;
+      const postalGroup = inputPostal ? (inputPostal.closest('div') || inputPostal.parentElement) : null;
+      const cityGroup = inputCity ? (inputCity.closest('div') || inputCity.parentElement) : null;
 
-          btnPickup.className = 'delivery-mode-btn';
-          btnPickup.style.border = '1.5px solid #cbd5e1';
-          btnPickup.style.background = '#ffffff';
-          btnPickup.style.color = '#475569';
+      const setDeliveryMode = (mode) => {
+        const isPickup = mode === 'pickup';
 
-          if (pickupBox) pickupBox.style.display = 'none';
-          if (inputStreet) { inputStreet.value = ''; inputStreet.placeholder = 'Calle, número ext/int y colonia'; }
-          if (inputPostal) { inputPostal.value = ''; inputPostal.placeholder = 'Ej: 30700'; }
-          if (inputCity) { inputCity.value = ''; inputCity.placeholder = 'Ej: Tapachula, Chiapas'; }
-        });
-
-        btnPickup.addEventListener('click', () => {
+        if (isPickup) {
           btnPickup.className = 'delivery-mode-btn active';
           btnPickup.style.border = '2px solid #c58f38';
           btnPickup.style.background = '#fffbf0';
@@ -1048,10 +1037,71 @@
           btnHome.style.color = '#475569';
 
           if (pickupBox) pickupBox.style.display = 'block';
-          if (inputStreet) { inputStreet.value = ''; inputStreet.placeholder = 'Calle y dirección para retiro / contacto'; }
-          if (inputPostal) { inputPostal.value = ''; inputPostal.placeholder = 'Ej: 30700'; }
-          if (inputCity) { inputCity.value = ''; inputCity.placeholder = 'Ej: Tapachula, Chiapas'; }
-        });
+
+          // Ocultar opción de Calle y número (y datos de domicilio) porque la sucursal ya está elegida arriba
+          if (streetGroup) streetGroup.style.display = 'none';
+          if (postalGroup) postalGroup.style.display = 'none';
+          if (cityGroup) cityGroup.style.display = 'none';
+
+          const selectedRadio = document.querySelector('input[name="pickupBranchOption"]:checked');
+          const branchKey = selectedRadio ? selectedRadio.value : 'centro';
+          const b = branches[branchKey] || branches.centro;
+
+          if (inputStreet) {
+            inputStreet.value = b.street;
+            inputStreet.required = false;
+          }
+          if (inputPostal) {
+            inputPostal.value = b.postal;
+            inputPostal.required = false;
+          }
+          if (inputCity) {
+            inputCity.value = b.city;
+            inputCity.required = false;
+          }
+        } else {
+          btnHome.className = 'delivery-mode-btn active';
+          btnHome.style.border = '2px solid #c58f38';
+          btnHome.style.background = '#fffbf0';
+          btnHome.style.color = '#0b1b3d';
+
+          btnPickup.className = 'delivery-mode-btn';
+          btnPickup.style.border = '1.5px solid #cbd5e1';
+          btnPickup.style.background = '#ffffff';
+          btnPickup.style.color = '#475569';
+
+          if (pickupBox) pickupBox.style.display = 'none';
+
+          // Mostrar campos de dirección para Envío a Domicilio
+          if (streetGroup) streetGroup.style.display = '';
+          if (postalGroup) postalGroup.style.display = '';
+          if (cityGroup) cityGroup.style.display = '';
+
+          if (inputStreet) {
+            if (inputStreet.value.includes('Plantel') || inputStreet.value.includes('8A Avenida Sur') || inputStreet.value.includes('3a. Av. Sur')) {
+              inputStreet.value = '';
+            }
+            inputStreet.required = true;
+            inputStreet.placeholder = 'Calle, número ext/int y colonia';
+          }
+          if (inputPostal) {
+            if (inputStreet && !inputStreet.value) inputPostal.value = '';
+            inputPostal.required = true;
+            inputPostal.placeholder = 'Ej: 30700';
+          }
+          if (inputCity) {
+            if (inputStreet && !inputStreet.value) inputCity.value = '';
+            inputCity.required = true;
+            inputCity.placeholder = 'Ej: Tapachula, Chiapas';
+          }
+        }
+      };
+
+      window.setCheckoutDeliveryMode = setDeliveryMode;
+
+      if (btnHome && btnPickup) {
+        btnHome.addEventListener('click', () => setDeliveryMode('home'));
+        btnPickup.addEventListener('click', () => setDeliveryMode('pickup'));
 
         document.querySelectorAll('input[name="pickupBranchOption"]').forEach(r => {
           r.addEventListener('change', () => {
@@ -1060,6 +1110,11 @@
             });
             const parentLabel = r.closest('.branch-radio-card');
             if (parentLabel) parentLabel.style.border = '2px solid #c58f38';
+
+            const b = branches[r.value] || branches.centro;
+            if (inputStreet) inputStreet.value = b.street;
+            if (inputPostal) inputPostal.value = b.postal;
+            if (inputCity) inputCity.value = b.city;
           });
         });
       }

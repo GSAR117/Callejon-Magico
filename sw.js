@@ -6,7 +6,7 @@
  * ==========================================================================
  */
 
-const CACHE_NAME = 'callejon-magico-pwa-v7';
+const CACHE_NAME = 'callejon-magico-pwa-v8';
 const CORE_ASSETS = [
   './',
   './index.html',
