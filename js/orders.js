@@ -486,13 +486,16 @@
                       <button type="button" class="btn-copy-tracking" onclick="navigator.clipboard?.writeText('${order.trackingNumber}'); if(window.DavantiApp){DavantiApp.showToast('Guía copiada: ${order.trackingNumber}');}">
                         📋 Copiar
                       </button>
-                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.open('${order.orderNum}');}" style="background: #0B1B3D; color: #ffffff; border-color: #C58F38;">
+                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.open('${order.orderNum}');}" style="background: #0B1B3D; color: #ffffff; border-color: #C58F38;" title="Ver e imprimir ticket">
                         🧾 Ticket
                       </button>
-                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendEmailFromOrder('${order.orderNum}');}" style="background: #059669; color: #ffffff; border-color: #059669;">
-                        ✉️ Enviar Correo
+                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.downloadPDF('${order.orderNum}');}" style="background: #b91c1c; color: #ffffff; border-color: #991b1b;" title="Descargar PDF para imprimir">
+                        📄 PDF
                       </button>
-                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${order.orderNum}', '${order.recipient?.phone || '962 401 4408'}');}" style="background: #25D366; color: #ffffff; border-color: #25D366;">
+                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendEmailFromOrder('${order.orderNum}');}" style="background: #059669; color: #ffffff; border-color: #059669;" title="Enviar por correo">
+                        ✉️ Correo
+                      </button>
+                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${order.orderNum}', '962 401 4408');}" style="background: #25D366; color: #ffffff; border-color: #25D366;" title="Enviar ticket a WhatsApp Oficial (962 401 4408)">
                         📲 WhatsApp
                       </button>
                     </div>
