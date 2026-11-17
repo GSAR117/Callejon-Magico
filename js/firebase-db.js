@@ -425,7 +425,10 @@
               if (staffMap.has(uniqueKey)) {
                 // Registro duplicado detectado en la nube: fusionar conservando modificaciones recientes
                 const existing = staffMap.get(uniqueKey);
-                const merged = { ...existing, ...st };
+                const resolvedStatus = (existing.status === 'activo' || st.status === 'activo')
+                  ? 'activo'
+                  : (st.status || existing.status || 'activo');
+                const merged = { ...existing, ...st, status: resolvedStatus };
                 if (st.shift && st.shift !== 'completo') {
                   merged.shift = st.shift;
                   merged.shiftName = st.shiftName || merged.shiftName;
@@ -438,6 +441,10 @@
                   db.ref('staff/' + remKey).remove().catch(() => {});
                 }
               } else {
+                // Si el estatus viene inactivo pero no está en la lista negra, normalizar a activo
+                if (st.status === 'inactivo' && !isDeletedStaffMember(st, deletedStaff)) {
+                  st.status = 'activo';
+                }
                 staffMap.set(uniqueKey, st);
               }
             });
@@ -461,8 +468,12 @@
 
           const mergedStaff = Array.from(staffMap.values());
           if (mergedStaff.length > 0) {
-            localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(mergedStaff));
-            notifyLocal('staff');
+            const currentRaw = localStorage.getItem(STORAGE_KEYS.STAFF) || '[]';
+            const newRaw = JSON.stringify(mergedStaff);
+            if (currentRaw !== newRaw) {
+              localStorage.setItem(STORAGE_KEYS.STAFF, newRaw);
+              notifyLocal('staff');
+            }
           }
         } catch (e) {
           console.warn('CallejonFirebase: Error en listener de empleados:', e);

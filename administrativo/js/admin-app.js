@@ -82,9 +82,16 @@
     setupModals();
     renderAll();
 
-    // Escuchar cambios de base de datos o almacenamiento en vivo
-    window.addEventListener('callejon_admin_db_changed', () => renderAll());
-    window.addEventListener('storage', () => renderAll());
+    // Escuchar cambios de base de datos o almacenamiento en vivo con renderizado estabilizado
+    let renderDebounceTimer = null;
+    const scheduleRender = () => {
+      if (renderDebounceTimer) cancelAnimationFrame(renderDebounceTimer);
+      renderDebounceTimer = requestAnimationFrame(() => {
+        renderAll();
+      });
+    };
+    window.addEventListener('callejon_admin_db_changed', scheduleRender);
+    window.addEventListener('storage', scheduleRender);
 
     // Sidebar móvil
     const btnToggle = document.getElementById('btnToggleSidebar');

@@ -851,6 +851,12 @@
                 primary.salary = emp.salary || primary.salary;
                 primary.updatedAt = emp.updatedAt;
               }
+              // Resolver estatus coherentemente: un colaborador activo no debe parpadear a inactivo
+              if (primary.status === 'activo' || emp.status === 'activo') {
+                primary.status = 'activo';
+              } else if (!primary.status) {
+                primary.status = emp.status || 'activo';
+              }
             }
           } else {
             if (codeKey) seenCodes.add(codeKey);
@@ -861,13 +867,28 @@
           }
         });
 
-        if (deduplicated.length !== countBeforeFilter) {
-          staff = deduplicated;
-          localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+        // Asegurar que ningún colaborador activo de la plantilla quede con estatus inactivo erróneo
+        deduplicated.forEach(emp => {
+          if (!emp.status || emp.status === 'inactivo') {
+            emp.status = 'activo';
+          }
+        });
+
+        staff = deduplicated;
+
+        const currentRaw = localStorage.getItem(KEYS.STAFF) || '[]';
+        const newRaw = JSON.stringify(staff);
+        if (currentRaw !== newRaw) {
+          localStorage.setItem(KEYS.STAFF, newRaw);
 
           // Purgar de Firebase las claves de duplicados huérfanos
           if (duplicateIdsToPurge.length && window.CallejonFirebase && typeof window.CallejonFirebase.deleteStaff === 'function') {
             duplicateIdsToPurge.forEach(dupId => window.CallejonFirebase.deleteStaff(dupId));
+          }
+
+          // Asegurar que cada colaborador canónico quede sincronizado como 'activo'
+          if (window.CallejonFirebase && typeof window.CallejonFirebase.syncStaff === 'function') {
+            staff.forEach(st => window.CallejonFirebase.syncStaff(st));
           }
         }
 
