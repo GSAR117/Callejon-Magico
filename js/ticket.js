@@ -463,9 +463,47 @@
         second: '2-digit'
       });
 
-      // Información de tarjeta enmascarada si fue con Callejón Mágico
+      // Información de tarjeta enmascarada si fue con Callejón Mágico o Pago Mixto
       let paymentDetailsHtml = '';
-      if (order.paymentMethod && order.paymentMethod.toLowerCase().includes('callejón')) {
+      const isSplit = order.isSplitPayment || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('mixto'));
+
+      if (isSplit) {
+        let cardNumMasked = '4152 •••• •••• ••••';
+        if (window.CallejonCard && typeof window.CallejonCard.getCard === 'function') {
+          const card = window.CallejonCard.getCard();
+          if (card && card.cardNumber && card.cardNumber.length >= 16) {
+            const raw = card.cardNumber.replace(/\s+/g, '');
+            cardNumMasked = `4152 •••• •••• ${raw.slice(-4)}`;
+          }
+        }
+        const cashAmt = typeof order.cashAmount === 'number' ? order.cashAmount : (fin.total / 2);
+        const credAmt = typeof order.creditAmount === 'number' ? order.creditAmount : (fin.total - cashAmt);
+        const msi = order.creditMsi || order.msi || 1;
+        paymentDetailsHtml = `
+          <div class="ticket-row-detail highlight" style="background: #fdf4ff; border: 1px dashed #d8b4fe; padding: 3px 5px; margin: 3px 0;">
+            <span>MODALIDAD:</span>
+            <span><strong>PAGO MIXTO (EFECTIVO + CRÉDITO)</strong></span>
+          </div>
+          <div class="ticket-row-detail">
+            <span>💵 EFECTIVO:</span>
+            <span><strong>$${cashAmt.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</strong> (${order.cashLabel || order.cashType || 'Contraentrega'})</span>
+          </div>
+          <div class="ticket-row-detail">
+            <span>💳 CRÉDITO:</span>
+            <span><strong>$${credAmt.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</strong> (${cardNumMasked})</span>
+          </div>
+          ${msi > 1 ? `
+            <div class="ticket-row-detail highlight">
+              <span>FINANCIAMIENTO CRÉDITO:</span>
+              <span><strong>${msi} MSI de $${(credAmt / msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/m</strong></span>
+            </div>
+          ` : '<div class="ticket-row-detail"><span>PLAZO CRÉDITO:</span><span>1 PAGO DE CONTADO</span></div>'}
+          <div class="ticket-row-detail">
+            <span>ESTADO:</span>
+            <span>CRÉDITO APLICADO — EFECTIVO POR COBRAR</span>
+          </div>
+        `;
+      } else if (order.paymentMethod && order.paymentMethod.toLowerCase().includes('callejón')) {
         let cardNumMasked = '4152 •••• •••• ••••';
         if (window.CallejonCard && typeof window.CallejonCard.getCard === 'function') {
           const card = window.CallejonCard.getCard();
@@ -741,9 +779,18 @@
       txt += `${border}\n`;
       txt += `(${fin.totalWords})\n\n`;
 
-      txt += `FORMA DE PAGO:      ${order.paymentMethod}\n`;
-      if (order.msi && order.msi > 1) {
-        txt += `FINANCIAMIENTO:     ${order.msi} MSI de $${(fin.total / order.msi).toFixed(2)}/mes\n`;
+      if (order.isSplitPayment || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('mixto'))) {
+        const cashAmt = typeof order.cashAmount === 'number' ? order.cashAmount : (fin.total / 2);
+        const credAmt = typeof order.creditAmount === 'number' ? order.creditAmount : (fin.total - cashAmt);
+        const msi = order.creditMsi || order.msi || 1;
+        txt += `FORMA DE PAGO:      PAGO MIXTO (EFECTIVO + CRÉDITO)\n`;
+        txt += `  - EFECTIVO:       $${cashAmt.toFixed(2)} MXN (${order.cashLabel || 'Contraentrega'})\n`;
+        txt += `  - CRÉDITO:        $${credAmt.toFixed(2)} MXN (${msi > 1 ? msi + ' MSI' : 'Contado'})\n`;
+      } else {
+        txt += `FORMA DE PAGO:      ${order.paymentMethod}\n`;
+        if (order.msi && order.msi > 1) {
+          txt += `FINANCIAMIENTO:     ${order.msi} MSI de $${(fin.total / order.msi).toFixed(2)}/mes\n`;
+        }
       }
       txt += `PUNTOS MÁGICOS:     +${order.pointsEarned || 0} pts acumulados\n`;
       txt += `GUÍA DE RASTREO:    ${order.carrier || 'Estafeta'}: ${order.trackingNumber || ''}\n`;
@@ -808,8 +855,10 @@ ${itemsText}
 _(${fin.totalWords})_
 ══════════════════════════════
 
-💳 *FORMA DE PAGO:* ${order.paymentMethod || 'Tarjeta Departamental Callejón Mágico'}
-${order.msi && order.msi > 1 ? `🎉 *FINANCIAMIENTO:* ${order.msi} MSI de $${(fin.total / order.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes\n` : ''}✨ *PUNTOS MÁGICOS:* +${order.pointsEarned || 0} pts
+${order.isSplitPayment || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('mixto')) ? `💳💵 *MODALIDAD DE PAGO:* PAGO MIXTO (EFECTIVO + CRÉDITO)
+   💵 *Efectivo:* $${(typeof order.cashAmount === 'number' ? order.cashAmount : fin.total/2).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN (${order.cashLabel || order.cashType || 'Contraentrega'})
+   💳 *Crédito Callejón:* $${(typeof order.creditAmount === 'number' ? order.creditAmount : fin.total/2).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN${(order.creditMsi || order.msi || 1) > 1 ? ` (${order.creditMsi || order.msi} MSI de $${(((typeof order.creditAmount === 'number' ? order.creditAmount : fin.total/2)) / (order.creditMsi || order.msi)).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes)` : ''}\n` : `💳 *FORMA DE PAGO:* ${order.paymentMethod || 'Tarjeta Departamental Callejón Mágico'}
+${order.msi && order.msi > 1 ? `🎉 *FINANCIAMIENTO:* ${order.msi} MSI de $${(fin.total / order.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes\n` : ''}`}✨ *PUNTOS MÁGICOS:* +${order.pointsEarned || 0} pts
 🚚 *GUÍA DE RASTREO:* ${order.trackingNumber || 'EST-MX-849201948'} (${order.carrier || 'Estafeta Express'})
 
 ══════════════════════════════
@@ -890,9 +939,18 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
       lines.push({ text: `(${clean(fin.totalWords)})`, font: "F1", size: 7, align: "right", spacing: 6 });
       lines.push({ text: "------------------------------------------------------------------", font: "F1", size: 8, align: "center", spacing: 6 });
 
-      lines.push({ text: `FORMA DE PAGO: ${clean(order.paymentMethod || 'Tarjeta Callejón Mágico')}`, font: "F2", size: 8, align: "left", spacing: 3 });
-      if (order.msi && order.msi > 1) {
-        lines.push({ text: `FINANCIAMIENTO: ${order.msi} Meses Sin Intereses de $${(fin.total / order.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes`, font: "F1", size: 8, align: "left", spacing: 3 });
+      if (order.isSplitPayment || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('mixto'))) {
+        const cashAmt = typeof order.cashAmount === 'number' ? order.cashAmount : (fin.total / 2);
+        const credAmt = typeof order.creditAmount === 'number' ? order.creditAmount : (fin.total - cashAmt);
+        const msi = order.creditMsi || order.msi || 1;
+        lines.push({ text: `FORMA DE PAGO: PAGO MIXTO (EFECTIVO + CREDITO)`, font: "F2", size: 8, align: "left", spacing: 2 });
+        lines.push({ text: `  - Efectivo: $${cashAmt.toFixed(2)} MXN (${clean(order.cashLabel || order.cashType || 'Contraentrega')})`, font: "F1", size: 7.5, align: "left", spacing: 1.5 });
+        lines.push({ text: `  - Credito Callejon: $${credAmt.toFixed(2)} MXN (${msi > 1 ? msi + ' MSI de $' + (credAmt/msi).toFixed(2) + '/mes' : '1 solo pago'})`, font: "F1", size: 7.5, align: "left", spacing: 2 });
+      } else {
+        lines.push({ text: `FORMA DE PAGO: ${clean(order.paymentMethod || 'Tarjeta Callejon Magico')}`, font: "F2", size: 8, align: "left", spacing: 3 });
+        if (order.msi && order.msi > 1) {
+          lines.push({ text: `FINANCIAMIENTO: ${order.msi} Meses Sin Intereses de $${(fin.total / order.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes`, font: "F1", size: 8, align: "left", spacing: 3 });
+        }
       }
       lines.push({ text: `PUNTOS MAGICOS ACUMULADOS: +${order.pointsEarned || 0} pts`, font: "F1", size: 8, align: "left", spacing: 3 });
       lines.push({ text: `GUIA DE RASTREO: ${clean(order.carrier || 'Estafeta')} (${clean(order.trackingNumber || 'EST-MX-849201948')})`, font: "F1", size: 8, align: "left", spacing: 6 });

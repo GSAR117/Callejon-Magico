@@ -4213,6 +4213,54 @@
   box-shadow: 0 6px 18px rgba(5, 150, 105, 0.35) !important;
 }
 
+/* ==========================================================================
+   PAGO MIXTO: EFECTIVO + CRÉDITO DEPARTAMENTAL
+   ========================================================================== */
+.cash-split-toggle-wrap {
+  background: #ffffff;
+  border: 1.5px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  margin-top: 0.65rem;
+  transition: all 0.2s ease;
+}
+
+.cash-split-toggle-wrap:hover {
+  border-color: #059669;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.1);
+}
+
+.btn-split-preset {
+  flex: 1;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-split-preset:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-split-preset.active {
+  background: #059669;
+  border-color: #047857;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+}
+
+.badge-method.split {
+  background: rgba(168, 85, 247, 0.15) !important;
+  color: #a855f7 !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+}
+
 .checkout-action-btn.btn-track-order {
   background: #1e293b !important;
   color: #ffffff !important;

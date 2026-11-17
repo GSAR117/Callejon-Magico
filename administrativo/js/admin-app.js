@@ -1469,6 +1469,7 @@
   // =========================================================================
   function getMethodBadgeClass(method) {
     const m = (method || '').toLowerCase();
+    if (m.includes('mixto') || m.includes('split')) return 'split';
     if (m.includes('callejón') || m.includes('tienda')) return 'callejon';
     if (m.includes('efectivo') || m.includes('cash')) return 'cash';
     return 'card';

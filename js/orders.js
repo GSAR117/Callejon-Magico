@@ -537,7 +537,9 @@
                 <!-- Resumen de Pago y Puntos Mágicos -->
                 <div class="order-card-footer">
                   <div class="order-footer-details">
-                    <span>💳 <strong>Método:</strong> ${order.paymentMethod}</span>
+                    ${order.isSplitPayment ? `
+                      <span>💳💵 <strong>Pago Mixto:</strong> $${(order.cashAmount || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} en Efectivo (${order.cashLabel || 'Contraentrega'}) + $${(order.creditAmount || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} a Crédito (${order.creditMsi || 1} MSI)</span>
+                    ` : `<span>💳 <strong>Método:</strong> ${order.paymentMethod}</span>`}
                     <span>👤 <strong>Destinatario:</strong> ${order.recipient.name} (${order.recipient.phone})</span>
                     <span>📍 <strong>Dirección:</strong> ${order.recipient.street}</span>
                   </div>

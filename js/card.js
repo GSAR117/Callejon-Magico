@@ -1228,6 +1228,205 @@
       const creditDebitBox = document.getElementById('creditDebitCardBox');
       const cashBox = document.getElementById('cashPaymentBox');
 
+      // =========================================================================
+      // PAGO MIXTO: UNA PARTE EN EFECTIVO Y UNA PARTE A CRÉDITO
+      // =========================================================================
+      const ensureSplitSectionInCashBox = () => {
+        if (!cashBox) return;
+        let splitWrap = document.getElementById('cashSplitToggleSection');
+        if (!splitWrap) {
+          const html = `
+            <div class="cash-split-toggle-wrap" id="cashSplitToggleSection">
+              <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" id="toggleSplitPaymentWrap">
+                <label style="display: flex; align-items: center; gap: 0.55rem; cursor: pointer; margin: 0; user-select: none;">
+                  <input type="checkbox" id="chkSplitPayment" style="width: 18px; height: 18px; cursor: pointer; accent-color: #059669;" />
+                  <span style="font-size: 0.85rem; font-weight: 700; color: #0b1b3d;">
+                    💳💵 Dividir pago: Pagar una parte en efectivo y una parte a crédito
+                  </span>
+                </label>
+                <span style="font-size: 0.7rem; font-weight: 800; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 2px 7px; border-radius: 4px;">
+                  Pago Mixto
+                </span>
+              </div>
+
+              <div id="splitPaymentDetailsBox" style="display: none; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; font-size: 0.82rem; background: #f8fafc; padding: 0.5rem 0.65rem; border-radius: 6px;">
+                  <span style="color: #64748b;">Total de la compra:</span>
+                  <strong id="splitTotalDisplay" style="color: #0b1b3d; font-size: 0.95rem;">$0.00 MXN</strong>
+                </div>
+
+                <div style="margin-bottom: 0.75rem;">
+                  <label class="form-label" for="splitCashAmount" style="font-size: 0.8rem; font-weight: 700; color: #166534; display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                    <span>💵 ¿Cuánto deseas pagar en Efectivo?</span>
+                    <span id="splitCashPercentLabel" style="color: #059669; font-weight: 700;">(50%)</span>
+                  </label>
+                  <div style="position: relative;">
+                    <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 700; color: #475569; font-size: 1rem;">$</span>
+                    <input type="number" id="splitCashAmount" class="form-control" style="padding-left: 26px; font-weight: 700; font-size: 1rem; height: 42px; border: 1.5px solid #86efac; border-radius: 6px;" placeholder="0.00" min="1" step="any" />
+                  </div>
+                  <div style="display: flex; gap: 0.4rem; margin-top: 0.4rem;">
+                    <button type="button" class="btn-split-preset" data-pct="25">25%</button>
+                    <button type="button" class="btn-split-preset active" data-pct="50">50%</button>
+                    <button type="button" class="btn-split-preset" data-pct="75">75%</button>
+                  </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem; font-size: 0.82rem;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                    <span style="color: #334155;">💵 A pagar en Efectivo:</span>
+                    <strong id="splitSummaryCash" style="color: #166534; font-size: 0.95rem;">$0.00 MXN</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                    <span style="color: #334155;">💳 A Crédito Callejón Mágico:</span>
+                    <strong id="splitSummaryCredit" style="color: #0b1b3d; font-size: 0.95rem;">$0.00 MXN</strong>
+                  </div>
+                  <div style="font-size: 0.74rem; color: #64748b; border-top: 1px dashed #e2e8f0; padding-top: 0.4rem; margin-top: 0.3rem;" id="splitCardBalanceNote">
+                    💳 Saldo disponible en tu Tarjeta: <strong>$35,000.00 MXN</strong>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="form-label" for="splitCreditMsi" style="font-size: 0.8rem; font-weight: 700; color: #0b1b3d; margin-bottom: 0.35rem;">
+                    💳 Plazo de financiamiento para la parte a crédito:
+                  </label>
+                  <select id="splitCreditMsi" class="form-control" style="font-size: 0.85rem; height: 40px; border-radius: 6px;">
+                    <option value="1">1 pago de contado con tu crédito</option>
+                    <option value="3">3 Meses Sin Intereses</option>
+                    <option value="6" selected>6 Meses Sin Intereses</option>
+                    <option value="12">12 Meses Sin Intereses</option>
+                    <option value="18">18 Meses Sin Intereses</option>
+                  </select>
+                  <div id="splitMonthlyInstallmentNotice" style="font-size: 0.76rem; color: #059669; font-weight: 700; margin-top: 0.35rem; background: #ecfdf5; padding: 0.35rem 0.5rem; border-radius: 4px; border: 1px solid #a7f3d0;">
+                    6 mensualidades sin intereses de $0.00 MXN al mes
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          const note = document.getElementById('cashDetailsNote');
+          if (note) {
+            note.insertAdjacentHTML('beforebegin', html);
+          } else {
+            cashBox.insertAdjacentHTML('beforeend', html);
+          }
+          bindSplitEvents();
+        }
+      };
+
+      const bindSplitEvents = () => {
+        const chk = document.getElementById('chkSplitPayment');
+        const detailsBox = document.getElementById('splitPaymentDetailsBox');
+        const inputCash = document.getElementById('splitCashAmount');
+        const selectMsi = document.getElementById('splitCreditMsi');
+        const note = document.getElementById('cashDetailsNote');
+        const presets = document.querySelectorAll('.btn-split-preset');
+
+        if (!chk || chk.__splitBound) return;
+        chk.__splitBound = true;
+
+        const updateSplitCalculations = (preferredCash = null) => {
+          const cartTotal = this.getCartTotal();
+          const totalDisp = document.getElementById('splitTotalDisplay');
+          const sumCash = document.getElementById('splitSummaryCash');
+          const sumCred = document.getElementById('splitSummaryCredit');
+          const pctLabel = document.getElementById('splitCashPercentLabel');
+          const msiNotice = document.getElementById('splitMonthlyInstallmentNotice');
+          const balNote = document.getElementById('splitCardBalanceNote');
+          const btn = checkoutForm.querySelector('button[type="submit"]');
+
+          if (totalDisp) totalDisp.textContent = `$${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+
+          let availableBal = 35000;
+          try {
+            const card = CardEngine.getCard();
+            if (card && typeof card.balance === 'number') availableBal = card.balance;
+          } catch(e) {}
+          if (balNote) {
+            balNote.innerHTML = `💳 Saldo disponible en tu Tarjeta: <strong style="color: ${availableBal > 0 ? '#059669' : '#dc2626'}">$${availableBal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</strong>`;
+          }
+
+          let cashVal = preferredCash;
+          if (cashVal === null) {
+            cashVal = parseFloat(inputCash?.value);
+            if (isNaN(cashVal) || cashVal <= 0) {
+              cashVal = Math.round(cartTotal * 0.5 * 100) / 100;
+              if (inputCash) inputCash.value = cashVal;
+            }
+          } else {
+            if (inputCash) inputCash.value = cashVal;
+          }
+
+          if (cashVal > cartTotal) {
+            cashVal = cartTotal;
+            if (inputCash) inputCash.value = cashVal;
+          }
+
+          const creditVal = Math.max(0, Math.round((cartTotal - cashVal) * 100) / 100);
+          const pct = Math.round((cashVal / (cartTotal || 1)) * 100);
+          if (pctLabel) pctLabel.textContent = `(${pct}% en efectivo, ${100 - pct}% a crédito)`;
+
+          if (sumCash) sumCash.textContent = `$${cashVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+          if (sumCred) sumCred.textContent = `$${creditVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+
+          const msi = parseInt(selectMsi?.value || '6', 10);
+          const monthly = msi > 1 ? (creditVal / msi) : creditVal;
+          if (msiNotice) {
+            msiNotice.textContent = msi > 1 
+              ? `${msi} mensualidades sin intereses de $${monthly.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN/mes`
+              : `1 solo pago de $${creditVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN cargado a tu crédito`;
+          }
+
+          if (btn) {
+            if (chk.checked) {
+              btn.innerHTML = `Confirmar Pedido Mixto: $${cashVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} Efectivo + $${creditVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} Crédito (${msi} MSI)`;
+            } else {
+              btn.innerHTML = `Confirmar Pedido en Efectivo ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
+            }
+          }
+
+          if (note) {
+            if (chk.checked) {
+              note.innerHTML = `ℹ️ <strong>Pago Mixto Combinado:</strong> Pagas una parte en efectivo ($${cashVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN) y el resto ($${creditVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN) se carga a tu Tarjeta Callejón Mágico a ${msi} MSI. ¡Aprovechas ambos beneficios sin descapitalizarte!`;
+            } else {
+              note.innerHTML = `ℹ️ <strong>Pago seguro en efectivo:</strong> Tu compra se liquida de contado directo sin tocar ni gastar el saldo de tu Tarjeta Callejón Mágico. Recibirás tu ticket oficial de compra con folio de rastreo.`;
+            }
+          }
+        };
+
+        chk.addEventListener('change', () => {
+          if (chk.checked) {
+            if (detailsBox) detailsBox.style.display = 'block';
+            updateSplitCalculations();
+          } else {
+            if (detailsBox) detailsBox.style.display = 'none';
+            const cartTotal = this.getCartTotal();
+            const btn = checkoutForm.querySelector('button[type="submit"]');
+            if (btn) btn.innerHTML = `Confirmar Pedido en Efectivo ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
+            if (note) note.innerHTML = `ℹ️ <strong>Pago seguro en efectivo:</strong> Tu compra se liquida de contado directo sin tocar ni gastar el saldo de tu Tarjeta Callejón Mágico. Recibirás tu ticket oficial de compra con folio de rastreo.`;
+          }
+        });
+
+        presets.forEach(p => {
+          p.addEventListener('click', () => {
+            presets.forEach(b => b.classList.remove('active'));
+            p.classList.add('active');
+            const pct = parseInt(p.dataset.pct, 10) / 100;
+            const cartTotal = this.getCartTotal();
+            const targetVal = Math.round(cartTotal * pct * 100) / 100;
+            updateSplitCalculations(targetVal);
+          });
+        });
+
+        inputCash?.addEventListener('input', () => {
+          presets.forEach(b => b.classList.remove('active'));
+          updateSplitCalculations();
+        });
+
+        selectMsi?.addEventListener('change', () => {
+          updateSplitCalculations();
+        });
+      };
+
       const updatePaymentBoxes = (selectedRadio) => {
         const methodVal = selectedRadio ? (selectedRadio.value || selectedRadio.closest('.payment-radio-card')?.dataset.method) : 'callejon';
 
@@ -1239,10 +1438,21 @@
         } else if (methodVal === 'cash') {
           if (msiContainer) msiContainer.style.display = 'none';
           if (creditDebitBox) creditDebitBox.style.display = 'none';
-          if (cashBox) cashBox.style.display = 'block';
+          if (cashBox) {
+            cashBox.style.display = 'block';
+            ensureSplitSectionInCashBox();
+          }
+          const chk = document.getElementById('chkSplitPayment');
           const btn = checkoutForm.querySelector('button[type="submit"]');
           const cartTotal = this.getCartTotal();
-          if (btn) btn.innerHTML = `Confirmar Pedido en Efectivo ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
+          if (chk && chk.checked) {
+            const inputVal = parseFloat(document.getElementById('splitCashAmount')?.value) || Math.round(cartTotal * 0.5 * 100) / 100;
+            const creditVal = Math.max(0, Math.round((cartTotal - inputVal) * 100) / 100);
+            const msi = parseInt(document.getElementById('splitCreditMsi')?.value || '6', 10);
+            if (btn) btn.innerHTML = `Confirmar Pedido Mixto: $${inputVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} Efectivo + $${creditVal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} Crédito (${msi} MSI)`;
+          } else {
+            if (btn) btn.innerHTML = `Confirmar Pedido en Efectivo ($${cartTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`;
+          }
         } else if (methodVal === 'card') {
           if (msiContainer) msiContainer.style.display = 'none';
           if (creditDebitBox) creditDebitBox.style.display = 'block';
@@ -1368,26 +1578,56 @@
           };
 
         } else {
-          // Si paga de contado (Efectivo / SPEI, Tarjeta Bancaria, PayPal):
-          // No toca el saldo de la Tarjeta Callejón Mágico. Precios ya incluyen IVA.
+          // Si paga de contado (Efectivo / SPEI, Tarjeta Bancaria, PayPal) o Pago Mixto
+          const activeRadio = checkoutForm.querySelector('input[name="paymentMethod"]:checked');
+          const isCash = activeRadio && (activeRadio.value === 'cash' || activeRadio.closest('.payment-radio-card')?.dataset.method === 'cash');
+          const chkSplit = document.getElementById('chkSplitPayment');
+          const isSplit = isCash && !!(chkSplit && chkSplit.checked);
+
           const net = Math.round((cartTotal / 1.16) * 100) / 100;
           const iva = Math.round((cartTotal - net) * 100) / 100;
-          const otherPoints = Math.max(25, Math.round(cartTotal * 0.05));
-          let newPointsTotal = otherPoints;
-          if (typeof CardEngine.addPoints === 'function') {
-            newPointsTotal = CardEngine.addPoints(otherPoints, 'Compra departamental');
+
+          if (isSplit) {
+            const inputVal = parseFloat(document.getElementById('splitCashAmount')?.value);
+            const cashAmount = (!isNaN(inputVal) && inputVal > 0 && inputVal < cartTotal) ? Math.round(inputVal * 100) / 100 : Math.round(cartTotal * 0.5 * 100) / 100;
+            const creditAmount = Math.max(0, Math.round((cartTotal - cashAmount) * 100) / 100);
+            const splitMsi = parseInt(document.getElementById('splitCreditMsi')?.value || '6', 10);
+            const totalPointsEarned = Math.round(creditAmount * 0.05) + Math.max(15, Math.round(cashAmount * 0.02));
+
+            window.__lastCallejonCharge = {
+              isCallejonCard: false,
+              isSplitPayment: true,
+              cashAmount: cashAmount,
+              creditAmount: creditAmount,
+              creditMsi: splitMsi,
+              msi: splitMsi,
+              discount: 0,
+              subtotal: cartTotal,
+              iva: iva,
+              finalAmount: cartTotal,
+              pointsEarned: totalPointsEarned
+            };
+
+          } else {
+            // Contado regular
+            const otherPoints = Math.max(25, Math.round(cartTotal * 0.05));
+            let newPointsTotal = otherPoints;
+            if (typeof CardEngine.addPoints === 'function') {
+              newPointsTotal = CardEngine.addPoints(otherPoints, 'Compra departamental');
+            }
+            
+            window.__lastCallejonCharge = {
+              isCallejonCard: false,
+              isSplitPayment: false,
+              msi: 1,
+              discount: 0,
+              subtotal: cartTotal,
+              iva: iva,
+              finalAmount: cartTotal,
+              pointsEarned: otherPoints,
+              totalPoints: newPointsTotal
+            };
           }
-          
-          window.__lastCallejonCharge = {
-            isCallejonCard: false,
-            msi: 1,
-            discount: 0,
-            subtotal: cartTotal,
-            iva: iva,
-            finalAmount: cartTotal,
-            pointsEarned: otherPoints,
-            totalPoints: newPointsTotal
-          };
         }
       });
 

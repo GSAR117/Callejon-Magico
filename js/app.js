@@ -2751,15 +2751,92 @@ document.addEventListener('DOMContentLoaded', () => {
           paymentLabel = `Tarjeta ${brand} (•••• ${last4}) — ${instLabel}`;
 
         } else if (methodVal === 'cash') {
-          // MÉTODO 2: EFECTIVO (Contraentrega / Sucursal / SPEI / OXXO)
-          // NO TOCA LA TARJETA CALLEJÓN MÁGICO. EL SALDO DE LA TIENDA QUEDA 100% INTACTO.
+          // MÉTODO 2: EFECTIVO (Contraentrega / Sucursal / SPEI / OXXO) o PAGO MIXTO (Efectivo + Crédito Callejón)
           const cashTypeSelect = document.getElementById('cashPaymentType');
           const cashType = cashTypeSelect ? cashTypeSelect.value : 'contraentrega';
           let cashLabel = 'Efectivo contra entrega';
           if (cashType === 'sucursal') cashLabel = 'Efectivo en Sucursal';
           else if (cashType === 'spei') cashLabel = 'Transferencia SPEI';
           else if (cashType === 'oxxo') cashLabel = 'Depósito en OXXO';
-          paymentLabel = `Efectivo (${cashLabel})`;
+
+          const chkSplit = document.getElementById('chkSplitPayment');
+          const isSplit = !!(chkSplit && chkSplit.checked);
+
+          if (isSplit) {
+            // PAGO MIXTO: UNA PARTE EN EFECTIVO Y UNA PARTE A CRÉDITO
+            const inputVal = parseFloat(document.getElementById('splitCashAmount')?.value);
+            const cashAmount = (!isNaN(inputVal) && inputVal > 0 && inputVal < totalAmount)
+              ? Math.round(inputVal * 100) / 100
+              : Math.round(totalAmount * 0.5 * 100) / 100;
+            const creditAmount = Math.max(0, Math.round((totalAmount - cashAmount) * 100) / 100);
+            const splitMsi = parseInt(document.getElementById('splitCreditMsi')?.value || '6', 10);
+
+            if (cashAmount <= 0) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              showToast('⚠️ Ingresa una cantidad válida mayor a $0 para pagar en efectivo.');
+              return;
+            }
+            if (creditAmount <= 0) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              showToast('⚠️ La parte a crédito debe ser mayor a $0. Desmarca la casilla de pago mixto si deseas liquidar todo en efectivo.');
+              return;
+            }
+
+            // Validar sesión para la parte financiada a crédito
+            if (!activeUser || (!activeUser.fullName && !activeUser.email)) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              showToast('🔒 Para financiar la parte a crédito con tu Tarjeta Callejón Mágico, por favor inicia sesión.');
+              return;
+            }
+
+            // Validar saldo disponible de la tarjeta departamental
+            let userCard = null;
+            if (window.CallejonCard && typeof window.CallejonCard.getCard === 'function') {
+              userCard = window.CallejonCard.getCard();
+            }
+            if (userCard && typeof userCard.balance === 'number' && userCard.balance < creditAmount) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              showToast(`⚠️ Tu saldo de crédito disponible ($${userCard.balance.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN) no alcanza para cubrir la parte a crédito de $${creditAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN.`);
+              return;
+            }
+
+            // Procesar cargo EXCLUSIVAMENTE por la parte a crédito
+            let chargeResult = null;
+            if (window.CallejonCard && typeof window.CallejonCard.charge === 'function') {
+              chargeResult = window.CallejonCard.charge(creditAmount, `Pago Mixto (Crédito) en Callejón Mágico`, splitMsi);
+              if (!chargeResult || !chargeResult.success) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                showToast(chargeResult?.message || '⚠️ No se pudo procesar la parte a crédito con tu Tarjeta Callejón Mágico.');
+                return;
+              }
+            }
+
+            const credPoints = Math.round(creditAmount * 0.05);
+            const cashPoints = Math.max(15, Math.round(cashAmount * 0.02));
+            const totalPointsEarned = credPoints + cashPoints;
+
+            lastCharge = {
+              isSplitPayment: true,
+              cashAmount: cashAmount,
+              creditAmount: creditAmount,
+              cashType: cashType,
+              cashLabel: cashLabel,
+              creditMsi: splitMsi,
+              msi: splitMsi,
+              pointsEarned: totalPointsEarned,
+              totalPoints: chargeResult ? chargeResult.totalPoints : undefined
+            };
+
+            paymentLabel = `Pago Mixto: $${cashAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} Efec. (${cashLabel}) + $${creditAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} Crédito (${splitMsi} MSI)`;
+
+          } else {
+            paymentLabel = `Efectivo (${cashLabel})`;
+          }
 
         } else {
           // MÉTODO 1: TARJETA DE LA TIENDA (Financiamiento a MSI con 10% OFF)
@@ -2821,6 +2898,12 @@ document.addEventListener('DOMContentLoaded', () => {
             discount: discount,
             iva: iva,
             paymentMethod: paymentLabel,
+            isSplitPayment: !!lastCharge.isSplitPayment,
+            cashAmount: lastCharge.isSplitPayment ? lastCharge.cashAmount : (methodVal === 'cash' ? totalAmount : 0),
+            creditAmount: lastCharge.isSplitPayment ? lastCharge.creditAmount : (methodVal === 'callejon' ? totalAmount : 0),
+            cashType: lastCharge.cashType || 'contraentrega',
+            cashLabel: lastCharge.cashLabel || 'Efectivo',
+            creditMsi: lastCharge.creditMsi || lastCharge.msi || 1,
             msi: lastCharge.msi || 1,
             pointsEarned: earnedPoints,
             recipient: {
@@ -2886,8 +2969,17 @@ document.addEventListener('DOMContentLoaded', () => {
               <p style="margin-bottom: 0.4rem;">📍 <strong>${street.includes('Plantel') ? 'Sucursal de retiro (Click & Collect):' : 'Dirección de entrega:'}</strong> ${street}, ${city}</p>
               <p style="margin-bottom: 0.4rem;">📦 <strong>${street.includes('Plantel') ? 'Disponibilidad:' : 'Entrega de cortesía:'}</strong> ${street.includes('Plantel') ? '¡Listo para entrega en 2 horas en la sucursal seleccionada con tu INE y número de orden!' : 'En 48 a 72 horas hábiles en empaque boutique.'}</p>
               <p style="margin-bottom: 0.4rem;">💳 <strong>Método de pago:</strong> ${paymentLabel} — Aprobado inmediatamente.</p>
-              ${(methodVal === 'callejon' && lastCharge.msi > 1) ? `<p style="margin-bottom: 0;">🎉 <strong>Financiamiento:</strong> ${lastCharge.msi} mensualidades sin intereses de $${(totalAmount / lastCharge.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })} con 10% OFF aplicado a tu Tarjeta Callejón Mágico.</p>` : ''}
-              ${methodVal === 'cash' ? `<p style="margin-bottom: 0;">💵 <strong>Modalidad de pago:</strong> Liquidado al 100% de contado. Tu crédito y saldo de Tarjeta Callejón Mágico no fueron afectados.</p>` : ''}
+              ${lastCharge.isSplitPayment ? `
+                <div style="background: #fdf4ff; border: 1.5px solid #d8b4fe; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.65rem 0 0.4rem 0; font-size: 0.85rem; line-height: 1.55;">
+                  <div style="font-weight: 800; color: #7c3aed; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+                    <span>💳💵 Desglose de tu Pago Mixto:</span>
+                  </div>
+                  <div style="color: #166534; margin-bottom: 0.2rem;">💵 <strong>Parte en Efectivo:</strong> $${(lastCharge.cashAmount || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN (${lastCharge.cashLabel || 'Contraentrega'})</div>
+                  <div style="color: #0b1b3d;">💳 <strong>Parte a Crédito:</strong> $${(lastCharge.creditAmount || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN con tu Tarjeta Callejón Mágico ${lastCharge.creditMsi > 1 ? `(${lastCharge.creditMsi} MSI de $${((lastCharge.creditAmount || 0) / lastCharge.creditMsi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes)` : '(1 solo pago de contado)'}.</div>
+                </div>
+              ` : ''}
+              ${(methodVal === 'callejon' && lastCharge.msi > 1 && !lastCharge.isSplitPayment) ? `<p style="margin-bottom: 0;">🎉 <strong>Financiamiento:</strong> ${lastCharge.msi} mensualidades sin intereses de $${(totalAmount / lastCharge.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })} con 10% OFF aplicado a tu Tarjeta Callejón Mágico.</p>` : ''}
+              ${(methodVal === 'cash' && !lastCharge.isSplitPayment) ? `<p style="margin-bottom: 0;">💵 <strong>Modalidad de pago:</strong> Liquidado al 100% de contado. Tu crédito y saldo de Tarjeta Callejón Mágico no fueron afectados.</p>` : ''}
             </div>
 
             <div class="checkout-confirm-actions">

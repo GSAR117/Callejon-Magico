@@ -803,6 +803,12 @@ body {
   border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
+.badge-method.split {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
 /* Stock editor controls inside table */
 .stock-counter {
   display: inline-flex;
