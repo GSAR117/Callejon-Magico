@@ -562,11 +562,28 @@
       this.injectModal();
       this.renderOrders();
 
+      // Cerrar menús previos para evitar capas superpuestas
+      document.getElementById('userProfileMenu')?.classList.remove('active');
+      document.getElementById('cmCategoriesSheet')?.classList.remove('active');
+      document.getElementById('cmCategoriesSheetBackdrop')?.classList.remove('active');
+
       const modal = document.getElementById('ordersModal');
-      const backdrop = document.getElementById('modalBackdrop');
+      let backdrop = document.getElementById('modalBackdrop');
+      if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.id = 'modalBackdrop';
+        backdrop.className = 'modal-backdrop';
+        backdrop.addEventListener('click', () => this.closeModal());
+        document.body.appendChild(backdrop);
+      }
+
       if (modal) {
+        modal.style.zIndex = '100020';
+        if (backdrop) {
+          backdrop.style.zIndex = '9998';
+          backdrop.classList.add('active');
+        }
         modal.classList.add('active');
-        if (backdrop) backdrop.classList.add('active');
         document.body.style.overflow = 'hidden';
 
         if (targetOrderNum) {

@@ -452,6 +452,17 @@
           transition: transform 0.25s ease, opacity 0.2s ease;
         }
 
+        /* Ocultar backdrop de categorías móviles si se abre cualquier modal */
+        body.has-active-modal .cm-cat-sheet-backdrop,
+        .modal-backdrop.active ~ .cm-cat-sheet-backdrop,
+        .modal-window.active ~ .cm-cat-sheet-backdrop,
+        .info-corporate-modal.active ~ .cm-cat-sheet-backdrop {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+
         /* Mobile Categories Bottom Sheet */
         .cm-cat-sheet-backdrop {
           position: fixed;

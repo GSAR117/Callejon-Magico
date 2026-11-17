@@ -11,15 +11,19 @@
   inset: 0;
   background-color: rgba(9, 10, 13, 0.65);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 9998 !important;
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-normal);
+  pointer-events: none;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
 }
 
 .modal-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+  z-index: 9998 !important;
 }
 
 /* ==========================================================================
@@ -2759,9 +2763,22 @@
    ========================================================================== */
 .orders-modal {
   max-width: 860px !important;
+  width: 92% !important;
   max-height: 88vh;
   padding: 2.2rem 2.2rem;
   overflow-y: auto;
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1.5px solid rgba(197, 143, 56, 0.45) !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55) !important;
+  z-index: 100020 !important;
+  isolation: isolate !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform: translate(-50%, -50%) translateZ(0) !important;
 }
 
 .orders-modal-header {
@@ -4201,19 +4218,28 @@
   border-radius: 14px !important;
   background: #ffffff !important;
   border: 1.5px solid rgba(197, 143, 56, 0.45) !important;
-  box-shadow: 0 20px 60px rgba(7, 19, 43, 0.32) !important;
-  z-index: 1001 !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55) !important;
+  z-index: 100020 !important;
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
-  transform: translate(-50%, -50%) scale(0.96) !important;
-  transition: all 0.25s ease !important;
+  transform: translate(-50%, -50%) translateZ(0) !important;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-sizing: border-box !important;
+  isolation: isolate !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
 }
 
 .info-corporate-modal.active {
   display: flex !important;
-  transform: translate(-50%, -50%) scale(1) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translate(-50%, -50%) translateZ(0) scale(1) !important;
+  z-index: 100020 !important;
 }
 
 .info-corporate-header {
@@ -4494,10 +4520,13 @@
   margin-bottom: 0.35rem;
 }
 
-/* Modal layers priority: Ticket & Orders modals must display on top of checkout */
+/* Modal layers priority: Ticket & Orders modals must display on top of checkout and all backdrops */
 #ticketModal.modal-window,
-#ordersModal.modal-window {
-  z-index: 10001 !important;
+#ordersModal.modal-window,
+#ticketModal.modal-window.active,
+#ordersModal.modal-window.active {
+  z-index: 100020 !important;
+  isolation: isolate !important;
 }
 
 

@@ -64,6 +64,11 @@
     openModal(modalId, title, badge, contentHtml) {
       this.close(false);
 
+      // Cerrar menús flotantes previos para evitar capas superpuestas
+      document.getElementById('userProfileMenu')?.classList.remove('active');
+      document.getElementById('cmCategoriesSheet')?.classList.remove('active');
+      document.getElementById('cmCategoriesSheetBackdrop')?.classList.remove('active');
+
       let modalEl = document.getElementById(modalId);
       if (!modalEl) {
         modalEl = document.createElement('div');
@@ -91,6 +96,9 @@
       modalEl.querySelector('.btn-info-corporate-close').addEventListener('click', () => this.close());
 
       const bd = this.getBackdrop();
+      bd.style.zIndex = '9998';
+      modalEl.style.zIndex = '100020';
+
       bd.classList.add('active');
       modalEl.classList.add('active');
       document.body.style.overflow = 'hidden';
