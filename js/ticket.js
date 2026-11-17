@@ -1214,20 +1214,26 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
           <style>
             @page {
               size: auto;
-              margin: 0;
+              margin: 0mm;
             }
             * {
               box-sizing: border-box;
               margin: 0;
               padding: 0;
             }
+            html, body {
+              width: 100%;
+              margin: 0;
+              padding: 0;
+              background: #ffffff;
+            }
             body {
-              font-family: 'Courier New', Courier, 'Lucida Console', monospace;
-              font-size: 9.5px;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+              font-size: 8px;
               color: #000000;
               background: #ffffff;
-              line-height: 1.3;
-              padding: 1mm 2mm;
+              line-height: 1.25;
+              padding: 0;
               display: flex;
               justify-content: center;
               -webkit-print-color-adjust: exact;
@@ -1235,72 +1241,78 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             }
             .receipt-paper {
               width: 100%;
-              max-width: 72mm;
+              max-width: 48mm;
               margin: 0 auto;
+              padding: 0.5mm 1mm;
               background: #ffffff;
+              box-sizing: border-box;
             }
             .ticket-header-brand {
               text-align: center;
-              margin-bottom: 5px;
+              margin-bottom: 3px;
             }
             .ticket-logo-icon {
-              width: 40px;
-              height: 32px;
-              margin: 0 auto 2px;
+              width: 26px !important;
+              height: 20px !important;
+              margin: 0 auto 1px;
               display: block;
             }
             .ticket-store-name {
-              font-family: Georgia, 'Playfair Display', serif;
-              font-size: 15px;
+              font-family: 'Playfair Display', Georgia, serif;
+              font-size: 12.5px;
               font-weight: 800;
-              letter-spacing: 0.05em;
+              letter-spacing: 0.04em;
               margin-bottom: 1px;
+              color: #000000;
             }
             .ticket-store-subtitle {
-              font-size: 8px;
+              font-size: 6.5px;
               font-weight: 700;
-              letter-spacing: 0.12em;
+              letter-spacing: 0.08em;
               text-transform: uppercase;
+              color: #000000;
             }
             .ticket-fiscal-block {
               text-align: center;
-              font-size: 8.5px;
-              line-height: 1.25;
-              margin-bottom: 5px;
+              font-size: 7px;
+              line-height: 1.2;
+              margin-bottom: 3px;
             }
             .ticket-fiscal-line.bold {
               font-weight: bold;
             }
             .ticket-divider-double {
-              border-top: 1.5px dashed #000000;
-              margin: 5px 0;
+              border-top: 1px dashed #000000;
+              margin: 3px 0;
             }
             .ticket-divider-dashed {
-              border-top: 1px dashed #444444;
-              margin: 4px 0;
+              border-top: 1px dashed #000000;
+              margin: 3px 0;
             }
             .ticket-divider-solid {
-              border-top: 1.5px solid #000000;
-              margin: 4px 0;
+              border-top: 1px solid #000000;
+              margin: 3px 0;
             }
             .ticket-section-title {
-              font-size: 9px;
+              font-size: 7.5px;
               font-weight: bold;
               text-transform: uppercase;
-              margin-bottom: 3px;
+              margin-bottom: 2px;
             }
             .ticket-meta-grid, .ticket-payment-section, .ticket-client-block {
-              font-size: 9px;
+              font-size: 7.5px;
+              line-height: 1.25;
             }
             .ticket-meta-row {
               display: flex;
               justify-content: flex-start;
               align-items: baseline;
-              gap: 5px;
-              margin-bottom: 2px;
+              gap: 4px;
+              margin-bottom: 1.5px;
             }
             .ticket-meta-row .label {
               white-space: nowrap;
+              font-weight: 600;
             }
             .ticket-meta-row .val {
               text-align: left;
@@ -1308,7 +1320,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             .ticket-row-detail {
               display: flex;
               justify-content: space-between;
-              margin-bottom: 2px;
+              margin-bottom: 1.5px;
             }
             .ticket-row-detail span:last-child {
               text-align: right;
@@ -1328,29 +1340,29 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             .ticket-products-table {
               width: 100%;
               border-collapse: collapse;
-              border-top: 1.5px solid #000000;
-              border-bottom: 1.5px solid #000000;
-              margin: 4px 0;
-              font-size: 9px;
+              border-top: 1.2px solid #000000;
+              border-bottom: 1.2px solid #000000;
+              margin: 3px 0;
+              font-size: 7.5px;
             }
             .ticket-products-table th {
-              border-bottom: 1.5px solid #000000;
+              border-bottom: 1.2px solid #000000;
               border-right: 1px solid #000000;
-              padding: 3px 2px;
-              font-size: 8.5px;
+              padding: 2px 1px;
+              font-size: 7px;
               font-weight: bold;
               text-align: center;
-              background: #f4f4f4;
+              background: #f0f0f0;
             }
             .ticket-products-table th:last-child {
               border-right: none;
             }
             .ticket-products-table td {
               border-right: 1px solid #000000;
-              border-bottom: 1px dashed #444444;
-              padding: 3px 2px;
+              border-bottom: 1px dashed #666666;
+              padding: 2px 1px;
               vertical-align: top;
-              font-size: 8.5px;
+              font-size: 7.5px;
             }
             .ticket-products-table tr:last-child td {
               border-bottom: none;
@@ -1359,47 +1371,53 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
               border-right: none;
             }
             .ticket-products-table .th-qty, .ticket-products-table .td-qty {
-              width: 26px;
+              width: 16px;
               text-align: center;
+              padding: 2px 0;
             }
             .ticket-products-table .th-desc, .ticket-products-table .td-desc {
               text-align: left;
               padding-left: 2px;
+              word-break: break-word;
             }
             .ticket-products-table .th-unit, .ticket-products-table .td-unit {
-              width: 58px;
+              width: 36px;
               text-align: right;
               white-space: nowrap;
+              padding-right: 1px;
             }
             .ticket-products-table .th-total, .ticket-products-table .td-total {
-              width: 66px;
+              width: 40px;
               text-align: right;
               white-space: nowrap;
+              padding-right: 1px;
             }
             .ticket-products-table .prod-name {
               font-weight: bold;
-              line-height: 1.2;
-            }
-            .ticket-products-table .prod-specs {
-              font-size: 7.5px;
-              margin-top: 1px;
               line-height: 1.15;
             }
+            .ticket-products-table .prod-specs {
+              font-size: 6.5px;
+              margin-top: 1px;
+              line-height: 1.1;
+              color: #222222;
+            }
             .ticket-pieces-summary {
-              font-size: 9px;
+              font-size: 7.5px;
               text-align: right;
-              margin-top: 3px;
+              margin-top: 2px;
               font-weight: bold;
             }
 
             /* Desglose Financiero - SIN CUADRADO EN IVA */
             .ticket-financials-table {
-              font-size: 9.5px;
+              font-size: 7.5px;
+              line-height: 1.25;
             }
             .ticket-fin-row {
               display: flex;
               justify-content: space-between;
-              margin-bottom: 2px;
+              margin-bottom: 1.5px;
             }
             .ticket-fin-row.discount-row {
               font-weight: bold;
@@ -1413,15 +1431,15 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
               background: transparent !important;
             }
             .ticket-fin-row.total-row {
-              font-size: 11.5px;
+              font-size: 10px;
               font-weight: bold;
-              margin-top: 3px;
+              margin-top: 2px;
             }
             .ticket-amount-words {
-              font-size: 8px;
+              font-size: 6.5px;
               font-weight: bold;
               text-align: right;
-              margin-top: 2px;
+              margin-top: 1px;
               font-style: italic;
             }
 
@@ -1430,37 +1448,38 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
               display: flex;
               justify-content: space-between;
               align-items: center;
-              font-size: 9.5px;
+              font-size: 7.5px;
               font-weight: bold;
               border-top: 1px dashed #000000;
               border-bottom: 1px dashed #000000;
-              padding: 3px 1px;
-              margin: 5px 0;
+              padding: 2px 0;
+              margin: 3px 0;
             }
 
             .ticket-barcode-wrap {
-              margin: 5px 0 3px;
+              margin: 3px 0 2px;
               text-align: center;
             }
             .ticket-barcode-svg {
-              max-width: 210px;
-              height: 42px;
+              max-width: 140px !important;
+              height: 28px !important;
               margin: 0 auto;
             }
             .ticket-legal-policies {
               text-align: center;
-              font-size: 7.5px;
-              line-height: 1.25;
-              margin-top: 5px;
+              font-size: 6.5px;
+              line-height: 1.2;
+              margin-top: 3px;
             }
             .ticket-legal-policies .bold {
               font-weight: bold;
-              margin-bottom: 2px;
+              margin-bottom: 1px;
             }
             .ticket-bottom-stamp {
               font-weight: bold;
-              letter-spacing: 0.15em;
-              margin-top: 3px;
+              letter-spacing: 0.1em;
+              font-size: 6.5px;
+              margin-top: 2px;
             }
             .receipt-zigzag-bottom {
               display: none;
