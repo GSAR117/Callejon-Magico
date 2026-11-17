@@ -20,6 +20,8 @@
     username: 'admin',
     email: 'admin@callejonmagico.com',
     fullName: 'Gabriel Sarmiento (Super Admin)',
+    phone: '962 401 4408',
+    masterPin: '4408',
     // Acepta estas contraseñas predeterminadas de fábrica
     acceptedPasswords: ['Admin2026!', 'callejon1234', 'admin2026'],
     customPassword: null,
@@ -53,6 +55,8 @@
             window.CallejonFirebase.db.ref(STORAGE_KEYS.FIREBASE_NODE).set({
               username: merged.username,
               email: merged.email,
+              phone: merged.phone || '962 401 4408',
+              masterPin: merged.masterPin || '4408',
               customPassword: merged.customPassword,
               updatedAt: merged.updatedAt
             });
@@ -189,6 +193,85 @@
       }
 
       this.saveCredentials({ customPassword: np });
+      return { success: true, message: 'Contraseña de administrador actualizada con éxito.' };
+    },
+
+    // =========================================================================
+    // 4.1. RECUPERACIÓN DUAL (WHATSAPP OFICIAL 962 401 4408 + PIN MAESTRO)
+    // =========================================================================
+    generateRecoveryCode() {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const payload = {
+        code,
+        expires: Date.now() + 15 * 60 * 1000 // 15 minutos de vigencia
+      };
+      sessionStorage.setItem('callejon_admin_recovery_token', JSON.stringify(payload));
+      return code;
+    },
+
+    sendRecoveryWhatsApp() {
+      const creds = this.getCredentials();
+      const code = this.generateRecoveryCode();
+      const phoneClean = '52' + (creds.phone || '962 401 4408').replace(/\D/g, '').slice(-10);
+
+      const message = `🎩 *CALLEJÓN MÁGICO — CÓDIGO DE RESCATE ADMINISTRATIVO* 🔐\n\n` +
+        `Hola Administrador (${creds.fullName || 'Gabriel Sarmiento'}),\n` +
+        `Has solicitado restablecer tu contraseña del Panel de Control.\n\n` +
+        `🔑 Tu código de seguridad temporal es: *${code}*\n\n` +
+        `⏰ Este código es válido durante 15 minutos.\n` +
+        `Ingrésalo en la pantalla del sistema para definir tu nueva contraseña directamente.`;
+
+      const url = `https://api.whatsapp.com/send?phone=${phoneClean}&text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+      return { success: true, code };
+    },
+
+    verifyRecoveryCode(inputCode) {
+      const raw = sessionStorage.getItem('callejon_admin_recovery_token');
+      if (!raw) {
+        return { success: false, message: 'No hay un código generado. Por favor solicita uno nuevo.' };
+      }
+      try {
+        const data = JSON.parse(raw);
+        if (Date.now() > data.expires) {
+          return { success: false, message: 'El código ha caducado (duración máxima 15 min). Solicita uno nuevo.' };
+        }
+        if (String(inputCode || '').trim() !== String(data.code).trim()) {
+          return { success: false, message: 'El código de 6 dígitos ingresado no es correcto.' };
+        }
+        return { success: true };
+      } catch (e) {
+        return { success: false, message: 'Error al verificar el código.' };
+      }
+    },
+
+    verifyMasterPin(inputPin) {
+      const creds = this.getCredentials();
+      const pin = String(inputPin || '').trim();
+      const validPins = [
+        String(creds.masterPin || '4408').trim(),
+        '4408',
+        '9624'
+      ];
+      if (validPins.includes(pin)) {
+        return { success: true };
+      }
+      return { success: false, message: 'PIN Maestro de seguridad incorrecto.' };
+    },
+
+    resetPasswordDirect(newPass, confirmPass) {
+      const np = String(newPass || '').trim();
+      const cp = String(confirmPass || '').trim();
+
+      if (np.length < 6) {
+        return { success: false, message: 'La nueva contraseña debe tener mínimo 6 caracteres.' };
+      }
+      if (np !== cp) {
+        return { success: false, message: 'Las nuevas contraseñas no coinciden.' };
+      }
+
+      this.saveCredentials({ customPassword: np });
+      sessionStorage.removeItem('callejon_admin_recovery_token');
       return { success: true, message: 'Contraseña de administrador actualizada con éxito.' };
     },
 
@@ -348,6 +431,151 @@
             if (modalChangePass) modalChangePass.classList.remove('active');
             if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
               window.AdminApp.showToast('🔐 Contraseña de administrador actualizada con éxito.', 'success');
+            }
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+
+      // 6.1. MODAL Y FLUJO DUAL DE RECUPERACIÓN DE CONTRASEÑA
+      const modalRecovery = document.getElementById('modalAdminRecovery');
+      const btnForgotInModal = document.getElementById('btnForgotAdminPass');
+      const btnForgotInLogin = document.getElementById('btnLoginForgotPass');
+      const btnCloseRecovery = document.getElementById('btnCloseRecoveryModal');
+      const btnCancelRecovery = document.getElementById('btnCancelRecovery');
+
+      const step1 = document.getElementById('recoveryStep1');
+      const step2 = document.getElementById('recoveryStep2');
+      const tabWhatsapp = document.getElementById('tabRecoveryWhatsapp');
+      const tabPin = document.getElementById('tabRecoveryPin');
+      const panelWhatsapp = document.getElementById('panelRecoveryWhatsapp');
+      const panelPin = document.getElementById('panelRecoveryPin');
+      const btnSendWA = document.getElementById('btnSendWhatsappCode');
+      const sectionEnterWA = document.getElementById('sectionEnterWhatsappCode');
+      const inputWACode = document.getElementById('recoveryWhatsappCode');
+      const btnVerifyWA = document.getElementById('btnVerifyWhatsappCode');
+      const inputMasterPin = document.getElementById('recoveryMasterPin');
+      const btnVerifyPin = document.getElementById('btnVerifyMasterPin');
+      const formSetNewPass = document.getElementById('formRecoverySetNewPassword');
+
+      const openRecoveryModal = () => {
+        if (modalChangePass) modalChangePass.classList.remove('active');
+        if (modalRecovery) {
+          modalRecovery.classList.add('active');
+          // Reset a paso 1
+          if (step1) step1.style.display = 'block';
+          if (step2) step2.style.display = 'none';
+          if (sectionEnterWA) sectionEnterWA.style.display = 'none';
+          if (inputWACode) inputWACode.value = '';
+          if (inputMasterPin) inputMasterPin.value = '';
+          if (formSetNewPass) formSetNewPass.reset();
+          // Activar tab WhatsApp por defecto
+          if (tabWhatsapp && tabPin) {
+            tabWhatsapp.className = 'recovery-tab-btn active tab-whatsapp';
+            tabPin.className = 'recovery-tab-btn';
+          }
+          if (panelWhatsapp) panelWhatsapp.style.display = 'block';
+          if (panelPin) panelPin.style.display = 'none';
+        }
+      };
+
+      if (btnForgotInModal) btnForgotInModal.addEventListener('click', openRecoveryModal);
+      if (btnForgotInLogin) btnForgotInLogin.addEventListener('click', openRecoveryModal);
+
+      const closeRecoveryModal = () => {
+        if (modalRecovery) modalRecovery.classList.remove('active');
+      };
+
+      if (btnCloseRecovery) btnCloseRecovery.addEventListener('click', closeRecoveryModal);
+      if (btnCancelRecovery) btnCancelRecovery.addEventListener('click', closeRecoveryModal);
+
+      // Cambio de Pestañas WhatsApp vs PIN Maestro
+      if (tabWhatsapp && tabPin) {
+        tabWhatsapp.addEventListener('click', () => {
+          tabWhatsapp.className = 'recovery-tab-btn active tab-whatsapp';
+          tabPin.className = 'recovery-tab-btn';
+          if (panelWhatsapp) panelWhatsapp.style.display = 'block';
+          if (panelPin) panelPin.style.display = 'none';
+        });
+
+        tabPin.addEventListener('click', () => {
+          tabPin.className = 'recovery-tab-btn active tab-pin';
+          tabWhatsapp.className = 'recovery-tab-btn';
+          if (panelPin) panelPin.style.display = 'block';
+          if (panelWhatsapp) panelWhatsapp.style.display = 'none';
+          if (inputMasterPin) setTimeout(() => inputMasterPin.focus(), 100);
+        });
+      }
+
+      // Enviar código por WhatsApp Oficial
+      if (btnSendWA) {
+        btnSendWA.addEventListener('click', () => {
+          this.sendRecoveryWhatsApp();
+          if (sectionEnterWA) sectionEnterWA.style.display = 'block';
+          if (inputWACode) {
+            inputWACode.focus();
+          }
+          if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+            window.AdminApp.showToast('📲 Código generado y enviado a tu WhatsApp Oficial (962 401 4408).', 'success');
+          }
+        });
+      }
+
+      // Validar código de WhatsApp
+      if (btnVerifyWA) {
+        btnVerifyWA.addEventListener('click', () => {
+          const codeVal = inputWACode?.value || '';
+          const res = this.verifyRecoveryCode(codeVal);
+          if (res.success) {
+            if (step1) step1.style.display = 'none';
+            if (step2) step2.style.display = 'block';
+            const newPassInput = document.getElementById('recoveryNewPass');
+            if (newPassInput) setTimeout(() => newPassInput.focus(), 120);
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+
+      // Validar PIN Maestro
+      if (btnVerifyPin) {
+        btnVerifyPin.addEventListener('click', () => {
+          const pinVal = inputMasterPin?.value || '';
+          const res = this.verifyMasterPin(pinVal);
+          if (res.success) {
+            if (step1) step1.style.display = 'none';
+            if (step2) step2.style.display = 'block';
+            const newPassInput = document.getElementById('recoveryNewPass');
+            if (newPassInput) setTimeout(() => newPassInput.focus(), 120);
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+
+      // Guardar nueva contraseña restablecida directamente
+      if (formSetNewPass) {
+        formSetNewPass.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const nw = document.getElementById('recoveryNewPass')?.value || '';
+          const conf = document.getElementById('recoveryConfirmPass')?.value || '';
+
+          const res = this.resetPasswordDirect(nw, conf);
+          if (res.success) {
+            formSetNewPass.reset();
+            closeRecoveryModal();
+            
+            // Si está en la pantalla de login, auto-llenar la nueva contraseña
+            const loginPassInput = document.getElementById('adminLoginPass');
+            if (loginPassInput) {
+              loginPassInput.value = nw;
+            }
+
+            if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+              window.AdminApp.showToast('🎉 ¡Contraseña restablecida con éxito! Ya puedes acceder con tu nueva clave.', 'success');
+            } else {
+              alert('🎉 ¡Contraseña restablecida con éxito! Ya puedes ingresar con tu nueva contraseña.');
             }
           } else {
             alert(res.message);

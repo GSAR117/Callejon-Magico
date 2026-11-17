@@ -88,6 +88,7 @@
             <input type="checkbox" id="adminRememberMe" checked />
             <span>Recordar en este equipo</span>
           </label>
+          <button type="button" class="btn-forgot-pass-link" id="btnLoginForgotPass" style="background: none; border: none; color: #C58F38; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">¿Olvidaste tu contraseña?</button>
         </div>
 
         <button type="submit" class="admin-login-btn-submit" id="btnSubmitAdminLogin">
@@ -1154,7 +1155,10 @@
       <form id="formAdminChangePassword">
         <div class="admin-modal-body">
           <div class="admin-form-group">
-            <label for="adminCurrentPass">Contraseña Actual</label>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem;">
+              <label for="adminCurrentPass" style="margin-bottom: 0;">Contraseña Actual</label>
+              <button type="button" class="btn-forgot-pass-link" id="btnForgotAdminPass" style="background: none; border: none; color: #C58F38; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">¿La olvidaste?</button>
+            </div>
             <input type="password" id="adminCurrentPass" class="admin-form-control" placeholder="Contraseña actual" required />
           </div>
 
@@ -1173,6 +1177,106 @@
           <button type="submit" class="btn-admin btn-admin-primary">Guardar Nueva Contraseña</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal: Recuperación de Contraseña de Administrador (Dual: WhatsApp + PIN Maestro) -->
+  <div class="admin-modal-backdrop" id="modalAdminRecovery">
+    <div class="admin-modal" style="max-width: 480px;">
+      <div class="admin-modal-header">
+        <h3>🛡️ Recuperación de Contraseña Oficial</h3>
+        <button type="button" class="btn-close-modal" id="btnCloseRecoveryModal" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <!-- PASO 1: VALIDACIÓN DE IDENTIDAD (WHATSAPP O PIN MAESTRO) -->
+      <div id="recoveryStep1" class="admin-modal-body">
+        <p style="font-size: 0.86rem; color: #94a3b8; margin-bottom: 1rem; line-height: 1.45;">
+          Elige cómo deseas validar tu identidad de Administrador para crear una nueva contraseña sin necesidad de recordar la anterior:
+        </p>
+
+        <!-- Selector de Pestañas -->
+        <div class="recovery-method-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+          <button type="button" class="recovery-tab-btn active" id="tabRecoveryWhatsapp" style="flex: 1; padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #25D366; background: rgba(37, 211, 102, 0.12); color: #ffffff; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s;">
+            <span>📲 WhatsApp Oficial</span>
+          </button>
+          <button type="button" class="recovery-tab-btn" id="tabRecoveryPin" style="flex: 1; padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #334155; background: #1e293b; color: #94a3b8; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s;">
+            <span>🔑 PIN Maestro</span>
+          </button>
+        </div>
+
+        <!-- Panel 1: Método WhatsApp Oficial -->
+        <div id="panelRecoveryWhatsapp">
+          <div style="background: rgba(37, 211, 102, 0.08); border: 1px dashed #25D366; border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
+            <p style="font-size: 0.82rem; color: #e2e8f0; margin-bottom: 0.5rem;">
+              Enviaremos un <strong>Código de Seguridad de 6 dígitos</strong> directamente al WhatsApp de Gerencia:
+            </p>
+            <div style="font-size: 1rem; font-weight: 800; color: #25D366; display: flex; align-items: center; justify-content: space-between;">
+              <span>📞 962 401 4408</span>
+              <span style="font-size: 0.72rem; background: #25D366; color: #000; padding: 2px 7px; border-radius: 4px; font-weight: 800;">AUTORIZADO</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-admin" id="btnSendWhatsappCode" style="width: 100%; background: #25D366; border-color: #25D366; color: #ffffff; font-weight: 700; margin-bottom: 1rem; padding: 0.75rem;">
+            📲 Enviar Código de Seguridad a mi WhatsApp
+          </button>
+
+          <div id="sectionEnterWhatsappCode" style="display: none; border-top: 1px dashed #334155; padding-top: 1rem;">
+            <div class="admin-form-group">
+              <label for="recoveryWhatsappCode" style="color: #cbd5e1; font-weight: 600;">Código de 6 dígitos recibido:</label>
+              <input type="text" id="recoveryWhatsappCode" class="admin-form-control" placeholder="000000" maxlength="6" style="text-align: center; letter-spacing: 0.35em; font-size: 1.4rem; font-weight: 800; color: #C58F38;" />
+              <small style="display: block; color: #94a3b8; font-size: 0.75rem; margin-top: 0.3rem; text-align: center;">Válido durante 15 minutos</small>
+            </div>
+            <button type="button" class="btn-admin btn-admin-primary" id="btnVerifyWhatsappCode" style="width: 100%; padding: 0.75rem;">
+              Verificar Código y Continuar ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 2: Método PIN Maestro de Emergencia -->
+        <div id="panelRecoveryPin" style="display: none;">
+          <div style="background: rgba(197, 143, 56, 0.08); border: 1px dashed #C58F38; border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
+            <p style="font-size: 0.82rem; color: #e2e8f0; margin-bottom: 0.3rem;">
+              Ingresa el <strong>PIN Maestro de Rescate</strong> de Super Administrador (predeterminado de emergencia: <code>4408</code>).
+            </p>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="recoveryMasterPin" style="color: #cbd5e1; font-weight: 600;">PIN Maestro de Seguridad:</label>
+            <input type="password" id="recoveryMasterPin" class="admin-form-control" placeholder="••••" maxlength="8" style="text-align: center; letter-spacing: 0.4em; font-size: 1.35rem; font-weight: 800;" />
+          </div>
+
+          <button type="button" class="btn-admin btn-admin-primary" id="btnVerifyMasterPin" style="width: 100%; padding: 0.75rem;">
+            Validar PIN Maestro y Continuar ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- PASO 2: CREAR NUEVA CONTRASEÑA DIRECTAMENTE -->
+      <div id="recoveryStep2" class="admin-modal-body" style="display: none;">
+        <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid #10b981; border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.5rem;">✅</span>
+          <span style="font-size: 0.82rem; color: #a7f3d0; line-height: 1.4;">
+            <strong>Identidad verificada exitosamente.</strong> Escribe tu nueva contraseña de Administrador a continuación.
+          </span>
+        </div>
+
+        <form id="formRecoverySetNewPassword">
+          <div class="admin-form-group">
+            <label for="recoveryNewPass">Nueva Contraseña de Administrador</label>
+            <input type="password" id="recoveryNewPass" class="admin-form-control" placeholder="Mínimo 6 caracteres" minlength="6" required />
+          </div>
+
+          <div class="admin-form-group">
+            <label for="recoveryConfirmPass">Confirmar Nueva Contraseña</label>
+            <input type="password" id="recoveryConfirmPass" class="admin-form-control" placeholder="Repite la nueva contraseña" minlength="6" required />
+          </div>
+
+          <div class="admin-modal-footer" style="padding: 1rem 0 0; border-top: 1px solid #334155; margin-top: 1rem;">
+            <button type="button" class="btn-admin btn-admin-secondary" id="btnCancelRecovery">Cancelar</button>
+            <button type="submit" class="btn-admin btn-admin-primary">Guardar y Restablecer Contraseña</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 

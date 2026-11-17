@@ -1803,5 +1803,56 @@ select.admin-form-control option {
   white-space: nowrap;
 }
 
+/* ==========================================================================
+   RECUPERACIÓN DE CONTRASEÑA ADMINISTRATIVA (DUAL: WHATSAPP + PIN)
+   ========================================================================== */
+.recovery-method-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.recovery-tab-btn {
+  flex: 1;
+  padding: 0.7rem 0.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  border: 1.5px solid var(--admin-border);
+  background: var(--admin-card-bg);
+  color: var(--admin-text-muted);
+}
+
+.recovery-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.recovery-tab-btn.active.tab-whatsapp {
+  border-color: #25D366 !important;
+  background: rgba(37, 211, 102, 0.15) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.2);
+}
+
+.recovery-tab-btn.active.tab-pin {
+  border-color: var(--admin-gold) !important;
+  background: rgba(197, 143, 56, 0.15) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(197, 143, 56, 0.2);
+}
+
+.btn-forgot-pass-link:hover {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+
 
 
