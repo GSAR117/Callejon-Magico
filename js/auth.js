@@ -300,17 +300,24 @@
     },
 
     // ==========================================
-    // RECUPERACIÓN DE CONTRASEÑA VÍA CORREO (EMAILJS)
+    // CONFIGURACIÓN DE EMAILJS PARA RECUPERACIÓN DE CONTRASEÑA
     // ==========================================
+    EMAILJS_RECOVERY: {
+      serviceId: 'service_ixkb84f',
+      templateId: 'template_ksxs8gb',
+      publicKey: 'eFDXFKJFAoYalylpS'
+    },
+
     async sendResetEmail(targetEmail, targetName, code) {
       try {
+        const cfg = this.EMAILJS_RECOVERY;
         if (!window.emailjs) {
           await new Promise((resolve) => {
             const s = document.createElement('script');
             s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
             s.async = true;
             s.onload = () => {
-              try { window.emailjs.init('eFDXFKJFAoYalylpS'); } catch (e) {}
+              try { window.emailjs.init(cfg.publicKey); } catch (e) {}
               resolve();
             };
             s.onerror = () => resolve();
@@ -319,45 +326,45 @@
         }
         if (window.emailjs) {
           try {
-            window.emailjs.init('eFDXFKJFAoYalylpS');
+            window.emailjs.init(cfg.publicKey);
           } catch (e) {}
+
+          const expireDate = new Date(Date.now() + 15 * 60 * 1000);
+          const timeStr = expireDate.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
 
           const templateParams = {
             to_name: targetName || 'Cliente Callejón Mágico',
             to_email: targetEmail.trim(),
             email: targetEmail.trim(),
             user_email: targetEmail.trim(),
-            reply_to: 'admin@callejonmagico.com',
+            passcode: code,
+            pass_code: code,
+            code: code,
+            otp_code: code,
+            time: timeStr,
+            reply_to: 'gabosarmiento090@gmail.com',
             order_num: 'RESTAURAR-CLAVE',
             order_date: new Date().toLocaleString('es-MX'),
             delivery_info: `Código de Seguridad para Restablecer Contraseña: ${code}`,
-            items_summary: `Has solicitado restablecer tu contraseña en Callejón Mágico. Tu código de verificación temporal es: ${code} (Válido durante 15 minutos).`,
-            items_html: `<div style="font-family:Arial,sans-serif; text-align:center; padding:20px; background:#0b1b3d; color:#ffffff; border-radius:10px;"><h2 style="color:#C58F38; margin:0 0 10px;">Callejón Mágico</h2><p style="font-size:15px; color:#e2e8f0;">Tu código de seguridad temporal para restablecer contraseña es:</p><div style="font-size:32px; font-weight:800; color:#C58F38; letter-spacing:6px; margin:15px 0; padding:10px; background:#07142a; border-radius:6px;">${code}</div><p style="font-size:12px; color:#94a3b8;">Válido durante 15 minutos. Si no solicitaste este cambio, puedes ignorar este correo.</p></div>`,
-            items: `Código de seguridad: ${code}`,
-            articulos: `Código de seguridad: ${code}`,
-            productos: `Código de seguridad: ${code}`,
-            message: `Tu código de verificación de 6 dígitos para Callejón Mágico es: ${code}`,
-            orders: `Código: ${code}`,
-            total: code,
-            total_words: `Código de 6 dígitos: ${code}`,
-            subtotal_bruto: code,
-            subtotal: code,
-            iva: '0.00'
+            items_summary: `Código de seguridad: ${code} (Válido 15 minutos).`,
+            message: `Tu código de seguridad temporal para Callejón Mágico es: ${code}`
           };
 
           const resp = await window.emailjs.send(
-            'service_twm03c7',
-            'template_anh3qjr',
+            cfg.serviceId,
+            cfg.templateId,
             templateParams,
-            'eFDXFKJFAoYalylpS'
+            cfg.publicKey
           );
           console.log('AuthEngine: EmailJS enviado exitosamente:', resp);
-          return true;
+          return { success: true, resp };
         }
+        return { success: false, error: 'No se pudo cargar la librería de EmailJS.' };
       } catch (err) {
         console.error('AuthEngine: Error al enviar correo de recuperación vía EmailJS:', err);
+        const errMsg = err?.text || err?.message || JSON.stringify(err);
+        return { success: false, error: errMsg };
       }
-      return false;
     },
 
     async requestPasswordReset(email) {
@@ -391,16 +398,20 @@
       sessionStorage.setItem('callejon_client_recovery_token', JSON.stringify(token));
 
       // Enviar correo real vía EmailJS
-      const sent = await this.sendResetEmail(cleanEmail, userName, code);
+      const sentResult = await this.sendResetEmail(cleanEmail, userName, code);
+
+      if (!sentResult.success) {
+        return {
+          success: false,
+          message: `Error al enviar correo vía EmailJS (${sentResult.error || 'Verifica la conexión'}). Si tu Public Key cambió, actualízala.`
+        };
+      }
 
       return {
         success: true,
         email: cleanEmail,
         code,
-        sentEmail: sent,
-        message: sent 
-          ? `✉️ Código de seguridad enviado a ${cleanEmail}. Revisa tu bandeja de entrada o spam.`
-          : `✉️ Código generado para ${cleanEmail}.`
+        message: `✉️ Código de 6 dígitos enviado exitosamente a ${cleanEmail}. Revisa tu bandeja de entrada o spam.`
       };
     },
 
