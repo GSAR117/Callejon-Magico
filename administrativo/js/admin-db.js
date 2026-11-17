@@ -19,6 +19,7 @@
     CUSTOM_PRODUCTS: 'callejon_custom_products',
     DELETED_PRODUCTS: 'callejon_deleted_products',
     STAFF: 'callejon_staff_db',
+    DELETED_STAFF: 'callejon_deleted_staff',
     USER_WISHLISTS: 'callejon_user_wishlists'
   };
 
@@ -646,12 +647,62 @@
     // =========================================================================
     // 5. PERSONAL & EMPLEADOS DE LA TIENDA
     // =========================================================================
+    getDeletedStaffList() {
+      try {
+        let deleted = JSON.parse(localStorage.getItem(KEYS.DELETED_STAFF) || '[]');
+        if (!Array.isArray(deleted)) deleted = [];
+        return deleted;
+      } catch (e) {
+        return [];
+      }
+    },
+
+    isStaffDeleted(emp, deletedList) {
+      if (!emp) return false;
+      const list = deletedList || this.getDeletedStaffList();
+      if (!list || !list.length) return false;
+
+      const norm = (v) => String(v || '').trim().toLowerCase();
+      const empId = norm(emp.id);
+      const empCode = norm(emp.code);
+      const empEmail = norm(emp.email);
+      const empName = norm(emp.fullName);
+
+      return list.some(item => {
+        const d = norm(item);
+        if (!d) return false;
+        return (empId && d === empId) ||
+               (empCode && d === empCode) ||
+               (empEmail && d === empEmail) ||
+               (empName && d === empName);
+      });
+    },
+
     getStaff() {
       try {
         let staff = JSON.parse(localStorage.getItem(KEYS.STAFF) || '[]');
+        let deletedStaff = this.getDeletedStaffList();
+
+        // Autocorrección persistente: Sofía Morales fue solicitada para baja definitiva
+        // Garantizar que sus identificadores estén registrados en la lista negra
+        const sofiaIds = ['staff_emp_0102', 'EMP-0102', 'emp-0102', 'sofia.cajas@callejonmagico.com', 'sofia morales', 'sofía morales'];
+        let blacklistChanged = false;
+        sofiaIds.forEach(idItem => {
+          if (!deletedStaff.includes(idItem)) {
+            deletedStaff.push(idItem);
+            blacklistChanged = true;
+          }
+        });
+        if (blacklistChanged) {
+          localStorage.setItem(KEYS.DELETED_STAFF, JSON.stringify(deletedStaff));
+          if (window.CallejonFirebase && typeof window.CallejonFirebase.deleteStaff === 'function') {
+            sofiaIds.forEach(idItem => window.CallejonFirebase.deleteStaff(idItem));
+          }
+        }
+
         if (!staff || !staff.length) {
           // Plantilla oficial inicial de colaboradores de Callejón Mágico
-          staff = [
+          const defaultStaff = [
             {
               id: 'staff_emp_0101',
               code: 'EMP-0101',
@@ -738,12 +789,88 @@
               notes: 'Asesoría técnica en pantallas 4K, consolas PlayStation/Xbox/Nintendo y smartphones.'
             }
           ];
+
+          // Filtrar cualquier empleado que esté en la lista negra
+          staff = defaultStaff.filter(st => !this.isStaffDeleted(st, deletedStaff));
           localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
 
           if (window.CallejonFirebase && typeof window.CallejonFirebase.syncStaff === 'function') {
             staff.forEach(st => window.CallejonFirebase.syncStaff(st));
           }
         }
+
+        // 1. Filtrar empleados eliminados permanentemente
+        const countBeforeFilter = staff.length;
+        staff = staff.filter(st => !this.isStaffDeleted(st, deletedStaff));
+
+        // 2. Desduplicación estricta y consolidación de datos (p. ej. eliminar Gabriel Sarmiento duplicado)
+        const seenCodes = new Set();
+        const seenEmails = new Set();
+        const seenIds = new Set();
+        const seenNames = new Set();
+        const deduplicated = [];
+        const duplicateIdsToPurge = [];
+
+        staff.forEach(emp => {
+          if (!emp) return;
+          const codeKey = (emp.code || '').trim().toUpperCase();
+          const emailKey = (emp.email || '').trim().toLowerCase();
+          const idKey = (emp.id || '').trim();
+          const nameKey = (emp.fullName || '').trim().toLowerCase();
+
+          const isDuplicate = (codeKey && seenCodes.has(codeKey)) ||
+                              (emailKey && seenEmails.has(emailKey)) ||
+                              (idKey && seenIds.has(idKey)) ||
+                              (nameKey && seenNames.has(nameKey));
+
+          if (isDuplicate) {
+            // Es un registro duplicado: recolectar id para purgarlo de Firebase
+            if (emp.id) duplicateIdsToPurge.push(emp.id);
+
+            // Localizar el registro previo para preservar cambios recientes (ej: turno modificado)
+            const primary = deduplicated.find(e =>
+              (codeKey && (e.code || '').trim().toUpperCase() === codeKey) ||
+              (emailKey && (e.email || '').trim().toLowerCase() === emailKey) ||
+              (idKey && e.id === idKey) ||
+              (nameKey && (e.fullName || '').trim().toLowerCase() === nameKey)
+            );
+
+            if (primary) {
+              // Si el registro duplicado traía el turno modificado más reciente (ej. mixto rotativo), preservarlo
+              if (emp.shift && emp.shift !== 'completo') {
+                primary.shift = emp.shift;
+                primary.shiftName = emp.shiftName || primary.shiftName;
+              }
+              if (emp.updatedAt && (!primary.updatedAt || emp.updatedAt > primary.updatedAt)) {
+                primary.shift = emp.shift || primary.shift;
+                primary.shiftName = emp.shiftName || primary.shiftName;
+                primary.role = emp.role || primary.role;
+                primary.department = emp.department || primary.department;
+                primary.departmentName = emp.departmentName || primary.departmentName;
+                primary.phone = emp.phone || primary.phone;
+                primary.salary = emp.salary || primary.salary;
+                primary.updatedAt = emp.updatedAt;
+              }
+            }
+          } else {
+            if (codeKey) seenCodes.add(codeKey);
+            if (emailKey) seenEmails.add(emailKey);
+            if (idKey) seenIds.add(idKey);
+            if (nameKey) seenNames.add(nameKey);
+            deduplicated.push(emp);
+          }
+        });
+
+        if (deduplicated.length !== countBeforeFilter) {
+          staff = deduplicated;
+          localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+
+          // Purgar de Firebase las claves de duplicados huérfanos
+          if (duplicateIdsToPurge.length && window.CallejonFirebase && typeof window.CallejonFirebase.deleteStaff === 'function') {
+            duplicateIdsToPurge.forEach(dupId => window.CallejonFirebase.deleteStaff(dupId));
+          }
+        }
+
         return staff;
       } catch (e) {
         console.error('AdminDB: Error al obtener personal:', e);
@@ -754,7 +881,13 @@
     getStaffById(id) {
       if (!id) return null;
       const staff = this.getStaff();
-      return staff.find(s => s.id === id || s.code === id) || null;
+      const norm = String(id).trim().toLowerCase();
+      return staff.find(s =>
+        (s.id && s.id.toLowerCase() === norm) ||
+        (s.code && s.code.toLowerCase() === norm) ||
+        (s.email && s.email.toLowerCase() === norm) ||
+        (s.fullName && s.fullName.toLowerCase() === norm)
+      ) || null;
     },
 
     saveStaff(staffData) {
@@ -784,25 +917,44 @@
         const deptKey = staffData.department || 'boutique';
         const shiftKey = staffData.shift || 'completo';
 
-        if (staffData.id) {
-          // Edición
-          const idx = staff.findIndex(s => s.id === staffData.id);
-          if (idx !== -1) {
-            staff[idx] = {
-              ...staff[idx],
-              ...staffData,
-              departmentName: deptNames[deptKey] || staffData.departmentName || deptKey,
-              shiftName: shiftNames[shiftKey] || staffData.shiftName || shiftKey,
-              updatedAt: new Date().toISOString()
-            };
-            savedItem = staff[idx];
-          }
+        const targetId = (staffData.id || '').trim();
+        const targetCode = (staffData.code || '').trim().toUpperCase();
+        const targetEmail = (staffData.email || '').trim().toLowerCase();
+        const targetName = (staffData.fullName || '').trim().toLowerCase();
+
+        // Buscar si ya existe por ID, Código, Correo o Nombre para NUNCA duplicar
+        let idx = -1;
+        if (targetId) {
+          idx = staff.findIndex(s => s.id === targetId || (s.code && s.code.toUpperCase() === targetId.toUpperCase()));
+        }
+        if (idx === -1 && targetCode) {
+          idx = staff.findIndex(s => s.code && s.code.trim().toUpperCase() === targetCode);
+        }
+        if (idx === -1 && targetEmail) {
+          idx = staff.findIndex(s => s.email && s.email.trim().toLowerCase() === targetEmail);
+        }
+        if (idx === -1 && targetName) {
+          idx = staff.findIndex(s => s.fullName && s.fullName.trim().toLowerCase() === targetName);
         }
 
-        if (!savedItem) {
-          // Nuevo Empleado
+        if (idx !== -1) {
+          // ACTUALIZACIÓN DE EMPLEADO EXISTENTE (Evita duplicados al cambiar turno u otro dato)
+          staff[idx] = {
+            ...staff[idx],
+            ...staffData,
+            id: staff[idx].id, // Mantener el ID original estable
+            code: staffData.code ? staffData.code.trim() : staff[idx].code,
+            department: deptKey,
+            departmentName: deptNames[deptKey] || staffData.departmentName || deptKey,
+            shift: shiftKey,
+            shiftName: shiftNames[shiftKey] || staffData.shiftName || shiftKey,
+            updatedAt: new Date().toISOString()
+          };
+          savedItem = staff[idx];
+        } else {
+          // REGISTRO DE NUEVO COLABORADOR REAL
           const nextNum = staff.length + 101;
-          const newCode = staffData.code || ('EMP-' + String(nextNum).padStart(4, '0'));
+          const newCode = staffData.code ? staffData.code.trim() : ('EMP-' + String(nextNum).padStart(4, '0'));
           const newId = 'staff_' + Date.now();
           savedItem = {
             id: newId,
@@ -825,6 +977,21 @@
           staff.unshift(savedItem);
         }
 
+        // Si este colaborador estaba en la lista de eliminados, removerlo de la lista negra
+        let deletedList = this.getDeletedStaffList();
+        if (deletedList.length) {
+          const idToRemove = (savedItem.id || '').toLowerCase();
+          const codeToRemove = (savedItem.code || '').toLowerCase();
+          const emailToRemove = (savedItem.email || '').toLowerCase();
+          const nameToRemove = (savedItem.fullName || '').toLowerCase();
+
+          deletedList = deletedList.filter(item => {
+            const d = String(item).trim().toLowerCase();
+            return d !== idToRemove && d !== codeToRemove && d !== emailToRemove && d !== nameToRemove;
+          });
+          localStorage.setItem(KEYS.DELETED_STAFF, JSON.stringify(deletedList));
+        }
+
         localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
 
         if (window.CallejonFirebase && typeof window.CallejonFirebase.syncStaff === 'function') {
@@ -843,20 +1010,52 @@
       try {
         if (!id) return false;
         let staff = this.getStaff();
-        const initialLen = staff.length;
-        staff = staff.filter(s => s.id !== id && s.code !== id);
+        const normId = String(id).trim();
 
-        if (staff.length < initialLen) {
-          localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+        // Buscar el colaborador antes de removerlo para obtener todos sus identificadores únicos
+        const empToDelete = staff.find(s =>
+          s.id === normId ||
+          (s.code && s.code.toUpperCase() === normId.toUpperCase()) ||
+          (s.email && s.email.toLowerCase() === normId.toLowerCase()) ||
+          (s.fullName && s.fullName.toLowerCase() === normId.toLowerCase())
+        );
 
-          if (window.CallejonFirebase && typeof window.CallejonFirebase.deleteStaff === 'function') {
-            window.CallejonFirebase.deleteStaff(id);
+        // Registrar en la lista negra persistente (callejon_deleted_staff)
+        let deletedStaff = this.getDeletedStaffList();
+        const idsToAdd = [normId];
+        if (empToDelete) {
+          if (empToDelete.id) idsToAdd.push(empToDelete.id);
+          if (empToDelete.code) {
+            idsToAdd.push(empToDelete.code);
+            idsToAdd.push(empToDelete.code.toUpperCase());
+            idsToAdd.push(empToDelete.code.toLowerCase());
           }
-
-          this.notifyChange('staff');
-          return true;
+          if (empToDelete.email) idsToAdd.push(empToDelete.email.toLowerCase());
+          if (empToDelete.fullName) idsToAdd.push(empToDelete.fullName.toLowerCase());
         }
-        return false;
+
+        idsToAdd.forEach(item => {
+          if (item && !deletedStaff.includes(item)) {
+            deletedStaff.push(item);
+          }
+        });
+        localStorage.setItem(KEYS.DELETED_STAFF, JSON.stringify(deletedStaff));
+
+        // Filtrar del arreglo de personal
+        const initialLen = staff.length;
+        staff = staff.filter(s => !this.isStaffDeleted(s, deletedStaff));
+
+        localStorage.setItem(KEYS.STAFF, JSON.stringify(staff));
+
+        // Purgar de Firebase bajo todas las claves posibles
+        if (window.CallejonFirebase && typeof window.CallejonFirebase.deleteStaff === 'function') {
+          idsToAdd.forEach(keyToDelete => {
+            window.CallejonFirebase.deleteStaff(keyToDelete);
+          });
+        }
+
+        this.notifyChange('staff');
+        return true;
       } catch (e) {
         console.error('AdminDB: Error al eliminar empleado:', e);
         return false;

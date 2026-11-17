@@ -26,8 +26,28 @@
     ORDERS: 'callejon_user_orders',
     STOCK: 'callejon_stock_db',
     CUSTOM_PRODUCTS: 'callejon_custom_products',
-    STAFF: 'callejon_staff_db'
+    STAFF: 'callejon_staff_db',
+    DELETED_STAFF: 'callejon_deleted_staff'
   };
+
+  function isDeletedStaffMember(emp, deletedList) {
+    if (!emp) return false;
+    if (!deletedList || !deletedList.length) return false;
+    const norm = (v) => String(v || '').trim().toLowerCase();
+    const empId = norm(emp.id);
+    const empCode = norm(emp.code);
+    const empEmail = norm(emp.email);
+    const empName = norm(emp.fullName);
+
+    return deletedList.some(item => {
+      const d = norm(item);
+      if (!d) return false;
+      return (empId && d === empId) ||
+             (empCode && d === empCode) ||
+             (empEmail && d === empEmail) ||
+             (empName && d === empName);
+    });
+  }
 
   function sanitizeKey(key) {
     if (!key) return 'unknown_' + Date.now();
@@ -199,7 +219,8 @@
     async syncStaff(staffMember) {
       if (!staffMember || !this.isReady()) return;
       try {
-        const staffKey = sanitizeKey(staffMember.id || staffMember.code || staffMember.email);
+        // Usar código o id como clave canónica única para evitar duplicados
+        const staffKey = sanitizeKey(staffMember.code || staffMember.id || staffMember.email);
         await db.ref('staff/' + staffKey).set({
           ...staffMember,
           _updatedAt: new Date().toISOString()
@@ -214,6 +235,11 @@
       try {
         const staffKey = sanitizeKey(staffId);
         await db.ref('staff/' + staffKey).remove();
+
+        const cleanNorm = sanitizeKey(String(staffId).replace(/[^a-zA-Z0-9]/g, '_'));
+        if (cleanNorm !== staffKey) {
+          await db.ref('staff/' + cleanNorm).remove();
+        }
       } catch (e) {
         console.warn('CallejonFirebase: Error al borrar empleado en Firebase:', e);
       }
@@ -378,20 +404,54 @@
             localStaff = JSON.parse(localStorage.getItem(STORAGE_KEYS.STAFF) || '[]');
           } catch (e) {}
 
+          let deletedStaff = [];
+          try {
+            deletedStaff = JSON.parse(localStorage.getItem(STORAGE_KEYS.DELETED_STAFF) || '[]');
+          } catch (e) {}
+
           const staffMap = new Map();
           if (remoteStaff) {
-            Object.values(remoteStaff).forEach(st => {
-              if (st && (st.id || st.code)) {
-                staffMap.set(st.id || st.code, st);
+            Object.entries(remoteStaff).forEach(([remKey, st]) => {
+              if (!st) return;
+
+              // Si el empleado remoto está en la lista negra de bajas, purgarlo de Firebase
+              if (isDeletedStaffMember(st, deletedStaff) || deletedStaff.some(d => sanitizeKey(d) === remKey)) {
+                db.ref('staff/' + remKey).remove().catch(() => {});
+                return;
+              }
+
+              // Usar como clave única su CÓDIGO (ej: EMP-0101) o ID normalizado para NUNCA duplicar
+              const uniqueKey = (st.code || st.id || remKey).trim().toUpperCase();
+              if (staffMap.has(uniqueKey)) {
+                // Registro duplicado detectado en la nube: fusionar conservando modificaciones recientes
+                const existing = staffMap.get(uniqueKey);
+                const merged = { ...existing, ...st };
+                if (st.shift && st.shift !== 'completo') {
+                  merged.shift = st.shift;
+                  merged.shiftName = st.shiftName || merged.shiftName;
+                }
+                staffMap.set(uniqueKey, merged);
+
+                // Si la clave remota huérfana no es la canónica, purgar el duplicado de Firebase
+                const canonicalKey = sanitizeKey(st.code || st.id);
+                if (remKey !== canonicalKey) {
+                  db.ref('staff/' + remKey).remove().catch(() => {});
+                }
+              } else {
+                staffMap.set(uniqueKey, st);
               }
             });
           }
 
-          // Conservar locales no sincronizados y subirlos a la nube
+          // Conservar colaboradores locales no sincronizados (si no han sido dados de baja)
           localStaff.forEach(ls => {
-            if (ls && (ls.id || ls.code) && !staffMap.has(ls.id || ls.code)) {
-              staffMap.set(ls.id || ls.code, ls);
-              const staffKey = sanitizeKey(ls.id || ls.code);
+            if (!ls) return;
+            if (isDeletedStaffMember(ls, deletedStaff)) return;
+
+            const uniqueKey = (ls.code || ls.id).trim().toUpperCase();
+            if (!staffMap.has(uniqueKey)) {
+              staffMap.set(uniqueKey, ls);
+              const staffKey = sanitizeKey(ls.code || ls.id);
               db.ref('staff/' + staffKey).set({
                 ...ls,
                 _updatedAt: new Date().toISOString()

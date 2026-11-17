@@ -1169,8 +1169,10 @@
           return;
         }
 
+        const staffId = (document.getElementById('staffIdInput')?.value || activeEditStaffId || '').trim();
+
         const staffData = {
-          id: activeEditStaffId || undefined,
+          id: staffId || undefined,
           code,
           fullName,
           role,
@@ -1186,8 +1188,9 @@
         };
 
         window.AdminDB.saveStaff(staffData);
+        activeEditStaffId = null;
         closeAllModals();
-        showToast(activeEditStaffId ? `Ficha de ${fullName} actualizada con éxito` : `Colaborador ${fullName} registrado en plantilla`, 'success');
+        showToast(staffId ? `Ficha de ${fullName} actualizada con éxito` : `Colaborador ${fullName} registrado en plantilla`, 'success');
         renderAll();
       });
     }
