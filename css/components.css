@@ -3663,17 +3663,35 @@
   font-size: 0.75rem;
 }
 
-.ticket-meta-row, .ticket-row-detail {
+.ticket-meta-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-bottom: 0.2rem;
+}
+
+.ticket-meta-row .label {
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.ticket-meta-row .val {
+  color: #0f172a;
+  text-align: left;
+}
+
+.ticket-row-detail {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.2rem;
 }
 
-.ticket-meta-row .label, .ticket-row-detail span:first-child {
+.ticket-row-detail span:first-child {
   color: #64748b;
 }
 
-.ticket-meta-row .val, .ticket-row-detail span:last-child {
+.ticket-row-detail span:last-child {
   color: #0f172a;
   text-align: right;
 }
@@ -3791,9 +3809,11 @@
 .ticket-fin-row.highlight-iva {
   color: #0b1b3d;
   font-weight: 700;
-  background: transparent;
-  border: none;
-  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
 .ticket-points-footer-line {

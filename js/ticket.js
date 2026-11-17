@@ -451,12 +451,13 @@
 
       const recipientName = order.recipient?.name || 'CLIENTE FRECUENTE';
       const recipientPhone = order.recipient?.phone || 'No especificado';
-      let recipientStreet = order.recipient?.street || 'Entrega en Domicilio';
-      const postal = order.recipient?.postal || order.recipient?.postalCode || order.recipient?.zip;
-      if (postal && !recipientStreet.includes('C.P.')) {
-        recipientStreet += ` • C.P. ${postal}`;
+      let recipientPostal = order.recipient?.postal || order.recipient?.postalCode || order.recipient?.zip;
+      if (!recipientPostal) {
+        const match = (order.recipient?.street || '').match(/\b\d{5}\b/);
+        if (match) recipientPostal = match[0];
+        else recipientPostal = '30700';
       }
-      const recipientCity = order.recipient?.city || 'Ciudad de México';
+      const recipientCity = order.recipient?.city || 'Tapachula, Chiapas';
 
       const dateStr = order.date || new Date().toLocaleString('es-MX', {
         year: 'numeric',
@@ -576,10 +577,6 @@
               <span class="label">FECHA & HORA:</span>
               <span class="val">${dateStr}</span>
             </div>
-            <div class="ticket-meta-row">
-              <span class="label">LUGAR EXPEDICIÓN:</span>
-              <span class="val">${emisor.lugarExpedicion}</span>
-            </div>
           </div>
 
           <div class="ticket-divider-dashed"></div>
@@ -589,7 +586,7 @@
             <div class="ticket-section-title">DATOS DEL CLIENTE / ENTREGA:</div>
             <div class="ticket-meta-row"><span class="label">TITULAR:</span><span class="val bold">${recipientName.toUpperCase()}</span></div>
             <div class="ticket-meta-row"><span class="label">TELÉFONO:</span><span class="val">${recipientPhone}</span></div>
-            <div class="ticket-meta-row"><span class="label">DOMICILIO:</span><span class="val">${recipientStreet}</span></div>
+            <div class="ticket-meta-row"><span class="label">C.P.:</span><span class="val">${recipientPostal}</span></div>
             <div class="ticket-meta-row"><span class="label">CIUDAD / ESTADO:</span><span class="val">${recipientCity}</span></div>
           </div>
 
@@ -658,7 +655,7 @@
               </div>
             ` : ''}
 
-            <div class="ticket-fin-row highlight-iva">
+            <div class="ticket-fin-row">
               <span>I.V.A. TRASLADADO (16% INCLUIDO):</span>
               <span><strong>$${fin.iva16.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN</strong></span>
             </div>
@@ -730,6 +727,13 @@
       const border = '='.repeat(48);
       const line = '-'.repeat(48);
 
+      let recipientPostal = order.recipient?.postal || order.recipient?.postalCode || order.recipient?.zip;
+      if (!recipientPostal) {
+        const match = (order.recipient?.street || '').match(/\b\d{5}\b/);
+        if (match) recipientPostal = match[0];
+        else recipientPostal = '30700';
+      }
+
       let txt = '';
       txt += `${border}\n`;
       txt += `          ${emisor.razonSocial}\n`;
@@ -744,12 +748,12 @@
       txt += `FOLIO DE TICKET:    ${fin.ticketFolio}\n`;
       txt += `ORDEN DE COMPRA:    #${order.orderNum}\n`;
       txt += `FECHA Y HORA:       ${order.date || new Date().toLocaleString('es-MX')}\n`;
-      txt += `LUGAR EXPEDICIÓN:   ${emisor.lugarExpedicion}\n`;
       txt += `${line}\n`;
       txt += `DATOS DEL CLIENTE / ENTREGA:\n`;
       txt += `CLIENTE:            ${(order.recipient?.name || 'Cliente Callejón Mágico').toUpperCase()}\n`;
       txt += `TELÉFONO:           ${order.recipient?.phone || 'No especificado'}\n`;
-      txt += `DIRECCIÓN ENTREGA:  ${order.recipient?.street || ''}, ${order.recipient?.city || ''}\n`;
+      txt += `C.P.:               ${recipientPostal}\n`;
+      txt += `CIUDAD / ESTADO:    ${order.recipient?.city || 'Tapachula, Chiapas'}\n`;
       txt += `${line}\n\n`;
 
       txt += `CANT  DESCRIPCIÓN                      P.UNIT     IMPORTE\n`;
@@ -873,7 +877,12 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
       const emisor = FISCAL_EMISOR;
       const recipientName = (order.recipient?.name || 'Cliente Callejón Mágico').toUpperCase();
       const phone = order.recipient?.phone || 'No especificado';
-      const street = order.recipient?.street || 'Entrega en Domicilio';
+      let recipientPostal = order.recipient?.postal || order.recipient?.postalCode || order.recipient?.zip;
+      if (!recipientPostal) {
+        const match = (order.recipient?.street || '').match(/\b\d{5}\b/);
+        if (match) recipientPostal = match[0];
+        else recipientPostal = '30700';
+      }
       const city = order.recipient?.city || 'Tapachula, Chiapas';
       const dateStr = order.date || new Date().toLocaleString('es-MX', {
         year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -895,13 +904,13 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
         { text: "Telefono / WhatsApp de Atencion: (962) 401-4408", font: "F2", size: 9, align: "center", spacing: 6 },
         { text: "==================================================================", font: "F1", size: 8, align: "center", spacing: 6 },
         { text: `FOLIO TICKET: ${fin.ticketFolio}      ORDEN: #${order.orderNum}`, font: "F2", size: 9, align: "left", spacing: 4 },
-        { text: `FECHA Y HORA: ${clean(dateStr)}`, font: "F1", size: 8, align: "left", spacing: 4 },
-        { text: `LUGAR DE EXPEDICION: ${clean(emisor.lugarExpedicion)}`, font: "F1", size: 8, align: "left", spacing: 6 },
+        { text: `FECHA Y HORA: ${clean(dateStr)}`, font: "F1", size: 8, align: "left", spacing: 6 },
         { text: "------------------------------------------------------------------", font: "F1", size: 8, align: "center", spacing: 6 },
         { text: "DATOS DEL CLIENTE / RECEPTOR:", font: "F2", size: 8, align: "left", spacing: 4 },
         { text: `CLIENTE: ${clean(recipientName)}`, font: "F1", size: 8, align: "left", spacing: 3 },
         { text: `TELEFONO: ${clean(phone)}`, font: "F1", size: 8, align: "left", spacing: 3 },
-        { text: `DOMICILIO DE ENTREGA: ${clean(street)}, ${clean(city)}`, font: "F1", size: 8, align: "left", spacing: 6 },
+        { text: `CODIGO POSTAL (C.P.): ${clean(recipientPostal)}`, font: "F1", size: 8, align: "left", spacing: 3 },
+        { text: `CIUDAD / ESTADO: ${clean(city)}`, font: "F1", size: 8, align: "left", spacing: 6 },
         { text: "------------------------------------------------------------------", font: "F1", size: 8, align: "center", spacing: 6 },
         { text: "CANT  DESCRIPCION DEL ARTICULO           P.UNIT         IMPORTE", font: "F2", size: 8, align: "left", spacing: 5 },
         { text: "------------------------------------------------------------------", font: "F1", size: 8, align: "center", spacing: 5 }
@@ -1280,15 +1289,28 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
               text-transform: uppercase;
               margin-bottom: 3px;
             }
-            .ticket-meta-grid, .ticket-payment-section {
+            .ticket-meta-grid, .ticket-payment-section, .ticket-client-block {
               font-size: 9px;
             }
-            .ticket-meta-row, .ticket-row-detail {
+            .ticket-meta-row {
+              display: flex;
+              justify-content: flex-start;
+              align-items: baseline;
+              gap: 5px;
+              margin-bottom: 2px;
+            }
+            .ticket-meta-row .label {
+              white-space: nowrap;
+            }
+            .ticket-meta-row .val {
+              text-align: left;
+            }
+            .ticket-row-detail {
               display: flex;
               justify-content: space-between;
               margin-bottom: 2px;
             }
-            .ticket-meta-row .val, .ticket-row-detail span:last-child {
+            .ticket-row-detail span:last-child {
               text-align: right;
             }
             .bold {
@@ -1296,8 +1318,6 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             }
 
             /* OCULTAR EN TICKET FÍSICO LO TACHADO EN LAPICERO AZUL */
-            .ticket-client-block,
-            .ticket-client-divider,
             .ticket-shipping-section,
             .ticket-shipping-divider,
             .ticket-points-banner {
@@ -1387,6 +1407,8 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             .ticket-fin-row.highlight-iva {
               font-weight: bold;
               border: none !important;
+              outline: none !important;
+              box-shadow: none !important;
               padding: 0 !important;
               background: transparent !important;
             }
