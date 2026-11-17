@@ -297,6 +297,167 @@
 
       // 7. Redirigir siempre a la página principal
       window.location.href = 'index.html';
+    },
+
+    // ==========================================
+    // RECUPERACIÓN DE CONTRASEÑA VÍA CORREO (EMAILJS)
+    // ==========================================
+    async sendResetEmail(targetEmail, targetName, code) {
+      try {
+        if (!window.emailjs) {
+          await new Promise((resolve) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+            s.onload = () => {
+              try { window.emailjs.init('eFDXFKJFAoYalylpS'); } catch (e) {}
+              resolve();
+            };
+            s.onerror = () => resolve();
+            document.head.appendChild(s);
+          });
+        }
+        if (window.emailjs) {
+          const templateParams = {
+            to_name: targetName || 'Cliente Callejón Mágico',
+            to_email: targetEmail,
+            order_num: 'RESTAURAR-CLAVE',
+            items_summary: `Código de seguridad para restablecer contraseña: ${code}\n(Válido por 15 minutos).`,
+            delivery_info: `Código de Verificación: ${code}`,
+            message: `Hola ${targetName || 'Cliente Callejón Mágico'},\n\nHas solicitado restablecer tu contraseña en Callejón Mágico.\n\nTu código de verificación de 6 dígitos es:\n👉 ${code}\n\n(Válido durante 15 minutos). Ingrésalo en la pantalla de la tienda para crear tu nueva contraseña.`
+          };
+          await window.emailjs.send('service_twm03c7', 'template_anh3qjr', templateParams);
+          return true;
+        }
+      } catch (err) {
+        console.warn('AuthEngine: Error al enviar correo de recuperación vía EmailJS:', err);
+      }
+      return false;
+    },
+
+    async requestPasswordReset(email) {
+      const cleanEmail = String(email || '').trim().toLowerCase();
+      if (!cleanEmail || !cleanEmail.includes('@')) {
+        return { success: false, message: 'Por favor ingresa un correo electrónico válido.' };
+      }
+
+      // Buscar si el usuario existe localmente o en Firebase
+      let localUsers = this.getLocalUsers();
+      let user = localUsers.find(u => u.email && u.email.toLowerCase() === cleanEmail);
+
+      if (!user && window.CallejonFirebase && typeof window.CallejonFirebase.fetchUserByEmailOrUsername === 'function') {
+        try {
+          const remoteUser = await window.CallejonFirebase.fetchUserByEmailOrUsername(cleanEmail);
+          if (remoteUser) {
+            user = remoteUser;
+            localUsers.push(remoteUser);
+            localStorage.setItem('davanti_users', JSON.stringify(localUsers));
+          }
+        } catch (e) {}
+      }
+
+      const userName = user ? user.fullName : cleanEmail.split('@')[0];
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const token = {
+        email: cleanEmail,
+        code,
+        expires: Date.now() + 15 * 60 * 1000 // 15 minutos
+      };
+      sessionStorage.setItem('callejon_client_recovery_token', JSON.stringify(token));
+
+      // Enviar correo real vía EmailJS
+      const sent = await this.sendResetEmail(cleanEmail, userName, code);
+
+      return {
+        success: true,
+        email: cleanEmail,
+        code,
+        sentEmail: sent,
+        message: sent 
+          ? `✉️ Código de seguridad enviado a ${cleanEmail}. Revisa tu bandeja de entrada o spam.`
+          : `✉️ Código generado para ${cleanEmail}.`
+      };
+    },
+
+    async resetPasswordWithCode(email, code, newPassword, confirmPassword) {
+      const cleanEmail = String(email || '').trim().toLowerCase();
+      const cleanCode = String(code || '').trim();
+      const np = String(newPassword || '').trim();
+      const cp = String(confirmPassword || '').trim();
+
+      if (!cleanCode || cleanCode.length < 6) {
+        return { success: false, message: 'Ingresa el código de 6 dígitos que enviamos a tu correo.' };
+      }
+
+      const rawToken = sessionStorage.getItem('callejon_client_recovery_token');
+      if (!rawToken) {
+        return { success: false, message: 'No hay un código activo. Por favor solicita uno nuevo.' };
+      }
+
+      try {
+        const tokenData = JSON.parse(rawToken);
+        if (Date.now() > tokenData.expires) {
+          return { success: false, message: 'El código ha expirado (duración 15 minutos). Por favor solicita uno nuevo.' };
+        }
+        if (tokenData.code !== cleanCode) {
+          return { success: false, message: 'El código ingresado es incorrecto. Verifica los 6 dígitos recibidos.' };
+        }
+      } catch (e) {
+        return { success: false, message: 'Error de verificación de código.' };
+      }
+
+      if (np.length < 6) {
+        return { success: false, message: 'La nueva contraseña debe tener mínimo 6 caracteres.' };
+      }
+      if (np !== cp) {
+        return { success: false, message: 'Las nuevas contraseñas no coinciden. Por favor verifícalas.' };
+      }
+
+      // Actualizar en base de datos local y Firebase
+      const users = this.getLocalUsers();
+      let userIdx = users.findIndex(u => u.email && u.email.toLowerCase() === cleanEmail);
+      let updatedUser = null;
+
+      if (userIdx > -1) {
+        users[userIdx].password = np;
+        updatedUser = users[userIdx];
+        localStorage.setItem('davanti_users', JSON.stringify(users));
+      } else {
+        updatedUser = {
+          id: 'usr_' + Date.now().toString(36),
+          fullName: cleanEmail.split('@')[0],
+          email: cleanEmail,
+          username: cleanEmail.split('@')[0],
+          password: np,
+          tier: 'Privé Member',
+          createdAt: new Date().toISOString()
+        };
+        users.push(updatedUser);
+        localStorage.setItem('davanti_users', JSON.stringify(users));
+      }
+
+      // Sincronizar en la nube con Firebase
+      if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncUser === 'function') {
+        window.CallejonFirebase.syncUser(updatedUser);
+      }
+
+      sessionStorage.removeItem('callejon_client_recovery_token');
+
+      // Auto-iniciar sesión del cliente con su nueva contraseña
+      const safeUser = {
+        id: updatedUser.id,
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        username: updatedUser.username,
+        tier: updatedUser.tier || 'Privé Member',
+        createdAt: updatedUser.createdAt
+      };
+      this.setCurrentUser(safeUser);
+
+      return {
+        success: true,
+        user: safeUser,
+        message: `¡Contraseña actualizada con éxito! Bienvenido/a, ${safeUser.fullName}.`
+      };
     }
   };
 
@@ -406,6 +567,12 @@
                   </svg>
                 </button>
               </div>
+            </div>
+
+            <div class="auth-forgot-row" style="display: flex; justify-content: flex-end; margin: 0.25rem 0 0.65rem;">
+              <button type="button" class="auth-link-btn" id="btnOpenClientForgot" style="background: none; border: none; color: #c58f38; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">
+                ¿Olvidaste tu contraseña?
+              </button>
             </div>
 
             <button type="submit" class="btn-auth-submit" id="btnSubmitLogin">
@@ -534,6 +701,81 @@
               <button type="button" class="auth-switch-btn" id="linkToLogin">Inicia sesión aquí</button>
             </p>
           </form>
+
+          <!-- ==========================================
+               RECOVER PASSWORD FORM (CLIENTE)
+               ========================================== -->
+          <form id="formRecoverPassword" class="auth-form" style="display: none;">
+            <!-- Sub-paso 1: Ingresar correo -->
+            <div id="recoverStepEmail">
+              <div style="background: rgba(197, 143, 56, 0.08); border: 1px dashed #C58F38; border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 0.95rem; font-weight: 800; color: #0b1b3d; margin-bottom: 0.3rem;">🔐 Recuperar mi Contraseña</h3>
+                <p style="font-size: 0.8rem; color: #475569; margin: 0; line-height: 1.4;">
+                  Ingresa tu correo registrado. Te enviaremos un <strong>código de seguridad de 6 dígitos</strong> para crear tu nueva contraseña.
+                </p>
+              </div>
+
+              <div class="auth-field-group">
+                <label class="auth-label" for="recoverEmail">Correo electrónico de tu cuenta</label>
+                <div class="auth-input-container">
+                  <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <input type="email" id="recoverEmail" class="auth-input" placeholder="ejemplo@correo.com" required autocomplete="email" />
+                </div>
+              </div>
+
+              <button type="submit" class="btn-auth-submit" id="btnSubmitSendRecovery">
+                <span>Enviar Código a mi Correo</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Sub-paso 2: Ingresar código y nueva contraseña -->
+            <div id="recoverStepNewPassword" style="display: none;">
+              <div style="background: rgba(37, 211, 102, 0.1); border: 1px solid #25D366; border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem;">
+                <p style="font-size: 0.82rem; color: #0b1b3d; margin: 0; line-height: 1.4;">
+                  ✉️ Hemos enviado el código de 6 dígitos a <strong id="recoverEmailSentDisplay">tu correo</strong>. Ingrésalo abajo con tu nueva contraseña.
+                </p>
+              </div>
+
+              <div class="auth-field-group">
+                <label class="auth-label" for="recoverCode">Código de 6 dígitos recibido</label>
+                <div class="auth-input-container">
+                  <input type="text" id="recoverCode" class="auth-input" placeholder="000000" maxlength="6" required style="text-align: center; letter-spacing: 0.35em; font-size: 1.3rem; font-weight: 800; color: #c58f38;" />
+                </div>
+              </div>
+
+              <div class="auth-field-group">
+                <label class="auth-label" for="recoverNewPassword">Nueva Contraseña</label>
+                <div class="auth-input-container">
+                  <input type="password" id="recoverNewPassword" class="auth-input" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password" />
+                </div>
+              </div>
+
+              <div class="auth-field-group">
+                <label class="auth-label" for="recoverConfirmPassword">Confirmar Nueva Contraseña</label>
+                <div class="auth-input-container">
+                  <input type="password" id="recoverConfirmPassword" class="auth-input" placeholder="Repite la nueva contraseña" minlength="6" required autocomplete="new-password" />
+                </div>
+              </div>
+
+              <button type="button" class="btn-auth-submit" id="btnSubmitResetPassword">
+                <span>Guardar Nueva Contraseña y Entrar</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <p class="auth-switch-text" style="margin-top: 1.25rem;">
+              <button type="button" class="auth-switch-btn" id="linkBackToLogin">← Volver a Iniciar Sesión</button>
+            </p>
+          </form>
         </div>
       `;
 
@@ -632,22 +874,45 @@
     switchTab(tab) {
       const tabLogin = document.getElementById('tabBtnLogin');
       const tabReg = document.getElementById('tabBtnRegister');
+      const tabsRow = document.querySelector('.auth-tabs-row');
       const formLogin = document.getElementById('formLogin');
       const formReg = document.getElementById('formRegister');
+      const formRecover = document.getElementById('formRecoverPassword');
       const errorBanner = document.getElementById('authErrorBanner');
 
       if (errorBanner) errorBanner.classList.remove('visible');
 
-      if (tab === 'register') {
+      if (tab === 'recover') {
+        if (tabsRow) tabsRow.style.display = 'none';
+        if (formLogin) formLogin.style.display = 'none';
+        if (formReg) formReg.style.display = 'none';
+        if (formRecover) formRecover.style.display = 'block';
+
+        const recoverStepEmail = document.getElementById('recoverStepEmail');
+        const recoverStepNewPass = document.getElementById('recoverStepNewPassword');
+        if (recoverStepEmail) recoverStepEmail.style.display = 'block';
+        if (recoverStepNewPass) recoverStepNewPass.style.display = 'none';
+
+        const loginIdent = document.getElementById('loginIdentifier')?.value || '';
+        const recEmail = document.getElementById('recoverEmail');
+        if (recEmail && loginIdent.includes('@')) {
+          recEmail.value = loginIdent.trim();
+        }
+        if (recEmail) setTimeout(() => recEmail.focus(), 150);
+      } else if (tab === 'register') {
+        if (tabsRow) tabsRow.style.display = 'flex';
         if (tabLogin) tabLogin.classList.remove('active');
         if (tabReg) tabReg.classList.add('active');
         if (formLogin) formLogin.style.display = 'none';
         if (formReg) formReg.style.display = 'block';
+        if (formRecover) formRecover.style.display = 'none';
       } else {
+        if (tabsRow) tabsRow.style.display = 'flex';
         if (tabReg) tabReg.classList.remove('active');
         if (tabLogin) tabLogin.classList.add('active');
         if (formReg) formReg.style.display = 'none';
         if (formLogin) formLogin.style.display = 'block';
+        if (formRecover) formRecover.style.display = 'none';
       }
     },
 
@@ -741,6 +1006,78 @@
       document.getElementById('tabBtnRegister')?.addEventListener('click', () => this.switchTab('register'));
       document.getElementById('linkToRegister')?.addEventListener('click', () => this.switchTab('register'));
       document.getElementById('linkToLogin')?.addEventListener('click', () => this.switchTab('login'));
+      document.getElementById('linkBackToLogin')?.addEventListener('click', () => this.switchTab('login'));
+
+      // Abrir vista de recuperación de contraseña cliente
+      document.getElementById('btnOpenClientForgot')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.switchTab('recover');
+      });
+      document.getElementById('btnForgotClientPassIndex')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.switchTab('recover');
+      });
+
+      // Paso 1 de Recuperación: Enviar Código al Correo
+      document.getElementById('formRecoverPassword')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('recoverEmail');
+        const email = (emailInput?.value || '').trim();
+        const submitBtn = document.getElementById('btnSubmitSendRecovery');
+        if (!email) return;
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>Enviando código al correo...</span>';
+        }
+
+        const res = await AuthEngine.requestPasswordReset(email);
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Enviar Código a mi Correo</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+        }
+
+        if (res.success) {
+          const stepEmail = document.getElementById('recoverStepEmail');
+          const stepPass = document.getElementById('recoverStepNewPassword');
+          const displayEl = document.getElementById('recoverEmailSentDisplay');
+          if (stepEmail) stepEmail.style.display = 'none';
+          if (stepPass) stepPass.style.display = 'block';
+          if (displayEl) displayEl.textContent = res.email;
+          const codeInput = document.getElementById('recoverCode');
+          if (codeInput) setTimeout(() => codeInput.focus(), 150);
+          this.showToast(res.message);
+        } else {
+          this.showError(res.message);
+        }
+      });
+
+      // Paso 2 de Recuperación: Validar Código y Establecer Nueva Contraseña
+      document.getElementById('btnSubmitResetPassword')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = (document.getElementById('recoverEmail')?.value || '').trim();
+        const code = (document.getElementById('recoverCode')?.value || '').trim();
+        const newPass = document.getElementById('recoverNewPassword')?.value || '';
+        const confirmPass = document.getElementById('recoverConfirmPassword')?.value || '';
+        const submitBtn = document.getElementById('btnSubmitResetPassword');
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        const res = await AuthEngine.resetPasswordWithCode(email, code, newPass, confirmPass);
+        if (submitBtn) submitBtn.disabled = false;
+
+        if (res.success) {
+          this.closeModal();
+          this.updateHeaderAccountBtn();
+          if (window.DavantiApp && typeof window.DavantiApp.updateCartUI === 'function') {
+            window.DavantiApp.updateCartUI();
+          }
+          this.showToast(`🎉 ${res.message}`);
+        } else {
+          this.showError(res.message);
+        }
+      });
 
       // Close modal
       document.getElementById('btnCloseAuthModal')?.addEventListener('click', () => this.closeModal());
