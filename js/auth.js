@@ -742,7 +742,7 @@
           <!-- ==========================================
                RECOVER PASSWORD FORM (CLIENTE)
                ========================================== -->
-          <form id="formRecoverPassword" class="auth-form" style="display: none;">
+          <form id="formRecoverPassword" class="auth-form" style="display: none;" novalidate>
             <!-- Sub-paso 1: Ingresar correo -->
             <div id="recoverStepEmail">
               <div style="background: rgba(197, 143, 56, 0.08); border: 1px dashed #C58F38; border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem;">
@@ -759,11 +759,11 @@
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                     <polyline points="22,6 12,13 2,6"></polyline>
                   </svg>
-                  <input type="email" id="recoverEmail" class="auth-input" placeholder="ejemplo@correo.com" required autocomplete="email" />
+                  <input type="email" id="recoverEmail" class="auth-input" placeholder="ejemplo@correo.com" autocomplete="email" />
                 </div>
               </div>
 
-              <button type="submit" class="btn-auth-submit" id="btnSubmitSendRecovery">
+              <button type="button" class="btn-auth-submit" id="btnSubmitSendRecovery">
                 <span>Enviar Código a mi Correo</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -783,21 +783,21 @@
               <div class="auth-field-group">
                 <label class="auth-label" for="recoverCode">Código de 6 dígitos recibido</label>
                 <div class="auth-input-container">
-                  <input type="text" id="recoverCode" class="auth-input" placeholder="000000" maxlength="6" required style="text-align: center; letter-spacing: 0.35em; font-size: 1.3rem; font-weight: 800; color: #c58f38;" />
+                  <input type="text" id="recoverCode" class="auth-input" placeholder="000000" maxlength="6" style="text-align: center; letter-spacing: 0.35em; font-size: 1.3rem; font-weight: 800; color: #c58f38;" />
                 </div>
               </div>
 
               <div class="auth-field-group">
                 <label class="auth-label" for="recoverNewPassword">Nueva Contraseña</label>
                 <div class="auth-input-container">
-                  <input type="password" id="recoverNewPassword" class="auth-input" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password" />
+                  <input type="password" id="recoverNewPassword" class="auth-input" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" />
                 </div>
               </div>
 
               <div class="auth-field-group">
                 <label class="auth-label" for="recoverConfirmPassword">Confirmar Nueva Contraseña</label>
                 <div class="auth-input-container">
-                  <input type="password" id="recoverConfirmPassword" class="auth-input" placeholder="Repite la nueva contraseña" minlength="6" required autocomplete="new-password" />
+                  <input type="password" id="recoverConfirmPassword" class="auth-input" placeholder="Repite la nueva contraseña" minlength="6" autocomplete="new-password" />
                 </div>
               </div>
 
@@ -1056,39 +1056,55 @@
       });
 
       // Paso 1 de Recuperación: Enviar Código al Correo
-      document.getElementById('formRecoverPassword')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
+      const handleSendRecoveryCode = async (e) => {
+        if (e) e.preventDefault();
         const emailInput = document.getElementById('recoverEmail');
         const email = (emailInput?.value || '').trim();
         const submitBtn = document.getElementById('btnSubmitSendRecovery');
-        if (!email) return;
+        if (!email) {
+          this.showError('Por favor ingresa tu correo electrónico registrado.');
+          if (emailInput) emailInput.focus();
+          return;
+        }
 
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.innerHTML = '<span>Enviando código al correo...</span>';
         }
 
-        const res = await AuthEngine.requestPasswordReset(email);
+        try {
+          const res = await AuthEngine.requestPasswordReset(email);
 
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = `<span>Enviar Código a mi Correo</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
-        }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Enviar Código a mi Correo</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+          }
 
-        if (res.success) {
-          const stepEmail = document.getElementById('recoverStepEmail');
-          const stepPass = document.getElementById('recoverStepNewPassword');
-          const displayEl = document.getElementById('recoverEmailSentDisplay');
-          if (stepEmail) stepEmail.style.display = 'none';
-          if (stepPass) stepPass.style.display = 'block';
-          if (displayEl) displayEl.textContent = res.email;
-          const codeInput = document.getElementById('recoverCode');
-          if (codeInput) setTimeout(() => codeInput.focus(), 150);
-          this.showToast(res.message);
-        } else {
-          this.showError(res.message);
+          if (res.success) {
+            const stepEmail = document.getElementById('recoverStepEmail');
+            const stepPass = document.getElementById('recoverStepNewPassword');
+            const displayEl = document.getElementById('recoverEmailSentDisplay');
+            if (stepEmail) stepEmail.style.display = 'none';
+            if (stepPass) stepPass.style.display = 'block';
+            if (displayEl) displayEl.textContent = res.email;
+            const codeInput = document.getElementById('recoverCode');
+            if (codeInput) setTimeout(() => codeInput.focus(), 150);
+            this.showToast(res.message);
+          } else {
+            this.showError(res.message);
+          }
+        } catch (err) {
+          console.error('Error en handleSendRecoveryCode:', err);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Enviar Código a mi Correo</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+          }
+          this.showError('Ocurrió un error al procesar la solicitud: ' + (err?.message || err));
         }
-      });
+      };
+
+      document.getElementById('btnSubmitSendRecovery')?.addEventListener('click', handleSendRecoveryCode);
+      document.getElementById('formRecoverPassword')?.addEventListener('submit', handleSendRecoveryCode);
 
       // Paso 2 de Recuperación: Validar Código y Establecer Nueva Contraseña
       document.getElementById('btnSubmitResetPassword')?.addEventListener('click', async (e) => {
