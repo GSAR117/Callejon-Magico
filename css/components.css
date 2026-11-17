@@ -4529,6 +4529,370 @@
   isolation: isolate !important;
 }
 
+/* ==========================================================================
+   ALERTAS DE STOCK & EXISTENCIAS EN TIEMPO REAL
+   ========================================================================== */
+.toast.toast-warning {
+  border-left: 4px solid #f59e0b !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
+}
+
+.toast.toast-danger {
+  border-left: 4px solid #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.45) !important;
+}
+
+/* Modal de Advertencia de Stock */
+.stock-warning-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 23, 48, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100070 !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.stock-warning-modal-overlay.active {
+  display: flex !important;
+  opacity: 1;
+}
+
+.stock-warning-modal-card {
+  background: #0f1d38;
+  color: #ffffff;
+  border: 1px solid rgba(223, 183, 67, 0.45);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(223, 183, 67, 0.18);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 480px;
+  padding: 2.2rem 1.85rem;
+  text-align: center;
+  position: relative;
+  transform: scale(0.92);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stock-warning-modal-overlay.active .stock-warning-modal-card {
+  transform: scale(1);
+}
+
+.stock-warning-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.35rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.stock-warning-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.stock-warning-icon-wrap {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.16);
+  border: 2px solid rgba(245, 158, 11, 0.45);
+  font-size: 2.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.1rem auto;
+  animation: pulseStockIcon 2s infinite ease-in-out;
+}
+
+.stock-warning-icon-wrap.out {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+@keyframes pulseStockIcon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.stock-warning-title {
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.015em;
+}
+
+.stock-warning-product-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--color-gold, #dfb743);
+  margin-bottom: 0.85rem;
+}
+
+.stock-warning-message {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+  margin-bottom: 1.35rem;
+}
+
+.stock-warning-badges-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stock-pill {
+  padding: 0.38rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.stock-pill-avail {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
+.stock-pill-cart {
+  background: rgba(16, 185, 129, 0.18);
+  color: #a7f3d0;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+
+.stock-pill-danger {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+.stock-warning-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.btn-stock-action {
+  padding: 0.7rem 1.35rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-stock-primary {
+  background: linear-gradient(135deg, #dfb743 0%, #b8932b 100%);
+  color: #0b1730;
+  border: none;
+}
+
+.btn-stock-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-stock-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-stock-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* Badges en Tarjetas de Catálogo */
+.product-stock-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: auto;
+  margin-right: 0.35rem;
+}
+
+.product-stock-tag.low {
+  background: rgba(245, 158, 11, 0.18);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.product-stock-tag.out {
+  background: rgba(239, 68, 68, 0.18);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.btn-add-to-cart.btn-sold-out {
+  background: #374151 !important;
+  color: #9ca3af !important;
+  border: 1px solid #4b5563 !important;
+  cursor: not-allowed !important;
+  opacity: 0.85;
+}
+
+.btn-add-to-cart.btn-sold-out:hover {
+  background: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+/* QuickView Stock Banner & Selector */
+.quickview-stock-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--radius-sm, 8px);
+  margin-bottom: 1.15rem;
+  font-size: 0.82rem;
+  border: 1px solid;
+}
+
+.quickview-stock-status-bar.ok {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.quickview-stock-status-bar.low {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.quickview-stock-status-bar.out {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.stock-status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+}
+
+.quickview-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.quickview-qty-label {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.quickview-qty-selector {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.btn-qv-qty {
+  width: 34px;
+  height: 34px;
+  background: #f9fafb;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn-qv-qty:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.btn-qv-qty:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#qvQtyInput {
+  width: 44px;
+  height: 34px;
+  border: none;
+  border-left: 1px solid #d1d5db;
+  border-right: 1px solid #d1d5db;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+  -moz-appearance: textfield;
+}
+
+#qvQtyInput::-webkit-inner-spin-button,
+#qvQtyInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quickview-qty-max-hint {
+  font-size: 0.75rem;
+  color: #d97706;
+  font-weight: 600;
+}
+
+/* Cart Item Stock Notice & Disabled Button */
+.cart-item-stock-notice {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cart-item-stock-notice.low {
+  color: #d97706;
+}
+
+.cart-item-stock-notice.out {
+  color: #dc2626;
+}
+
+.cart-qty-btn.disabled-max {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+}
+
 
 
 

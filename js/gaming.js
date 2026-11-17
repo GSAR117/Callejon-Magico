@@ -158,11 +158,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const badgeClass = `badge-${product.badgeType || 'bestseller'}`;
       const msiAmount = (product.price / 12).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const platformTagClass = product.platformTag || 'multi';
+      const stock = window.CallejonStock ? window.CallejonStock.getStock(product.id) : 15;
+      let stockTagHtml = '';
+      if (stock === 0) {
+        stockTagHtml = `<span class="product-stock-tag out">❌ Agotado</span>`;
+      } else if (stock <= 5) {
+        stockTagHtml = `<span class="product-stock-tag low">⚠️ ¡Solo ${stock}!</span>`;
+      }
 
       return `
         <article class="gaming-product-card" data-id="${product.id}">
           <div class="product-card-top">
             <span class="product-badge ${badgeClass}">${product.badge}</span>
+            ${stockTagHtml}
             <button class="btn-favorite-toggle ${isFav ? 'active' : ''}" data-id="${product.id}" aria-label="Favorito">
               <svg viewBox="0 0 24 24" fill="${isFav ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -198,13 +206,19 @@ document.addEventListener('DOMContentLoaded', () => {
               <span>💳</span> Hasta 12 MSI de <strong>$${msiAmount}</strong>
             </div>
 
-            <button class="btn-add-to-cart" data-id="${product.id}">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
-              Agregar al Carrito
-            </button>
+            ${stock === 0 ? `
+              <button class="btn-add-to-cart btn-sold-out" data-id="${product.id}" title="Producto agotado en bodega">
+                ❌ Agotado
+              </button>
+            ` : `
+              <button class="btn-add-to-cart" data-id="${product.id}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Agregar al Carrito
+              </button>
+            `}
           </div>
         </article>
       `;
@@ -503,10 +517,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // FALLBACK CART / WISHLIST
   // =========================================================================
   function fallbackAddToCart(productId) {
+    if (window.GrandeApp && typeof window.GrandeApp.addToCart === 'function') {
+      window.GrandeApp.addToCart(productId);
+      return;
+    }
     const p = PRODUCTS_DATA.find(x => x.id === productId);
     if (!p) return;
+
+    const availableStock = window.CallejonStock ? window.CallejonStock.getStock(productId) : 15;
+    if (availableStock <= 0) {
+      if (window.CallejonStock && typeof window.CallejonStock.showWarning === 'function') {
+        window.CallejonStock.showWarning({ type: 'outofstock', product: p, available: 0, requested: 1 });
+      }
+      return;
+    }
+
     const cart = JSON.parse(localStorage.getItem('davanti_cart') || localStorage.getItem('grande_cart') || '[]');
     const exist = cart.find(i => i.id === productId);
+    const currentInCart = exist ? exist.quantity : 0;
+
+    if (currentInCart >= availableStock) {
+      if (window.CallejonStock && typeof window.CallejonStock.showWarning === 'function') {
+        window.CallejonStock.showWarning({ type: 'max_reached', product: p, available: availableStock, requested: 1, currentInCart });
+      }
+      return;
+    }
+
     if (exist) { exist.quantity += 1; }
     else { cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, sku: p.sku, size: null, color: null, quantity: 1 }); }
     localStorage.setItem('davanti_cart', JSON.stringify(cart));

@@ -252,11 +252,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const isDiscounted = product.originalPrice ? 'discounted' : '';
       
       const badgeClass = `badge-${product.badgeType || 'bestseller'}`;
+      const stock = getProductStock(product.id);
+      let stockTagHtml = '';
+      if (stock === 0) {
+        stockTagHtml = `<span class="product-stock-tag out">❌ Agotado</span>`;
+      } else if (stock <= 5) {
+        stockTagHtml = `<span class="product-stock-tag low">⚠️ ¡Solo ${stock}!</span>`;
+      }
 
       return `
         <article class="product-card" data-id="${product.id}">
           <div class="product-card-top">
             <span class="product-badge ${badgeClass}">${product.badge}</span>
+            ${stockTagHtml}
             <button class="btn-favorite-toggle ${isFav ? 'active' : ''}" data-id="${product.id}" title="${isFav ? 'Eliminar de favoritos' : 'Agregar a favoritos'}" aria-label="Favorito">
               <svg viewBox="0 0 24 24" fill="${isFav ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -286,14 +294,24 @@ document.addEventListener('DOMContentLoaded', () => {
               ${originalPriceHtml}
             </div>
 
-            <button class="btn-add-to-cart" data-id="${product.id}">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <path d="M16 10a4 4 0 0 1-8 0"></path>
-              </svg>
-              Agregar al carrito
-            </button>
+            ${stock === 0 ? `
+              <button class="btn-add-to-cart btn-sold-out" data-id="${product.id}" title="Producto agotado en bodega">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                </svg>
+                Agotado
+              </button>
+            ` : `
+              <button class="btn-add-to-cart" data-id="${product.id}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                Agregar al carrito
+              </button>
+            `}
           </div>
         </article>
       `;
@@ -310,16 +328,231 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
+  // GESTIÓN DE STOCK & ADVERTENCIAS DE INVENTARIO
+  // ==========================================
+  function getProductStock(productId) {
+    try {
+      const raw = localStorage.getItem('callejon_stock_db');
+      if (raw) {
+        const map = JSON.parse(raw);
+        if (map && typeof map[productId] !== 'undefined') {
+          return Math.max(0, parseInt(map[productId], 10) || 0);
+        }
+      }
+    } catch (e) {}
+
+    if (typeof PRODUCTS_DATA !== 'undefined' && Array.isArray(PRODUCTS_DATA)) {
+      const p = PRODUCTS_DATA.find(x => x.id === productId);
+      if (p && typeof p.stock === 'number') return Math.max(0, p.stock);
+    }
+    return 15;
+  }
+
+  function injectStockWarningModal() {
+    if (document.getElementById('stockWarningModal')) return;
+
+    const modalHtml = `
+      <div class="stock-warning-modal-overlay" id="stockWarningModal" role="dialog" aria-modal="true" style="display: none;">
+        <div class="stock-warning-modal-card">
+          <button type="button" class="stock-warning-close-btn" onclick="window.closeStockWarningModal()" aria-label="Cerrar">&times;</button>
+          <div class="stock-warning-icon-wrap" id="stockWarningIcon">⚠️</div>
+          <h3 class="stock-warning-title" id="stockWarningTitle">Advertencia de Inventario</h3>
+          <div class="stock-warning-product-name" id="stockWarningProduct"></div>
+          <p class="stock-warning-message" id="stockWarningMsg"></p>
+          <div class="stock-warning-badges-row" id="stockWarningBadges">
+            <span class="stock-pill stock-pill-avail" id="stockWarningAvailablePill"></span>
+            <span class="stock-pill stock-pill-cart" id="stockWarningCartPill"></span>
+          </div>
+          <div class="stock-warning-actions">
+            <button type="button" class="btn-stock-action btn-stock-primary" id="btnStockWarningPrimary" onclick="window.closeStockWarningModal(true)">
+              🛒 Ver Mi Carrito
+            </button>
+            <button type="button" class="btn-stock-action btn-stock-secondary" onclick="window.closeStockWarningModal()">
+              Entendido
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    const modalEl = document.getElementById('stockWarningModal');
+    if (modalEl) {
+      modalEl.addEventListener('click', (e) => {
+        if (e.target === modalEl) closeStockWarningModal();
+      });
+    }
+  }
+
+  function showStockWarningModal({ type, product, available, requested, added, currentInCart }) {
+    injectStockWarningModal();
+    const modalEl = document.getElementById('stockWarningModal');
+    if (!modalEl) return;
+
+    const iconEl = document.getElementById('stockWarningIcon');
+    const titleEl = document.getElementById('stockWarningTitle');
+    const prodEl = document.getElementById('stockWarningProduct');
+    const msgEl = document.getElementById('stockWarningMsg');
+    const availPill = document.getElementById('stockWarningAvailablePill');
+    const cartPill = document.getElementById('stockWarningCartPill');
+    const btnPrimary = document.getElementById('btnStockWarningPrimary');
+
+    const prodName = product ? (product.name || 'Producto') : 'Producto';
+    if (prodEl) prodEl.textContent = prodName;
+
+    if (type === 'outofstock') {
+      if (iconEl) {
+        iconEl.textContent = '❌';
+        iconEl.className = 'stock-warning-icon-wrap out';
+      }
+      if (titleEl) titleEl.textContent = 'Producto Agotado';
+      if (msgEl) {
+        msgEl.innerHTML = `Lo sentimos, actualmente <strong>no quedan unidades disponibles</strong> de «<strong>${escapeHtml(prodName)}</strong>» en inventario.<br><span style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.4rem; display: block;">Nuestro equipo de almacén está gestionando el reabastecimiento. Puedes guardarlo en favoritos para que te avisemos en cuanto llegue.</span>`;
+      }
+      if (availPill) {
+        availPill.style.display = 'inline-block';
+        availPill.textContent = '📦 Existencias: 0 piezas';
+        availPill.className = 'stock-pill stock-pill-danger';
+      }
+      if (cartPill) cartPill.style.display = 'none';
+      if (btnPrimary) {
+        btnPrimary.textContent = '❤️ Guardar en Favoritos';
+        btnPrimary.onclick = () => {
+          if (product && product.id) toggleWishlist(product.id);
+          closeStockWarningModal();
+          showToast(`«${prodName}» guardado en tus favoritos`, 'heart');
+        };
+      }
+    } else if (type === 'partial_add') {
+      // Advertencia precisa solicitada por el usuario (ej: pide 3 y solo hay 1)
+      if (iconEl) {
+        iconEl.textContent = '⚠️';
+        iconEl.className = 'stock-warning-icon-wrap';
+      }
+      if (titleEl) titleEl.textContent = 'Existencias Limitadas en Inventario';
+      if (msgEl) {
+        msgEl.innerHTML = `Solo queda <strong>${available} pieza${available === 1 ? '' : 's'} disponible${available === 1 ? '' : 's'}</strong> de «<strong>${escapeHtml(prodName)}</strong>» en inventario.<br><span style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.45rem; display: block;">Has solicitado <strong>${requested} piezas</strong>. Para que no te quedes sin tu artículo, hemos ajustado tu carrito con la cantidad máxima en existencia (<strong>${added} pieza${added === 1 ? '' : 's'}</strong>).</span>`;
+      }
+      if (availPill) {
+        availPill.style.display = 'inline-block';
+        availPill.textContent = `📦 En inventario: ${available} pieza${available === 1 ? '' : 's'}`;
+        availPill.className = 'stock-pill stock-pill-avail';
+      }
+      if (cartPill) {
+        cartPill.style.display = 'inline-block';
+        cartPill.textContent = `🛒 En tu carrito: ${currentInCart || added} pieza${(currentInCart || added) === 1 ? '' : 's'}`;
+        cartPill.className = 'stock-pill stock-pill-cart';
+      }
+      if (btnPrimary) {
+        btnPrimary.textContent = '🛒 Ver Mi Carrito';
+        btnPrimary.onclick = () => {
+          closeStockWarningModal();
+          openDrawer('cart');
+        };
+      }
+    } else if (type === 'max_reached') {
+      if (iconEl) {
+        iconEl.textContent = '⚠️';
+        iconEl.className = 'stock-warning-icon-wrap';
+      }
+      if (titleEl) titleEl.textContent = 'Límite de Existencias Alcanzado';
+      if (msgEl) {
+        msgEl.innerHTML = `Ya tienes en tu carrito la totalidad de piezas disponibles (<strong>${available} pieza${available === 1 ? '' : 's'}</strong>) de «<strong>${escapeHtml(prodName)}</strong>».<br><span style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.4rem; display: block;">No es posible agregar más unidades porque se han alcanzado las existencias máximas en bodega.</span>`;
+      }
+      if (availPill) {
+        availPill.style.display = 'inline-block';
+        availPill.textContent = `📦 Máximo disponible: ${available} pieza${available === 1 ? '' : 's'}`;
+        availPill.className = 'stock-pill stock-pill-avail';
+      }
+      if (cartPill) {
+        cartPill.style.display = 'inline-block';
+        cartPill.textContent = `🛒 En tu carrito: ${currentInCart || available} pieza${(currentInCart || available) === 1 ? '' : 's'}`;
+        cartPill.className = 'stock-pill stock-pill-cart';
+      }
+      if (btnPrimary) {
+        btnPrimary.textContent = '🛒 Ver Mi Carrito';
+        btnPrimary.onclick = () => {
+          closeStockWarningModal();
+          openDrawer('cart');
+        };
+      }
+    } else {
+      if (iconEl) {
+        iconEl.textContent = '⚠️';
+        iconEl.className = 'stock-warning-icon-wrap';
+      }
+      if (titleEl) titleEl.textContent = 'Pocas Existencias Disponibles';
+      if (msgEl) {
+        msgEl.innerHTML = `Solo queda(n) <strong>${available} pieza(s) disponible(s)</strong> de «<strong>${escapeHtml(prodName)}</strong>» en bodega.`;
+      }
+      if (availPill) {
+        availPill.style.display = 'inline-block';
+        availPill.textContent = `📦 Existencias: ${available} pieza${available === 1 ? '' : 's'}`;
+        availPill.className = 'stock-pill stock-pill-avail';
+      }
+      if (cartPill) cartPill.style.display = 'none';
+      if (btnPrimary) {
+        btnPrimary.textContent = '🛒 Ver Mi Carrito';
+        btnPrimary.onclick = () => {
+          closeStockWarningModal();
+          openDrawer('cart');
+        };
+      }
+    }
+
+    modalEl.style.display = 'flex';
+    requestAnimationFrame(() => {
+      modalEl.classList.add('active');
+    });
+  }
+
+  function closeStockWarningModal(openCart = false) {
+    const modalEl = document.getElementById('stockWarningModal');
+    if (modalEl) {
+      modalEl.classList.remove('active');
+      setTimeout(() => {
+        modalEl.style.display = 'none';
+        if (openCart) openDrawer('cart');
+      }, 200);
+    }
+  }
+
+  window.closeStockWarningModal = closeStockWarningModal;
+  window.showStockWarningModal = showStockWarningModal;
+  window.getProductStock = getProductStock;
+  window.CallejonStock = {
+    getStock: getProductStock,
+    showWarning: showStockWarningModal,
+    closeWarning: closeStockWarningModal
+  };
+
+  // ==========================================
   // CART OPERATIONS & UI
   // ==========================================
   function addToCart(productId, selectedSize = null, selectedColor = null, quantity = 1) {
     const product = PRODUCTS_DATA.find(p => p.id === productId);
     if (!product) return;
 
+    const availableStock = getProductStock(productId);
+    const qtyToAdd = Math.max(1, parseInt(quantity, 10) || 1);
+
+    // 1. Si el producto está agotado por completo
+    if (availableStock <= 0) {
+      showStockWarningModal({
+        type: 'outofstock',
+        product: product,
+        available: 0,
+        requested: qtyToAdd
+      });
+      showToast(`⚠️ «${product.name}» está agotado en inventario`, 'danger');
+      return;
+    }
+
     const size = selectedSize || (product.sizes ? product.sizes[0] : null);
     const color = selectedColor || (product.colors ? product.colors[0] : null);
 
-    // Sync State.cart with latest localStorage if changed elsewhere
+    // Sincronizar State.cart con el último localStorage
     try {
       const stored = JSON.parse(localStorage.getItem('davanti_cart') || localStorage.getItem('grande_cart') || '[]');
       if (Array.isArray(stored) && stored.length > State.cart.length) {
@@ -330,9 +563,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const existingIndex = State.cart.findIndex(item => 
       item.id === productId && item.size === size && item.color === color
     );
+    const currentInCart = existingIndex > -1 ? State.cart[existingIndex].quantity : 0;
 
+    // 2. Si ya tiene en el carrito la totalidad de piezas que quedan en stock
+    if (currentInCart >= availableStock) {
+      showStockWarningModal({
+        type: 'max_reached',
+        product: product,
+        available: availableStock,
+        requested: qtyToAdd,
+        currentInCart: currentInCart
+      });
+      showToast(`⚠️ Ya tienes en tu carrito las ${availableStock} pieza(s) disponibles de «${product.name}»`, 'warning');
+      openDrawer('cart');
+      return;
+    }
+
+    // 3. Si pide más de lo que queda en inventario (ej: pide 3 y solo hay 1)
+    if (currentInCart + qtyToAdd > availableStock) {
+      const allowedToAdd = Math.max(0, availableStock - currentInCart);
+      if (existingIndex > -1) {
+        State.cart[existingIndex].quantity = availableStock;
+      } else {
+        State.cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          sku: product.sku,
+          size: size,
+          color: color,
+          quantity: allowedToAdd
+        });
+      }
+
+      saveCart();
+      updateCartUI();
+      openDrawer('cart');
+
+      showStockWarningModal({
+        type: 'partial_add',
+        product: product,
+        available: availableStock,
+        requested: qtyToAdd,
+        added: allowedToAdd,
+        currentInCart: availableStock
+      });
+      showToast(`⚠️ Solo queda(n) ${availableStock} pieza(s) disponible(s) de «${product.name}»`, 'warning');
+      return;
+    }
+
+    // 4. Agregar cantidad normal permitida
     if (existingIndex > -1) {
-      State.cart[existingIndex].quantity += quantity;
+      State.cart[existingIndex].quantity += qtyToAdd;
     } else {
       State.cart.push({
         id: product.id,
@@ -342,18 +625,51 @@ document.addEventListener('DOMContentLoaded', () => {
         sku: product.sku,
         size: size,
         color: color,
-        quantity: quantity
+        quantity: qtyToAdd
       });
     }
 
     saveCart();
     updateCartUI();
-    showToast(`"${product.name}" se agregó a tu carrito de compras`, 'cart');
+
+    const remainingStock = availableStock - (currentInCart + qtyToAdd);
+    if (remainingStock <= 5 && remainingStock > 0) {
+      showToast(`"${product.name}" se agregó al carrito (¡Quedan solo ${remainingStock} en stock!)`, 'cart');
+    } else {
+      showToast(`"${product.name}" se agregó a tu carrito de compras`, 'cart');
+    }
     openDrawer('cart');
   }
 
   function updateCartQuantity(index, delta) {
     if (!State.cart[index]) return;
+    const item = State.cart[index];
+    const availableStock = getProductStock(item.id);
+
+    if (delta > 0) {
+      if (availableStock <= 0) {
+        showStockWarningModal({
+          type: 'outofstock',
+          product: item,
+          available: 0,
+          requested: item.quantity + delta
+        });
+        showToast(`⚠️ «${item.name}» está agotado en bodega`, 'danger');
+        return;
+      }
+      if (item.quantity + delta > availableStock) {
+        showStockWarningModal({
+          type: 'max_reached',
+          product: item,
+          available: availableStock,
+          requested: item.quantity + delta,
+          currentInCart: item.quantity
+        });
+        showToast(`⚠️ Solo hay ${availableStock} pieza(s) disponible(s) de «${item.name}» en inventario`, 'warning');
+        return;
+      }
+    }
+
     State.cart[index].quantity += delta;
     if (State.cart[index].quantity <= 0) {
       State.cart.splice(index, 1);
@@ -417,7 +733,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (DOM.cartEmptyState) DOM.cartEmptyState.style.display = 'none';
       if (DOM.cartSummaryBox) DOM.cartSummaryBox.style.display = 'block';
 
-      const itemsHtml = State.cart.map((item, index) => `
+      const itemsHtml = State.cart.map((item, index) => {
+        const availableStock = getProductStock(item.id);
+        const isMaxReached = item.quantity >= availableStock;
+
+        return `
         <div class="cart-item" data-cart-index="${index}">
           <img src="${item.image}" alt="${item.name}" class="cart-item-img" />
           <div class="cart-item-details">
@@ -441,9 +761,14 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="cart-qty-controls">
                 <button class="cart-qty-btn" onclick="window.appCartQty(${index}, -1)" aria-label="Disminuir">−</button>
                 <span class="cart-qty-value">${item.quantity}</span>
-                <button class="cart-qty-btn" onclick="window.appCartQty(${index}, 1)" aria-label="Aumentar">+</button>
+                <button class="cart-qty-btn ${isMaxReached ? 'disabled-max' : ''}" onclick="window.appCartQty(${index}, 1)" aria-label="Aumentar" ${isMaxReached ? 'title="Máximo disponible en bodega alcanzado"' : ''}>+</button>
               </div>
             </div>
+            ${availableStock <= 5 ? `
+              <div class="cart-item-stock-notice ${availableStock === 0 ? 'out' : 'low'}">
+                ${availableStock === 0 ? '❌ Agotado en bodega' : `⚠️ Solo queda(n) ${availableStock} pieza(s) disponible(s)`}
+              </div>
+            ` : ''}
             <div class="cart-item-footer-row">
               <button type="button" class="cart-item-remove-link" onclick="window.appCartRemove(${index})">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -455,7 +780,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       DOM.cartItemsList.innerHTML = `
         <div class="cart-drawer-actions-bar">
@@ -611,6 +937,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let selectedSize = product.sizes ? product.sizes[0] : null;
     let selectedColor = product.colors ? product.colors[0] : null;
+    const qvStock = getProductStock(product.id);
+
+    let stockStatusBarHtml = '';
+    if (qvStock === 0) {
+      stockStatusBarHtml = `
+        <div class="quickview-stock-status-bar out">
+          <span class="stock-status-indicator-dot"></span>
+          <span>❌ <strong>Agotado:</strong> No hay piezas disponibles en inventario por el momento.</span>
+        </div>
+      `;
+    } else if (qvStock <= 5) {
+      stockStatusBarHtml = `
+        <div class="quickview-stock-status-bar low">
+          <span class="stock-status-indicator-dot"></span>
+          <span>⚠️ <strong>¡Pocas existencias!</strong> Solo queda${qvStock === 1 ? '' : 'n'} <strong>${qvStock} pieza${qvStock === 1 ? '' : 's'}</strong> en stock.</span>
+        </div>
+      `;
+    } else {
+      stockStatusBarHtml = `
+        <div class="quickview-stock-status-bar ok">
+          <span class="stock-status-indicator-dot"></span>
+          <span>✅ <strong>En existencia:</strong> ${qvStock} piezas disponibles para entrega inmediata.</span>
+        </div>
+      `;
+    }
 
     DOM.quickViewBody.innerHTML = `
       <div class="quickview-layout">
@@ -641,6 +992,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="installments-note">Hasta 12 MSI de $${(product.price / 12).toFixed(2)}</span>
           </div>
 
+          ${stockStatusBarHtml}
+
           ${window.CallejonOffers ? window.CallejonOffers.getQuickViewOfferBannerHtml(product) : ''}
 
           <p class="quickview-desc">${product.description}</p>
@@ -667,19 +1020,35 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           ` : ''}
 
+          <div class="quickview-qty-row">
+            <label class="quickview-qty-label" for="qvQtyInput">Cantidad deseada:</label>
+            <div class="quickview-qty-selector">
+              <button type="button" class="btn-qv-qty" id="btnQvQtyDec" aria-label="Disminuir">−</button>
+              <input type="number" id="qvQtyInput" value="1" min="1" max="${Math.max(1, qvStock)}" ${qvStock === 0 ? 'disabled' : ''} />
+              <button type="button" class="btn-qv-qty" id="btnQvQtyInc" aria-label="Aumentar" ${qvStock <= 1 ? 'disabled' : ''}>+</button>
+            </div>
+            ${qvStock <= 5 && qvStock > 0 ? `<span class="quickview-qty-max-hint">(Máximo en existencia: ${qvStock})</span>` : ''}
+          </div>
+
           <div style="background-color: var(--color-beige-light, #f7f5f0); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; font-size: 0.8rem; color: #374151; border: 1px solid var(--color-border-subtle, #ede6de);">
             🚚 <strong>Envío express de cortesía</strong> a toda la República · 📦 Retira hoy con <strong>Click & Collect Express</strong> en sucursal <strong>Callejón Mágico</strong>.
           </div>
 
           <div class="quickview-cta-row">
-            <button class="btn-add-to-cart" id="btnQuickViewAddToCart" style="height: 48px; font-size: 0.95rem; flex: 1;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <path d="M16 10a4 4 0 0 1-8 0"></path>
-              </svg>
-              Agregar al Carrito
-            </button>
+            ${qvStock === 0 ? `
+              <button class="btn-add-to-cart btn-sold-out" id="btnQuickViewAddToCart" style="height: 48px; font-size: 0.95rem; flex: 1;">
+                ❌ Producto Agotado
+              </button>
+            ` : `
+              <button class="btn-add-to-cart" id="btnQuickViewAddToCart" style="height: 48px; font-size: 0.95rem; flex: 1;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                Agregar al Carrito
+              </button>
+            `}
             <button class="btn-favorite-toggle ${State.wishlist.includes(product.id) ? 'active' : ''}" id="btnQuickViewFav" style="width: 48px; height: 48px; border: 1px solid #d1d5db; border-radius: var(--radius-sm);" title="Guardar en favoritos">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="${State.wishlist.includes(product.id) ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -729,11 +1098,57 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    // Control de cantidad en QuickView
+    const qvQtyInput = DOM.quickViewBody.querySelector('#qvQtyInput');
+    const btnQvDec = DOM.quickViewBody.querySelector('#btnQvQtyDec');
+    const btnQvInc = DOM.quickViewBody.querySelector('#btnQvQtyInc');
+
+    if (btnQvDec && qvQtyInput) {
+      btnQvDec.addEventListener('click', () => {
+        let val = parseInt(qvQtyInput.value, 10) || 1;
+        if (val > 1) {
+          qvQtyInput.value = val - 1;
+        }
+      });
+    }
+
+    if (btnQvInc && qvQtyInput) {
+      btnQvInc.addEventListener('click', () => {
+        let val = parseInt(qvQtyInput.value, 10) || 1;
+        if (val < qvStock) {
+          qvQtyInput.value = val + 1;
+        } else {
+          showToast(`⚠️ Solo queda(n) ${qvStock} pieza(s) disponible(s) de este producto`, 'warning');
+        }
+      });
+    }
+
+    if (qvQtyInput) {
+      qvQtyInput.addEventListener('change', () => {
+        let val = parseInt(qvQtyInput.value, 10) || 1;
+        if (val > qvStock && qvStock > 0) {
+          qvQtyInput.value = qvStock;
+          showStockWarningModal({
+            type: 'partial_add',
+            product: product,
+            available: qvStock,
+            requested: val,
+            added: qvStock
+          });
+          showToast(`⚠️ Solo hay ${qvStock} pieza(s) disponible(s) de «${product.name}» en inventario`, 'warning');
+        } else if (val < 1) {
+          qvQtyInput.value = 1;
+        }
+      });
+    }
+
     // Add to cart from modal
     const btnAdd = DOM.quickViewBody.querySelector('#btnQuickViewAddToCart');
     if (btnAdd) {
       btnAdd.addEventListener('click', () => {
-        addToCart(product.id, selectedSize, selectedColor);
+        const qtyInp = DOM.quickViewBody.querySelector('#qvQtyInput');
+        const chosenQty = qtyInp ? Math.max(1, parseInt(qtyInp.value, 10) || 1) : 1;
+        addToCart(product.id, selectedSize, selectedColor, chosenQty);
         closeAllModals();
       });
     }
@@ -836,6 +1251,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openModal(type) {
     if (type === 'checkout') {
+      if (!State.cart || State.cart.length === 0) {
+        showToast('Tu carrito de compras está vacío');
+        return;
+      }
+      for (const item of State.cart) {
+        const avail = getProductStock(item.id);
+        if (avail <= 0) {
+          showStockWarningModal({
+            type: 'outofstock',
+            product: item,
+            available: 0,
+            requested: item.quantity
+          });
+          showToast(`⚠️ «${item.name}» está agotado en inventario`, 'danger');
+          openDrawer('cart');
+          return;
+        }
+        if (item.quantity > avail) {
+          item.quantity = avail;
+          saveCart();
+          updateCartUI();
+          showStockWarningModal({
+            type: 'partial_add',
+            product: item,
+            available: avail,
+            requested: item.quantity,
+            added: avail,
+            currentInCart: avail
+          });
+          showToast(`⚠️ Solo queda(n) ${avail} pieza(s) disponible(s) de «${item.name}»`, 'warning');
+          openDrawer('cart');
+          return;
+        }
+      }
+
       const activeUser = getActiveAuthUser();
       if (!activeUser) {
         closeAllModals();
@@ -1535,6 +1985,8 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.title = 'Clic para cerrar';
 
     let iconSvg = '';
+    let duration = 1800;
+
     if (iconType === 'cart') {
       iconSvg = `
         <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1547,6 +1999,26 @@ document.addEventListener('DOMContentLoaded', () => {
       iconSvg = `
         <svg class="toast-icon" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      `;
+    } else if (iconType === 'warning') {
+      toast.classList.add('toast-warning');
+      duration = 4000;
+      iconSvg = `
+        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      `;
+    } else if (iconType === 'danger') {
+      toast.classList.add('toast-danger');
+      duration = 4500;
+      iconSvg = `
+        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
         </svg>
       `;
     } else {
@@ -1573,13 +2045,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     DOM.toastContainer.appendChild(toast);
 
-    // Duración reducida a 1.8 segundos para no estorbar
     setTimeout(() => {
       if (toast.parentNode) {
         toast.classList.add('toast-remove');
         setTimeout(() => toast.remove(), 200);
       }
-    }, 1800);
+    }, duration);
   }
 
   // ==========================================
@@ -2119,6 +2590,40 @@ document.addEventListener('DOMContentLoaded', () => {
           e.stopImmediatePropagation();
           goToCheckoutStep(1);
           return;
+        }
+
+        // 1.1 VERIFICACIÓN DE EXISTENCIAS EN BODEGA
+        for (const item of State.cart) {
+          const avail = getProductStock(item.id);
+          if (avail <= 0) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            showStockWarningModal({
+              type: 'outofstock',
+              product: item,
+              available: 0,
+              requested: item.quantity
+            });
+            showToast(`⚠️ «${item.name}» ya no tiene existencias disponibles.`, 'danger');
+            return;
+          }
+          if (item.quantity > avail) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            item.quantity = avail;
+            saveCart();
+            updateCartUI();
+            showStockWarningModal({
+              type: 'partial_add',
+              product: item,
+              available: avail,
+              requested: item.quantity,
+              added: avail,
+              currentInCart: avail
+            });
+            showToast(`⚠️ Solo queda(n) ${avail} pieza(s) de «${item.name}». Se ajustó tu pedido.`, 'warning');
+            return;
+          }
         }
 
         const recipientName = (document.getElementById('checkoutRecipientName')?.value || '').trim();
