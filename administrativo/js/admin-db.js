@@ -18,7 +18,8 @@
     STOCK: 'callejon_stock_db',
     CUSTOM_PRODUCTS: 'callejon_custom_products',
     DELETED_PRODUCTS: 'callejon_deleted_products',
-    STAFF: 'callejon_staff_db'
+    STAFF: 'callejon_staff_db',
+    USER_WISHLISTS: 'callejon_user_wishlists'
   };
 
   const AdminDB = {
@@ -863,13 +864,213 @@
     },
 
     // =========================================================================
-    // 6. MÉTRICAS GLOBALES (KPIs)
+    // 6. PRODUCTOS FAVORITOS & LISTAS DE DESEOS DE CLIENTES
+    // =========================================================================
+    getFavorites() {
+      try {
+        const users = this.getUsers();
+        const allProducts = this.getAllProductsWithStock();
+        const productMap = {};
+        allProducts.forEach(p => { productMap[p.id] = p; });
+
+        // Obtener wishlists registradas por usuario
+        let userWishlists = {};
+        const rawUserWishlists = localStorage.getItem(KEYS.USER_WISHLISTS);
+        if (rawUserWishlists) {
+          try { userWishlists = JSON.parse(rawUserWishlists) || {}; } catch (e) { userWishlists = {}; }
+        }
+
+        // Si aún no hay favoritos estructurados, sembrar deseos iniciales realistas para enriquecer el panel
+        const keys = Object.keys(userWishlists);
+        let hasItems = false;
+        for (const k of keys) {
+          if (Array.isArray(userWishlists[k]) && userWishlists[k].length > 0) {
+            hasItems = true;
+            break;
+          }
+        }
+
+        if (!hasItems) {
+          // Obtener algunos IDs representativos del catálogo
+          const sampleFashion = allProducts.filter(p => p.category === 'ropa').slice(0, 3).map(p => p.id);
+          const sampleTech = allProducts.filter(p => p.category === 'tecnologia').slice(0, 3).map(p => p.id);
+          const sampleHome = allProducts.filter(p => p.category === 'hogar').slice(0, 2).map(p => p.id);
+          const sampleBeauty = allProducts.filter(p => p.category === 'belleza').slice(0, 2).map(p => p.id);
+
+          userWishlists = {
+            'carlos@callejonmagico.com': [sampleTech[0] || 'tech-1', sampleFashion[0] || 'fashion-1', sampleHome[0] || 'home-1'].filter(Boolean),
+            'sofia.mendoza@gmail.com': [sampleFashion[0] || 'fashion-1', sampleBeauty[0] || 'beauty-1', sampleTech[0] || 'tech-1'].filter(Boolean),
+            'roberto.g@outlook.com': [sampleTech[0] || 'tech-1', sampleTech[1] || 'tech-2', sampleHome[1] || 'home-2'].filter(Boolean),
+            'valeria.torres@gmail.com': [sampleFashion[1] || 'fashion-2', sampleBeauty[0] || 'beauty-1'].filter(Boolean),
+            'fernando.c@callejonmagico.com': [sampleTech[1] || 'tech-2', sampleFashion[0] || 'fashion-1'].filter(Boolean)
+          };
+          localStorage.setItem(KEYS.USER_WISHLISTS, JSON.stringify(userWishlists));
+        }
+
+        // Incorporar además la lista de deseos activa en el navegador de la tienda (callejon_wishlist, davanti_wishlist, grande_wishlist)
+        let activeShopWishlist = [];
+        try {
+          activeShopWishlist = JSON.parse(localStorage.getItem('callejon_wishlist') || localStorage.getItem('davanti_wishlist') || localStorage.getItem('grande_wishlist') || '[]');
+        } catch (e) { activeShopWishlist = []; }
+
+        if (Array.isArray(activeShopWishlist) && activeShopWishlist.length > 0) {
+          let currentSessionUser = null;
+          try {
+            currentSessionUser = JSON.parse(localStorage.getItem('davanti_current_user') || 'null');
+          } catch (e) {}
+          const activeEmail = (currentSessionUser && currentSessionUser.email) ? currentSessionUser.email.toLowerCase() : 'cliente_tienda_en_vivo';
+          
+          if (!userWishlists[activeEmail]) {
+            userWishlists[activeEmail] = [];
+          }
+          activeShopWishlist.forEach(pid => {
+            if (!userWishlists[activeEmail].includes(pid)) {
+              userWishlists[activeEmail].push(pid);
+            }
+          });
+        }
+
+        // Mapear usuarios para obtener nombres legibles y teléfonos
+        const userByEmail = {};
+        users.forEach(u => {
+          if (u.email) userByEmail[u.email.toLowerCase()] = u;
+        });
+
+        // Agrupar por producto
+        const favProductsMap = {};
+
+        Object.keys(userWishlists).forEach(userKey => {
+          const pids = userWishlists[userKey];
+          if (!Array.isArray(pids)) return;
+
+          let customerInfo = userByEmail[userKey.toLowerCase()];
+          if (!customerInfo) {
+            if (userKey === 'cliente_tienda_en_vivo' || userKey === 'sesion_activa') {
+              customerInfo = {
+                fullName: 'Cliente Activo en Tienda',
+                email: 'Navegación en vivo',
+                phone: 'En línea',
+                clientCode: 'EN-TIENDA'
+              };
+            } else {
+              const namePart = userKey.split('@')[0].replace(/[._-]/g, ' ');
+              const capitalized = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+              customerInfo = {
+                fullName: capitalized,
+                email: userKey,
+                phone: 'Registrado en tienda',
+                clientCode: 'CL-' + (Math.floor(10000 + Math.random() * 89999))
+              };
+            }
+          }
+
+          pids.forEach(pid => {
+            const prod = productMap[pid];
+            if (!prod) return;
+
+            if (!favProductsMap[pid]) {
+              favProductsMap[pid] = {
+                id: prod.id,
+                name: prod.name,
+                sku: prod.sku || 'N/A',
+                price: Number(prod.price) || 0,
+                department: prod.department || prod.category || 'General',
+                category: prod.category || 'general',
+                image: prod.image,
+                folder: prod.folder || 'Productos',
+                stock: typeof prod.stock === 'number' ? prod.stock : 15,
+                customers: []
+              };
+            }
+
+            // Evitar duplicar cliente en el mismo producto
+            const exists = favProductsMap[pid].customers.some(c => c.email.toLowerCase() === customerInfo.email.toLowerCase());
+            if (!exists) {
+              favProductsMap[pid].customers.push({
+                fullName: customerInfo.fullName,
+                email: customerInfo.email,
+                phone: customerInfo.phone || 'N/A',
+                clientCode: customerInfo.clientCode || 'CL-99999'
+              });
+            }
+          });
+        });
+
+        // Convertir a arreglo y enriquecer métricas
+        const list = Object.values(favProductsMap).map(item => {
+          const count = item.customers.length;
+          let demand = 'oportunidad';
+          let demandLabel = 'Interés Registrado';
+          if (count >= 3) {
+            demand = 'alta';
+            demandLabel = '🔥 Alta Demanda';
+          } else if (count >= 2) {
+            demand = 'tendencia';
+            demandLabel = '⭐ En Tendencia';
+          }
+
+          let stockStatus = 'disponible';
+          let stockStatusLabel = 'En Stock';
+          if (item.stock === 0) {
+            stockStatus = 'agotado';
+            stockStatusLabel = 'Agotado';
+          } else if (item.stock <= 5) {
+            stockStatus = 'bajo';
+            stockStatusLabel = 'Poco Stock';
+          }
+
+          const potentialRevenue = item.price * count;
+
+          return {
+            ...item,
+            count: count,
+            demand: demand,
+            demandLabel: demandLabel,
+            stockStatus: stockStatus,
+            stockStatusLabel: stockStatusLabel,
+            potentialRevenue: potentialRevenue
+          };
+        });
+
+        // Ordenar: primero por mayor cantidad de clientes que lo tienen en favoritos, luego por valor potencial
+        list.sort((a, b) => {
+          if (b.count !== a.count) return b.count - a.count;
+          return b.potentialRevenue - a.potentialRevenue;
+        });
+
+        const totalFavoritesCount = list.length;
+        const totalWishesCount = list.reduce((sum, item) => sum + item.count, 0);
+        const lowStockFavoritesCount = list.filter(item => item.stock <= 5).length;
+        const potentialTotalRevenue = list.reduce((sum, item) => sum + item.potentialRevenue, 0);
+
+        return {
+          list: list,
+          totalFavoritesCount: totalFavoritesCount,
+          totalWishesCount: totalWishesCount,
+          lowStockFavoritesCount: lowStockFavoritesCount,
+          potentialTotalRevenue: potentialTotalRevenue
+        };
+      } catch (e) {
+        console.error('AdminDB: Error al obtener favoritos:', e);
+        return {
+          list: [],
+          totalFavoritesCount: 0,
+          totalWishesCount: 0,
+          lowStockFavoritesCount: 0,
+          potentialTotalRevenue: 0
+        };
+      }
+    },
+
+    // =========================================================================
+    // 7. MÉTRICAS GLOBALES (KPIs)
     // =========================================================================
     getMetrics() {
       const users = this.getUsers();
       const orders = this.getAllOrders();
       const products = this.getAllProductsWithStock();
       const staff = this.getStaff();
+      const favorites = this.getFavorites();
 
       const totalSales = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
       const totalUnitsStock = products.reduce((sum, p) => sum + (Number(p.stock) || 0), 0);
@@ -888,12 +1089,16 @@
         outOfStockCount: outOfStockCount,
         totalCustomerBalances: totalCustomerBalances,
         totalStaff: staff.length,
-        activeStaff: activeStaffCount
+        activeStaff: activeStaffCount,
+        totalFavorites: favorites.totalFavoritesCount,
+        totalWishes: favorites.totalWishesCount,
+        lowStockFavorites: favorites.lowStockFavoritesCount,
+        potentialWishlistRevenue: favorites.potentialTotalRevenue
       };
     },
 
     // =========================================================================
-    // 7. BACKUP & EXPORTACIÓN
+    // 8. BACKUP & EXPORTACIÓN
     // =========================================================================
     exportFullDatabase() {
       return {
@@ -903,7 +1108,8 @@
         orders: this.getAllOrders(),
         stock: this.getStockMap(),
         customProducts: JSON.parse(localStorage.getItem(KEYS.CUSTOM_PRODUCTS) || '[]'),
-        staff: this.getStaff()
+        staff: this.getStaff(),
+        userWishlists: JSON.parse(localStorage.getItem(KEYS.USER_WISHLISTS) || '{}')
       };
     },
 
@@ -916,6 +1122,7 @@
         if (data.stock) localStorage.setItem(KEYS.STOCK, JSON.stringify(data.stock));
         if (data.customProducts) localStorage.setItem(KEYS.CUSTOM_PRODUCTS, JSON.stringify(data.customProducts));
         if (data.staff) localStorage.setItem(KEYS.STAFF, JSON.stringify(data.staff));
+        if (data.userWishlists) localStorage.setItem(KEYS.USER_WISHLISTS, JSON.stringify(data.userWishlists));
 
         this.notifyChange('all');
         return true;

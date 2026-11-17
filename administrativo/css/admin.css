@@ -1667,4 +1667,135 @@ select.admin-form-control option {
   transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   VISTA: PRODUCTOS FAVORITOS DE CLIENTES
+   ========================================================================== */
+.badge-heart-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.badge-demand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge-demand.demand-alta {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.badge-demand.demand-tendencia {
+  background: rgba(223, 183, 67, 0.18);
+  color: #fde047;
+  border: 1px solid rgba(223, 183, 67, 0.4);
+}
+
+.badge-demand.demand-oportunidad {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Diagnóstico Comercial */
+.badge-opp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.32rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge-opp.danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.badge-opp.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
+.badge-opp.gold {
+  background: rgba(223, 183, 67, 0.2);
+  color: #dfb743;
+  border: 1px solid rgba(223, 183, 67, 0.5);
+}
+
+.badge-opp.success {
+  background: rgba(16, 185, 129, 0.18);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+/* Etiquetas y Chips de Clientes */
+.fav-client-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-width: 320px;
+}
+
+.fav-client-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.55rem 0.2rem 0.25rem;
+  border-radius: 9999px;
+  font-size: 0.73rem;
+  color: #e2e8f0;
+  cursor: default;
+  transition: all 0.15s ease;
+}
+
+.fav-client-chip:hover {
+  background: rgba(223, 183, 67, 0.12);
+  border-color: rgba(223, 183, 67, 0.35);
+  color: #ffffff;
+}
+
+.fav-client-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #dfb743 0%, #b8932b 100%);
+  color: #0b1730;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fav-client-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
 

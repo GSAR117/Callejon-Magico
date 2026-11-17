@@ -28,12 +28,22 @@
     kpiBalances: document.getElementById('kpiTotalBalances'),
     kpiStaff: document.getElementById('kpiTotalStaff'),
     kpiActiveStaffMeta: document.getElementById('kpiActiveStaffMeta'),
+    kpiFavorites: document.getElementById('kpiTotalFavorites'),
+    kpiFavoritesMeta: document.getElementById('kpiFavoritesMeta'),
+
+    // KPIs vista Favoritos
+    favStatTotalProducts: document.getElementById('favStatTotalProducts'),
+    favStatTotalWishes: document.getElementById('favStatTotalWishes'),
+    favStatLowStock: document.getElementById('favStatLowStock'),
+    favStatPotentialRev: document.getElementById('favStatPotentialRev'),
 
     // Tablas
     tableUsersBody: document.getElementById('adminUsersTableBody'),
     tableOrdersBody: document.getElementById('adminOrdersTableBody'),
     tableStockBody: document.getElementById('adminStockTableBody'),
     tableStaffBody: document.getElementById('adminStaffTableBody'),
+    tableFavoritesBody: document.getElementById('adminFavoritesTableBody'),
+    dashboardFavoritesBody: document.getElementById('dashboardFavoritesBody'),
     recentOrdersBody: document.getElementById('recentOrdersBody'),
     lowStockAlertList: document.getElementById('lowStockAlertList'),
 
@@ -49,6 +59,10 @@
     searchStaff: document.getElementById('searchStaffInput'),
     filterStaffDepartment: document.getElementById('filterStaffDepartment'),
     filterStaffStatus: document.getElementById('filterStaffStatus'),
+    searchFavorites: document.getElementById('searchFavoritesInput'),
+    filterFavoritesDept: document.getElementById('filterFavoritesDept'),
+    filterFavoritesDemand: document.getElementById('filterFavoritesDemand'),
+    filterFavoritesStock: document.getElementById('filterFavoritesStock'),
 
     // Modales
     modalBalance: document.getElementById('modalAdjustBalance'),
@@ -114,7 +128,8 @@
       clients: { title: 'Gestión de Clientes & Saldos', subtitle: 'Cuentas registradas, saldos de Tarjeta Callejón Mágico y abonos' },
       orders: { title: 'Ventas & Pedidos', subtitle: 'Historial de compras, estados de envío y notas de remisión' },
       inventory: { title: 'Inventario & Stock Restante', subtitle: 'Control de existencias disponibles y edición de productos' },
-      staff: { title: 'Personal & Empleados', subtitle: 'Directorio de colaboradores, cargos, turnos y datos de contacto de la tienda' }
+      staff: { title: 'Personal & Empleados', subtitle: 'Directorio de colaboradores, cargos, turnos y datos de contacto de la tienda' },
+      favorites: { title: '❤️ Productos Favoritos de Clientes', subtitle: 'Monitoreo de listas de deseos, demanda de compra y disponibilidad en stock' }
     };
 
     const info = titles[viewId] || titles.dashboard;
@@ -135,6 +150,7 @@
     renderOrdersTable();
     renderStockTable();
     renderStaffTable();
+    renderFavoritesTable();
   }
 
   // 1. KPIs
@@ -148,6 +164,8 @@
     if (DOM.kpiBalances) DOM.kpiBalances.textContent = '$' + metrics.totalCustomerBalances.toLocaleString('es-MX', { minimumFractionDigits: 2 });
     if (DOM.kpiStaff) DOM.kpiStaff.textContent = metrics.totalStaff || 0;
     if (DOM.kpiActiveStaffMeta) DOM.kpiActiveStaffMeta.textContent = `${metrics.activeStaff || 0} activos / ${metrics.totalStaff || 0} total`;
+    if (DOM.kpiFavorites) DOM.kpiFavorites.textContent = metrics.totalFavorites || 0;
+    if (DOM.kpiFavoritesMeta) DOM.kpiFavoritesMeta.textContent = `${metrics.totalWishes || 0} deseos de clientes`;
 
     // Insignias en navegación
     const badgeUsers = document.getElementById('navBadgeUsers');
@@ -158,6 +176,8 @@
     if (badgeStock) badgeStock.textContent = metrics.totalProductsCount;
     const badgeStaff = document.getElementById('navBadgeStaff');
     if (badgeStaff) badgeStaff.textContent = metrics.totalStaff || 0;
+    const badgeFavorites = document.getElementById('navBadgeFavorites');
+    if (badgeFavorites) badgeFavorites.textContent = metrics.totalFavorites || 0;
   }
 
   // 2. Dashboard Resumen
@@ -165,6 +185,8 @@
     const orders = window.AdminDB.getAllOrders().slice(0, 5);
     const products = window.AdminDB.getAllProductsWithStock();
     const lowStock = products.filter(p => p.stock <= 5).slice(0, 6);
+    const favoritesData = window.AdminDB.getFavorites();
+    const topFavorites = favoritesData.list.slice(0, 5);
 
     // Últimos pedidos en Dashboard
     if (DOM.recentOrdersBody) {
@@ -191,7 +213,7 @@
         DOM.lowStockAlertList.innerHTML = lowStock.map(p => `
           <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-bottom: 1px solid var(--admin-border-subtle);">
             <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <img src="${p.image}" alt="" style="width: 36px; height: 36px; border-radius: 6px; object-fit: cover;" />
+              <img src="${p.image}" alt="" style="width: 36px; height: 36px; border-radius: 6px; object-fit: cover;" onerror="this.src='../assets/images/prod_shoes.jpg'" />
               <div>
                 <strong style="font-size: 0.82rem; color: #fff; display: block; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(p.name)}</strong>
                 <span style="font-size: 0.72rem; color: var(--admin-text-muted);">${p.sku}</span>
@@ -202,6 +224,57 @@
             </span>
           </div>
         `).join('');
+      }
+    }
+
+    // Top Favoritos en Dashboard
+    if (DOM.dashboardFavoritesBody) {
+      if (!topFavorites.length) {
+        DOM.dashboardFavoritesBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">Aún no hay productos guardados en favoritos por los clientes.</td></tr>`;
+      } else {
+        DOM.dashboardFavoritesBody.innerHTML = topFavorites.map(fav => {
+          let stockClass = 'instock';
+          let stockLabel = `${fav.stock} disponibles`;
+          if (fav.stock === 0) {
+            stockClass = 'outofstock';
+            stockLabel = '❌ Agotado';
+          } else if (fav.stock <= 5) {
+            stockClass = 'lowstock';
+            stockLabel = `⚠️ ¡Solo ${fav.stock}!`;
+          }
+
+          let demandBadge = `<span class="badge-demand demand-alta">🔥 Alta Demanda</span>`;
+          if (fav.demand === 'tendencia') demandBadge = `<span class="badge-demand demand-tendencia">⭐ En Tendencia</span>`;
+          else if (fav.demand === 'oportunidad') demandBadge = `<span class="badge-demand demand-oportunidad">📈 Interés</span>`;
+
+          return `
+            <tr>
+              <td>
+                <div class="prod-thumb-cell">
+                  <img src="${fav.image}" alt="" class="prod-thumb-img" onerror="this.src='../assets/images/prod_shoes.jpg'" />
+                  <div>
+                    <strong style="color: #ffffff; font-size: 0.88rem; display: block; max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(fav.name)}</strong>
+                    <span style="font-size: 0.72rem; color: var(--admin-text-muted);">${fav.sku}</span>
+                  </div>
+                </div>
+              </td>
+              <td><span style="font-size: 0.78rem; color: var(--admin-text-muted);">${escapeHtml(fav.department)}</span></td>
+              <td><strong>$${Number(fav.price || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong></td>
+              <td>
+                <span class="badge-heart-count">❤️ ${fav.count} ${fav.count === 1 ? 'cliente' : 'clientes'}</span>
+              </td>
+              <td>
+                <span class="badge-status ${stockClass}">${stockLabel}</span>
+              </td>
+              <td>${demandBadge}</td>
+              <td style="text-align: right;">
+                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp && window.AdminApp.switchView('favorites')">
+                  Ver Detalles
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
       }
     }
   }
@@ -656,6 +729,189 @@
 
     DOM.tableStaffBody.querySelectorAll('.btn-delete-staff').forEach(btn => {
       btn.addEventListener('click', () => deleteStaffMember(btn.dataset.id));
+    });
+  }
+
+  // =========================================================================
+  // 6. TABLA DE PRODUCTOS FAVORITOS DE CLIENTES
+  // =========================================================================
+  function renderFavoritesTable() {
+    if (!DOM.tableFavoritesBody) return;
+    const favoritesData = window.AdminDB.getFavorites();
+    const list = favoritesData.list || [];
+
+    // Actualizar tarjetas de resumen en la vista de Favoritos
+    if (DOM.favStatTotalProducts) DOM.favStatTotalProducts.textContent = favoritesData.totalFavoritesCount;
+    if (DOM.favStatTotalWishes) DOM.favStatTotalWishes.textContent = favoritesData.totalWishesCount;
+    if (DOM.favStatLowStock) DOM.favStatLowStock.textContent = favoritesData.lowStockFavoritesCount;
+    if (DOM.favStatPotentialRev) DOM.favStatPotentialRev.textContent = '$' + favoritesData.potentialTotalRevenue.toLocaleString('es-MX', { minimumFractionDigits: 2 });
+
+    const query = (DOM.searchFavorites ? DOM.searchFavorites.value : '').trim().toLowerCase();
+    const deptFilter = (DOM.filterFavoritesDept ? DOM.filterFavoritesDept.value : 'all');
+    const demandFilter = (DOM.filterFavoritesDemand ? DOM.filterFavoritesDemand.value : 'all');
+    const stockFilter = (DOM.filterFavoritesStock ? DOM.filterFavoritesStock.value : 'all');
+
+    const filtered = list.filter(fav => {
+      // Búsqueda en nombre, SKU, departamento, o en clientes
+      const matchProduct = (fav.name || '').toLowerCase().includes(query) ||
+                           (fav.sku || '').toLowerCase().includes(query) ||
+                           (fav.department || '').toLowerCase().includes(query) ||
+                           (fav.category || '').toLowerCase().includes(query);
+      const matchCustomer = (fav.customers || []).some(c => 
+        (c.fullName || '').toLowerCase().includes(query) || 
+        (c.email || '').toLowerCase().includes(query)
+      );
+      const matchSearch = matchProduct || matchCustomer;
+
+      let matchDept = true;
+      if (deptFilter !== 'all') {
+        const cat = (fav.category || '').toLowerCase();
+        const dept = (fav.department || '').toLowerCase();
+        const f = deptFilter.toLowerCase();
+        matchDept = cat.includes(f) || dept.includes(f);
+      }
+
+      let matchDemand = true;
+      if (demandFilter !== 'all') {
+        matchDemand = fav.demand === demandFilter;
+      }
+
+      let matchStock = true;
+      if (stockFilter === 'instock') matchStock = fav.stock > 5;
+      else if (stockFilter === 'lowstock') matchStock = fav.stock > 0 && fav.stock <= 5;
+      else if (stockFilter === 'outofstock') matchStock = fav.stock === 0;
+
+      return matchSearch && matchDept && matchDemand && matchStock;
+    });
+
+    if (!filtered.length) {
+      DOM.tableFavoritesBody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; padding: 3rem 1.5rem; color: var(--admin-text-muted);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">💔</div>
+            <p style="font-size: 0.95rem; font-weight: 600; color: #fff;">No se encontraron productos favoritos con los filtros seleccionados</p>
+            <p style="font-size: 0.8rem; margin-top: 0.25rem;">Prueba limpiando la búsqueda o cambiando los filtros de departamento o demanda.</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    DOM.tableFavoritesBody.innerHTML = filtered.map(fav => {
+      let badgeStockClass = 'instock';
+      let badgeStockText = `${fav.stock} disponibles`;
+      if (fav.stock === 0) {
+        badgeStockClass = 'outofstock';
+        badgeStockText = '❌ Agotado';
+      } else if (fav.stock <= 5) {
+        badgeStockClass = 'lowstock';
+        badgeStockText = `⚠️ ¡Solo ${fav.stock}!`;
+      }
+
+      let demandBadge = `<span class="badge-demand demand-alta">🔥 Alta Demanda</span>`;
+      if (fav.demand === 'tendencia') demandBadge = `<span class="badge-demand demand-tendencia">⭐ En Tendencia</span>`;
+      else if (fav.demand === 'oportunidad') demandBadge = `<span class="badge-demand demand-oportunidad">📈 Interés</span>`;
+
+      // Diagnóstico comercial
+      let commercialDiagnosis = '';
+      if (fav.stock === 0) {
+        commercialDiagnosis = `<span class="badge-opp danger">⚠️ Reabastecer Urgente</span>`;
+      } else if (fav.stock <= 5) {
+        commercialDiagnosis = `<span class="badge-opp warning">⚡ Riesgo Agotamiento</span>`;
+      } else if (fav.demand === 'alta') {
+        commercialDiagnosis = `<span class="badge-opp gold">🔥 Oportunidad Estrella</span>`;
+      } else {
+        commercialDiagnosis = `<span class="badge-opp success">⭐ Alta Conversión</span>`;
+      }
+
+      // Renderizar tags de clientes
+      const customersChips = (fav.customers || []).map(c => `
+        <span class="fav-client-chip" title="Cliente: ${escapeHtml(c.fullName)} &#10;Email: ${escapeHtml(c.email)} &#10;Tel: ${escapeHtml(c.phone)}">
+          <span class="fav-client-avatar">${escapeHtml((c.fullName || 'C').charAt(0).toUpperCase())}</span>
+          <span class="fav-client-name">${escapeHtml(c.fullName)}</span>
+        </span>
+      `).join('');
+
+      return `
+        <tr>
+          <td>
+            <div class="prod-thumb-cell">
+              <img src="${fav.image}" alt="" class="prod-thumb-img" onerror="this.src='../assets/images/prod_shoes.jpg'" />
+              <div>
+                <strong style="color: #ffffff; font-size: 0.88rem; display: block; max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(fav.name)}</strong>
+                <span style="font-size: 0.72rem; color: var(--admin-text-muted);">SKU: ${fav.sku || 'N/A'}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span style="font-size: 0.78rem; color: #cbd5e1; font-weight: 500;">${escapeHtml(fav.department)}</span>
+          </td>
+          <td>
+            <strong>$${Number(fav.price || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong>
+            <span style="display: block; font-size: 0.7rem; color: var(--admin-text-muted); font-weight: normal;">Potencial: $${fav.potentialRevenue.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+          </td>
+          <td>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+              <span class="badge-heart-count">❤️ ${fav.count} ${fav.count === 1 ? 'cliente' : 'clientes'}</span>
+              ${demandBadge}
+            </div>
+          </td>
+          <td>
+            <div class="fav-client-tags-container">
+              ${customersChips}
+            </div>
+          </td>
+          <td>
+            <div class="stock-counter" style="margin-bottom: 0.35rem;">
+              <button type="button" class="btn-stock-adjust btn-fav-stock-dec" data-id="${fav.id}" title="Restar 1 unidad">-</button>
+              <input type="number" class="stock-input fav-stock-input" data-id="${fav.id}" value="${fav.stock}" min="0" />
+              <button type="button" class="btn-stock-adjust btn-fav-stock-inc" data-id="${fav.id}" title="Sumar 1 unidad">+</button>
+            </div>
+            <span class="badge-status ${badgeStockClass}">${badgeStockText}</span>
+          </td>
+          <td>
+            ${commercialDiagnosis}
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a href="index.html#search=${encodeURIComponent(fav.name)}" target="_blank" class="btn-admin btn-admin-secondary btn-admin-sm" title="Ver producto en la tienda pública">
+              👁️ En Tienda
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Listeners para modificar existencias directamente desde la tabla de favoritos
+    DOM.tableFavoritesBody.querySelectorAll('.btn-fav-stock-dec').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const input = DOM.tableFavoritesBody.querySelector(`.fav-stock-input[data-id="${id}"]`);
+        const current = parseInt(input.value, 10) || 0;
+        const updated = Math.max(0, current - 1);
+        input.value = updated;
+        window.AdminDB.setProductStock(id, updated);
+      });
+    });
+
+    DOM.tableFavoritesBody.querySelectorAll('.btn-fav-stock-inc').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const input = DOM.tableFavoritesBody.querySelector(`.fav-stock-input[data-id="${id}"]`);
+        const current = parseInt(input.value, 10) || 0;
+        const updated = current + 1;
+        input.value = updated;
+        window.AdminDB.setProductStock(id, updated);
+      });
+    });
+
+    DOM.tableFavoritesBody.querySelectorAll('.fav-stock-input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const id = inp.dataset.id;
+        const val = Math.max(0, parseInt(inp.value, 10) || 0);
+        inp.value = val;
+        window.AdminDB.setProductStock(id, val);
+        showToast('Stock actualizado correctamente', 'success');
+      });
     });
   }
 
@@ -1192,6 +1448,10 @@
     if (DOM.searchStaff) DOM.searchStaff.addEventListener('input', () => renderStaffTable());
     if (DOM.filterStaffDepartment) DOM.filterStaffDepartment.addEventListener('change', () => renderStaffTable());
     if (DOM.filterStaffStatus) DOM.filterStaffStatus.addEventListener('change', () => renderStaffTable());
+    if (DOM.searchFavorites) DOM.searchFavorites.addEventListener('input', () => renderFavoritesTable());
+    if (DOM.filterFavoritesDept) DOM.filterFavoritesDept.addEventListener('change', () => renderFavoritesTable());
+    if (DOM.filterFavoritesDemand) DOM.filterFavoritesDemand.addEventListener('change', () => renderFavoritesTable());
+    if (DOM.filterFavoritesStock) DOM.filterFavoritesStock.addEventListener('change', () => renderFavoritesTable());
   }
 
   // =========================================================================

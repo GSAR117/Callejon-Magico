@@ -204,6 +204,14 @@
           Personal & Empleados
           <span class="nav-badge" id="navBadgeStaff">0</span>
         </button>
+
+        <button type="button" class="nav-item" data-view="favorites">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          Productos Favoritos
+          <span class="nav-badge" id="navBadgeFavorites" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">0</span>
+        </button>
       </nav>
 
       <div class="admin-sidebar-footer">
@@ -334,6 +342,15 @@
               <div class="stat-value" id="kpiTotalStaff">0</div>
               <div class="stat-meta" id="kpiActiveStaffMeta">Colaboradores registrados</div>
             </div>
+
+            <div class="stat-card" style="cursor: pointer;" onclick="window.AdminApp && window.AdminApp.switchView('favorites')" title="Ver productos favoritos de clientes">
+              <div class="stat-card-header">
+                <span class="stat-title">Productos Favoritos</span>
+                <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">❤️</div>
+              </div>
+              <div class="stat-value" id="kpiTotalFavorites">0</div>
+              <div class="stat-meta" id="kpiFavoritesMeta">0 deseos registrados</div>
+            </div>
           </div>
 
           <!-- Dos Paneles: Últimos Pedidos y Alertas de Stock Bajo -->
@@ -384,6 +401,37 @@
               </div>
             </div>
 
+          </div>
+
+          <!-- Panel de Productos Más Deseados por Clientes -->
+          <div class="admin-card" style="margin-top: 1.5rem;">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>❤️ Top Productos en Favoritos de Clientes</h3>
+                <p>Artículos con mayor intención de compra guardados en lista de deseos y su disponibilidad actual en bodega</p>
+              </div>
+              <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp.switchView('favorites')">
+                Ver Catálogo de Favoritos
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Departamento</th>
+                    <th>Precio</th>
+                    <th>Clientes Interesados</th>
+                    <th>Stock en Tienda</th>
+                    <th>Demanda</th>
+                    <th style="text-align: right;">Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardFavoritesBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -622,6 +670,114 @@
                   </tr>
                 </thead>
                 <tbody id="adminStaffTableBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VISTA 6: PRODUCTOS FAVORITOS DE CLIENTES
+             ================================================================== -->
+        <section class="admin-view" id="view-favorites">
+          
+          <!-- KPIs Resumen de Favoritos -->
+          <div class="stats-grid" style="margin-bottom: 1.5rem;">
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Artículos en Favoritos</span>
+                <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">❤️</div>
+              </div>
+              <div class="stat-value" id="favStatTotalProducts">0</div>
+              <div class="stat-meta">Productos guardados por clientes</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Deseos Acumulados</span>
+                <div class="stat-icon" style="background: rgba(223, 183, 67, 0.15); color: #dfb743;">⭐</div>
+              </div>
+              <div class="stat-value" id="favStatTotalWishes">0</div>
+              <div class="stat-meta">Interacciones de compra registradas</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">En Riesgo de Stock</span>
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">⚠️</div>
+              </div>
+              <div class="stat-value" id="favStatLowStock">0</div>
+              <div class="stat-meta">Artículos con stock crítico o agotados</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-title">Venta Potencial Total</span>
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">💵</div>
+              </div>
+              <div class="stat-value" id="favStatPotentialRev">$0.00</div>
+              <div class="stat-meta">Valor estimado acumulado en deseos</div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>❤️ Análisis de Productos Favoritos de Clientes</h3>
+                <p>Monitoreo en tiempo real de artículos con mayor deseo de compra, nombres de clientes interesados y nivel de inventario</p>
+              </div>
+              <div class="admin-card-actions">
+                <div class="search-input-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" class="admin-search-input" id="searchFavoritesInput" placeholder="Buscar por producto, SKU, categoría o cliente..." />
+                </div>
+
+                <select class="admin-select" id="filterFavoritesDept">
+                  <option value="all" selected>Todos los departamentos</option>
+                  <option value="ropa">Moda & Ropa</option>
+                  <option value="tecnologia">Tecnología & Celulares</option>
+                  <option value="hogar">Hogar & Cocina</option>
+                  <option value="deportes">Deportes & Outdoor</option>
+                  <option value="belleza">Belleza & Perfumería</option>
+                  <option value="juguetes">Juguetes & Niños</option>
+                  <option value="videojuegos">Videojuegos & Consolas</option>
+                </select>
+
+                <select class="admin-select" id="filterFavoritesDemand">
+                  <option value="all" selected>Demanda: Todas</option>
+                  <option value="alta">🔥 Alta Demanda (3+ clientes)</option>
+                  <option value="tendencia">⭐ En Tendencia (2 clientes)</option>
+                  <option value="oportunidad">📈 Interés Registrado (1 cliente)</option>
+                </select>
+
+                <select class="admin-select" id="filterFavoritesStock">
+                  <option value="all" selected>Stock: Todos</option>
+                  <option value="instock">Disponible (&gt; 5)</option>
+                  <option value="lowstock">Poco stock (&le; 5)</option>
+                  <option value="outofstock">Agotado (0 unidades)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Departamento</th>
+                    <th>Precio</th>
+                    <th>Interés</th>
+                    <th>Clientes que lo Agregaron</th>
+                    <th>Stock en Bodega</th>
+                    <th>Diagnóstico Comercial</th>
+                    <th style="text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="adminFavoritesTableBody">
                   <!-- Dinámico -->
                 </tbody>
               </table>

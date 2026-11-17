@@ -539,6 +539,24 @@ document.addEventListener('DOMContentLoaded', () => {
   function saveWishlist() {
     localStorage.setItem('davanti_wishlist', JSON.stringify(State.wishlist));
     localStorage.setItem('grande_wishlist', JSON.stringify(State.wishlist));
+    localStorage.setItem('callejon_wishlist', JSON.stringify(State.wishlist));
+    try {
+      let currentUser = null;
+      if (window.DavantiAuth && typeof window.DavantiAuth.getCurrentUser === 'function') {
+        currentUser = window.DavantiAuth.getCurrentUser();
+      }
+      if (!currentUser && window.CallejonAuth && typeof window.CallejonAuth.getCurrentUser === 'function') {
+        currentUser = window.CallejonAuth.getCurrentUser();
+      }
+      if (!currentUser) {
+        try { currentUser = JSON.parse(localStorage.getItem('davanti_current_user') || 'null'); } catch (e) {}
+      }
+      const userWishlists = JSON.parse(localStorage.getItem('callejon_user_wishlists') || '{}');
+      const userKey = (currentUser && currentUser.email) ? currentUser.email.toLowerCase() : 'cliente_tienda_en_vivo';
+      userWishlists[userKey] = State.wishlist;
+      localStorage.setItem('callejon_user_wishlists', JSON.stringify(userWishlists));
+      window.dispatchEvent(new CustomEvent('callejon_admin_db_changed', { detail: { type: 'favorites' } }));
+    } catch (e) {}
   }
 
   function updateWishlistUI() {
