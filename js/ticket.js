@@ -451,7 +451,11 @@
 
       const recipientName = order.recipient?.name || 'CLIENTE FRECUENTE';
       const recipientPhone = order.recipient?.phone || 'No especificado';
-      const recipientStreet = order.recipient?.street || 'Entrega en Domicilio';
+      let recipientStreet = order.recipient?.street || 'Entrega en Domicilio';
+      const postal = order.recipient?.postal || order.recipient?.postalCode || order.recipient?.zip;
+      if (postal && !recipientStreet.includes('C.P.')) {
+        recipientStreet += ` • C.P. ${postal}`;
+      }
       const recipientCity = order.recipient?.city || 'Ciudad de México';
 
       const dateStr = order.date || new Date().toLocaleString('es-MX', {
@@ -589,46 +593,49 @@
             <div class="ticket-meta-row"><span class="label">CIUDAD / ESTADO:</span><span class="val">${recipientCity}</span></div>
           </div>
 
-          <div class="ticket-divider-dashed"></div>
+          <div class="ticket-divider-dashed ticket-client-divider"></div>
 
-          <!-- TABLA DE ARTÍCULOS VENDIDOS -->
+          <!-- TABLA DE ARTÍCULOS VENDIDOS CON COLUMNAS MARCADAS EXACTAS -->
           <div class="ticket-items-section">
-            <div class="ticket-table-header">
-              <span class="col-qty">CANT</span>
-              <span class="col-desc">DESCRIPCIÓN / PRODUCTO</span>
-              <span class="col-unit">P.UNIT</span>
-              <span class="col-total">IMPORTE</span>
-            </div>
-
-            <div class="ticket-items-list">
-              ${(fin.itemsDetailed || order.items).map((item, idx) => {
-                const qty = Number(item.quantity) || 1;
-                const unitPrice = Number(item.unitPrice !== undefined ? item.unitPrice : item.price) || 0;
-                const lineTotal = Number(item.lineGross !== undefined ? item.lineGross : (qty * unitPrice)) || 0;
-                const taxTag = item.taxType === '0' 
-                  ? ' • <span style="font-weight: bold; color: #059669;">[TASA 0%]</span>' 
-                  : (item.taxType === 'exento' 
-                    ? ' • <span style="font-weight: bold; color: #2563eb;">[EXENTO]</span>' 
-                    : '');
-                return `
-                  <div class="ticket-item-row">
-                    <div class="ticket-item-main-line">
-                      <span class="col-qty bold">${qty}</span>
-                      <span class="col-desc bold">${item.name}</span>
-                      <span class="col-unit">$${unitPrice.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span class="col-total bold">$${lineTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    </div>
-                    ${(item.size || item.color || taxTag) ? `
-                      <div class="ticket-item-sub-specs">
-                        ${item.size ? `Talla: <strong>${item.size}</strong> ` : ''}
-                        ${item.color ? `• Color: <strong>${item.color}</strong> ` : ''}
-                        • SKU: CLM-${(item.id || 'GEN').toUpperCase().slice(0, 10)}${taxTag}
-                      </div>
-                    ` : ''}
-                  </div>
-                `;
-              }).join('')}
-            </div>
+            <table class="ticket-products-table">
+              <thead>
+                <tr>
+                  <th class="th-qty">CANT</th>
+                  <th class="th-desc">DESCRIPCIÓN / PRODUCTO</th>
+                  <th class="th-unit">P.UNIT</th>
+                  <th class="th-total">IMPORTE</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${(fin.itemsDetailed || order.items).map((item) => {
+                  const qty = Number(item.quantity) || 1;
+                  const unitPrice = Number(item.unitPrice !== undefined ? item.unitPrice : item.price) || 0;
+                  const lineTotal = Number(item.lineGross !== undefined ? item.lineGross : (qty * unitPrice)) || 0;
+                  const taxTag = item.taxType === '0' 
+                    ? ' • [TASA 0%]' 
+                    : (item.taxType === 'exento' 
+                      ? ' • [EXENTO]' 
+                      : '');
+                  return `
+                    <tr>
+                      <td class="td-qty bold">${qty}</td>
+                      <td class="td-desc">
+                        <div class="prod-name bold">${item.name}</div>
+                        ${(item.size || item.color || taxTag) ? `
+                          <div class="prod-specs">
+                            ${item.size ? `Talla: <strong>${item.size}</strong> ` : ''}
+                            ${item.color ? `• Col: <strong>${item.color}</strong> ` : ''}
+                            • SKU: CLM-${(item.id || 'GEN').toUpperCase().slice(0, 10)}${taxTag}
+                          </div>
+                        ` : ''}
+                      </td>
+                      <td class="td-unit">$${unitPrice.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                      <td class="td-total bold">$${lineTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
 
             <div class="ticket-pieces-summary">
               TOTAL DE PIEZAS VENDIDAS: <strong>${fin.totalPieces} ARTÍCULO(S)</strong>
@@ -670,7 +677,7 @@
 
           <div class="ticket-divider-dashed"></div>
 
-          <!-- FORMA DE PAGO Y PUNTOS MÁGICOS -->
+          <!-- FORMA DE PAGO & APROBACIÓN -->
           <div class="ticket-payment-section">
             <div class="ticket-section-title">FORMA DE PAGO & APROBACIÓN:</div>
             <div class="ticket-row-detail">
@@ -678,32 +685,24 @@
               <span><strong>${order.paymentMethod || 'Tarjeta Departamental Callejón Mágico'}</strong></span>
             </div>
             ${paymentDetailsHtml}
-
-            <!-- PROGRAMA DE RECOMPENSAS PUNTOS MÁGICOS -->
-            <div class="ticket-points-banner">
-              <div class="points-badge-title">✨ PROGRAMA PRIVÉ DE PUNTOS MÁGICOS ✨</div>
-              <div class="points-row">
-                <span>Puntos acumulados en esta compra:</span>
-                <span class="bold gold-text">+${order.pointsEarned || 0} pts</span>
-              </div>
-              <div class="points-row">
-                <span>Cashback departamental acreditado:</span>
-                <span>5% en monedero digital</span>
-              </div>
-            </div>
           </div>
 
-          <div class="ticket-divider-dashed"></div>
+          <div class="ticket-divider-dashed ticket-shipping-divider"></div>
 
           <!-- DATOS DE ENVÍO Y RASTREO -->
           <div class="ticket-shipping-section">
             <div class="ticket-section-title">LOGÍSTICA & RASTREO EN VIVO:</div>
             <div class="ticket-row-detail"><span>PAQUETERÍA:</span><span>${order.carrier || 'Estafeta Express'}</span></div>
             <div class="ticket-row-detail"><span>GUÍA OFICIAL:</span><span><strong>${order.trackingNumber || 'EST-MX-849201948'}</strong></span></div>
-            <div class="ticket-row-detail"><span>TIEMPO DE ENTREGA:</span><span>48 a 72 hrs hábiles • Empaque Boutique</span></div>
           </div>
 
           <div class="ticket-divider-dashed"></div>
+
+          <!-- PUNTOS MÁGICOS OBTENIDOS EN ESTA COMPRA (ANOTADO EN CAPTURA) -->
+          <div class="ticket-points-footer-line">
+            <span>✨ PUNTOS MÁGICOS OBTENIDOS:</span>
+            <span class="bold gold-text">+${order.pointsEarned || 0} PTS</span>
+          </div>
 
           <!-- CÓDIGO DE BARRAS DEL TICKET -->
           <div class="ticket-barcode-wrap">
@@ -1206,7 +1205,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
           <style>
             @page {
               size: auto;
-              margin: 4mm 6mm;
+              margin: 0;
             }
             * {
               box-sizing: border-box;
@@ -1215,72 +1214,74 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             }
             body {
               font-family: 'Courier New', Courier, 'Lucida Console', monospace;
-              font-size: 11px;
+              font-size: 9.5px;
               color: #000000;
               background: #ffffff;
-              line-height: 1.35;
-              padding: 6px;
+              line-height: 1.3;
+              padding: 1mm 2mm;
               display: flex;
               justify-content: center;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
             }
             .receipt-paper {
               width: 100%;
-              max-width: 360px;
+              max-width: 72mm;
               margin: 0 auto;
               background: #ffffff;
             }
             .ticket-header-brand {
               text-align: center;
-              margin-bottom: 6px;
+              margin-bottom: 5px;
             }
             .ticket-logo-icon {
-              width: 44px;
-              height: 35px;
-              margin: 0 auto 3px;
+              width: 40px;
+              height: 32px;
+              margin: 0 auto 2px;
               display: block;
             }
             .ticket-store-name {
               font-family: Georgia, 'Playfair Display', serif;
-              font-size: 16px;
+              font-size: 15px;
               font-weight: 800;
               letter-spacing: 0.05em;
-              margin-bottom: 2px;
+              margin-bottom: 1px;
             }
             .ticket-store-subtitle {
-              font-size: 8.5px;
+              font-size: 8px;
               font-weight: 700;
               letter-spacing: 0.12em;
               text-transform: uppercase;
             }
             .ticket-fiscal-block {
               text-align: center;
-              font-size: 9.5px;
-              line-height: 1.3;
-              margin-bottom: 6px;
+              font-size: 8.5px;
+              line-height: 1.25;
+              margin-bottom: 5px;
             }
             .ticket-fiscal-line.bold {
               font-weight: bold;
             }
             .ticket-divider-double {
-              border-top: 2px dashed #000000;
-              margin: 6px 0;
+              border-top: 1.5px dashed #000000;
+              margin: 5px 0;
             }
             .ticket-divider-dashed {
               border-top: 1px dashed #444444;
-              margin: 5px 0;
+              margin: 4px 0;
             }
             .ticket-divider-solid {
               border-top: 1.5px solid #000000;
-              margin: 5px 0;
+              margin: 4px 0;
             }
             .ticket-section-title {
-              font-size: 9.5px;
+              font-size: 9px;
               font-weight: bold;
               text-transform: uppercase;
               margin-bottom: 3px;
             }
-            .ticket-meta-grid, .ticket-client-block, .ticket-payment-section, .ticket-shipping-section {
-              font-size: 9.5px;
+            .ticket-meta-grid, .ticket-payment-section {
+              font-size: 9px;
             }
             .ticket-meta-row, .ticket-row-detail {
               display: flex;
@@ -1293,49 +1294,87 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             .bold {
               font-weight: bold;
             }
-            .gold-text {
-              font-weight: bold;
+
+            /* OCULTAR EN TICKET FÍSICO LO TACHADO EN LAPICERO AZUL */
+            .ticket-client-block,
+            .ticket-client-divider,
+            .ticket-shipping-section,
+            .ticket-shipping-divider,
+            .ticket-points-banner {
+              display: none !important;
             }
-            /* Tabla de artículos */
-            .ticket-table-header {
-              display: grid;
-              grid-template-columns: 28px 1fr 65px 75px;
-              font-size: 9.5px;
-              font-weight: bold;
-              border-bottom: 1px solid #000000;
-              padding-bottom: 3px;
-              margin-bottom: 4px;
+
+            /* TABLA ESTRUCTURADA DE ARTÍCULOS CON LÍNEAS DIVISORIAS VERTICALES */
+            .ticket-products-table {
+              width: 100%;
+              border-collapse: collapse;
+              border-top: 1.5px solid #000000;
+              border-bottom: 1.5px solid #000000;
+              margin: 4px 0;
+              font-size: 9px;
             }
-            .ticket-table-header .col-unit, .ticket-table-header .col-total {
-              text-align: right;
-            }
-            .ticket-item-row {
-              margin-bottom: 4px;
-              font-size: 9.5px;
-            }
-            .ticket-item-main-line {
-              display: grid;
-              grid-template-columns: 28px 1fr 65px 75px;
-              gap: 2px;
-              align-items: baseline;
-            }
-            .ticket-item-main-line .col-unit, .ticket-item-main-line .col-total {
-              text-align: right;
-            }
-            .ticket-item-sub-specs {
+            .ticket-products-table th {
+              border-bottom: 1.5px solid #000000;
+              border-right: 1px solid #000000;
+              padding: 3px 2px;
               font-size: 8.5px;
-              padding-left: 28px;
+              font-weight: bold;
+              text-align: center;
+              background: #f4f4f4;
+            }
+            .ticket-products-table th:last-child {
+              border-right: none;
+            }
+            .ticket-products-table td {
+              border-right: 1px solid #000000;
+              border-bottom: 1px dashed #444444;
+              padding: 3px 2px;
+              vertical-align: top;
+              font-size: 8.5px;
+            }
+            .ticket-products-table tr:last-child td {
+              border-bottom: none;
+            }
+            .ticket-products-table td:last-child {
+              border-right: none;
+            }
+            .ticket-products-table .th-qty, .ticket-products-table .td-qty {
+              width: 26px;
+              text-align: center;
+            }
+            .ticket-products-table .th-desc, .ticket-products-table .td-desc {
+              text-align: left;
+              padding-left: 2px;
+            }
+            .ticket-products-table .th-unit, .ticket-products-table .td-unit {
+              width: 58px;
+              text-align: right;
+              white-space: nowrap;
+            }
+            .ticket-products-table .th-total, .ticket-products-table .td-total {
+              width: 66px;
+              text-align: right;
+              white-space: nowrap;
+            }
+            .ticket-products-table .prod-name {
+              font-weight: bold;
+              line-height: 1.2;
+            }
+            .ticket-products-table .prod-specs {
+              font-size: 7.5px;
               margin-top: 1px;
+              line-height: 1.15;
             }
             .ticket-pieces-summary {
-              font-size: 9.5px;
+              font-size: 9px;
               text-align: right;
-              margin-top: 4px;
+              margin-top: 3px;
               font-weight: bold;
             }
-            /* Desglose Financiero */
+
+            /* Desglose Financiero - SIN CUADRADO EN IVA */
             .ticket-financials-table {
-              font-size: 10px;
+              font-size: 9.5px;
             }
             .ticket-fin-row {
               display: flex;
@@ -1347,51 +1386,50 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             }
             .ticket-fin-row.highlight-iva {
               font-weight: bold;
-              border: 1px solid #000000;
-              padding: 2px 4px;
+              border: none !important;
+              padding: 0 !important;
+              background: transparent !important;
             }
             .ticket-fin-row.total-row {
-              font-size: 12.5px;
+              font-size: 11.5px;
               font-weight: bold;
-              margin-top: 4px;
+              margin-top: 3px;
             }
             .ticket-amount-words {
-              font-size: 8.5px;
+              font-size: 8px;
               font-weight: bold;
               text-align: right;
-              margin-top: 3px;
+              margin-top: 2px;
               font-style: italic;
             }
-            /* Banner Puntos Mágicos */
-            .ticket-points-banner {
-              border: 1px dashed #000000;
-              padding: 4px 6px;
-              margin-top: 4px;
-              font-size: 9px;
-            }
-            .points-badge-title {
-              font-weight: bold;
-              text-align: center;
-              margin-bottom: 2px;
-            }
-            .points-row {
+
+            /* Puntos obtenidos en esta compra al pie del ticket */
+            .ticket-points-footer-line {
               display: flex;
               justify-content: space-between;
+              align-items: center;
+              font-size: 9.5px;
+              font-weight: bold;
+              border-top: 1px dashed #000000;
+              border-bottom: 1px dashed #000000;
+              padding: 3px 1px;
+              margin: 5px 0;
             }
+
             .ticket-barcode-wrap {
-              margin: 6px 0 4px;
+              margin: 5px 0 3px;
               text-align: center;
             }
             .ticket-barcode-svg {
-              max-width: 230px;
-              height: 46px;
+              max-width: 210px;
+              height: 42px;
               margin: 0 auto;
             }
             .ticket-legal-policies {
               text-align: center;
-              font-size: 8px;
-              line-height: 1.3;
-              margin-top: 6px;
+              font-size: 7.5px;
+              line-height: 1.25;
+              margin-top: 5px;
             }
             .ticket-legal-policies .bold {
               font-weight: bold;
@@ -1400,7 +1438,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             .ticket-bottom-stamp {
               font-weight: bold;
               letter-spacing: 0.15em;
-              margin-top: 4px;
+              margin-top: 3px;
             }
             .receipt-zigzag-bottom {
               display: none;

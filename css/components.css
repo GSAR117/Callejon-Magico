@@ -3687,52 +3687,81 @@
 }
 
 /* Tabla de productos */
-.ticket-table-header {
-  display: grid;
-  grid-template-columns: 36px 1fr 75px 85px;
-  font-size: 0.72rem;
+/* Tabla estructurada de artículos con líneas divisorias verticales exactas */
+.ticket-products-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1.5px solid #000000;
+  border-bottom: 1.5px solid #000000;
+  margin: 0.5rem 0;
+  font-size: 0.74rem;
+}
+
+.ticket-products-table th {
+  border-bottom: 1.5px solid #000000;
+  border-right: 1px solid #000000;
+  padding: 0.35rem 0.25rem;
+  font-size: 0.7rem;
   font-weight: 800;
   color: #0b1b3d;
-  border-bottom: 1px solid #cbd5e1;
-  padding-bottom: 0.3rem;
-  margin-bottom: 0.4rem;
+  background: #f8fafc;
+  text-align: center;
 }
 
-.ticket-table-header .col-total {
+.ticket-products-table th:last-child {
+  border-right: none;
+}
+
+.ticket-products-table td {
+  border-right: 1px solid #000000;
+  border-bottom: 1px dashed #cbd5e1;
+  padding: 0.35rem 0.25rem;
+  vertical-align: top;
+  font-size: 0.73rem;
+  color: #1e293b;
+}
+
+.ticket-products-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ticket-products-table td:last-child {
+  border-right: none;
+}
+
+.ticket-products-table .th-qty, .ticket-products-table .td-qty {
+  width: 32px;
+  text-align: center;
+}
+
+.ticket-products-table .th-desc, .ticket-products-table .td-desc {
+  text-align: left;
+  padding-left: 0.35rem;
+}
+
+.ticket-products-table .th-unit, .ticket-products-table .td-unit {
+  width: 68px;
   text-align: right;
+  white-space: nowrap;
 }
 
-.ticket-table-header .col-unit {
+.ticket-products-table .th-total, .ticket-products-table .td-total {
+  width: 78px;
   text-align: right;
+  white-space: nowrap;
 }
 
-.ticket-item-row {
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-}
-
-.ticket-item-main-line {
-  display: grid;
-  grid-template-columns: 36px 1fr 75px 85px;
-  gap: 0.25rem;
-  align-items: baseline;
-}
-
-.ticket-item-main-line .col-unit {
-  text-align: right;
-  color: #475569;
-}
-
-.ticket-item-main-line .col-total {
-  text-align: right;
+.ticket-products-table .prod-name {
+  font-weight: 700;
+  line-height: 1.25;
   color: #0b1b3d;
 }
 
-.ticket-item-sub-specs {
-  font-size: 0.68rem;
+.ticket-products-table .prod-specs {
+  font-size: 0.66rem;
   color: #64748b;
-  padding-left: 36px;
   margin-top: 0.15rem;
+  line-height: 1.2;
 }
 
 .ticket-pieces-summary {
@@ -3760,11 +3789,24 @@
 }
 
 .ticket-fin-row.highlight-iva {
-  color: #0369a1;
+  color: #0b1b3d;
   font-weight: 700;
-  background: #f0f9ff;
-  padding: 0.25rem 0.4rem;
-  border-radius: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.ticket-points-footer-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0b1b3d;
+  border-top: 1px dashed #cbd5e1;
+  border-bottom: 1px dashed #cbd5e1;
+  padding: 0.4rem 0.25rem;
+  margin: 0.6rem 0;
 }
 
 .ticket-fin-row.total-row {

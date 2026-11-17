@@ -265,7 +265,7 @@
           if (current && (current.email || '').toLowerCase() === emailKey) {
             localStorage.setItem(KEYS.LEGACY_CARD, JSON.stringify(card));
           }
-        } catch (e) {}
+        } catch (e) { }
 
         this.notifyChange('balance');
         return card;
@@ -333,7 +333,7 @@
           if (current && (current.email || '').toLowerCase() === emailKey) {
             localStorage.setItem(KEYS.LEGACY_CARD, JSON.stringify(card));
           }
-        } catch (e) {}
+        } catch (e) { }
 
         this.notifyChange('balance');
         return card;
@@ -387,7 +387,7 @@
           if (current && (current.email || '').toLowerCase() === emailKey) {
             localStorage.setItem(KEYS.LEGACY_CARD, JSON.stringify(card));
           }
-        } catch (e) {}
+        } catch (e) { }
 
         this.notifyChange('balance');
         return card;
@@ -423,7 +423,7 @@
                   }
                 });
               }
-            } catch (err) {}
+            } catch (err) { }
           }
         }
 
@@ -672,9 +672,9 @@
         const d = norm(item);
         if (!d) return false;
         return (empId && d === empId) ||
-               (empCode && d === empCode) ||
-               (empEmail && d === empEmail) ||
-               (empName && d === empName);
+          (empCode && d === empCode) ||
+          (empEmail && d === empEmail) ||
+          (empName && d === empName);
       });
     },
 
@@ -819,9 +819,9 @@
           const nameKey = (emp.fullName || '').trim().toLowerCase();
 
           const isDuplicate = (codeKey && seenCodes.has(codeKey)) ||
-                              (emailKey && seenEmails.has(emailKey)) ||
-                              (idKey && seenIds.has(idKey)) ||
-                              (nameKey && seenNames.has(nameKey));
+            (emailKey && seenEmails.has(emailKey)) ||
+            (idKey && seenIds.has(idKey)) ||
+            (nameKey && seenNames.has(nameKey));
 
           if (isDuplicate) {
             // Es un registro duplicado: recolectar id para purgarlo de Firebase
@@ -1137,9 +1137,9 @@
           let currentSessionUser = null;
           try {
             currentSessionUser = JSON.parse(localStorage.getItem('davanti_current_user') || 'null');
-          } catch (e) {}
+          } catch (e) { }
           const activeEmail = (currentSessionUser && currentSessionUser.email) ? currentSessionUser.email.toLowerCase() : 'cliente_tienda_en_vivo';
-          
+
           if (!userWishlists[activeEmail]) {
             userWishlists[activeEmail] = [];
           }
@@ -1356,7 +1356,7 @@
       try {
         window.dispatchEvent(new CustomEvent('callejon_admin_db_changed', { detail: { type } }));
         window.dispatchEvent(new Event('storage'));
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
