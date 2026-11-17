@@ -308,6 +308,7 @@
           await new Promise((resolve) => {
             const s = document.createElement('script');
             s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+            s.async = true;
             s.onload = () => {
               try { window.emailjs.init('eFDXFKJFAoYalylpS'); } catch (e) {}
               resolve();
@@ -317,19 +318,44 @@
           });
         }
         if (window.emailjs) {
+          try {
+            window.emailjs.init('eFDXFKJFAoYalylpS');
+          } catch (e) {}
+
           const templateParams = {
             to_name: targetName || 'Cliente Callejón Mágico',
-            to_email: targetEmail,
+            to_email: targetEmail.trim(),
+            email: targetEmail.trim(),
+            user_email: targetEmail.trim(),
+            reply_to: 'admin@callejonmagico.com',
             order_num: 'RESTAURAR-CLAVE',
-            items_summary: `Código de seguridad para restablecer contraseña: ${code}\n(Válido por 15 minutos).`,
-            delivery_info: `Código de Verificación: ${code}`,
-            message: `Hola ${targetName || 'Cliente Callejón Mágico'},\n\nHas solicitado restablecer tu contraseña en Callejón Mágico.\n\nTu código de verificación de 6 dígitos es:\n👉 ${code}\n\n(Válido durante 15 minutos). Ingrésalo en la pantalla de la tienda para crear tu nueva contraseña.`
+            order_date: new Date().toLocaleString('es-MX'),
+            delivery_info: `Código de Seguridad para Restablecer Contraseña: ${code}`,
+            items_summary: `Has solicitado restablecer tu contraseña en Callejón Mágico. Tu código de verificación temporal es: ${code} (Válido durante 15 minutos).`,
+            items_html: `<div style="font-family:Arial,sans-serif; text-align:center; padding:20px; background:#0b1b3d; color:#ffffff; border-radius:10px;"><h2 style="color:#C58F38; margin:0 0 10px;">Callejón Mágico</h2><p style="font-size:15px; color:#e2e8f0;">Tu código de seguridad temporal para restablecer contraseña es:</p><div style="font-size:32px; font-weight:800; color:#C58F38; letter-spacing:6px; margin:15px 0; padding:10px; background:#07142a; border-radius:6px;">${code}</div><p style="font-size:12px; color:#94a3b8;">Válido durante 15 minutos. Si no solicitaste este cambio, puedes ignorar este correo.</p></div>`,
+            items: `Código de seguridad: ${code}`,
+            articulos: `Código de seguridad: ${code}`,
+            productos: `Código de seguridad: ${code}`,
+            message: `Tu código de verificación de 6 dígitos para Callejón Mágico es: ${code}`,
+            orders: `Código: ${code}`,
+            total: code,
+            total_words: `Código de 6 dígitos: ${code}`,
+            subtotal_bruto: code,
+            subtotal: code,
+            iva: '0.00'
           };
-          await window.emailjs.send('service_twm03c7', 'template_anh3qjr', templateParams);
+
+          const resp = await window.emailjs.send(
+            'service_twm03c7',
+            'template_anh3qjr',
+            templateParams,
+            'eFDXFKJFAoYalylpS'
+          );
+          console.log('AuthEngine: EmailJS enviado exitosamente:', resp);
           return true;
         }
       } catch (err) {
-        console.warn('AuthEngine: Error al enviar correo de recuperación vía EmailJS:', err);
+        console.error('AuthEngine: Error al enviar correo de recuperación vía EmailJS:', err);
       }
       return false;
     },
