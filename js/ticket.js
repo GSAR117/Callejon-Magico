@@ -371,51 +371,13 @@
         };
       });
 
-      // 5. Cálculo fiscal exacto:
-      // Subtotal = Suma de precios de productos en tienda
-      // IVA (16%) = Se suma al subtotal
-      // Total a Pagar = Subtotal - Descuento + IVA
-      let baseGravable16 = 0;
-      let iva16 = 0;
-      let baseTasa0 = 0;
-      let importeExento = 0;
-      let totalPayable = 0;
-
+      // 5. Cálculo financiero: El IVA ya viene registrado en el precio de los artículos
       const totalAfterDiscount = Math.round((subtotalGross - discount) * 100) / 100;
-
-      if (pricesIncludeTax) {
-        // En caso de que se configure explícitamente precios con IVA incluido
-        itemsWithDiscount.forEach(item => {
-          if (item.taxType === '16') {
-            const itemBase = Math.round((item.lineNet / 1.16) * 100) / 100;
-            const itemIva = Math.round((item.lineNet - itemBase) * 100) / 100;
-            baseGravable16 = Math.round((baseGravable16 + itemBase) * 100) / 100;
-            iva16 = Math.round((iva16 + itemIva) * 100) / 100;
-          } else if (item.taxType === '0') {
-            baseTasa0 = Math.round((baseTasa0 + item.lineNet) * 100) / 100;
-          } else if (item.taxType === 'exento') {
-            importeExento = Math.round((importeExento + item.lineNet) * 100) / 100;
-          }
-        });
-        totalPayable = totalAfterDiscount;
-      } else {
-        // REGLA POR DEFECTO SOLICITADA:
-        // El precio de la tienda es el Subtotal. El 16% de IVA se calcula y se suma al subtotal.
-        itemsWithDiscount.forEach(item => {
-          if (item.taxType === '16') {
-            const itemBase = item.lineNet;
-            const itemIva = Math.round((itemBase * 0.16) * 100) / 100;
-            baseGravable16 = Math.round((baseGravable16 + itemBase) * 100) / 100;
-            iva16 = Math.round((iva16 + itemIva) * 100) / 100;
-          } else if (item.taxType === '0') {
-            baseTasa0 = Math.round((baseTasa0 + item.lineNet) * 100) / 100;
-          } else if (item.taxType === 'exento') {
-            importeExento = Math.round((importeExento + item.lineNet) * 100) / 100;
-          }
-        });
-
-        totalPayable = Math.round((totalAfterDiscount + iva16) * 100) / 100;
-      }
+      const totalPayable = totalAfterDiscount;
+      const baseGravable16 = totalPayable;
+      const iva16 = 0;
+      const baseTasa0 = 0;
+      const importeExento = 0;
 
       const totalPieces = itemsWithDiscount.reduce((sum, item) => sum + item.quantity, 0);
       const ticketFolio = 'TKT-' + (order.orderNum || 'CLM-000000').replace(/[^a-zA-Z0-9-]/g, '');
@@ -436,7 +398,7 @@
         totalPieces,
         ticketFolio,
         uuidFiscal,
-        pricesIncludeTax,
+        pricesIncludeTax: true,
         itemsDetailed: itemsWithDiscount,
         totalWords: numberToWordsMXN(totalPayable)
       };
@@ -655,11 +617,6 @@
               </div>
             ` : ''}
 
-            <div class="ticket-fin-row">
-              <span>I.V.A. TRASLADADO (16% INCLUIDO):</span>
-              <span><strong>$${fin.iva16.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN</strong></span>
-            </div>
-
             <div class="ticket-divider-solid"></div>
 
             <div class="ticket-fin-row total-row">
@@ -706,10 +663,11 @@
             ${generateBarcodeSvg(order.orderNum || 'CLM-784210')}
           </div>
 
-          <!-- POLÍTICAS DE GARANTÍA Y MENSAJE DE DESPEDIDA -->
+          <!-- POLÍTICAS DE GARANTÍA, CONDICIONES Y MENSAJE DE DESPEDIDA -->
           <div class="ticket-legal-policies">
             <p class="bold">¡GRACIAS POR TU COMPRA EN CALLEJÓN MÁGICO!</p>
             <p>Este comprobante oficial ampara la garantía departamental de 1 año y asegura el derecho a cambio o devolución durante 30 días naturales con el empaque original.</p>
+            <p class="bold">CONDICIONES: El I.V.A. ya viene registrado e incluido en el precio de los artículos.</p>
             <p class="ticket-bottom-stamp">*** COMPROBANTE OFICIAL DE VENTA ***</p>
           </div>
 
@@ -776,7 +734,6 @@
       if (fin.discount > 0) {
         txt += `DESCUENTO DEPARTAMENTAL:       -$${fin.discount.toFixed(2).padStart(12)} MXN\n`;
       }
-      txt += `I.V.A. TRASLADADO (TASA 16%):   $${fin.iva16.toFixed(2).padStart(12)} MXN\n`;
       txt += `${line}\n`;
       txt += `TOTAL A PAGAR:                  $${fin.total.toFixed(2).padStart(12)} MXN\n`;
       txt += `${border}\n`;
@@ -800,6 +757,7 @@
       txt += `${line}\n\n`;
       txt += `      ¡GRACIAS POR SU COMPRA EN CALLEJÓN MÁGICO!\n`;
       txt += `  30 DÍAS PARA CAMBIOS O DEVOLUCIONES CON ESTE TICKET\n`;
+      txt += `  CONDICIONES: EL I.V.A. YA VIENE REGISTRADO EN LOS PRECIOS\n`;
       txt += `${border}\n`;
 
       return txt;
@@ -853,9 +811,9 @@ ${itemsText}
 
 ──────────────────────────────
 *SUBTOTAL BRUTO DE VENTA:* $${fin.subtotalGross.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN${discountText}
-*I.V.A. TRASLADADO (16%):* $${fin.iva16.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
 *TOTAL A PAGAR:* *$${fin.total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN*
 _(${fin.totalWords})_
+_Condiciones: El I.V.A. ya viene registrado e incluido en el precio de los artículos._
 ══════════════════════════════
 
 ${order.isSplitPayment || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('mixto')) ? `💳💵 *MODALIDAD DE PAGO:* PAGO MIXTO (EFECTIVO + CRÉDITO)
@@ -941,7 +899,6 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
         lines.push({ text: `DESCUENTO DEPARTAMENTAL:      -$${fin.discount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`, font: "F1", size: 8, align: "right", spacing: 3 });
       }
 
-      lines.push({ text: `I.V.A. TRASLADADO (16% INCL.): $${fin.iva16.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`, font: "F1", size: 8, align: "right", spacing: 5 });
       lines.push({ text: "==================================================================", font: "F1", size: 8, align: "center", spacing: 6 });
       lines.push({ text: `TOTAL A PAGAR: $${fin.total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`, font: "F2", size: 12, align: "right", spacing: 4 });
       lines.push({ text: `(${clean(fin.totalWords)})`, font: "F1", size: 7, align: "right", spacing: 6 });
@@ -966,6 +923,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
       lines.push({ text: "==================================================================", font: "F1", size: 8, align: "center", spacing: 8 });
       lines.push({ text: "!GRACIAS POR TU COMPRA EN CALLEJON MAGICO!", font: "F2", size: 10, align: "center", spacing: 4 });
       lines.push({ text: "Garantia oficial de 1 ano - 30 dias para cambios con empaque original", font: "F1", size: 7, align: "center", spacing: 3 });
+      lines.push({ text: "Condiciones: El I.V.A. ya viene registrado e incluido en los precios", font: "F2", size: 7.5, align: "center", spacing: 3 });
       lines.push({ text: "Atencion y Pedidos por WhatsApp: 962 401 4408", font: "F2", size: 8, align: "center", spacing: 4 });
       lines.push({ text: "*** COMPROBANTE OFICIAL DE COMPRA PARA IMPRIMIR ***", font: "F1", size: 7, align: "center", spacing: 0 });
 

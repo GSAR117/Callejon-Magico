@@ -274,8 +274,8 @@
         </div>
 
         <div class="legal-clause">
-          <h4>2. Precios, I.V.A. y Desglose Fiscal</h4>
-          <p>Todos los precios se encuentran expresados en <strong>Pesos Mexicanos (MXN)</strong>. Conforme al régimen comercial oficial, el precio exhibido del producto corresponde al valor subtotal del bien. Al procesarse la orden, se calcula e incorpora el <strong>16% de Impuesto al Valor Agregado (I.V.A.)</strong> de manera desglosada y transparente en el ticket de compra y factura digital correspondiente.</p>
+          <h4>2. Precios y Condiciones de I.V.A.</h4>
+          <p>Todos los precios se encuentran expresados en <strong>Pesos Mexicanos (MXN)</strong>. En nuestras condiciones de venta, <strong>el I.V.A. ya viene registrado e incluido</strong> directamente en el precio final de cada artículo, por lo que no se desglosa ni se cobra ningún cargo extra por concepto de impuestos en los tickets de compra.</p>
         </div>
 
         <div class="legal-clause">
