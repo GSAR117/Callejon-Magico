@@ -495,7 +495,7 @@
                       <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendEmailFromOrder('${order.orderNum}');}" style="background: #059669; color: #ffffff; border-color: #059669;" title="Enviar por correo">
                         ✉️ Correo
                       </button>
-                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${order.orderNum}', '962 401 4408');}" style="background: #25D366; color: #ffffff; border-color: #25D366;" title="Enviar ticket a WhatsApp Oficial (962 401 4408)">
+                      <button type="button" class="btn-copy-tracking" onclick="if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${order.orderNum}');}" style="background: #25D366; color: #ffffff; border-color: #25D366;" title="Enviar ticket al WhatsApp registrado (${order.recipient?.phone || ''})">
                         📲 WhatsApp
                       </button>
                     </div>

@@ -2937,10 +2937,10 @@ document.addEventListener('DOMContentLoaded', () => {
           } catch (e) {}
         }
 
-        // Disparar apertura automática de WhatsApp con el ticket oficial a la tienda oficial (962 401 4408)
+        // Disparar apertura automática de WhatsApp con el ticket oficial al número de teléfono ingresado en la compra
         if (window.CallejonTicket && typeof window.CallejonTicket.sendWhatsAppFromOrder === 'function') {
           try {
-            window.CallejonTicket.sendWhatsAppFromOrder(savedOrder || orderNum, '962 401 4408');
+            window.CallejonTicket.sendWhatsAppFromOrder(savedOrder || orderNum, phone);
           } catch(err) {
             console.error('Error al abrir WhatsApp:', err);
           }
@@ -2964,7 +2964,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid #e2e8f0; margin-bottom: 1.5rem; text-align: left; font-size: 0.88rem; line-height: 1.6;">
               <p style="margin-bottom: 0.4rem;">👤 <strong>Destinatario:</strong> ${recipientName} (${phone})</p>
-              <p style="margin-bottom: 0.4rem;">💬 <strong>WhatsApp Oficial Callejón Mágico:</strong> <span style="color: #10b981; font-weight: 600;">Ticket dirigido al <strong>962 401 4408</strong> para despacho inmediato</span></p>
+              <p style="margin-bottom: 0.4rem;">💬 <strong>WhatsApp del Destinatario:</strong> <span style="color: #10b981; font-weight: 600;">Ticket dirigido al chat de <strong>${phone}</strong></span></p>
               ${recipientEmail ? `<p style="margin-bottom: 0.4rem;">📧 <strong>Ticket Digital:</strong> <span id="checkoutAutoEmailStatus" style="color: #059669; font-weight: 600;">Enviando automáticamente a <strong>${recipientEmail}</strong>...</span></p>` : ''}
               <p style="margin-bottom: 0.4rem;">📍 <strong>${street.includes('Plantel') ? 'Sucursal de retiro (Click & Collect):' : 'Dirección de entrega:'}</strong> ${street}, ${city}</p>
               <p style="margin-bottom: 0.4rem;">📦 <strong>${street.includes('Plantel') ? 'Disponibilidad:' : 'Entrega de cortesía:'}</strong> ${street.includes('Plantel') ? '¡Listo para entrega en 2 horas en la sucursal seleccionada con tu INE y número de orden!' : 'En 48 a 72 horas hábiles en empaque boutique.'}</p>
@@ -2983,11 +2983,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="checkout-confirm-actions">
-              <button type="button" class="checkout-action-btn btn-whatsapp" onclick="event.stopPropagation(); if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${orderNum}', '962 401 4408');}">
+              <button type="button" class="checkout-action-btn btn-whatsapp" onclick="event.stopPropagation(); if(window.CallejonTicket){CallejonTicket.sendWhatsAppFromOrder('${orderNum}', '${phone}');}">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.53 7.35C9.34 7.35 9.04 7.42 8.78 7.7C8.52 7.97 7.81 8.63 7.81 10C7.81 11.37 8.81 12.69 8.94 12.87C9.08 13.06 11.03 16.06 14 17.35C14.71 17.65 15.26 17.84 15.7 17.98C16.41 18.2 17.06 18.17 17.57 18.1C18.14 18.01 19.33 17.38 19.58 16.68C19.83 15.98 19.83 15.38 19.76 15.26C19.69 15.13 19.5 15.06 19.22 14.92C18.94 14.78 17.57 14.1 17.31 14.01C17.06 13.92 16.87 13.87 16.68 14.15C16.5 14.43 15.96 15.06 15.8 15.25C15.64 15.43 15.49 15.46 15.21 15.32C14.93 15.18 13.75 14.79 12.35 13.54C11.26 12.57 10.53 11.37 10.31 11C10.1 10.63 10.29 10.43 10.43 10.29C10.56 10.16 10.71 9.96 10.86 9.79C11 9.61 11.06 9.48 11.15 9.29C11.25 9.11 11.19 8.94 11.12 8.81C11.06 8.67 10.5 7.31 10.28 6.78C10.06 6.25 9.83 6.32 9.67 6.32C9.53 6.32 9.34 6.31 9.53 7.35Z"/>
                 </svg>
-                <span>📲 Enviar Ticket a WhatsApp Oficial (962 401 4408)</span>
+                <span>📲 Enviar Ticket por WhatsApp (${phone})</span>
               </button>
               <button type="button" class="checkout-action-btn btn-download-pdf" onclick="event.stopPropagation(); if(window.CallejonTicket){CallejonTicket.downloadPDF('${orderNum}');}">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

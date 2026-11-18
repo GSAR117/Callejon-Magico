@@ -1040,11 +1040,11 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
                 <span id="btnEmailTicketText">Enviar a mi Correo</span>
               </button>
 
-              <button type="button" class="btn-ticket-whatsapp" id="btnWhatsAppTicket" title="Enviar comprobante a WhatsApp Oficial Callejón Mágico (962 401 4408)">
+              <button type="button" class="btn-ticket-whatsapp" id="btnWhatsAppTicket" title="Enviar comprobante al número de WhatsApp registrado en la compra">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.53 7.35C9.34 7.35 9.04 7.42 8.78 7.7C8.52 7.97 7.81 8.63 7.81 10C7.81 11.37 8.81 12.69 8.94 12.87C9.08 13.06 11.03 16.06 14 17.35C14.71 17.65 15.26 17.84 15.7 17.98C16.41 18.2 17.06 18.17 17.57 18.1C18.14 18.01 19.33 17.38 19.58 16.68C19.83 15.98 19.83 15.38 19.76 15.26C19.69 15.13 19.5 15.06 19.22 14.92C18.94 14.78 17.57 14.1 17.31 14.01C17.06 13.92 16.87 13.87 16.68 14.15C16.5 14.43 15.96 15.06 15.8 15.25C15.64 15.43 15.49 15.46 15.21 15.32C14.93 15.18 13.75 14.79 12.35 13.54C11.26 12.57 10.53 11.37 10.31 11C10.1 10.63 10.29 10.43 10.43 10.29C10.56 10.16 10.71 9.96 10.86 9.79C11 9.61 11.06 9.48 11.15 9.29C11.25 9.11 11.19 8.94 11.12 8.81C11.06 8.67 10.5 7.31 10.28 6.78C10.06 6.25 9.83 6.32 9.67 6.32C9.53 6.32 9.34 6.31 9.53 7.35Z"/>
                 </svg>
-                <span>WhatsApp (962 401 4408)</span>
+                <span id="btnWhatsAppTicketText">WhatsApp</span>
               </button>
 
               <button type="button" class="btn-ticket-download" id="btnDownloadTicket" title="Descargar comprobante en texto">
@@ -1089,9 +1089,9 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
         this.sendEmail();
       });
 
-      // Enviar ticket a WhatsApp Oficial (962 401 4408)
+      // Enviar ticket al número de WhatsApp registrado en el pedido
       document.getElementById('btnWhatsAppTicket')?.addEventListener('click', () => {
-        this.sendWhatsApp('962 401 4408');
+        this.sendWhatsApp();
       });
 
       // Descargar ticket en texto plano
@@ -1116,6 +1116,12 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
       this.injectModal();
       const order = resolveOrderData(orderOrNum);
       this.currentOrder = order;
+
+      const waBtnText = document.getElementById('btnWhatsAppTicketText');
+      if (waBtnText) {
+        const orderPhone = order?.recipient?.phone || order?.phone || '';
+        waBtnText.textContent = orderPhone ? `WhatsApp (${orderPhone})` : 'WhatsApp';
+      }
 
       const container = document.getElementById('ticketModalContent');
       if (container) {
@@ -1842,19 +1848,19 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
     },
 
     /**
-     * Abre y envía el ticket oficial formateado por WhatsApp
-     * Por defecto se envía al número oficial de Callejón Mágico: 962 401 4408
+     * Abre y envía el ticket oficial formateado al número de WhatsApp ingresado en la compra
      */
     sendWhatsApp(customPhone = null) {
       if (!this.currentOrder) return;
       const order = this.currentOrder;
-      const targetPhone = customPhone || '962 401 4408';
+      const checkoutPhoneVal = (document.getElementById('checkoutPhone')?.value || '').trim();
+      const targetPhone = (customPhone && String(customPhone).trim()) || order.recipient?.phone || order.phone || checkoutPhoneVal || '962 401 4408';
       const cleanPhone = this.formatPhoneForWhatsApp(targetPhone);
       const text = TicketEngine.generateWhatsAppMessage(order, targetPhone);
       const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(text)}`;
 
       if (window.DavantiApp && typeof window.DavantiApp.showToast === 'function') {
-        window.DavantiApp.showToast(`📲 Enviando ticket al WhatsApp Oficial (${targetPhone})...`);
+        window.DavantiApp.showToast(`📲 Abriendo chat de WhatsApp de ${targetPhone} con el ticket...`);
       }
 
       const win = window.open(url, '_blank');
@@ -1868,7 +1874,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
       const order = resolveOrderData(orderOrNum);
       if (!order) return;
       this.currentOrder = order;
-      return this.sendWhatsApp(customPhone || '962 401 4408');
+      return this.sendWhatsApp(customPhone || order.recipient?.phone || order.phone);
     }
   };
 
