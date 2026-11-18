@@ -105,12 +105,32 @@
     async syncUser(userData) {
       if (!userData || !this.isReady()) return;
       try {
+        const nowIso = new Date().toISOString();
+        const payload = {
+          ...userData,
+          _updatedAt: nowIso
+        };
         const idKey = sanitizeKey(userData.id || userData.email);
         const ref = db.ref('users/' + idKey);
-        await ref.set({
-          ...userData,
-          _updatedAt: new Date().toISOString()
-        });
+        await ref.set(payload);
+
+        // Si existen otros nodos duplicados con el mismo correo en Firebase, actualizarlos o limpiarlos
+        if (userData.email) {
+          const targetEmail = String(userData.email).trim().toLowerCase();
+          const snap = await db.ref('users').once('value');
+          if (snap.exists()) {
+            const val = snap.val() || {};
+            const updates = {};
+            Object.entries(val).forEach(([k, u]) => {
+              if (k !== idKey && u && u.email && String(u.email).trim().toLowerCase() === targetEmail) {
+                updates[k] = null; // Eliminar nodo duplicado viejo para dejar solo el nodo canónico actualizado
+              }
+            });
+            if (Object.keys(updates).length > 0) {
+              await db.ref('users').update(updates);
+            }
+          }
+        }
       } catch (e) {
         console.warn('CallejonFirebase: Error al subir usuario:', e);
       }
@@ -133,11 +153,21 @@
         const snap = await db.ref('users').once('value');
         if (snap.exists()) {
           const all = Object.values(snap.val() || {});
-          return all.find(u => 
-            (u.email && u.email.toLowerCase() === clean) ||
-            (u.username && u.username.toLowerCase() === clean) ||
-            (u.id && u.id === clean)
-          ) || null;
+          const matches = all.filter(u =>
+            u && (
+              (u.email && String(u.email).toLowerCase() === clean) ||
+              (u.username && String(u.username).toLowerCase() === clean) ||
+              (u.id && String(u.id).toLowerCase() === clean)
+            )
+          );
+          if (matches.length === 0) return null;
+          // Si hay más de una coincidencia, priorizar la más reciente por _updatedAt y que tenga contraseña
+          matches.sort((a, b) => {
+            const tA = a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
+            const tB = b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
+            return tB - tA;
+          });
+          return matches[0];
         }
       } catch (e) {
         console.warn('CallejonFirebase: Error en fetchUser:', e);
@@ -264,28 +294,51 @@
           const localUsers = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
           const userMap = new Map();
 
-          // 1. Agregar usuarios remotos
+          // 1. Agregar usuarios remotos (si hay duplicados, conservar el más reciente por _updatedAt)
           if (remoteData) {
             Object.values(remoteData).forEach(u => {
               if (u && (u.id || u.email)) {
-                const k = (u.email || u.id).trim().toLowerCase();
-                userMap.set(k, u);
+                const k = String(u.email || u.id).trim().toLowerCase();
+                if (!userMap.has(k)) {
+                  userMap.set(k, u);
+                } else {
+                  const existing = userMap.get(k);
+                  const tExisting = existing._updatedAt ? new Date(existing._updatedAt).getTime() : 0;
+                  const tNew = u._updatedAt ? new Date(u._updatedAt).getTime() : 0;
+                  if (tNew >= tExisting) {
+                    userMap.set(k, { ...existing, ...u });
+                  } else {
+                    userMap.set(k, { ...u, ...existing });
+                  }
+                }
               }
             });
           }
 
-          // 2. Si hay usuarios locales que aún no estaban en la nube, subirlos (seed inicial)
+          // 2. Comparar con usuarios locales: si no estaban en la nube o si el local es más reciente, preservar y sincronizar
           localUsers.forEach(lu => {
             if (lu && (lu.id || lu.email)) {
-              const k = (lu.email || lu.id).trim().toLowerCase();
+              const k = String(lu.email || lu.id).trim().toLowerCase();
               if (!userMap.has(k)) {
                 userMap.set(k, lu);
-                // Subir silenciosamente a Firebase
                 const idKey = sanitizeKey(lu.id || lu.email);
                 db.ref('users/' + idKey).set({
                   ...lu,
-                  _updatedAt: new Date().toISOString()
+                  _updatedAt: lu._updatedAt || new Date().toISOString()
                 }).catch(() => {});
+              } else {
+                const remoteU = userMap.get(k);
+                const tRemote = remoteU._updatedAt ? new Date(remoteU._updatedAt).getTime() : 0;
+                const tLocal = lu._updatedAt ? new Date(lu._updatedAt).getTime() : 0;
+                if (tLocal > tRemote) {
+                  const merged = { ...remoteU, ...lu };
+                  userMap.set(k, merged);
+                  const idKey = sanitizeKey(merged.id || merged.email);
+                  db.ref('users/' + idKey).set(merged).catch(() => {});
+                } else if (!remoteU.password && lu.password) {
+                  const merged = { ...remoteU, password: lu.password };
+                  userMap.set(k, merged);
+                }
               }
             }
           });

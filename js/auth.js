@@ -153,17 +153,18 @@
 
       // 2. LocalStorage Fallback
       const localUsers = this.getLocalUsers();
-      if (localUsers.some(u => u.email.toLowerCase() === normalizedEmail)) {
+      if (localUsers.some(u => u && u.email && String(u.email).toLowerCase() === normalizedEmail)) {
         return { success: false, message: 'Este correo electrónico ya está registrado en Callejón Mágico.' };
       }
 
       let finalUsername = cleanUsername || normalizedEmail.split('@')[0];
       let count = 1;
       let base = finalUsername;
-      while (localUsers.some(u => u.username.toLowerCase() === finalUsername.toLowerCase())) {
+      while (localUsers.some(u => u && u.username && String(u.username).toLowerCase() === finalUsername.toLowerCase())) {
         finalUsername = `${base}${count++}`;
       }
 
+      const nowIso = new Date().toISOString();
       const newUser = {
         id: 'usr_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
         fullName: fullName.trim(),
@@ -172,7 +173,8 @@
         username: finalUsername,
         password: password,
         tier: 'Privé Member',
-        createdAt: new Date().toISOString()
+        createdAt: nowIso,
+        _updatedAt: nowIso
       };
 
       this.saveLocalUser(newUser);
@@ -193,71 +195,83 @@
     },
 
     async login(identifier, password) {
-      const cleanIdent = identifier.trim().toLowerCase().replace(/^@/, '');
+      const cleanIdent = String(identifier || '').trim().toLowerCase().replace(/^@/, '');
 
-      // 1. Try Server API first
-      try {
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ identifier: cleanIdent, password })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && data.user) {
-            this.setCurrentUser(data.user);
-            const restoredCount = this.restoreCartForUser(data.user);
-            const cartNote = restoredCount > 0 ? ` Se restauraron ${restoredCount} producto(s) en tu carrito.` : '';
-            return { success: true, user: data.user, message: (data.message || '¡Bienvenido!') + cartNote };
-          }
-        } else if (res.status === 401) {
-          const errData = await res.json();
-          return { success: false, message: errData.message || 'Credenciales inválidas.' };
-        }
-      } catch (err) {
-        // Fallback to localStorage
-      }
-
-      // 2. LocalStorage Fallback (con consulta a Firebase en la nube)
+      // 1. Consultar almacenamiento local y Firebase primero para garantizar contraseñas recién restablecidas
       let localUsers = this.getLocalUsers();
-      let user = localUsers.find(u => 
-        u.email.toLowerCase() === cleanIdent || 
-        u.username.toLowerCase() === cleanIdent
+      let matchingLocal = localUsers.filter(u =>
+        u && (
+          (u.email && String(u.email).toLowerCase() === cleanIdent) ||
+          (u.username && String(u.username).toLowerCase() === cleanIdent)
+        )
       );
 
-      // Si no se encuentra en almacenamiento local, intentar consultar Firebase en tiempo real
-      if (!user && typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.fetchUserByEmailOrUsername === 'function') {
+      // Ordenar coincidencias locales por _updatedAt más reciente
+      matchingLocal.sort((a, b) => {
+        const tA = a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
+        const tB = b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
+        return tB - tA;
+      });
+
+      let user = matchingLocal.find(u => u.password === password) || matchingLocal[0] || null;
+
+      // Si no coincide la contraseña localmente o no existe el usuario local, consultar Firebase en tiempo real
+      if ((!user || user.password !== password) && typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.fetchUserByEmailOrUsername === 'function') {
         try {
           const remoteUser = await window.CallejonFirebase.fetchUserByEmailOrUsername(cleanIdent);
           if (remoteUser) {
             user = remoteUser;
-            // Guardar en copia local
-            const exists = localUsers.some(u => u.id === remoteUser.id || u.email.toLowerCase() === remoteUser.email.toLowerCase());
-            if (!exists) {
-              localUsers.push(remoteUser);
-              localStorage.setItem('davanti_users', JSON.stringify(localUsers));
-            }
+            // Actualizar copia local con el registro remoto más reciente
+            const targetEmail = String(remoteUser.email || '').toLowerCase();
+            localUsers = localUsers.filter(u => !u || String(u.email || '').toLowerCase() !== targetEmail);
+            localUsers.push(remoteUser);
+            localStorage.setItem('davanti_users', JSON.stringify(localUsers));
           }
         } catch (e) {}
+      }
+
+      // 2. Si aún no coincide, intentar API de servidor local (/api/auth/login) como respaldo
+      if (!user || user.password !== password) {
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier: cleanIdent, password })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.user) {
+              this.setCurrentUser(data.user);
+              const restoredCount = this.restoreCartForUser(data.user);
+              const cartNote = restoredCount > 0 ? ` Se restauraron ${restoredCount} producto(s) en tu carrito.` : '';
+              return { success: true, user: data.user, message: (data.message || '¡Bienvenido!') + cartNote };
+            }
+          }
+        } catch (err) {
+          // Servidor no activo, continuar con resultado local/Firebase
+        }
       }
 
       if (!user || user.password !== password) {
         return { success: false, message: 'Credenciales inválidas. Verifica tu correo/usuario y contraseña.' };
       }
 
+      const safeFullName = user.fullName || (user.email ? user.email.split('@')[0] : 'Cliente Privé');
+      const safeUsername = user.username || (user.email ? user.email.split('@')[0] : 'prive_user');
+
       const safeUser = {
-        id: user.id,
-        fullName: user.fullName,
+        id: user.id || ('usr_' + Date.now().toString(36)),
+        fullName: safeFullName,
         email: user.email,
-        username: user.username,
+        username: safeUsername,
         tier: user.tier || 'Privé Member',
-        createdAt: user.createdAt
+        createdAt: user.createdAt || new Date().toISOString()
       };
 
       this.setCurrentUser(safeUser);
       const restoredCount = this.restoreCartForUser(user);
       const cartNote = restoredCount > 0 ? ` Se restauraron ${restoredCount} producto(s) en tu carrito.` : '';
-      return { success: true, user: safeUser, message: `¡Bienvenido de vuelta, ${user.fullName.split(' ')[0]}!${cartNote}` };
+      return { success: true, user: safeUser, message: `¡Bienvenido de vuelta, ${safeFullName.split(' ')[0]}!${cartNote}` };
     },
 
     logout() {
@@ -367,6 +381,22 @@
       }
     },
 
+    getActiveRecoveryToken() {
+      try {
+        const raw = localStorage.getItem('callejon_client_recovery_token') || sessionStorage.getItem('callejon_client_recovery_token');
+        if (!raw) return null;
+        const token = JSON.parse(raw);
+        if (!token || Date.now() > token.expires) {
+          localStorage.removeItem('callejon_client_recovery_token');
+          sessionStorage.removeItem('callejon_client_recovery_token');
+          return null;
+        }
+        return token;
+      } catch (e) {
+        return null;
+      }
+    },
+
     async requestPasswordReset(email) {
       const cleanEmail = String(email || '').trim().toLowerCase();
       if (!cleanEmail || !cleanEmail.includes('@')) {
@@ -375,7 +405,7 @@
 
       // Buscar si el usuario existe localmente o en Firebase
       let localUsers = this.getLocalUsers();
-      let user = localUsers.find(u => u.email && u.email.toLowerCase() === cleanEmail);
+      let user = localUsers.find(u => u && u.email && String(u.email).toLowerCase() === cleanEmail);
 
       if (!user && window.CallejonFirebase && typeof window.CallejonFirebase.fetchUserByEmailOrUsername === 'function') {
         try {
@@ -388,14 +418,26 @@
         } catch (e) {}
       }
 
-      const userName = user ? user.fullName : cleanEmail.split('@')[0];
+      const userName = (user && user.fullName) ? user.fullName : cleanEmail.split('@')[0];
       const code = String(Math.floor(100000 + Math.random() * 900000));
+
+      // Preservar códigos previos emitidos en los últimos 15 minutos para ese mismo correo por si el usuario pidió reenvío
+      const prevToken = this.getActiveRecoveryToken();
+      let validCodes = [code];
+      if (prevToken && prevToken.email === cleanEmail) {
+        const oldCodes = Array.isArray(prevToken.validCodes) ? prevToken.validCodes : (prevToken.code ? [prevToken.code] : []);
+        validCodes = Array.from(new Set([code, ...oldCodes]));
+      }
+
       const token = {
         email: cleanEmail,
         code,
+        validCodes,
         expires: Date.now() + 15 * 60 * 1000 // 15 minutos
       };
-      sessionStorage.setItem('callejon_client_recovery_token', JSON.stringify(token));
+      const tokenStr = JSON.stringify(token);
+      sessionStorage.setItem('callejon_client_recovery_token', tokenStr);
+      localStorage.setItem('callejon_client_recovery_token', tokenStr);
 
       // Enviar correo real vía EmailJS
       const sentResult = await this.sendResetEmail(cleanEmail, userName, code);
@@ -416,30 +458,26 @@
     },
 
     async resetPasswordWithCode(email, code, newPassword, confirmPassword) {
-      const cleanEmail = String(email || '').trim().toLowerCase();
-      const cleanCode = String(code || '').trim();
+      // Limpiar espacios o caracteres invisibles al copiar y pegar el código desde el correo
+      const cleanCode = String(code || '').replace(/\D/g, '').trim();
       const np = String(newPassword || '').trim();
       const cp = String(confirmPassword || '').trim();
 
-      if (!cleanCode || cleanCode.length < 6) {
-        return { success: false, message: 'Ingresa el código de 6 dígitos que enviamos a tu correo.' };
+      if (!cleanCode || cleanCode.length !== 6) {
+        return { success: false, message: 'Ingresa los 6 dígitos numéricos del código que enviamos a tu correo.' };
       }
 
-      const rawToken = sessionStorage.getItem('callejon_client_recovery_token');
-      if (!rawToken) {
-        return { success: false, message: 'No hay un código activo. Por favor solicita uno nuevo.' };
+      const tokenData = this.getActiveRecoveryToken();
+      if (!tokenData) {
+        return { success: false, message: 'No hay un código activo o ya expiró (15 minutos). Por favor solicita uno nuevo.' };
       }
 
-      try {
-        const tokenData = JSON.parse(rawToken);
-        if (Date.now() > tokenData.expires) {
-          return { success: false, message: 'El código ha expirado (duración 15 minutos). Por favor solicita uno nuevo.' };
-        }
-        if (tokenData.code !== cleanCode) {
-          return { success: false, message: 'El código ingresado es incorrecto. Verifica los 6 dígitos recibidos.' };
-        }
-      } catch (e) {
-        return { success: false, message: 'Error de verificación de código.' };
+      const allowedCodes = Array.isArray(tokenData.validCodes)
+        ? tokenData.validCodes
+        : (tokenData.code ? [String(tokenData.code)] : []);
+
+      if (!allowedCodes.includes(cleanCode) && String(tokenData.code) !== cleanCode) {
+        return { success: false, message: 'El código ingresado es incorrecto. Verifica los 6 dígitos recibidos en tu correo.' };
       }
 
       if (np.length < 6) {
@@ -449,15 +487,34 @@
         return { success: false, message: 'Las nuevas contraseñas no coinciden. Por favor verifícalas.' };
       }
 
-      // Actualizar en base de datos local y Firebase
-      const users = this.getLocalUsers();
-      let userIdx = users.findIndex(u => u.email && u.email.toLowerCase() === cleanEmail);
-      let updatedUser = null;
+      const cleanEmail = String(email || tokenData.email || '').trim().toLowerCase();
+      const nowIso = new Date().toISOString();
 
-      if (userIdx > -1) {
-        users[userIdx].password = np;
-        updatedUser = users[userIdx];
-        localStorage.setItem('davanti_users', JSON.stringify(users));
+      // 1. Consultar Firebase por si el usuario existe en la nube pero no localmente
+      let remoteUser = null;
+      if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.fetchUserByEmailOrUsername === 'function') {
+        try {
+          remoteUser = await window.CallejonFirebase.fetchUserByEmailOrUsername(cleanEmail);
+        } catch (e) {}
+      }
+
+      // 2. Actualizar en base de datos local deduplicando cualquier registro viejo del mismo correo
+      let users = this.getLocalUsers();
+      let existingUser = users.find(u => u && u.email && String(u.email).toLowerCase() === cleanEmail) || remoteUser || null;
+
+      let updatedUser;
+      if (existingUser) {
+        updatedUser = {
+          ...existingUser,
+          id: existingUser.id || ('usr_' + Date.now().toString(36)),
+          fullName: existingUser.fullName || cleanEmail.split('@')[0],
+          email: cleanEmail,
+          username: existingUser.username || cleanEmail.split('@')[0],
+          password: np,
+          tier: existingUser.tier || 'Privé Member',
+          createdAt: existingUser.createdAt || nowIso,
+          _updatedAt: nowIso
+        };
       } else {
         updatedUser = {
           id: 'usr_' + Date.now().toString(36),
@@ -466,20 +523,43 @@
           username: cleanEmail.split('@')[0],
           password: np,
           tier: 'Privé Member',
-          createdAt: new Date().toISOString()
+          createdAt: nowIso,
+          _updatedAt: nowIso
         };
-        users.push(updatedUser);
-        localStorage.setItem('davanti_users', JSON.stringify(users));
       }
 
-      // Sincronizar en la nube con Firebase
+      // Reemplazar todos los registros que tengan ese correo por el registro único actualizado
+      users = users.filter(u => !u || !u.email || String(u.email).toLowerCase() !== cleanEmail);
+      users.push(updatedUser);
+      localStorage.setItem('davanti_users', JSON.stringify(users));
+
+      // 3. Sincronizar en la nube con Firebase (y limpiar nodos duplicados antiguos)
       if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncUser === 'function') {
-        window.CallejonFirebase.syncUser(updatedUser);
+        try {
+          await window.CallejonFirebase.syncUser(updatedUser);
+        } catch (e) {}
+      }
+
+      // 4. Sincronizar con servidor local (/api/auth/reset-password) si está activo
+      try {
+        await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: cleanEmail,
+            newPassword: np,
+            fullName: updatedUser.fullName,
+            username: updatedUser.username
+          })
+        });
+      } catch (e) {
+        // Servidor local no requerido si corre en modo estático / Firebase
       }
 
       sessionStorage.removeItem('callejon_client_recovery_token');
+      localStorage.removeItem('callejon_client_recovery_token');
 
-      // Auto-iniciar sesión del cliente con su nueva contraseña
+      // 5. Auto-iniciar sesión del cliente con su nueva contraseña
       const safeUser = {
         id: updatedUser.id,
         fullName: updatedUser.fullName,
@@ -770,6 +850,12 @@
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
               </button>
+
+              <div style="text-align: center; margin-top: 0.85rem;">
+                <button type="button" id="btnGoToStepCode" style="background: none; border: none; color: #0b1b3d; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
+                  ¿Ya recibiste tu código de 6 dígitos? Ingrésalo aquí →
+                </button>
+              </div>
             </div>
 
             <!-- Sub-paso 2: Ingresar código y nueva contraseña -->
@@ -783,21 +869,40 @@
               <div class="auth-field-group">
                 <label class="auth-label" for="recoverCode">Código de 6 dígitos recibido</label>
                 <div class="auth-input-container">
-                  <input type="text" id="recoverCode" class="auth-input" placeholder="000000" maxlength="6" style="text-align: center; letter-spacing: 0.35em; font-size: 1.3rem; font-weight: 800; color: #c58f38;" />
+                  <input type="text" id="recoverCode" class="auth-input" placeholder="000000" maxlength="12" inputmode="numeric" autocomplete="one-time-code" style="text-align: center; letter-spacing: 0.35em; font-size: 1.3rem; font-weight: 800; color: #c58f38;" />
                 </div>
               </div>
 
               <div class="auth-field-group">
                 <label class="auth-label" for="recoverNewPassword">Nueva Contraseña</label>
                 <div class="auth-input-container">
+                  <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
                   <input type="password" id="recoverNewPassword" class="auth-input" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" />
+                  <button type="button" class="auth-toggle-pwd-btn" data-target="recoverNewPassword" aria-label="Mostrar contraseña">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
                 </div>
               </div>
 
               <div class="auth-field-group">
                 <label class="auth-label" for="recoverConfirmPassword">Confirmar Nueva Contraseña</label>
                 <div class="auth-input-container">
+                  <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
                   <input type="password" id="recoverConfirmPassword" class="auth-input" placeholder="Repite la nueva contraseña" minlength="6" autocomplete="new-password" />
+                  <button type="button" class="auth-toggle-pwd-btn" data-target="recoverConfirmPassword" aria-label="Mostrar contraseña">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
                 </div>
               </div>
 
@@ -807,6 +912,12 @@
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
               </button>
+
+              <div style="text-align: center; margin-top: 0.75rem;">
+                <button type="button" id="btnBackToStepEmail" style="background: none; border: none; color: #64748b; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: underline;">
+                  ← Reenviar código o cambiar correo
+                </button>
+              </div>
             </div>
 
             <p class="auth-switch-text" style="margin-top: 1.25rem;">
@@ -873,11 +984,13 @@
       const textSpan = btn.querySelector('span');
 
       if (user) {
-        const firstName = user.fullName ? user.fullName.split(' ')[0] : 'Privé';
+        const safeFullName = user.fullName || (user.email ? user.email.split('@')[0] : 'Privé');
+        const safeUsername = user.username || (user.email ? user.email.split('@')[0] : 'prive_user');
+        const firstName = safeFullName.split(' ')[0] || 'Privé';
         if (textSpan) {
           textSpan.textContent = `Hola, ${firstName}`;
         }
-        btn.setAttribute('title', `${user.fullName} (@${user.username})`);
+        btn.setAttribute('title', `${safeFullName} (@${safeUsername})`);
         
         // Update user profile dropdown details
         const nameEl = document.getElementById('userMenuName');
@@ -885,15 +998,15 @@
         const avatarEl = document.getElementById('userMenuAvatar');
         const tierEl = document.getElementById('userMenuTier');
 
-        if (nameEl) nameEl.textContent = user.fullName;
-        if (handleEl) handleEl.textContent = user.email || user.fullName;
+        if (nameEl) nameEl.textContent = safeFullName;
+        if (handleEl) handleEl.textContent = user.email || safeFullName;
         if (tierEl) tierEl.textContent = `${user.tier || 'Privé Member'} ✨`;
-        if (avatarEl) avatarEl.textContent = (user.fullName.charAt(0) || 'D').toUpperCase();
+        if (avatarEl) avatarEl.textContent = (safeFullName.charAt(0) || 'D').toUpperCase();
 
         // Also pre-fill checkout form if user is logged in
         const nameInput = document.querySelector('#checkoutForm input[placeholder*="Mendoza"]');
         if (nameInput && !nameInput.dataset.modified) {
-          nameInput.value = user.fullName;
+          nameInput.value = safeFullName;
         }
       } else {
         if (textSpan) {
@@ -905,6 +1018,29 @@
       // Sincronizar Tarjeta Callejón Mágico si está disponible
       if (window.CallejonCard && typeof window.CallejonCard.updateUI === 'function') {
         window.CallejonCard.updateUI();
+      }
+    },
+
+    showRecoveryStep(step, email = '') {
+      const recoverStepEmail = document.getElementById('recoverStepEmail');
+      const recoverStepNewPass = document.getElementById('recoverStepNewPassword');
+      const displayEl = document.getElementById('recoverEmailSentDisplay');
+      const errorBanner = document.getElementById('authErrorBanner');
+      if (errorBanner) errorBanner.classList.remove('visible');
+
+      if (step === 'code') {
+        if (recoverStepEmail) recoverStepEmail.style.display = 'none';
+        if (recoverStepNewPass) recoverStepNewPass.style.display = 'block';
+        const activeToken = AuthEngine.getActiveRecoveryToken();
+        const targetEmail = email || document.getElementById('recoverEmail')?.value?.trim() || activeToken?.email || 'tu correo';
+        if (displayEl) displayEl.textContent = targetEmail;
+        const codeInput = document.getElementById('recoverCode');
+        if (codeInput) setTimeout(() => codeInput.focus(), 150);
+      } else {
+        if (recoverStepEmail) recoverStepEmail.style.display = 'block';
+        if (recoverStepNewPass) recoverStepNewPass.style.display = 'none';
+        const recEmail = document.getElementById('recoverEmail');
+        if (recEmail) setTimeout(() => recEmail.focus(), 150);
       }
     },
 
@@ -925,17 +1061,23 @@
         if (formReg) formReg.style.display = 'none';
         if (formRecover) formRecover.style.display = 'block';
 
-        const recoverStepEmail = document.getElementById('recoverStepEmail');
-        const recoverStepNewPass = document.getElementById('recoverStepNewPassword');
-        if (recoverStepEmail) recoverStepEmail.style.display = 'block';
-        if (recoverStepNewPass) recoverStepNewPass.style.display = 'none';
-
+        const activeToken = AuthEngine.getActiveRecoveryToken();
         const loginIdent = document.getElementById('loginIdentifier')?.value || '';
         const recEmail = document.getElementById('recoverEmail');
-        if (recEmail && loginIdent.includes('@')) {
-          recEmail.value = loginIdent.trim();
+        if (recEmail) {
+          if (loginIdent.includes('@')) {
+            recEmail.value = loginIdent.trim();
+          } else if (!recEmail.value && activeToken && activeToken.email) {
+            recEmail.value = activeToken.email;
+          }
         }
-        if (recEmail) setTimeout(() => recEmail.focus(), 150);
+
+        // Si ya tiene un código vigente enviado recientemente, mostrar directamente el Paso 2 para que pueda ingresarlo
+        if (activeToken && activeToken.email) {
+          this.showRecoveryStep('code', activeToken.email);
+        } else {
+          this.showRecoveryStep('email');
+        }
       } else if (tab === 'register') {
         if (tabsRow) tabsRow.style.display = 'flex';
         if (tabLogin) tabLogin.classList.remove('active');
@@ -1055,6 +1197,27 @@
         this.switchTab('recover');
       });
 
+      // Navegación entre Paso 1 (Correo) y Paso 2 (Código)
+      document.getElementById('btnGoToStepCode')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.showRecoveryStep('code');
+      });
+      document.getElementById('btnBackToStepEmail')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.showRecoveryStep('email');
+      });
+
+      // Limpiar automáticamente espacios o letras al pegar el código de 6 dígitos
+      const recoverCodeInput = document.getElementById('recoverCode');
+      if (recoverCodeInput) {
+        recoverCodeInput.addEventListener('input', (e) => {
+          const digitsOnly = String(e.target.value || '').replace(/\D/g, '').slice(0, 6);
+          if (e.target.value !== digitsOnly) {
+            e.target.value = digitsOnly;
+          }
+        });
+      }
+
       // Paso 1 de Recuperación: Enviar Código al Correo
       const handleSendRecoveryCode = async (e) => {
         if (e) e.preventDefault();
@@ -1081,14 +1244,7 @@
           }
 
           if (res.success) {
-            const stepEmail = document.getElementById('recoverStepEmail');
-            const stepPass = document.getElementById('recoverStepNewPassword');
-            const displayEl = document.getElementById('recoverEmailSentDisplay');
-            if (stepEmail) stepEmail.style.display = 'none';
-            if (stepPass) stepPass.style.display = 'block';
-            if (displayEl) displayEl.textContent = res.email;
-            const codeInput = document.getElementById('recoverCode');
-            if (codeInput) setTimeout(() => codeInput.focus(), 150);
+            this.showRecoveryStep('code', res.email);
             this.showToast(res.message);
           } else {
             this.showError(res.message);
@@ -1103,32 +1259,66 @@
         }
       };
 
-      document.getElementById('btnSubmitSendRecovery')?.addEventListener('click', handleSendRecoveryCode);
-      document.getElementById('formRecoverPassword')?.addEventListener('submit', handleSendRecoveryCode);
-
       // Paso 2 de Recuperación: Validar Código y Establecer Nueva Contraseña
-      document.getElementById('btnSubmitResetPassword')?.addEventListener('click', async (e) => {
-        e.preventDefault();
+      const handleResetPassword = async (e) => {
+        if (e) e.preventDefault();
         const email = (document.getElementById('recoverEmail')?.value || '').trim();
         const code = (document.getElementById('recoverCode')?.value || '').trim();
         const newPass = document.getElementById('recoverNewPassword')?.value || '';
         const confirmPass = document.getElementById('recoverConfirmPassword')?.value || '';
         const submitBtn = document.getElementById('btnSubmitResetPassword');
 
-        if (submitBtn) submitBtn.disabled = true;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>Guardando nueva contraseña...</span>';
+        }
 
-        const res = await AuthEngine.resetPasswordWithCode(email, code, newPass, confirmPass);
-        if (submitBtn) submitBtn.disabled = false;
-
-        if (res.success) {
-          this.closeModal();
-          this.updateHeaderAccountBtn();
-          if (window.DavantiApp && typeof window.DavantiApp.updateCartUI === 'function') {
-            window.DavantiApp.updateCartUI();
+        try {
+          const res = await AuthEngine.resetPasswordWithCode(email, code, newPass, confirmPass);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Guardar Nueva Contraseña y Entrar</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
           }
-          this.showToast(`🎉 ${res.message}`);
+
+          if (res.success) {
+            // Limpiar campos del formulario de recuperación
+            const codeEl = document.getElementById('recoverCode');
+            const npEl = document.getElementById('recoverNewPassword');
+            const cpEl = document.getElementById('recoverConfirmPassword');
+            if (codeEl) codeEl.value = '';
+            if (npEl) npEl.value = '';
+            if (cpEl) cpEl.value = '';
+
+            this.closeModal();
+            this.updateHeaderAccountBtn();
+            if (window.DavantiApp && typeof window.DavantiApp.updateCartUI === 'function') {
+              window.DavantiApp.updateCartUI();
+            }
+            this.showToast(`🎉 ${res.message}`);
+          } else {
+            this.showError(res.message);
+          }
+        } catch (err) {
+          console.error('Error en handleResetPassword:', err);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Guardar Nueva Contraseña y Entrar</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+          }
+          this.showError('Error al guardar la nueva contraseña: ' + (err?.message || err));
+        }
+      };
+
+      document.getElementById('btnSubmitSendRecovery')?.addEventListener('click', handleSendRecoveryCode);
+      document.getElementById('btnSubmitResetPassword')?.addEventListener('click', handleResetPassword);
+
+      // Si el usuario presiona Enter dentro del formulario, detectar en qué paso está
+      document.getElementById('formRecoverPassword')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const stepPass = document.getElementById('recoverStepNewPassword');
+        if (stepPass && stepPass.style.display !== 'none') {
+          handleResetPassword(e);
         } else {
-          this.showError(res.message);
+          handleSendRecoveryCode(e);
         }
       });
 

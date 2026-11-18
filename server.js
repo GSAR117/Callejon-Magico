@@ -242,7 +242,61 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    // 4. Get list of users (safe)
+    // 4. Reset Password
+    if (action === 'reset-password' && req.method === 'POST') {
+      try {
+        const { email, newPassword, fullName, username } = await parseBody(req);
+        if (!email || !newPassword) {
+          return sendJson(res, 400, { success: false, message: 'Correo y nueva contraseña requeridos.' });
+        }
+        const cleanEmail = String(email).trim().toLowerCase();
+        const users = getUsers();
+        let found = false;
+        let updatedUser = null;
+
+        for (let i = 0; i < users.length; i++) {
+          if (users[i].email && users[i].email.toLowerCase() === cleanEmail) {
+            users[i].password = newPassword;
+            users[i]._updatedAt = new Date().toISOString();
+            updatedUser = users[i];
+            found = true;
+          }
+        }
+
+        if (!found) {
+          updatedUser = {
+            id: 'usr_' + Date.now().toString(36),
+            fullName: fullName || cleanEmail.split('@')[0],
+            email: cleanEmail,
+            username: username || cleanEmail.split('@')[0],
+            password: newPassword,
+            tier: 'Privé Member',
+            createdAt: new Date().toISOString(),
+            _updatedAt: new Date().toISOString()
+          };
+          users.push(updatedUser);
+        }
+
+        saveUsers(users);
+        return sendJson(res, 200, {
+          success: true,
+          message: 'Contraseña actualizada en el servidor.',
+          user: {
+            id: updatedUser.id,
+            fullName: updatedUser.fullName,
+            email: updatedUser.email,
+            username: updatedUser.username,
+            tier: updatedUser.tier || 'Privé Member',
+            createdAt: updatedUser.createdAt
+          }
+        });
+      } catch (err) {
+        console.error('Reset password error:', err);
+        return sendJson(res, 500, { success: false, message: 'Error interno al restablecer contraseña.' });
+      }
+    }
+
+    // 5. Get list of users (safe)
     if (action === 'users' && req.method === 'GET') {
       const users = getUsers().map(u => ({
         id: u.id,
