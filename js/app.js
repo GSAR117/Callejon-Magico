@@ -2655,6 +2655,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const netSubtotal = Math.round((totalAmount / 1.16) * 100) / 100;
         const iva = Math.round((totalAmount - netSubtotal) * 100) / 100;
+        const orderNum = 'CLM-' + Math.floor(100000 + Math.random() * 900000);
+        const purchasedItemsSummary = State.cart.map(i => `${i.name}${Number(i.quantity) > 1 ? ' x' + i.quantity : ''}`).join(', ') || 'Artículos departamentales';
+        let updatedCardBalanceAfterCharge = null;
 
         if (methodVal === 'card') {
           const ccNumberInput = document.getElementById('ccCardNumber');
@@ -2810,13 +2813,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Procesar cargo EXCLUSIVAMENTE por la parte a crédito
             let chargeResult = null;
             if (window.CallejonCard && typeof window.CallejonCard.charge === 'function') {
-              chargeResult = window.CallejonCard.charge(creditAmount, `Pago Mixto (Crédito) en Callejón Mágico`, splitMsi);
+              chargeResult = window.CallejonCard.charge(creditAmount, `Pago Mixto #${orderNum}: ${purchasedItemsSummary}`, splitMsi, orderNum);
               if (!chargeResult || !chargeResult.success) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 showToast(chargeResult?.message || '⚠️ No se pudo procesar la parte a crédito con tu Tarjeta Callejón Mágico.');
                 return;
               }
+              updatedCardBalanceAfterCharge = chargeResult.newBalance;
             }
 
             const credPoints = Math.round(creditAmount * 0.05);
@@ -2855,20 +2859,20 @@ document.addEventListener('DOMContentLoaded', () => {
           const selectedMsi = lastCharge.msi || 18;
           let chargeResult = null;
           if (window.CallejonCard && typeof window.CallejonCard.charge === 'function') {
-            chargeResult = window.CallejonCard.charge(totalAmount, 'Compra departamental financiada Callejón Mágico', selectedMsi);
+            chargeResult = window.CallejonCard.charge(totalAmount, `Compra #${orderNum}: ${purchasedItemsSummary}`, selectedMsi, orderNum);
             if (!chargeResult || !chargeResult.success) {
               e.preventDefault();
               e.stopImmediatePropagation();
               showToast(chargeResult?.message || '⚠️ No se pudo procesar el cargo con tu Tarjeta Callejón Mágico.');
               return;
             }
+            updatedCardBalanceAfterCharge = chargeResult.newBalance;
           }
 
           paymentLabel = `Tarjeta Departamental Callejón Mágico (${selectedMsi} MSI)`;
         }
 
         e.preventDefault();
-        const orderNum = 'CLM-' + Math.floor(100000 + Math.random() * 900000);
 
         // Read charge details if handled by CallejonCard
         const earnedPoints = lastCharge.pointsEarned || Math.max(25, Math.round(totalAmount * 0.05));
@@ -2981,7 +2985,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div style="color: #0b1b3d;">💳 <strong>Parte a Crédito:</strong> $${(lastCharge.creditAmount || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN con tu Tarjeta Callejón Mágico ${lastCharge.creditMsi > 1 ? `(${lastCharge.creditMsi} MSI de $${((lastCharge.creditAmount || 0) / lastCharge.creditMsi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes)` : '(1 solo pago de contado)'}.</div>
                 </div>
               ` : ''}
-              ${(methodVal === 'callejon' && lastCharge.msi > 1 && !lastCharge.isSplitPayment) ? `<p style="margin-bottom: 0;">🎉 <strong>Financiamiento:</strong> ${lastCharge.msi} mensualidades sin intereses de $${(totalAmount / lastCharge.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })} con 10% OFF aplicado a tu Tarjeta Callejón Mágico.</p>` : ''}
+              ${(methodVal === 'callejon' && lastCharge.msi > 1 && !lastCharge.isSplitPayment) ? `<p style="margin-bottom: 0.4rem;">🎉 <strong>Financiamiento:</strong> ${lastCharge.msi} mensualidades sin intereses de $${(totalAmount / lastCharge.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })} con 10% OFF aplicado a tu Tarjeta Callejón Mágico.</p>` : ''}
+              ${(typeof updatedCardBalanceAfterCharge === 'number') ? `<p style="margin-bottom: 0; color: #059669; font-weight: 700;">💳 <strong>Nuevo saldo disponible en tu Tarjeta Callejón Mágico:</strong> $${updatedCardBalanceAfterCharge.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</p>` : ''}
               ${(methodVal === 'cash' && !lastCharge.isSplitPayment) ? `<p style="margin-bottom: 0;">💵 <strong>Modalidad de pago:</strong> Liquidado al 100% de contado. Tu crédito y saldo de Tarjeta Callejón Mágico no fueron afectados.</p>` : ''}
             </div>
 

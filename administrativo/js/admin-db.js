@@ -51,9 +51,113 @@
 
         const mappedUsers = users.map((user, idx) => {
           const emailKey = (user.email || '').trim().toLowerCase();
-          let card = allCards[emailKey] || allCards[user.id] || null;
-          const userOrders = allOrders.filter(o => (o.userEmail || '').trim().toLowerCase() === emailKey || o.userId === user.id);
+          const sanitizedEmailKey = emailKey ? emailKey.replace(/[.#$/\[\]]/g, '_') : '';
+          const idKey = (user.id || '').trim().toLowerCase();
+          const candidateKeys = Array.from(new Set([emailKey, sanitizedEmailKey, idKey].filter(Boolean)));
+
+          let card = null;
+          const mergedTxMap = new Map();
+          for (const k of candidateKeys) {
+            const c = allCards[k];
+            if (!c) continue;
+            if (Array.isArray(c.transactions)) {
+              for (const tx of c.transactions) {
+                if (!tx) continue;
+                const txKey = tx.orderNum || tx.id || `${tx.concept}_${tx.amount}_${tx.date}`;
+                if (!mergedTxMap.has(txKey)) mergedTxMap.set(txKey, tx);
+              }
+            }
+            if (!card) {
+              card = { ...c };
+            } else {
+              const cTime = c._updatedAt ? new Date(c._updatedAt).getTime() : 0;
+              const uTime = card._updatedAt ? new Date(card._updatedAt).getTime() : 0;
+              if (cTime > uTime || (cTime === uTime && Number(c.balance) < Number(card.balance))) {
+                card = { ...card, ...c };
+              }
+            }
+          }
+
+          if (card && mergedTxMap.size > 0) {
+            card.transactions = Array.from(mergedTxMap.values());
+          }
+
+          const userOrders = allOrders.filter(o => {
+            if (!o) return false;
+            const oEmail = (o.userEmail || o.recipient?.email || '').trim().toLowerCase();
+            const oId = (o.userId || '').trim().toLowerCase();
+            return (emailKey && oEmail === emailKey) || (idKey && oId === idKey);
+          });
           const totalSpent = userOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+
+          // Conciliar pedidos pagados con Tarjeta Callejón Mágico o Pago Mixto
+          const userCreditOrders = userOrders.filter(o => {
+            if (o.status === 'cancelled') return false;
+            const pm = (o.paymentMethod || '').toLowerCase();
+            const isSplit = !!o.isSplitPayment && Number(o.creditAmount) > 0;
+            const isCallejon = pm.includes('callejón') || pm.includes('callejon') || pm.includes('departamental') || pm.includes('tienda') || (!o.isSplitPayment && Number(o.creditAmount) > 0);
+            return isSplit || isCallejon;
+          });
+
+          if (!card && userCreditOrders.length > 0) {
+            card = {
+              cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
+              tier: 'ORO DEPARTAMENTAL',
+              creditLimit: 60000,
+              balance: 60000,
+              points: 500,
+              statementDay: 15,
+              isActive: true,
+              transactions: []
+            };
+            cardsNeedSave = true;
+          }
+
+          if (card) {
+            if (!Array.isArray(card.transactions)) card.transactions = [];
+            for (const order of userCreditOrders) {
+              const orderNum = String(order.orderNum || '').trim();
+              if (!orderNum) continue;
+              const creditAmt = order.isSplitPayment
+                ? Math.round((Number(order.creditAmount) || 0) * 100) / 100
+                : Math.round((Number(order.creditAmount) > 0 ? Number(order.creditAmount) : (Number(order.total) || 0)) * 100) / 100;
+              if (creditAmt <= 0) continue;
+
+              const itemNames = Array.isArray(order.items) && order.items.length > 0
+                ? order.items.map(i => `${i.name}${Number(i.quantity) > 1 ? ' x' + i.quantity : ''}`).join(', ')
+                : 'Artículos departamentales';
+              const richConcept = order.isSplitPayment
+                ? `Pago Mixto #${orderNum}: ${itemNames}`
+                : `Compra #${orderNum}: ${itemNames}`;
+
+              let existingTx = card.transactions.find(tx =>
+                tx && (tx.orderNum === orderNum || String(tx.concept || '').includes(orderNum))
+              );
+              if (!existingTx) {
+                existingTx = card.transactions.find(tx =>
+                  tx && !tx.orderNum && Math.abs((Number(tx.amount) || 0) - creditAmt) < 0.5 &&
+                  (String(tx.concept || '').includes('Compra departamental') || String(tx.concept || '').includes('Pago Mixto'))
+                );
+                if (existingTx) {
+                  existingTx.orderNum = orderNum;
+                  existingTx.concept = richConcept;
+                  cardsNeedSave = true;
+                }
+              }
+              if (!existingTx) {
+                card.transactions.unshift({
+                  id: 'tx-ord-' + orderNum,
+                  orderNum: orderNum,
+                  concept: richConcept,
+                  amount: creditAmt,
+                  pointsEarned: Number(order.pointsEarned) || Math.round(creditAmt * 0.05),
+                  date: (order.createdAt || new Date().toISOString()).split('T')[0],
+                  msi: Number(order.creditMsi || order.msi) || 18
+                });
+                cardsNeedSave = true;
+              }
+            }
+          }
 
           const creditLimit = card ? (Number(card.creditLimit) || 60000) : 60000;
           let balance = creditLimit;
@@ -64,8 +168,33 @@
             balance = Math.max(0, creditLimit - Number(card.debt));
           }
 
-          // Corrección para usuario demo o cuentas sin pedidos: su crédito disponible es el 100% de la línea ($60,000)
-          if ((!userOrders || userOrders.length === 0) && (emailKey === 'carlos@callejonmagico.com' || user.id === 'usr_demo_1' || balance === 0)) {
+          // Recalcular saldo con base en transacciones reales de compras y abonos si existen cargos
+          if (card && Array.isArray(card.transactions)) {
+            let totalCharges = 0;
+            let totalPayments = 0;
+            for (const tx of card.transactions) {
+              if (!tx) continue;
+              const txId = String(tx.id || '');
+              if ((txId === 'tx-101' || txId === 'tx-102') && emailKey !== 'carlos@callejonmagico.com') continue;
+              const amt = Number(tx.amount) || 0;
+              if (txId.startsWith('tx-pay-') || tx.isPayment) {
+                totalPayments += Math.abs(amt);
+              } else if (txId.startsWith('tx-adm-')) {
+                if (amt > 0) totalPayments += amt;
+                else if (amt < 0) totalCharges += Math.abs(amt);
+              } else if (amt > 0) {
+                totalCharges += amt;
+              } else if (amt < 0) {
+                totalPayments += Math.abs(amt);
+              }
+            }
+            if (totalCharges > 0 || userCreditOrders.length > 0) {
+              balance = Math.max(0, Math.min(creditLimit, Math.round((creditLimit - totalCharges + totalPayments) * 100) / 100));
+            }
+          }
+
+          // Corrección para usuario demo o cuentas sin pedidos a crédito
+          if ((!userCreditOrders || userCreditOrders.length === 0) && (emailKey === 'carlos@callejonmagico.com' || user.id === 'usr_demo_1')) {
             balance = creditLimit;
           }
 
@@ -77,16 +206,24 @@
             balance = 0;
           }
 
-          const debt = Math.max(0, creditLimit - balance);
+          const debt = Math.max(0, Math.round((creditLimit - balance) * 100) / 100);
           const daysOverdue = debt > 0 ? (card && typeof card.daysOverdue === 'number' ? Math.max(0, parseInt(card.daysOverdue, 10) || 0) : 0) : 0;
 
-          // Si la tarjeta guardada tenía valores inconsistentes (por ejemplo saldo mayor a la línea), normalizarla
-          if (card && (card.balance !== balance || card.debt !== debt || (debt === 0 && card.daysOverdue !== 0))) {
-            card.balance = balance;
-            card.debt = debt;
-            if (debt === 0) card.daysOverdue = 0;
-            allCards[emailKey] = card;
-            cardsNeedSave = true;
+          // Si la tarjeta guardada tenía valores inconsistentes, normalizarla en todas las claves del usuario
+          if (card) {
+            if (card.balance !== balance || card.debt !== debt || (debt === 0 && card.daysOverdue !== 0)) {
+              card.balance = balance;
+              card.debt = debt;
+              if (debt === 0) card.daysOverdue = 0;
+              card._updatedAt = new Date().toISOString();
+              cardsNeedSave = true;
+            }
+            for (const k of candidateKeys) {
+              if (!allCards[k] || allCards[k].balance !== card.balance || (allCards[k].transactions || []).length !== (card.transactions || []).length) {
+                allCards[k] = card;
+                cardsNeedSave = true;
+              }
+            }
           }
 
           let creditStatus = 'al-corriente';
