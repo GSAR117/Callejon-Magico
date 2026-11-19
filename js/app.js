@@ -1539,7 +1539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sizesStr = Array.isArray(product.sizes) ? product.sizes.join(' ') : '';
 
     const searchableText = normalizeText(
-      `${product.name || ''} ${product.brand || ''} ${product.department || ''} ${product.category || ''} ${product.subcategory || ''} ${product.description || ''} ${product.sku || ''} ${featuresStr} ${colorsStr} ${sizesStr}`
+      `${product.name || ''} ${product.brand || ''} ${product.department || ''} ${product.category || ''} ${product.subcategory || ''} ${product.description || ''} ${product.sku || ''} ${product.barcode || ''} ${featuresStr} ${colorsStr} ${sizesStr}`
     );
 
     return queryTokens.every(token => {
@@ -1573,8 +1573,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const normName = normalizeText(product.name);
     const normBrand = normalizeText(product.brand);
     const normDept = normalizeText(product.department);
+    const normBarcode = normalizeText(product.barcode || '');
 
     let score = 0;
+    if (normBarcode && (normBarcode === normQ || normBarcode.includes(normQ))) score += 250;
     if (normName.startsWith(normQ)) score += 100;
     else if (normName.includes(normQ)) score += 50;
 
@@ -1921,6 +1923,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="search-result-meta">
                 <span class="search-badge-dept">${p.department || 'Tienda'}</span>
                 ${p.brand ? `<span>· <strong>${p.brand}</strong></span>` : ''}
+                ${p.barcode ? `<span style="font-family: monospace; color: #c58f38; font-weight: 800;">· EAN: ${highlightQuery(p.barcode, rawVal)}</span>` : ''}
               </div>
             </div>
             <div class="search-result-price-box">
