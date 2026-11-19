@@ -132,6 +132,7 @@
     // Actualizar títulos
     const titles = {
       dashboard: { title: 'Dashboard General', subtitle: 'Resumen ejecutivo de ventas, clientes e inventario en tiempo real' },
+      pos: { title: '║▌║ Caja Física & Lector de Código de Barras (POS)', subtitle: 'Escaneo múltiple de productos de diferente tipo, cobro en mostrador y emisión de ticket oficial' },
       clients: { title: 'Gestión de Clientes & Saldos', subtitle: 'Cuentas registradas, saldos de Tarjeta Callejón Mágico y abonos' },
       orders: { title: 'Ventas & Pedidos', subtitle: 'Historial de compras, estados de envío y notas de remisión' },
       inventory: { title: 'Inventario & Stock Restante', subtitle: 'Control de existencias disponibles y edición de productos' },
@@ -142,6 +143,17 @@
     const info = titles[viewId] || titles.dashboard;
     if (DOM.pageTitle) DOM.pageTitle.textContent = info.title;
     if (DOM.pageSubtitle) DOM.pageSubtitle.textContent = info.subtitle;
+
+    if (viewId === 'pos') {
+      if (window.CallejonBarcode && window.CallejonBarcode.AdminPos) {
+        window.CallejonBarcode.AdminPos.populateClientsSelector();
+        window.CallejonBarcode.AdminPos.renderPosView();
+        window.CallejonBarcode.AdminPos.renderCatalogHelper();
+      }
+      setTimeout(() => {
+        document.getElementById('adminPosBarcodeInput')?.focus();
+      }, 100);
+    }
   }
 
   // =========================================================================
@@ -476,8 +488,13 @@
     const deptFilter = (DOM.filterStockDept ? DOM.filterStockDept.value : 'all');
     const statusFilter = (DOM.filterStockStatus ? DOM.filterStockStatus.value : 'all');
 
+    if (window.CallejonBarcode && typeof window.CallejonBarcode.ensureAllProductsHaveBarcodes === 'function') {
+      window.CallejonBarcode.ensureAllProductsHaveBarcodes();
+    }
+
     const filtered = products.filter(p => {
-      const matchSearch = (p.name || '').toLowerCase().includes(query) || (p.sku || '').toLowerCase().includes(query);
+      const barcodeVal = p.barcode || (window.CallejonBarcode && window.CallejonBarcode.generateProductEan13 ? window.CallejonBarcode.generateProductEan13(p) : '');
+      const matchSearch = (p.name || '').toLowerCase().includes(query) || (p.sku || '').toLowerCase().includes(query) || String(barcodeVal).includes(query);
       let matchFolder = true;
       if (folderFilter !== 'all') {
         matchFolder = p.folder === folderFilter;
@@ -511,6 +528,7 @@
       }
 
       const folderClass = p.folder === 'Productos 4' ? 'folder-p4' : (p.folder === 'Productos 3' ? 'folder-p3' : (p.folder === 'Productos 2' ? 'folder-p2' : 'folder-p1'));
+      const barcodeVal = p.barcode || (window.CallejonBarcode && window.CallejonBarcode.generateProductEan13 ? window.CallejonBarcode.generateProductEan13(p) : '');
 
       return `
         <tr>
@@ -519,7 +537,7 @@
               <img src="${p.image}" alt="" class="prod-thumb-img" onerror="this.src='../assets/images/prod_shoes.jpg'" />
               <div>
                 <strong style="color: #ffffff; font-size: 0.88rem; display: block; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(p.name)}</strong>
-                <span style="font-size: 0.72rem; color: var(--admin-text-muted);">SKU: ${p.sku || 'N/A'}</span>
+                <span style="font-size: 0.72rem; color: var(--admin-text-muted);">SKU: ${p.sku || 'N/A'} ${barcodeVal ? `• <strong style="color: var(--admin-gold); font-family: monospace;">EAN: ${barcodeVal}</strong>` : ''}</span>
               </div>
             </div>
           </td>
@@ -540,6 +558,7 @@
           </td>
           <td style="text-align: right;">
             <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+              <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm btn-barcode-prod" data-id="${p.id}" title="Ver / Imprimir etiqueta de código de barras EAN-13">║▌║ Código</button>
               <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm btn-edit-prod" data-id="${p.id}" title="Editar información del producto">✏️ Editar</button>
               <button type="button" class="btn-admin btn-admin-danger btn-admin-sm btn-delete-prod" data-id="${p.id}" title="Dar de baja producto">🗑️</button>
             </div>
@@ -547,6 +566,15 @@
         </tr>
       `;
     }).join('');
+
+    // Listener de ver código de barras desde inventario
+    DOM.tableStockBody.querySelectorAll('.btn-barcode-prod').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.CallejonBarcode && typeof window.CallejonBarcode.openProductBarcodeModal === 'function') {
+          window.CallejonBarcode.openProductBarcodeModal(btn.dataset.id);
+        }
+      });
+    });
 
     // Listeners de ajuste rápido de stock
     DOM.tableStockBody.querySelectorAll('.btn-stock-dec').forEach(btn => {

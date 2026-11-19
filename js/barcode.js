@@ -1,16 +1,18 @@
 /**
  * ==========================================================================
  * CALLEJÓN MÁGICO — SISTEMA OFICIAL DE CÓDIGOS DE BARRAS (EAN-13) Y
- * SIMULADOR DE COMPRA FÍSICA CON LECTOR MÓVIL
+ * MÓDULO ADMINISTRATIVO DE CAJA FÍSICA / PUNTO DE VENTA (POS)
  * ==========================================================================
- * - Genera códigos de barras reales estándar ISO/IEC 15420 (EAN-13 GS1 México 750)
- *   100% escaneables por cualquier aplicación móvil lectora de códigos de barras.
- * - Asigna un código único y determinista de 13 dígitos a cada producto.
- * - Muestra botón "Código de Barras" en cada tarjeta de producto y dentro del
- *   modal de vista rápida / detalle en todas las páginas de la tienda.
- * - Integra el buscador principal y el módulo "Caja Física / Lector de Código"
- *   para escribir o pegar el código escaneado con el celular y simular la compra
- *   física hasta el pago y generación del ticket oficial.
+ * - En la Tienda del Cliente:
+ *   Genera y muestra la etiqueta de código de barras real estándar EAN-13
+ *   (GS1 México 750) en cada producto (botón en tarjeta y en vista rápida),
+ *   100% escaneable desde la pantalla con cualquier app móvil lectora.
+ * - En el Panel de Administrador (administracion.html):
+ *   Habilita la función «║▌║ Caja / Código» (Punto de Venta Físico) que
+ *   permite escanear e ingresar múltiples productos de diferente tipo y
+ *   departamento en una misma compra, gestionar cantidades, cobrar en
+ *   efectivo / crédito / pago mixto / tarjeta, descontar stock en tiempo
+ *   real y generar el ticket oficial imprimible / PDF / WhatsApp.
  * ==========================================================================
  */
 
@@ -57,7 +59,6 @@
     '1110100'  // 9
   ];
 
-  // Patrón de paridad de los 6 dígitos izquierdos según el primer dígito (para México '7' es LGLGLG)
   const EAN13_PARITY_TABLE = [
     'LLLLLL', // 0
     'LLGLGG', // 1
@@ -71,7 +72,6 @@
     'LGGLGL'  // 9
   ];
 
-  // Prefijos departamentales de 3 dígitos (después de 750)
   const DEPT_CODE_MAP = {
     'fashion': '101',
     'moda': '101',
@@ -93,6 +93,10 @@
     'videojuegos': '107'
   };
 
+  function isAdminPanelPage() {
+    return !!document.getElementById('adminLayout') || window.location.pathname.toLowerCase().includes('administracion');
+  }
+
   /**
    * Calcula el dígito verificador oficial GS1 (Módulo 10) para los primeros 12 dígitos de un EAN-13
    */
@@ -101,7 +105,6 @@
     let sum = 0;
     for (let i = 0; i < 12; i++) {
       const digit = parseInt(clean.charAt(i), 10) || 0;
-      // Posiciones impares (índice par 0,2,4...) multiplican por 1; pares (índice impar 1,3,5...) por 3
       sum += (i % 2 === 0) ? digit : digit * 3;
     }
     return String((10 - (sum % 10)) % 10);
@@ -126,7 +129,6 @@
       }
     }
 
-    // Extraer número del ID (ej. "fashion-12" -> 12, "p4-090" -> 4090) o usar hash determinista
     let itemNum = 0;
     const pMatch = idStr.match(/p(\d+)-(\d+)/i);
     const numMatch = idStr.match(/(\d+)/);
@@ -146,32 +148,10 @@
       itemNum = (Math.abs(hash) % 899999) + 100000;
     }
 
-    // Combinar con indexHint si hubiera colisión
     const sixDigits = String(itemNum % 1000000).padStart(6, '0');
     const twelve = `750${deptPrefix}${sixDigits}`;
     const check = calculateEan13CheckDigit(twelve);
     return `${twelve}${check}`;
-  }
-
-  /**
-   * Asegura que todos los productos del catálogo tengan asignado su código EAN-13 único
-   */
-  function ensureAllProductsHaveBarcodes() {
-    const allProducts = getAllCatalogProducts();
-    const usedBarcodes = new Set();
-
-    allProducts.forEach((prod, idx) => {
-      if (!prod) return;
-      let candidate = generateProductEan13(prod, idx + 1);
-      if (usedBarcodes.has(candidate)) {
-        const altTwelve = `750199${String(idx + 1).padStart(6, '0')}`;
-        candidate = altTwelve + calculateEan13CheckDigit(altTwelve);
-      }
-      usedBarcodes.add(candidate);
-      prod.barcode = candidate;
-    });
-
-    return allProducts;
   }
 
   /**
@@ -199,6 +179,48 @@
   }
 
   /**
+   * Asegura que todos los productos del catálogo tengan asignado su código EAN-13 único
+   */
+  function ensureAllProductsHaveBarcodes() {
+    const allProducts = getAllCatalogProducts();
+    const usedBarcodes = new Set();
+
+    allProducts.forEach((prod, idx) => {
+      if (!prod) return;
+      let candidate = generateProductEan13(prod, idx + 1);
+      if (usedBarcodes.has(candidate)) {
+        const altTwelve = `750199${String(idx + 1).padStart(6, '0')}`;
+        candidate = altTwelve + calculateEan13CheckDigit(altTwelve);
+      }
+      usedBarcodes.add(candidate);
+      prod.barcode = candidate;
+    });
+
+    return allProducts;
+  }
+
+  /**
+   * Obtiene el stock actual de un producto
+   */
+  function getProductAvailableStock(productId) {
+    if (window.AdminDB && typeof window.AdminDB.getProductStock === 'function') {
+      return window.AdminDB.getProductStock(productId);
+    }
+    try {
+      const raw = localStorage.getItem('callejon_stock_db');
+      if (raw) {
+        const map = JSON.parse(raw);
+        if (map && typeof map[productId] !== 'undefined') {
+          return Math.max(0, parseInt(map[productId], 10) || 0);
+        }
+      }
+    } catch (e) {}
+    const prod = findProductById(productId);
+    if (prod && typeof prod.stock === 'number') return Math.max(0, prod.stock);
+    return 15;
+  }
+
+  /**
    * Genera un SVG de código de barras EAN-13 100% real y escaneable por cualquier lector móvil
    */
   function renderEan13Svg(code13, options = {}) {
@@ -215,7 +237,6 @@
     const leftDigits = clean.slice(1, 7);
     const rightDigits = clean.slice(7, 13);
 
-    // Construir secuencia de 95 módulos con marcadores de barra de guardia ('G') vs barra de datos ('1')
     const modules = [];
 
     // Guardia Izquierda: 101
@@ -253,7 +274,7 @@
     modules.push({ bit: 1, guard: true }, { bit: 0, guard: true }, { bit: 1, guard: true });
 
     const moduleWidth = options.moduleWidth || 3;
-    const quietZoneModules = 12; // Zona silenciosa amplia para lectura instantánea con cámara móvil
+    const quietZoneModules = 12;
     const totalModules = quietZoneModules * 2 + 95;
     const svgWidth = totalModules * moduleWidth;
     const barTop = options.barTop || 14;
@@ -262,7 +283,6 @@
     const svgHeight = barTop + guardBarHeight + 28;
 
     let rectsHtml = '';
-    // Agrupar módulos negros contiguos del mismo tipo para trazos ultra nítidos sin líneas de unión
     let i = 0;
     while (i < modules.length) {
       if (modules[i].bit === 1) {
@@ -285,7 +305,6 @@
       }
     }
 
-    // Posiciones para los números legibles bajo las barras (formato EAN-13 oficial: 7  501010  000018)
     const textY = barTop + dataBarHeight + 20;
     const firstDigitX = (quietZoneModules - 7) * moduleWidth;
     const leftGroupCenterX = (quietZoneModules + 3 + 21) * moduleWidth;
@@ -325,7 +344,7 @@
   }
 
   /**
-   * Busca un producto por su código de barras EAN-13 (13 dígitos), por los 12 dígitos sin verificador, por SKU o por ID
+   * Busca un producto por su código de barras EAN-13 (13 dígitos), 12 dígitos, SKU o ID
    */
   function findProductByBarcodeOrCode(rawCode) {
     if (!rawCode) return null;
@@ -335,23 +354,19 @@
     const digitsOnly = trimmed.replace(/\D/g, '');
     const upper = trimmed.toUpperCase();
 
-    // 1. Coincidencia exacta de 13 dígitos EAN-13
     if (digitsOnly.length === 13) {
       const exact = allProducts.find(p => p && String(p.barcode) === digitsOnly);
       if (exact) return exact;
-      // Si el lector omitió o varió el último dígito verificador, comparar los primeros 12 dígitos
       const prefix12 = digitsOnly.slice(0, 12);
       const by12 = allProducts.find(p => p && String(p.barcode || '').slice(0, 12) === prefix12);
       if (by12) return by12;
     }
 
-    // 2. Si el usuario ingresó los 12 dígitos sin el dígito verificador
     if (digitsOnly.length === 12 && digitsOnly.startsWith('750')) {
       const by12 = allProducts.find(p => p && String(p.barcode || '').slice(0, 12) === digitsOnly);
       if (by12) return by12;
     }
 
-    // 3. Coincidencia por últimos dígitos significativos (ej. últimos 6-8 dígitos) o SKU o ID
     const bySkuOrId = allProducts.find(p =>
       p && (
         (p.sku && String(p.sku).toUpperCase() === upper) ||
@@ -364,9 +379,6 @@
     return null;
   }
 
-  /**
-   * Busca un producto por su ID
-   */
   function findProductById(productId) {
     if (!productId) return null;
     ensureAllProductsHaveBarcodes();
@@ -375,9 +387,9 @@
   }
 
   // =========================================================================
-  // ESTILOS Y MODALES DE ETIQUETA DE CÓDIGO DE BARRAS Y CAJA FÍSICA (POS)
+  // ESTILOS Y MODAL DE ETIQUETA DE CÓDIGO DE BARRAS (PARA ESCANEO MÓVIL)
   // =========================================================================
-  function injectStylesAndModals() {
+  function injectStylesAndTagModal() {
     if (document.getElementById('cmBarcodeSystemStyles')) return;
 
     const style = document.createElement('style');
@@ -417,29 +429,6 @@
       }
       .btn-product-barcode-tag:hover .barcode-mini-code {
         color: #dfb743;
-      }
-
-      /* Botón en el Header para Abrir Caja Física / Lector de Código */
-      .btn-header-pos-scanner {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(135deg, #0b1b3d 0%, #162a56 100%);
-        color: #ffffff;
-        border: 1.5px solid #c58f38;
-        border-radius: 999px;
-        padding: 7px 13px;
-        font-size: 0.78rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-        box-shadow: 0 2px 8px rgba(11, 27, 61, 0.2);
-      }
-      .btn-header-pos-scanner:hover {
-        background: linear-gradient(135deg, #c58f38 0%, #b07d2b 100%);
-        color: #07142a;
-        transform: translateY(-1px);
       }
 
       /* Bloque de Código de Barras dentro de Vista Rápida / Detalle de Producto */
@@ -485,16 +474,8 @@
         color: #ffffff;
         border-color: #0b1b3d;
       }
-      .btn-qv-barcode-action.gold {
-        background: #c58f38;
-        color: #ffffff;
-        border-color: #c58f38;
-      }
-      .btn-qv-barcode-action.gold:hover {
-        background: #a9782b;
-      }
 
-      /* Overlay de Modales de Código de Barras y Caja Física */
+      /* Overlay de Modal de Etiqueta de Código de Barras */
       .cm-barcode-overlay {
         position: fixed;
         inset: 0;
@@ -520,9 +501,6 @@
         border: 2px solid #c58f38;
         position: relative;
         animation: cmBarcodePop 0.22s ease-out;
-      }
-      .cm-barcode-modal-card.pos-wide {
-        max-width: 680px;
       }
       @keyframes cmBarcodePop {
         from { transform: scale(0.94); opacity: 0; }
@@ -606,11 +584,6 @@
         margin: 0 0 4px;
         line-height: 1.25;
       }
-      .cm-tag-product-sku {
-        font-size: 0.74rem;
-        color: #64748b;
-        font-family: monospace;
-      }
       .cm-tag-product-price {
         font-size: 1.25rem;
         font-weight: 900;
@@ -623,69 +596,10 @@
         border: 2px solid #e2e8f0;
         border-radius: 10px;
         text-align: center;
-        transition: all 0.2s ease;
-      }
-      .cm-barcode-scan-stage.zoomed svg {
-        max-width: 100% !important;
-        transform: scale(1.06);
-      }
-
-      /* Caja Física / Lector POS */
-      .cm-pos-scanner-input-wrap {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 14px;
-      }
-      .cm-pos-scanner-input {
-        flex: 1;
-        height: 48px;
-        padding: 0 14px;
-        border: 2px solid #0b1b3d;
-        border-radius: 10px;
-        font-size: 1.05rem;
-        font-weight: 800;
-        font-family: 'Courier New', Courier, monospace;
-        letter-spacing: 0.12em;
-        color: #0b1b3d;
-        background: #f8fafc;
-      }
-      .cm-pos-scanner-input:focus {
-        outline: none;
-        border-color: #c58f38;
-        background: #ffffff;
-        box-shadow: 0 0 0 4px rgba(197, 143, 56, 0.2);
-      }
-      .cm-pos-btn-scan {
-        background: #0b1b3d;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        padding: 0 18px;
-        font-weight: 800;
-        font-size: 0.86rem;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .cm-pos-btn-scan:hover {
-        background: #c58f38;
-        color: #07142a;
-      }
-
-      @media (max-width: 640px) {
-        .btn-header-pos-scanner span.hide-sm {
-          display: none;
-        }
-        .cm-pos-scanner-input-wrap {
-          flex-direction: column;
-        }
-        .cm-pos-btn-scan {
-          height: 44px;
-        }
       }
     `;
     document.head.appendChild(style);
 
-    // 1. Modal de Etiqueta Individual de Código de Barras
     const tagModalHtml = `
       <div class="cm-barcode-overlay" id="cmBarcodeTagModal" role="dialog" aria-modal="true" aria-label="Etiqueta de Código de Barras">
         <div class="cm-barcode-modal-card">
@@ -701,87 +615,8 @@
       </div>
     `;
 
-    // 2. Modal de Simulador de Caja Física / Lector de Código de Barras
-    const posModalHtml = `
-      <div class="cm-barcode-overlay" id="cmPosScannerModal" role="dialog" aria-modal="true" aria-label="Simulador de Compra Física por Código de Barras">
-        <div class="cm-barcode-modal-card pos-wide">
-          <div class="cm-barcode-modal-header">
-            <div>
-              <h3>🏪 CAJA FÍSICA • COMPRA POR CÓDIGO DE BARRAS</h3>
-              <p>Escanea el código en pantalla con tu celular y escríbelo o pégalo abajo</p>
-            </div>
-            <button type="button" class="cm-barcode-close-btn" id="btnCloseCmPosModal" aria-label="Cerrar">&times;</button>
-          </div>
-          <div class="cm-barcode-modal-body">
-            <!-- Instrucciones rápidas de flujo -->
-            <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.8rem; color: #166534; line-height: 1.45;">
-              <strong>📲 ¿Cómo simular tu compra física?</strong><br>
-              1. Abre el botón <strong>«║▌║ Código de Barras»</strong> en cualquier producto y escanéalo con la app lectora de tu celular.<br>
-              2. Escribe o pega aquí abajo el <strong>código de 13 dígitos</strong> leído por tu celular para pasarlo por caja.
-            </div>
+    document.body.insertAdjacentHTML('beforeend', tagModalHtml);
 
-            <!-- Campo de entrada del código escaneado -->
-            <form id="cmPosScanForm" novalidate>
-              <label for="cmPosBarcodeInput" style="display: block; font-size: 0.78rem; font-weight: 800; color: #0b1b3d; margin-bottom: 6px; text-transform: uppercase;">
-                Código de Barras Escaneado (EAN-13 de 13 dígitos o SKU):
-              </label>
-              <div class="cm-pos-scanner-input-wrap">
-                <input
-                  type="text"
-                  id="cmPosBarcodeInput"
-                  class="cm-pos-scanner-input"
-                  placeholder="Ej: 7501010000018"
-                  maxlength="20"
-                  inputmode="numeric"
-                  autocomplete="off"
-                />
-                <button type="submit" class="cm-pos-btn-scan" id="btnCmPosAddCode">
-                  ➕ Pasar por Caja
-                </button>
-              </div>
-            </form>
-
-            <!-- Retroalimentación del último producto escaneado -->
-            <div id="cmPosLastScannedBox" style="display: none; margin-bottom: 14px;"></div>
-
-            <!-- Lista de artículos en la compra física actual (Sincronizada con el Carrito) -->
-            <div style="border: 1.5px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 14px;">
-              <div style="background: #f8fafc; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; font-weight: 800; color: #0b1b3d;">🧾 ARTÍCULOS ESCANEADOS EN CAJA</span>
-                <span id="cmPosItemCountBadge" style="font-size: 0.75rem; font-weight: 800; background: #0b1b3d; color: #dfb743; padding: 2px 9px; border-radius: 999px;">0 piezas</span>
-              </div>
-              <div id="cmPosCartList" style="max-height: 220px; overflow-y: auto; padding: 10px 14px;"></div>
-              <div style="background: #f8fafc; padding: 12px 14px; border-top: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <div style="font-size: 0.72rem; color: #64748b;">TOTAL DE COMPRA FÍSICA (I.V.A. registrado):</div>
-                  <div id="cmPosTotalAmount" style="font-size: 1.35rem; font-weight: 900; color: #0b1b3d;">$0.00 MXN</div>
-                </div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                  <button type="button" id="btnCmPosProceedCheckout" style="background: linear-gradient(135deg, #c58f38 0%, #b07d2b 100%); color: #ffffff; border: none; border-radius: 10px; padding: 11px 18px; font-weight: 800; font-size: 0.86rem; cursor: pointer; box-shadow: 0 4px 12px rgba(197, 143, 56, 0.3);">
-                    💳 Cobrar y Generar Ticket →
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Catálogo rápido de consulta de códigos por si desea probar o verificar un código -->
-            <details style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px;">
-              <summary style="font-size: 0.8rem; font-weight: 800; color: #0b1b3d; cursor: pointer;">
-                📋 Ver lista rápida de productos y sus códigos de barras (para pruebas)
-              </summary>
-              <div style="margin-top: 10px;">
-                <input type="text" id="cmPosQuickFilterInput" placeholder="Filtrar producto por nombre para ver su código..." style="width: 100%; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; margin-bottom: 8px;" />
-                <div id="cmPosQuickCatalogList" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>
-              </div>
-            </details>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', tagModalHtml + posModalHtml);
-
-    // Eventos de cierre
     document.getElementById('btnCloseCmBarcodeTag')?.addEventListener('click', () => {
       document.getElementById('cmBarcodeTagModal')?.classList.remove('active');
     });
@@ -790,270 +625,13 @@
         e.currentTarget.classList.remove('active');
       }
     });
-
-    document.getElementById('btnCloseCmPosModal')?.addEventListener('click', () => {
-      document.getElementById('cmPosScannerModal')?.classList.remove('active');
-    });
-    document.getElementById('cmPosScannerModal')?.addEventListener('click', (e) => {
-      if (e.target.id === 'cmPosScannerModal') {
-        e.currentTarget.classList.remove('active');
-      }
-    });
-
-    // Evento de escaneo / ingreso de código en Caja Física
-    const scanForm = document.getElementById('cmPosScanForm');
-    const barcodeInput = document.getElementById('cmPosBarcodeInput');
-
-    if (scanForm && barcodeInput) {
-      scanForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const codeVal = barcodeInput.value.trim();
-        if (!codeVal) {
-          barcodeInput.focus();
-          return;
-        }
-        processScannedCodeInPos(codeVal);
-      });
-    }
-
-    // Botón Cobrar y Generar Ticket
-    document.getElementById('btnCmPosProceedCheckout')?.addEventListener('click', () => {
-      const cart = getActiveStoreCart();
-      if (!cart || cart.length === 0) {
-        if (window.DavantiApp && typeof window.DavantiApp.showToast === 'function') {
-          window.DavantiApp.showToast('⚠️ Escanea o agrega al menos un producto por código de barras antes de cobrar.');
-        } else {
-          alert('Escanea o agrega al menos un producto por código de barras antes de cobrar.');
-        }
-        return;
-      }
-      document.getElementById('cmPosScannerModal')?.classList.remove('active');
-      if (window.DavantiApp && typeof window.DavantiApp.openCheckoutModal === 'function') {
-        window.DavantiApp.openCheckoutModal();
-      } else {
-        document.getElementById('btnProceedCheckout')?.click();
-      }
-    });
-
-    // Filtro del catálogo rápido en Caja Física
-    document.getElementById('cmPosQuickFilterInput')?.addEventListener('input', (e) => {
-      renderPosQuickCatalog(e.target.value);
-    });
-  }
-
-  /**
-   * Obtiene el carrito activo de la tienda
-   */
-  function getActiveStoreCart() {
-    try {
-      const raw = localStorage.getItem('davanti_cart') || localStorage.getItem('grande_cart') || '[]';
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  /**
-   * Agrega un producto al carrito de la tienda (usando DavantiApp.addToCart o fallback directo)
-   */
-  function addProductToStoreCart(product, qty = 1) {
-    if (!product) return;
-    const defaultSize = (Array.isArray(product.sizes) && product.sizes.length > 0) ? product.sizes[0] : null;
-    const defaultColor = (Array.isArray(product.colors) && product.colors.length > 0) ? product.colors[0] : null;
-
-    if (window.DavantiApp && typeof window.DavantiApp.addToCart === 'function') {
-      window.DavantiApp.addToCart(product.id, defaultSize, defaultColor, qty);
-    } else {
-      const cart = getActiveStoreCart();
-      const existing = cart.find(i => i.id === product.id);
-      if (existing) {
-        existing.quantity = (existing.quantity || 1) + qty;
-      } else {
-        cart.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          size: defaultSize,
-          color: defaultColor,
-          quantity: qty
-        });
-      }
-      localStorage.setItem('davanti_cart', JSON.stringify(cart));
-      localStorage.setItem('grande_cart', JSON.stringify(cart));
-      if (window.DavantiApp && typeof window.DavantiApp.reloadCart === 'function') {
-        window.DavantiApp.reloadCart(cart);
-      }
-    }
-  }
-
-  /**
-   * Procesa un código de barras ingresado o pegado en el Simulador de Caja Física
-   */
-  function processScannedCodeInPos(rawCode) {
-    const input = document.getElementById('cmPosBarcodeInput');
-    const feedbackBox = document.getElementById('cmPosLastScannedBox');
-    const product = findProductByBarcodeOrCode(rawCode);
-
-    if (!product) {
-      playScannerBeep(false);
-      if (feedbackBox) {
-        feedbackBox.style.display = 'block';
-        feedbackBox.innerHTML = `
-          <div style="background: #fef2f2; border: 1.5px solid #f87171; border-radius: 10px; padding: 10px 14px; color: #991b1b; font-size: 0.82rem; font-weight: 700;">
-            ❌ No se encontró ningún producto con el código <code>${String(rawCode).replace(/</g, '&lt;')}</code>. Verifica los 13 dígitos escaneados.
-          </div>
-        `;
-      }
-      return false;
-    }
-
-    playScannerBeep(true);
-    addProductToStoreCart(product, 1);
-
-    if (input) {
-      input.value = '';
-      input.focus();
-    }
-
-    if (feedbackBox) {
-      feedbackBox.style.display = 'block';
-      feedbackBox.innerHTML = `
-        <div style="background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 12px;">
-          <img src="${product.image}" alt="${product.name}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid #a7f3d0; background: #fff;" />
-          <div style="flex: 1;">
-            <div style="font-size: 0.74rem; font-weight: 800; color: #059669; text-transform: uppercase;">
-              ✅ ¡LECTURA EXITOSA! • EAN-13: ${product.barcode}
-            </div>
-            <div style="font-size: 0.9rem; font-weight: 800; color: #0b1b3d;">${product.name}</div>
-            <div style="font-size: 0.84rem; font-weight: 800; color: #c58f38;">+$${Number(product.price).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN agregado a la cuenta</div>
-          </div>
-        </div>
-      `;
-    }
-
-    renderPosCartList();
-    return true;
-  }
-
-  /**
-   * Renderiza la lista de productos escaneados dentro del modal de Caja Física
-   */
-  function renderPosCartList() {
-    const container = document.getElementById('cmPosCartList');
-    const countBadge = document.getElementById('cmPosItemCountBadge');
-    const totalEl = document.getElementById('cmPosTotalAmount');
-    if (!container) return;
-
-    const cart = getActiveStoreCart();
-    const totalPieces = cart.reduce((sum, i) => sum + (Number(i.quantity) || 1), 0);
-    const totalAmount = cart.reduce((sum, i) => sum + ((Number(i.price) || 0) * (Number(i.quantity) || 1)), 0);
-
-    if (countBadge) countBadge.textContent = `${totalPieces} pieza(s)`;
-    if (totalEl) totalEl.textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
-
-    if (cart.length === 0) {
-      container.innerHTML = `
-        <div style="text-align: center; padding: 18px 10px; color: #64748b; font-size: 0.82rem;">
-          Aún no hay productos pasados por caja. Escanea un código de barras con tu celular e ingrésalo arriba.
-        </div>
-      `;
-      return;
-    }
-
-    container.innerHTML = cart.map((item, idx) => {
-      const prod = findProductById(item.id);
-      const barcodeStr = prod?.barcode || '';
-      const qty = Number(item.quantity) || 1;
-      const lineTotal = (Number(item.price) || 0) * qty;
-      return `
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2e8f0;">
-          <img src="${item.image}" alt="${item.name}" style="width: 38px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" />
-          <div style="flex: 1; min-width: 0;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: #0b1b3d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-            <div style="font-size: 0.72rem; color: #64748b; font-family: monospace;">
-              ${barcodeStr ? `EAN: ${barcodeStr} • ` : ''}${qty} x $${Number(item.price).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-            </div>
-          </div>
-          <div style="font-size: 0.85rem; font-weight: 800; color: #0b1b3d; white-space: nowrap;">
-            $${lineTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-          </div>
-          <button type="button" class="btn-cm-pos-remove" data-index="${idx}" title="Quitar artículo" style="background: #fee2e2; color: #b91c1c; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: 800; cursor: pointer;">&times;</button>
-        </div>
-      `;
-    }).join('');
-
-    container.querySelectorAll('.btn-cm-pos-remove').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = parseInt(btn.getAttribute('data-index'), 10);
-        if (window.DavantiApp && typeof window.DavantiApp.removeCartItem === 'function') {
-          window.DavantiApp.removeCartItem(idx);
-        } else {
-          const current = getActiveStoreCart();
-          current.splice(idx, 1);
-          localStorage.setItem('davanti_cart', JSON.stringify(current));
-          localStorage.setItem('grande_cart', JSON.stringify(current));
-        }
-        renderPosCartList();
-      });
-    });
-  }
-
-  /**
-   * Renderiza la lista rápida de productos y sus códigos de barras dentro del modal POS
-   */
-  function renderPosQuickCatalog(filterQuery = '') {
-    const listEl = document.getElementById('cmPosQuickCatalogList');
-    if (!listEl) return;
-    ensureAllProductsHaveBarcodes();
-    const all = getAllCatalogProducts();
-    const q = String(filterQuery || '').trim().toLowerCase();
-
-    const filtered = q
-      ? all.filter(p =>
-          (p.name && p.name.toLowerCase().includes(q)) ||
-          (p.barcode && p.barcode.includes(q)) ||
-          (p.department && p.department.toLowerCase().includes(q))
-        )
-      : all;
-
-    const subset = filtered.slice(0, 25);
-    listEl.innerHTML = subset.map(p => `
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #ffffff; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.76rem;">
-        <div style="flex: 1; min-width: 0;">
-          <div style="font-weight: 700; color: #0b1b3d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
-          <div style="font-family: monospace; color: #c58f38; font-weight: 800;">Código: ${p.barcode} • $${Number(p.price).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</div>
-        </div>
-        <button type="button" class="btn-cm-quick-view-tag" data-id="${p.id}" style="background: #f1f5f9; color: #0b1b3d; border: 1px solid #cbd5e1; border-radius: 5px; padding: 4px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
-          Ver Código
-        </button>
-        <button type="button" class="btn-cm-quick-use-code" data-code="${p.barcode}" style="background: #0b1b3d; color: #ffffff; border: none; border-radius: 5px; padding: 4px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
-          Pasar
-        </button>
-      </div>
-    `).join('');
-
-    listEl.querySelectorAll('.btn-cm-quick-view-tag').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const pid = btn.getAttribute('data-id');
-        openProductBarcodeModal(pid);
-      });
-    });
-
-    listEl.querySelectorAll('.btn-cm-quick-use-code').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const code = btn.getAttribute('data-code');
-        processScannedCodeInPos(code);
-      });
-    });
   }
 
   /**
    * Abre el modal con la Etiqueta Oficial de Código de Barras EAN-13 lista para escanear con el celular
    */
   function openProductBarcodeModal(productOrId) {
-    injectStylesAndModals();
+    injectStylesAndTagModal();
     ensureAllProductsHaveBarcodes();
 
     const product = (typeof productOrId === 'object' && productOrId !== null)
@@ -1070,6 +648,8 @@
     const bodyEl = document.getElementById('cmBarcodeTagBody');
     const modalEl = document.getElementById('cmBarcodeTagModal');
     if (!bodyEl || !modalEl) return;
+
+    const isAdmin = isAdminPanelPage();
 
     bodyEl.innerHTML = `
       <div class="cm-physical-tag-frame" id="cmPrintableTagArea">
@@ -1110,14 +690,15 @@
         </button>
       </div>
 
-      <button type="button" id="btnCmOpenPosFromTag" style="width: 100%; margin-top: 8px; background: linear-gradient(135deg, #0b1b3d 0%, #162a56 100%); color: #ffffff; border: 1.5px solid #c58f38; border-radius: 10px; padding: 12px 16px; font-size: 0.86rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-        <span>🏪 Abrir Caja Física para Ingresar Código Escaneado</span>
-      </button>
+      ${isAdmin ? `
+        <button type="button" id="btnCmAddFromTagToAdminPos" style="width: 100%; margin-top: 8px; background: linear-gradient(135deg, #c58f38 0%, #b07d2b 100%); color: #ffffff; border: none; border-radius: 10px; padding: 12px 16px; font-size: 0.86rem; font-weight: 800; cursor: pointer;">
+          🏪 Pasar este Artículo a Caja Física (Admin POS)
+        </button>
+      ` : ''}
     `;
 
     modalEl.classList.add('active');
 
-    // Copiar código al portapapeles
     document.getElementById('btnCmCopyBarcode')?.addEventListener('click', (e) => {
       navigator.clipboard?.writeText(barcode);
       const btn = e.currentTarget;
@@ -1127,18 +708,21 @@
       }, 2200);
       if (window.DavantiApp && typeof window.DavantiApp.showToast === 'function') {
         window.DavantiApp.showToast(`📋 Código de barras ${barcode} copiado al portapapeles`);
+      } else if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+        window.AdminApp.showToast(`📋 Código de barras ${barcode} copiado`, 'success');
       }
     });
 
-    // Imprimir etiqueta individual
     document.getElementById('btnCmPrintTag')?.addEventListener('click', () => {
       printProductBarcodeLabel(product);
     });
 
-    // Abrir Caja Física
-    document.getElementById('btnCmOpenPosFromTag')?.addEventListener('click', () => {
+    document.getElementById('btnCmAddFromTagToAdminPos')?.addEventListener('click', () => {
       modalEl.classList.remove('active');
-      openPosScannerModal();
+      if (window.AdminApp && typeof window.AdminApp.switchView === 'function') {
+        window.AdminApp.switchView('pos');
+      }
+      AdminPosEngine.scanAndAddCode(barcode, 1);
     });
   }
 
@@ -1197,34 +781,12 @@
     doc.close();
   }
 
-  /**
-   * Abre el modal de Simulador de Caja Física / Lector de Código de Barras
-   */
-  function openPosScannerModal(prefillCode = '') {
-    injectStylesAndModals();
-    ensureAllProductsHaveBarcodes();
-    renderPosCartList();
-    renderPosQuickCatalog('');
-
-    const modalEl = document.getElementById('cmPosScannerModal');
-    const inputEl = document.getElementById('cmPosBarcodeInput');
-    if (modalEl) {
-      modalEl.classList.add('active');
-    }
-    if (inputEl) {
-      if (prefillCode) inputEl.value = prefillCode;
-      setTimeout(() => inputEl.focus(), 120);
-    }
-  }
-
   // =========================================================================
-  // INYECCIÓN AUTOMÁTICA DE BOTONES EN TARJETAS, MODALES Y HEADER
+  // DECORACIÓN DE TARJETAS Y MODALES EN LA TIENDA DEL CLIENTE
+  // (SÓLO ETIQUETA DE CÓDIGO DE BARRAS PARA ESCANEAR CON EL CELULAR)
   // =========================================================================
-
-  /**
-   * Agrega el botón "║▌║ Código de Barras" en todas las tarjetas de producto de cualquier página
-   */
   function decorateProductCards() {
+    if (isAdminPanelPage()) return;
     ensureAllProductsHaveBarcodes();
     const cardSelectors = [
       '.product-card[data-id]',
@@ -1266,16 +828,13 @@
         openProductBarcodeModal(product);
       });
 
-      // Insertar dentro del contenedor de info de la tarjeta
       const infoBox = card.querySelector('.product-info, .beauty-card-body, .gaming-card-body, .home-card-body, .sport-card-body, .tech-card-body, .toy-card-body') || card;
       infoBox.appendChild(btn);
     });
   }
 
-  /**
-   * Inyecta el código de barras escaneable dentro del modal de Vista Rápida / Detalle de Producto cuando se abre
-   */
   function decorateQuickViewModal() {
+    if (isAdminPanelPage()) return;
     const qvContainers = [
       document.getElementById('quickViewBody'),
       document.getElementById('beautyModalBody'),
@@ -1290,7 +849,6 @@
     qvContainers.forEach(container => {
       if (container.querySelector('.qv-barcode-box')) return;
 
-      // Identificar qué producto se está mostrando en el modal
       let product = null;
       const titleEl = container.querySelector('.quickview-title, h2, h3');
       if (titleEl) {
@@ -1312,9 +870,8 @@
         </div>
         ${svgHtml}
         <div class="qv-barcode-actions">
-          <button type="button" class="btn-qv-barcode-action" data-action="enlarge">🔍 Ampliar Etiqueta</button>
+          <button type="button" class="btn-qv-barcode-action" data-action="enlarge">🔍 Ampliar Etiqueta para Escanear</button>
           <button type="button" class="btn-qv-barcode-action" data-action="copy">📋 Copiar Código</button>
-          <button type="button" class="btn-qv-barcode-action gold" data-action="pos">🏪 Simular Compra en Caja</button>
         </div>
       `;
 
@@ -1334,100 +891,808 @@
         }, 2000);
       });
 
-      box.querySelector('[data-action="pos"]')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openPosScannerModal(barcode);
-      });
-
       const targetCol = container.querySelector('.quickview-details-col, .modal-info-col, .beauty-modal-info, .gaming-modal-info, .home-modal-info, .sport-modal-info') || container;
       targetCol.appendChild(box);
     });
   }
 
-  /**
-   * Inyecta el botón "🏪 Caja Física / Código" en la barra superior (Header) de todas las páginas
-   */
-  function injectHeaderPosButton() {
-    if (document.getElementById('btnHeaderOpenPosScanner')) return;
+  // =========================================================================
+  // MÓDULO EXCLUSIVO DEL PANEL DE ADMINISTRADOR:
+  // «║▌║ CAJA FÍSICA / CÓDIGO» (ESCANEO MÚLTIPLE DE DIFERENTES PRODUCTOS)
+  // =========================================================================
+  const POS_STORAGE_KEY = 'callejon_admin_pos_cart';
 
-    const headerActions = document.querySelector('.header-actions, .nav-actions');
-    if (!headerActions) return;
+  const AdminPosEngine = {
+    items: [], // Array de { id, barcode, name, department, category, price, image, quantity, size, color }
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.id = 'btnHeaderOpenPosScanner';
-    btn.className = 'btn-header-pos-scanner';
-    btn.setAttribute('title', 'Simular compra física ingresando el código de barras escaneado con tu celular');
-    btn.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-        <path d="M3 5v14M7 5v14M11 5v14M15 5v14M18 5v14M21 5v14"/>
-      </svg>
-      <span class="hide-sm">Caja / Código</span>
-    `;
-
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openPosScannerModal();
-    });
-
-    headerActions.insertBefore(btn, headerActions.firstChild);
-  }
-
-  /**
-   * Conecta el buscador principal (#searchInput) para que al pegar o escribir un código de barras
-   * de 13 dígitos permita agregarlo directamente o abrir su etiqueta
-   */
-  function hookMainSearchInputForBarcodes() {
-    const searchInput = document.getElementById('searchInput');
-    const searchForm = document.getElementById('searchForm');
-    if (!searchInput) return;
-
-    // Actualizar placeholder para indicar que también acepta códigos de barras
-    if (!searchInput.placeholder.toLowerCase().includes('código')) {
-      searchInput.placeholder = 'Buscar productos, marcas o pegar código de barras (13 dígitos)...';
-    }
-
-    if (searchForm && !searchForm.dataset.barcodeHooked) {
-      searchForm.dataset.barcodeHooked = 'true';
-      searchForm.addEventListener('submit', (e) => {
-        const val = searchInput.value.trim();
-        const digits = val.replace(/\D/g, '');
-        if (digits.length === 12 || digits.length === 13) {
-          const matchedProd = findProductByBarcodeOrCode(digits);
-          if (matchedProd) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            openPosScannerModal();
-            processScannedCodeInPos(matchedProd.barcode);
+    loadCart() {
+      try {
+        const raw = localStorage.getItem(POS_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            this.items = parsed;
+            return;
           }
         }
-      }, true);
+      } catch (e) {}
+      this.items = [];
+    },
+
+    saveCart() {
+      try {
+        localStorage.setItem(POS_STORAGE_KEY, JSON.stringify(this.items));
+      } catch (e) {}
+    },
+
+    /**
+     * Escanea y agrega un producto (o suma cantidad si ya está en la lista)
+     * Permite acumular múltiples productos de diferentes tipos y departamentos
+     */
+    scanAndAddCode(rawCode, qtyToAdd = 1) {
+      const cleanQty = Math.max(1, parseInt(qtyToAdd, 10) || 1);
+      const product = findProductByBarcodeOrCode(rawCode);
+      const feedbackEl = document.getElementById('adminPosScanFeedback');
+
+      if (!product) {
+        playScannerBeep(false);
+        if (feedbackEl) {
+          feedbackEl.style.display = 'block';
+          feedbackEl.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1.5px solid #ef4444; border-radius: 10px; padding: 12px 16px; color: #fca5a5; font-size: 0.85rem; font-weight: 700;">
+              ❌ Código no encontrado: <code>${String(rawCode).replace(/</g, '&lt;')}</code>. Verifica los 13 dígitos escaneados con tu celular.
+            </div>
+          `;
+        }
+        return false;
+      }
+
+      const availStock = getProductAvailableStock(product.id);
+      const existingIdx = this.items.findIndex(it => String(it.id) === String(product.id));
+      const currentInPos = existingIdx > -1 ? (Number(this.items[existingIdx].quantity) || 0) : 0;
+
+      if (availStock <= 0 || currentInPos + cleanQty > availStock) {
+        playScannerBeep(false);
+        const msg = availStock <= 0
+          ? `⚠️ «${product.name}» está AGOTADO en bodega (0 disponibles).`
+          : `⚠️ Stock insuficiente para «${product.name}»: solo hay ${availStock} disponible(s) y ya tienes ${currentInPos} en caja.`;
+        if (feedbackEl) {
+          feedbackEl.style.display = 'block';
+          feedbackEl.innerHTML = `
+            <div style="background: rgba(245, 158, 11, 0.15); border: 1.5px solid #f59e0b; border-radius: 10px; padding: 12px 16px; color: #fcd34d; font-size: 0.85rem; font-weight: 700;">
+              ${msg}
+            </div>
+          `;
+        }
+        if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+          window.AdminApp.showToast(msg, 'danger');
+        }
+        return false;
+      }
+
+      playScannerBeep(true);
+
+      const barcode = product.barcode || generateProductEan13(product);
+      if (existingIdx > -1) {
+        this.items[existingIdx].quantity += cleanQty;
+      } else {
+        this.items.push({
+          id: product.id,
+          barcode: barcode,
+          sku: product.sku || `CLM-${String(product.id).toUpperCase().slice(0, 10)}`,
+          name: product.name,
+          department: product.department || product.category || 'General',
+          category: product.category || 'general',
+          price: Number(product.price) || 0,
+          image: product.image || 'img/logo-icon.svg',
+          size: (Array.isArray(product.sizes) && product.sizes[0]) ? product.sizes[0] : 'Estándar',
+          color: (Array.isArray(product.colors) && product.colors[0]) ? product.colors[0] : '',
+          quantity: cleanQty
+        });
+      }
+
+      this.saveCart();
+      this.renderPosView();
+
+      if (feedbackEl) {
+        const distinctTypes = this.items.length;
+        const totalUnits = this.items.reduce((s, i) => s + (Number(i.quantity) || 1), 0);
+        feedbackEl.style.display = 'block';
+        feedbackEl.innerHTML = `
+          <div style="background: rgba(16, 185, 129, 0.14); border: 1.5px solid #10b981; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 14px;">
+            <img src="${product.image}" alt="${product.name}" style="width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #10b981; background: #fff;" />
+            <div style="flex: 1;">
+              <div style="font-size: 0.74rem; font-weight: 800; color: #34d399; text-transform: uppercase;">
+                ✅ ESCANEADO Y AGREGADO (+${cleanQty}) • EAN-13: ${barcode} • [${product.department || product.category}]
+              </div>
+              <div style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">${product.name}</div>
+              <div style="font-size: 0.82rem; color: #dfb743; font-weight: 700;">
+                Precio unitario: $${Number(product.price).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN • En caja ahora: ${distinctTypes} tipo(s) de producto / ${totalUnits} pieza(s)
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const inputEl = document.getElementById('adminPosBarcodeInput');
+      const qtyEl = document.getElementById('adminPosQtyInput');
+      if (inputEl) {
+        inputEl.value = '';
+        inputEl.focus();
+      }
+      if (qtyEl) {
+        qtyEl.value = '1';
+      }
+
+      return true;
+    },
+
+    updateItemQuantity(productId, newQty) {
+      const idx = this.items.findIndex(it => String(it.id) === String(productId));
+      if (idx === -1) return;
+
+      const parsed = parseInt(newQty, 10);
+      if (isNaN(parsed) || parsed <= 0) {
+        this.items.splice(idx, 1);
+      } else {
+        const avail = getProductAvailableStock(productId);
+        if (parsed > avail) {
+          this.items[idx].quantity = Math.max(1, avail);
+          if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+            window.AdminApp.showToast(`⚠️ Solo hay ${avail} unidad(es) en stock de «${this.items[idx].name}»`, 'danger');
+          }
+        } else {
+          this.items[idx].quantity = parsed;
+        }
+      }
+      this.saveCart();
+      this.renderPosView();
+    },
+
+    removeItem(productId) {
+      this.items = this.items.filter(it => String(it.id) !== String(productId));
+      this.saveCart();
+      this.renderPosView();
+    },
+
+    clearAll() {
+      this.items = [];
+      this.saveCart();
+      const feedbackEl = document.getElementById('adminPosScanFeedback');
+      if (feedbackEl) feedbackEl.style.display = 'none';
+      this.renderPosView();
+    },
+
+    getFinancialTotals() {
+      const subtotal = this.items.reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.quantity) || 1)), 0);
+      const totalPieces = this.items.reduce((sum, it) => sum + (Number(it.quantity) || 1), 0);
+      const distinctProducts = this.items.length;
+      const distinctDepartments = new Set(this.items.map(it => it.department || it.category)).size;
+
+      const methodEl = document.getElementById('adminPosPaymentMethod');
+      const method = methodEl ? methodEl.value : 'cash';
+      const msiEl = document.getElementById('adminPosMsiSelect');
+      const msi = msiEl ? (parseInt(msiEl.value, 10) || 1) : 1;
+
+      // 10% de descuento si paga de contado (1 pago) con Tarjeta Callejón Mágico
+      let discount = 0;
+      if (method === 'callejon' && msi === 1) {
+        discount = Math.round(subtotal * 0.10 * 100) / 100;
+      }
+
+      const total = Math.max(0, Math.round((subtotal - discount) * 100) / 100);
+      return {
+        subtotal,
+        discount,
+        total,
+        totalPieces,
+        distinctProducts,
+        distinctDepartments,
+        method,
+        msi
+      };
+    },
+
+    populateClientsSelector() {
+      const selectEl = document.getElementById('adminPosClientSelect');
+      if (!selectEl || !window.AdminDB) return;
+
+      const currentVal = selectEl.value;
+      const users = window.AdminDB.getUsers() || [];
+
+      let html = `<option value="__walkin__">🛍️ Cliente en Mostrador (Venta Física Directa)</option>`;
+      users.forEach(u => {
+        const bal = Number(u.balance || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+        html += `<option value="${u.email}">👤 ${u.fullName} (${u.email}) — Crédito disp: $${bal}</option>`;
+      });
+
+      selectEl.innerHTML = html;
+      if (currentVal && Array.from(selectEl.options).some(o => o.value === currentVal)) {
+        selectEl.value = currentVal;
+      }
+    },
+
+    handleClientSelectionChange() {
+      const selectEl = document.getElementById('adminPosClientSelect');
+      const nameInput = document.getElementById('adminPosClientName');
+      const phoneInput = document.getElementById('adminPosClientPhone');
+      const emailInput = document.getElementById('adminPosClientEmail');
+      const postalInput = document.getElementById('adminPosClientPostal');
+      const creditBadge = document.getElementById('adminPosClientCreditInfo');
+
+      if (!selectEl) return;
+      const val = selectEl.value;
+
+      if (val === '__walkin__') {
+        if (nameInput && !nameInput.dataset.manual) nameInput.value = 'CLIENTE EN MOSTRADOR';
+        if (phoneInput && !phoneInput.dataset.manual) phoneInput.value = '';
+        if (emailInput && !emailInput.dataset.manual) emailInput.value = '';
+        if (postalInput && !postalInput.dataset.manual) postalInput.value = '30700';
+        if (creditBadge) {
+          creditBadge.style.display = 'none';
+        }
+      } else if (window.AdminDB) {
+        const users = window.AdminDB.getUsers() || [];
+        const user = users.find(u => (u.email || '').toLowerCase() === val.toLowerCase());
+        if (user) {
+          if (nameInput) nameInput.value = user.fullName || '';
+          if (phoneInput) phoneInput.value = (user.phone && user.phone !== 'No registrado') ? user.phone : '';
+          if (emailInput) emailInput.value = user.email || '';
+          if (postalInput) postalInput.value = user.postal || '30700';
+          if (creditBadge) {
+            creditBadge.style.display = 'block';
+            creditBadge.innerHTML = `💳 <strong>Tarjeta Callejón Mágico (${user.cardNumber || '4152 ••••'}):</strong> Crédito disponible: <strong style="color: #10b981;">$${Number(user.balance || 0).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</strong>`;
+          }
+        }
+      }
+    },
+
+    updatePaymentUI() {
+      const fin = this.getFinancialTotals();
+      const method = fin.method;
+
+      const boxCash = document.getElementById('adminPosCashBox');
+      const boxCallejon = document.getElementById('adminPosCallejonBox');
+      const boxSplit = document.getElementById('adminPosSplitBox');
+
+      if (boxCash) boxCash.style.display = method === 'cash' ? 'block' : 'none';
+      if (boxCallejon) boxCallejon.style.display = method === 'callejon' ? 'block' : 'none';
+      if (boxSplit) boxSplit.style.display = method === 'split' ? 'block' : 'none';
+
+      // Calcular cambio en efectivo
+      if (method === 'cash') {
+        const givenInput = document.getElementById('adminPosCashGiven');
+        const changeDisplay = document.getElementById('adminPosCashChange');
+        if (givenInput && changeDisplay) {
+          const given = parseFloat(givenInput.value) || 0;
+          if (given >= fin.total && fin.total > 0) {
+            const change = Math.round((given - fin.total) * 100) / 100;
+            changeDisplay.textContent = `$${change.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+            changeDisplay.style.color = '#10b981';
+          } else if (given > 0 && given < fin.total) {
+            const missing = Math.round((fin.total - given) * 100) / 100;
+            changeDisplay.textContent = `Faltan $${missing.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+            changeDisplay.style.color = '#ef4444';
+          } else {
+            changeDisplay.textContent = '$0.00 MXN (Pago exacto)';
+            changeDisplay.style.color = '#94a3b8';
+          }
+        }
+      }
+
+      // Calcular desglose de pago mixto
+      if (method === 'split') {
+        const splitCashInp = document.getElementById('adminPosSplitCashInput');
+        const splitCreditDisplay = document.getElementById('adminPosSplitCreditAmount');
+        if (splitCashInp && splitCreditDisplay) {
+          let cashPart = parseFloat(splitCashInp.value);
+          if (isNaN(cashPart) || cashPart < 0) cashPart = Math.round(fin.total * 0.5 * 100) / 100;
+          if (cashPart > fin.total) cashPart = fin.total;
+          const creditPart = Math.max(0, Math.round((fin.total - cashPart) * 100) / 100);
+          splitCreditDisplay.textContent = `$${creditPart.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+        }
+      }
+    },
+
+    renderPosView() {
+      const tableBody = document.getElementById('adminPosItemsTableBody');
+      const badgeNav = document.getElementById('navBadgePos');
+      const statTypesEl = document.getElementById('adminPosStatTypes');
+      const statUnitsEl = document.getElementById('adminPosStatUnits');
+      const subtotalEl = document.getElementById('adminPosSubtotalText');
+      const discountRow = document.getElementById('adminPosDiscountRow');
+      const discountEl = document.getElementById('adminPosDiscountText');
+      const totalEl = document.getElementById('adminPosTotalText');
+
+      const fin = this.getFinancialTotals();
+
+      if (badgeNav) badgeNav.textContent = fin.totalPieces;
+      if (statTypesEl) statTypesEl.textContent = `${fin.distinctProducts} producto(s) / ${fin.distinctDepartments} depto(s)`;
+      if (statUnitsEl) statUnitsEl.textContent = `${fin.totalPieces} unidad(es)`;
+      if (subtotalEl) subtotalEl.textContent = `$${fin.subtotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+
+      if (discountRow && discountEl) {
+        if (fin.discount > 0) {
+          discountRow.style.display = 'flex';
+          discountEl.textContent = `-$${fin.discount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+        } else {
+          discountRow.style.display = 'none';
+        }
+      }
+
+      if (totalEl) totalEl.textContent = `$${fin.total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+
+      this.updatePaymentUI();
+
+      if (!tableBody) return;
+
+      if (this.items.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 2.5rem 1rem; color: var(--admin-text-muted);">
+              <div style="font-size: 2rem; margin-bottom: 0.4rem;">║▌║</div>
+              <strong>La Caja Física está lista para escanear</strong><br>
+              <span style="font-size: 0.8rem;">Escanea con la app de tu celular el código de barras de varios productos de diferente tipo en la tienda e ingrésalos arriba, o agrégalos desde el catálogo inferior.</span>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = this.items.map(item => {
+        const lineTotal = (Number(item.price) || 0) * (Number(item.quantity) || 1);
+        const avail = getProductAvailableStock(item.id);
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${item.image}" alt="" style="width: 42px; height: 42px; object-fit: cover; border-radius: 8px; border: 1px solid #334155; background: #fff;" />
+                <div>
+                  <strong style="color: #ffffff; font-size: 0.86rem; display: block;">${item.name}</strong>
+                  <span style="font-family: monospace; font-size: 0.74rem; color: var(--admin-gold); font-weight: 700;">EAN-13: ${item.barcode}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span style="font-size: 0.75rem; background: rgba(197, 143, 56, 0.15); color: #dfb743; padding: 3px 8px; border-radius: 6px; font-weight: 700;">
+                ${item.department}
+              </span>
+            </td>
+            <td>
+              <strong>$${Number(item.price).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong>
+            </td>
+            <td>
+              <div class="stock-counter" style="justify-content: center;">
+                <button type="button" class="btn-stock-adjust btn-pos-qty-dec" data-id="${item.id}" title="Restar 1">-</button>
+                <input type="number" class="stock-input pos-qty-input" data-id="${item.id}" value="${item.quantity}" min="1" max="${avail}" style="width: 54px;" />
+                <button type="button" class="btn-stock-adjust btn-pos-qty-inc" data-id="${item.id}" title="Sumar 1 (Stock: ${avail})">+</button>
+              </div>
+            </td>
+            <td>
+              <strong style="color: #10b981; font-size: 0.92rem;">$${lineTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</strong>
+            </td>
+            <td style="text-align: right;">
+              <button type="button" class="btn-admin btn-admin-danger btn-admin-sm btn-pos-remove-item" data-id="${item.id}" title="Quitar de la caja">🗑️</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      tableBody.querySelectorAll('.btn-pos-qty-dec').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const it = this.items.find(x => String(x.id) === String(id));
+          if (it) this.updateItemQuantity(id, it.quantity - 1);
+        });
+      });
+
+      tableBody.querySelectorAll('.btn-pos-qty-inc').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const it = this.items.find(x => String(x.id) === String(id));
+          if (it) this.updateItemQuantity(id, it.quantity + 1);
+        });
+      });
+
+      tableBody.querySelectorAll('.pos-qty-input').forEach(inp => {
+        inp.addEventListener('change', () => {
+          const id = inp.dataset.id;
+          this.updateItemQuantity(id, inp.value);
+        });
+      });
+
+      tableBody.querySelectorAll('.btn-pos-remove-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.removeItem(btn.dataset.id);
+        });
+      });
+    },
+
+    renderCatalogHelper() {
+      const container = document.getElementById('adminPosCatalogTableBody');
+      if (!container) return;
+
+      ensureAllProductsHaveBarcodes();
+      const all = getAllCatalogProducts();
+      const q = (document.getElementById('adminPosCatalogSearch')?.value || '').trim().toLowerCase();
+      const dept = document.getElementById('adminPosCatalogDept')?.value || 'all';
+
+      const filtered = all.filter(p => {
+        if (!p) return false;
+        if (dept !== 'all' && p.category !== dept) return false;
+        if (!q) return true;
+        return (
+          (p.name && p.name.toLowerCase().includes(q)) ||
+          (p.barcode && String(p.barcode).includes(q)) ||
+          (p.sku && p.sku.toLowerCase().includes(q)) ||
+          (p.department && p.department.toLowerCase().includes(q))
+        );
+      });
+
+      const subset = filtered.slice(0, 40);
+      if (subset.length === 0) {
+        container.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 1.5rem; color: var(--admin-text-muted);">No se encontraron productos con ese criterio.</td></tr>`;
+        return;
+      }
+
+      container.innerHTML = subset.map(p => {
+        const stock = getProductAvailableStock(p.id);
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${p.image}" alt="" style="width: 36px; height: 36px; object-fit: cover; border-radius: 6px; background: #fff;" />
+                <div>
+                  <strong style="color: #ffffff; font-size: 0.82rem; display: block;">${p.name}</strong>
+                  <span style="font-size: 0.72rem; color: var(--admin-text-muted);">${p.department || p.category}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <code style="background: rgba(197, 143, 56, 0.15); color: #dfb743; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 0.82rem;">${p.barcode}</code>
+            </td>
+            <td><strong>$${Number(p.price).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</strong></td>
+            <td>
+              <span class="badge-status ${stock === 0 ? 'outofstock' : (stock <= 5 ? 'lowstock' : 'instock')}">
+                ${stock === 0 ? 'Agotado' : `${stock} disp.`}
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm btn-pos-cat-tag" data-id="${p.id}" title="Mostrar código de barras en pantalla para escanear con el celular">
+                  ║▌║ Ver Código
+                </button>
+                <button type="button" class="btn-admin btn-admin-primary btn-admin-sm btn-pos-cat-add" data-code="${p.barcode}" ${stock === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''}>
+                  ➕ Pasar a Caja
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.btn-pos-cat-tag').forEach(btn => {
+        btn.addEventListener('click', () => {
+          openProductBarcodeModal(btn.dataset.id);
+        });
+      });
+
+      container.querySelectorAll('.btn-pos-cat-add').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.scanAndAddCode(btn.dataset.code, 1);
+        });
+      });
+    },
+
+    /**
+     * Procesa el cobro final de la compra física en la Caja del Administrador
+     */
+    completePhysicalSale() {
+      if (this.items.length === 0) {
+        if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+          window.AdminApp.showToast('⚠️ Escanea al menos un producto antes de procesar el cobro en caja.', 'danger');
+        }
+        return;
+      }
+
+      const fin = this.getFinancialTotals();
+      const clientSelectVal = document.getElementById('adminPosClientSelect')?.value || '__walkin__';
+      const clientName = (document.getElementById('adminPosClientName')?.value || 'CLIENTE EN MOSTRADOR').trim();
+      const clientPhone = (document.getElementById('adminPosClientPhone')?.value || '962 401 4408').trim();
+      const clientEmail = (document.getElementById('adminPosClientEmail')?.value || '').trim().toLowerCase();
+      const clientPostal = (document.getElementById('adminPosClientPostal')?.value || '30700').trim();
+
+      let paymentLabel = 'Efectivo en Caja Física (Contado)';
+      let isSplitPayment = false;
+      let cashAmount = fin.total;
+      let creditAmount = 0;
+      let creditMsi = 1;
+
+      // Validar métodos que usan crédito de Tarjeta Callejón Mágico
+      if (fin.method === 'callejon' || fin.method === 'split') {
+        if (clientSelectVal === '__walkin__' && !clientEmail) {
+          if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+            window.AdminApp.showToast('⚠️ Para cobrar con crédito de Tarjeta Callejón Mágico, selecciona un cliente registrado.', 'danger');
+          }
+          return;
+        }
+
+        const targetEmail = clientSelectVal !== '__walkin__' ? clientSelectVal : clientEmail;
+        const users = (window.AdminDB && window.AdminDB.getUsers()) || [];
+        const clientUser = users.find(u => (u.email || '').toLowerCase() === targetEmail.toLowerCase());
+
+        if (!clientUser) {
+          if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+            window.AdminApp.showToast('⚠️ No se encontró la tarjeta departamental del cliente seleccionado.', 'danger');
+          }
+          return;
+        }
+
+        if (fin.method === 'callejon') {
+          cashAmount = 0;
+          creditAmount = fin.total;
+          creditMsi = fin.msi;
+          if (clientUser.balance < creditAmount) {
+            if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+              window.AdminApp.showToast(`⚠️ Saldo insuficiente en Tarjeta Callejón Mágico. Disponible: $${Number(clientUser.balance).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`, 'danger');
+            }
+            return;
+          }
+          const newBalance = Math.max(0, Math.round((clientUser.balance - creditAmount) * 100) / 100);
+          window.AdminDB.updateUserBalance(
+            clientUser.email,
+            newBalance,
+            `Compra en Caja Física (${fin.totalPieces} art.)`,
+            -creditAmount
+          );
+          paymentLabel = creditMsi > 1
+            ? `Tarjeta Departamental Callejón Mágico (${creditMsi} MSI en Caja Física)`
+            : `Tarjeta Departamental Callejón Mágico (Contado 10% OFF en Caja Física)`;
+        } else {
+          // Pago Mixto (Efectivo + Crédito)
+          isSplitPayment = true;
+          const rawSplitCash = parseFloat(document.getElementById('adminPosSplitCashInput')?.value);
+          cashAmount = (!isNaN(rawSplitCash) && rawSplitCash > 0 && rawSplitCash < fin.total)
+            ? Math.round(rawSplitCash * 100) / 100
+            : Math.round(fin.total * 0.5 * 100) / 100;
+          creditAmount = Math.max(0, Math.round((fin.total - cashAmount) * 100) / 100);
+          creditMsi = parseInt(document.getElementById('adminPosSplitMsiSelect')?.value || '6', 10) || 6;
+
+          if (clientUser.balance < creditAmount) {
+            if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+              window.AdminApp.showToast(`⚠️ Saldo insuficiente para la parte a crédito ($${creditAmount.toFixed(2)}). Disponible: $${Number(clientUser.balance).toFixed(2)} MXN`, 'danger');
+            }
+            return;
+          }
+          const newBalance = Math.max(0, Math.round((clientUser.balance - creditAmount) * 100) / 100);
+          window.AdminDB.updateUserBalance(
+            clientUser.email,
+            newBalance,
+            `Pago Mixto en Caja Física (Crédito ${creditMsi} MSI)`,
+            -creditAmount
+          );
+          paymentLabel = `Pago Mixto en Caja Física: Efectivo ($${cashAmount.toFixed(2)}) + Crédito Callejón ($${creditAmount.toFixed(2)})`;
+        }
+      } else if (fin.method === 'card') {
+        paymentLabel = 'Terminal Bancaria en Caja Física (Visa / Mastercard)';
+      }
+
+      // 1. Descontar Stock de cada uno de los productos escaneados en AdminDB & Firebase
+      this.items.forEach(item => {
+        const currentStock = getProductAvailableStock(item.id);
+        const updatedStock = Math.max(0, currentStock - (Number(item.quantity) || 1));
+        if (window.AdminDB && typeof window.AdminDB.setProductStock === 'function') {
+          window.AdminDB.setProductStock(item.id, updatedStock);
+        }
+      });
+
+      // 2. Construir y guardar el pedido oficial en la base de datos de ventas
+      const orderNum = 'CLM-' + Math.floor(100000 + Math.random() * 900000);
+      const pointsEarned = Math.max(25, Math.round(fin.total * 0.05));
+      const nowStr = new Date().toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const newOrder = {
+        orderNum: orderNum,
+        userId: 'pos_admin',
+        userEmail: clientEmail || 'mostrador@callejonmagico.com',
+        date: nowStr,
+        timestamp: Date.now(),
+        status: 'delivered',
+        statusText: 'Entregado en Caja Física (Sucursal)',
+        carrier: 'Entrega Inmediata en Mostrador',
+        trackingNumber: 'POS-' + orderNum,
+        estimatedDelivery: 'Entregado en tienda física',
+        total: fin.total,
+        subtotal: fin.subtotal,
+        discount: fin.discount,
+        iva: 0,
+        paymentMethod: paymentLabel,
+        isSplitPayment: isSplitPayment,
+        cashAmount: cashAmount,
+        creditAmount: creditAmount,
+        cashLabel: 'Efectivo en Caja Física',
+        creditMsi: creditMsi,
+        msi: creditMsi,
+        pointsEarned: pointsEarned,
+        recipient: {
+          name: clientName,
+          email: clientEmail || 'mostrador@callejonmagico.com',
+          phone: clientPhone,
+          postal: clientPostal,
+          street: '8A Avenida Sur no. 54 col. Centro (Caja Física Sucursal)',
+          city: 'Tapachula, Chiapas'
+        },
+        items: this.items.map(it => ({
+          id: it.id,
+          name: it.name,
+          price: it.price,
+          quantity: it.quantity,
+          size: it.size || 'Estándar',
+          color: it.color || '',
+          image: it.image,
+          barcode: it.barcode
+        }))
+      };
+
+      // Guardar en callejon_user_orders y sincronizar con Firebase
+      try {
+        const rawOrders = JSON.parse(localStorage.getItem('callejon_user_orders') || '[]');
+        rawOrders.unshift(newOrder);
+        localStorage.setItem('callejon_user_orders', JSON.stringify(rawOrders));
+        if (window.CallejonFirebase && typeof window.CallejonFirebase.syncOrder === 'function') {
+          window.CallejonFirebase.syncOrder(newOrder);
+        }
+        if (window.AdminDB && typeof window.AdminDB.notifyChange === 'function') {
+          window.AdminDB.notifyChange('orders');
+        }
+      } catch (e) {
+        console.error('Error guardando venta física:', e);
+      }
+
+      // 3. Limpiar caja actual y actualizar tablas
+      this.clearAll();
+      this.populateClientsSelector();
+      this.renderCatalogHelper();
+      if (window.AdminApp && typeof window.AdminApp.renderAll === 'function') {
+        window.AdminApp.renderAll();
+      }
+      if (window.AdminApp && typeof window.AdminApp.showToast === 'function') {
+        window.AdminApp.showToast(`🎉 Venta física #${orderNum} cobrada con éxito ($${fin.total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`, 'success');
+      }
+
+      // 4. Abrir comprobante oficial listo para imprimir en impresora de tickets, PDF o WhatsApp
+      if (window.CallejonTicket && typeof window.CallejonTicket.open === 'function') {
+        window.CallejonTicket.open(newOrder);
+      }
+    },
+
+    initAdminPos() {
+      if (!isAdminPanelPage()) return;
+      ensureAllProductsHaveBarcodes();
+      this.loadCart();
+      this.populateClientsSelector();
+      this.handleClientSelectionChange();
+      this.renderPosView();
+      this.renderCatalogHelper();
+
+      // Formulario de escaneo de código de barras en Caja Física Admin
+      const scanForm = document.getElementById('adminPosScanForm');
+      const codeInput = document.getElementById('adminPosBarcodeInput');
+      const qtyInput = document.getElementById('adminPosQtyInput');
+      const autoScanChk = document.getElementById('adminPosAutoScanCheck');
+
+      if (scanForm && codeInput) {
+        scanForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const val = codeInput.value.trim();
+          const qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+          if (!val) {
+            codeInput.focus();
+            return;
+          }
+          this.scanAndAddCode(val, qty);
+        });
+
+        // Auto-agregar inmediatamente cuando se pegan o escanean los 13 dígitos de un EAN-13
+        codeInput.addEventListener('input', () => {
+          if (autoScanChk && !autoScanChk.checked) return;
+          const digits = codeInput.value.replace(/\D/g, '');
+          if (digits.length === 13) {
+            const matched = findProductByBarcodeOrCode(digits);
+            if (matched) {
+              const qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+              this.scanAndAddCode(digits, qty);
+            }
+          }
+        });
+      }
+
+      // Botón vaciar caja
+      document.getElementById('btnAdminPosClearAll')?.addEventListener('click', () => {
+        if (this.items.length > 0 && confirm('¿Deseas vaciar todos los artículos escaneados en la caja actual?')) {
+          this.clearAll();
+        }
+      });
+
+      // Selector de cliente
+      document.getElementById('adminPosClientSelect')?.addEventListener('change', () => {
+        this.handleClientSelectionChange();
+      });
+
+      // Cambio de método de pago y cálculos en vivo
+      document.getElementById('adminPosPaymentMethod')?.addEventListener('change', () => {
+        this.renderPosView();
+      });
+      document.getElementById('adminPosMsiSelect')?.addEventListener('change', () => {
+        this.renderPosView();
+      });
+      document.getElementById('adminPosCashGiven')?.addEventListener('input', () => {
+        this.updatePaymentUI();
+      });
+      document.getElementById('adminPosSplitCashInput')?.addEventListener('input', () => {
+        this.updatePaymentUI();
+      });
+
+      // Botón cobrar venta física
+      document.getElementById('btnAdminPosCompleteSale')?.addEventListener('click', () => {
+        this.completePhysicalSale();
+      });
+
+      // Filtros del catálogo rápido en Caja Admin
+      document.getElementById('adminPosCatalogSearch')?.addEventListener('input', () => {
+        this.renderCatalogHelper();
+      });
+      document.getElementById('adminPosCatalogDept')?.addEventListener('change', () => {
+        this.renderCatalogHelper();
+      });
+
+      // Botón rápido en Topbar para ir a Caja Física
+      document.getElementById('btnTopbarPosView')?.addEventListener('click', () => {
+        if (window.AdminApp && typeof window.AdminApp.switchView === 'function') {
+          window.AdminApp.switchView('pos');
+          setTimeout(() => document.getElementById('adminPosBarcodeInput')?.focus(), 100);
+        }
+      });
+
+      // Escuchar cambios en la base de datos para refrescar clientes y stock
+      window.addEventListener('callejon_admin_db_changed', () => {
+        this.populateClientsSelector();
+        this.renderPosView();
+        this.renderCatalogHelper();
+      });
     }
-  }
+  };
 
   function initBarcodeSystem() {
     ensureAllProductsHaveBarcodes();
-    injectStylesAndModals();
-    injectHeaderPosButton();
-    decorateProductCards();
-    decorateQuickViewModal();
-    hookMainSearchInputForBarcodes();
+    injectStylesAndTagModal();
 
-    // Observador para decorar tarjetas de productos que se filtren o rendericen dinámicamente
-    let debounceTimer = null;
-    const observer = new MutationObserver(() => {
-      if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        decorateProductCards();
-        decorateQuickViewModal();
-      }, 120);
-    });
+    if (isAdminPanelPage()) {
+      AdminPosEngine.initAdminPos();
+    } else {
+      decorateProductCards();
+      decorateQuickViewModal();
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+      let debounceTimer = null;
+      const observer = new MutationObserver(() => {
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          decorateProductCards();
+          decorateQuickViewModal();
+        }, 120);
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
   }
 
   // Exponer API global
@@ -1439,8 +1704,7 @@
     renderEan13Svg,
     findProductByBarcodeOrCode,
     openProductBarcodeModal,
-    openPosScannerModal,
-    processScannedCodeInPos
+    AdminPos: AdminPosEngine
   };
 
   if (document.readyState === 'loading') {

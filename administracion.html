@@ -164,6 +164,14 @@
         </button>
 
         <span class="nav-section-title">Operaciones</span>
+        <button type="button" class="nav-item" data-view="pos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 5v14M7 5v14M11 5v14M15 5v14M18 5v14M21 5v14"></path>
+          </svg>
+          ║▌║ Caja / Código
+          <span class="nav-badge" id="navBadgePos" style="background: rgba(197, 143, 56, 0.25); color: #dfb743; border: 1px solid rgba(197, 143, 56, 0.5);">0</span>
+        </button>
+
         <button type="button" class="nav-item" data-view="clients">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -253,6 +261,10 @@
             <span class="sync-dot"></span>
             Base de Datos en Vivo
           </div>
+
+          <button type="button" class="btn-admin btn-admin-primary btn-admin-sm" id="btnTopbarPosView" title="Abrir Caja Física y Lector de Código de Barras">
+            ║▌║ Caja / Código
+          </button>
 
           <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" id="btnExportDatabase" title="Descargar respaldo JSON completo">
             📥 Exportar BD
@@ -786,6 +798,271 @@
           </div>
         </section>
 
+        <!-- ==================================================================
+             VISTA 7: CAJA FÍSICA / PUNTO DE VENTA POR CÓDIGO DE BARRAS (POS)
+             ================================================================== -->
+        <section class="admin-view" id="view-pos">
+
+          <!-- Tarjeta de Escaneo Múltiple de Códigos de Barras -->
+          <div class="admin-card" style="margin-bottom: 1.5rem; border: 1.5px solid rgba(197, 143, 56, 0.45);">
+            <div class="admin-card-header" style="flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h3 class="admin-card-title">║▌║ Lector de Código de Barras en Caja Física (Escaneo Múltiple)</h3>
+                <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-top: 2px;">
+                  Escanea varios productos de diferente tipo y departamento con la app lectora de tu celular y escribe o pega sus códigos EAN-13 (13 dígitos) aquí para acumularlos en la misma venta.
+                </p>
+              </div>
+              <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #34d399; font-weight: 700; cursor: pointer; background: rgba(16, 185, 129, 0.12); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.35);">
+                <input type="checkbox" id="adminPosAutoScanCheck" checked />
+                <span>⚡ Auto-agregar al detectar 13 dígitos</span>
+              </label>
+            </div>
+
+            <div style="padding: 1.25rem;">
+              <form id="adminPosScanForm" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;" novalidate>
+                <div style="flex: 1; min-width: 240px;">
+                  <label for="adminPosBarcodeInput" style="display: block; font-size: 0.76rem; font-weight: 800; color: var(--admin-gold); text-transform: uppercase; margin-bottom: 6px;">
+                    Código de Barras EAN-13 (13 dígitos) o SKU:
+                  </label>
+                  <input
+                    type="text"
+                    id="adminPosBarcodeInput"
+                    class="admin-input"
+                    placeholder="Ej: 7501010000018 (escribe o pega un código tras otro)..."
+                    style="width: 100%; height: 46px; font-family: 'Courier New', Courier, monospace; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.12em;"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div style="width: 110px;">
+                  <label for="adminPosQtyInput" style="display: block; font-size: 0.76rem; font-weight: 800; color: var(--admin-text-muted); text-transform: uppercase; margin-bottom: 6px;">
+                    Cantidad:
+                  </label>
+                  <input
+                    type="number"
+                    id="adminPosQtyInput"
+                    class="admin-input"
+                    value="1"
+                    min="1"
+                    max="99"
+                    style="width: 100%; height: 46px; text-align: center; font-weight: 800; font-size: 1rem;"
+                  />
+                </div>
+
+                <button type="submit" class="btn-admin btn-admin-primary" style="height: 46px; padding: 0 1.4rem; font-weight: 800;">
+                  ➕ Escanear / Agregar a Caja
+                </button>
+
+                <button type="button" class="btn-admin btn-admin-danger" id="btnAdminPosClearAll" style="height: 46px;">
+                  🗑️ Vaciar Caja
+                </button>
+              </form>
+
+              <!-- Retroalimentación del último artículo escaneado -->
+              <div id="adminPosScanFeedback" style="display: none; margin-top: 1rem;"></div>
+            </div>
+          </div>
+
+          <!-- Grid Principal de Caja: Izquierda (Lista de Productos Escaneados) / Derecha (Cliente, Pago y Cobro) -->
+          <div style="display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.5rem; align-items: start; margin-bottom: 1.5rem;">
+
+            <!-- Columna Izquierda: Tabla de Artículos Escaneados de Diferente Tipo -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <div>
+                  <h3 class="admin-card-title">🧾 Artículos Acumulados en la Venta Física Actual</h3>
+                  <p style="font-size: 0.76rem; color: var(--admin-text-muted); margin-top: 2px;">
+                    Puedes mezclar productos de Moda, Tecnología, Hogar, Belleza, Deportes, Juguetes y Videojuegos
+                  </p>
+                </div>
+                <div style="text-align: right;">
+                  <span id="adminPosStatTypes" style="font-size: 0.76rem; color: var(--admin-gold); font-weight: 700; display: block;">0 productos / 0 deptos</span>
+                  <span id="adminPosStatUnits" style="font-size: 0.74rem; color: var(--admin-text-muted);">0 unidades</span>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Producto & Código EAN-13</th>
+                      <th>Departamento</th>
+                      <th>P. Unitario</th>
+                      <th style="text-align: center;">Cantidad</th>
+                      <th>Subtotal</th>
+                      <th style="text-align: right;">Quitar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminPosItemsTableBody">
+                    <!-- Dinámico -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Columna Derecha: Datos del Cliente, Método de Pago y Botón Cobrar -->
+            <div class="admin-card" style="border: 1.5px solid rgba(197, 143, 56, 0.35);">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">💳 Datos de Cobro & Ticket</h3>
+              </div>
+
+              <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.9rem;">
+                <div>
+                  <label for="adminPosClientSelect" style="display: block; font-size: 0.76rem; font-weight: 700; color: var(--admin-text-muted); margin-bottom: 4px;">
+                    Seleccionar Cliente (o Venta en Mostrador):
+                  </label>
+                  <select id="adminPosClientSelect" class="admin-select" style="width: 100%;"></select>
+                  <div id="adminPosClientCreditInfo" style="display: none; margin-top: 6px; padding: 8px 10px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; font-size: 0.76rem; color: #e2e8f0;"></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+                  <div>
+                    <label for="adminPosClientName" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">Nombre en Ticket:</label>
+                    <input type="text" id="adminPosClientName" class="admin-input" value="CLIENTE EN MOSTRADOR" style="width: 100%;" />
+                  </div>
+                  <div>
+                    <label for="adminPosClientPhone" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">WhatsApp Cliente (10 díg):</label>
+                    <input type="tel" id="adminPosClientPhone" class="admin-input" placeholder="Ej: 962 193 2590" style="width: 100%;" />
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 0.65rem;">
+                  <div>
+                    <label for="adminPosClientEmail" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">Correo (opcional):</label>
+                    <input type="email" id="adminPosClientEmail" class="admin-input" placeholder="cliente@correo.com" style="width: 100%;" />
+                  </div>
+                  <div>
+                    <label for="adminPosClientPostal" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">C.P.:</label>
+                    <input type="text" id="adminPosClientPostal" class="admin-input" value="30700" maxlength="5" style="width: 100%;" />
+                  </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 0.75rem;">
+                  <label for="adminPosPaymentMethod" style="display: block; font-size: 0.76rem; font-weight: 700; color: var(--admin-gold); margin-bottom: 6px;">
+                    Método de Pago en Caja Física:
+                  </label>
+                  <select id="adminPosPaymentMethod" class="admin-select" style="width: 100%;">
+                    <option value="cash">💵 Efectivo en Mostrador (Contado)</option>
+                    <option value="callejon">💳 Tarjeta Departamental Callejón Mágico (Crédito / 10% OFF)</option>
+                    <option value="split">💳💵 Pago Mixto (Parte en Efectivo + Parte a Crédito)</option>
+                    <option value="card">💳 Terminal Bancaria (Visa / Mastercard / AMEX)</option>
+                  </select>
+                </div>
+
+                <!-- Sub-panel Efectivo (Cálculo de cambio) -->
+                <div id="adminPosCashBox" style="background: rgba(15, 23, 42, 0.65); padding: 10px 12px; border-radius: 8px; border: 1px solid #334155;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                    <label for="adminPosCashGiven" style="font-size: 0.76rem; color: #cbd5e1;">Efectivo recibido ($):</label>
+                    <input type="number" id="adminPosCashGiven" class="admin-input" placeholder="0.00" min="0" step="0.01" style="width: 130px; text-align: right; font-weight: 800;" />
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                    <span style="color: #94a3b8;">Cambio a entregar:</span>
+                    <strong id="adminPosCashChange" style="color: #10b981;">$0.00 MXN</strong>
+                  </div>
+                </div>
+
+                <!-- Sub-panel Tarjeta Callejón Mágico -->
+                <div id="adminPosCallejonBox" style="display: none; background: rgba(197, 143, 56, 0.1); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(197, 143, 56, 0.4);">
+                  <label for="adminPosMsiSelect" style="display: block; font-size: 0.75rem; color: #dfb743; margin-bottom: 4px;">Plazo con Tarjeta Callejón Mágico:</label>
+                  <select id="adminPosMsiSelect" class="admin-select" style="width: 100%;">
+                    <option value="1">1 Pago de Contado (Aplica 10% de Descuento)</option>
+                    <option value="3">3 Meses Sin Intereses</option>
+                    <option value="6">6 Meses Sin Intereses</option>
+                    <option value="12">12 Meses Sin Intereses</option>
+                    <option value="18">18 Meses Sin Intereses</option>
+                  </select>
+                </div>
+
+                <!-- Sub-panel Pago Mixto -->
+                <div id="adminPosSplitBox" style="display: none; background: rgba(124, 58, 237, 0.1); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(167, 139, 250, 0.4);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <label for="adminPosSplitCashInput" style="font-size: 0.75rem; color: #e2e8f0;">Parte en Efectivo ($):</label>
+                    <input type="number" id="adminPosSplitCashInput" class="admin-input" placeholder="0.00" min="0" step="0.01" style="width: 120px; text-align: right; font-weight: 800;" />
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; margin-bottom: 6px;">
+                    <span style="color: #cbd5e1;">Parte a Crédito Callejón:</span>
+                    <strong id="adminPosSplitCreditAmount" style="color: #dfb743;">$0.00 MXN</strong>
+                  </div>
+                  <select id="adminPosSplitMsiSelect" class="admin-select" style="width: 100%; font-size: 0.76rem;">
+                    <option value="1">Crédito a 1 solo pago</option>
+                    <option value="3">Crédito a 3 MSI</option>
+                    <option value="6" selected>Crédito a 6 MSI</option>
+                    <option value="12">Crédito a 12 MSI</option>
+                    <option value="18">Crédito a 18 MSI</option>
+                  </select>
+                </div>
+
+                <!-- Desglose de Totales en Caja -->
+                <div style="background: rgba(7, 20, 42, 0.85); padding: 14px; border-radius: 10px; border: 1px solid #334155;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: #cbd5e1; margin-bottom: 6px;">
+                    <span>Subtotal de Venta:</span>
+                    <strong id="adminPosSubtotalText">$0.00 MXN</strong>
+                  </div>
+                  <div id="adminPosDiscountRow" style="display: none; justify-content: space-between; font-size: 0.82rem; color: #10b981; margin-bottom: 6px;">
+                    <span>Descuento Departamental (10%):</span>
+                    <strong id="adminPosDiscountText">-$0.00 MXN</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; border-top: 1px dashed #475569;">
+                    <span style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">TOTAL A COBRAR:</span>
+                    <strong id="adminPosTotalText" style="font-size: 1.4rem; font-weight: 900; color: var(--admin-gold);">$0.00 MXN</strong>
+                  </div>
+                  <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 4px; text-align: right;">
+                    * Condiciones: El I.V.A. ya viene registrado e incluido en los precios.
+                  </div>
+                </div>
+
+                <button type="button" id="btnAdminPosCompleteSale" class="btn-admin btn-admin-primary" style="width: 100%; height: 50px; font-size: 0.96rem; font-weight: 900; justify-content: center;">
+                  ✅ Cobrar Venta Física y Generar Ticket Oficial
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Catálogo Rápido de Productos y Códigos EAN-13 por Departamento para Pruebas y Escaneo -->
+          <div class="admin-card">
+            <div class="admin-card-header" style="flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h3 class="admin-card-title">📋 Catálogo de Códigos de Barras EAN-13 por Departamento</h3>
+                <p style="font-size: 0.76rem; color: var(--admin-text-muted); margin-top: 2px;">
+                  Consulta o muestra en pantalla la etiqueta de cualquier producto para escanearla con tu celular, o pásalo directo a la caja
+                </p>
+              </div>
+              <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+                <input type="text" id="adminPosCatalogSearch" class="admin-input" placeholder="Buscar por nombre o código EAN-13..." style="min-width: 230px;" />
+                <select id="adminPosCatalogDept" class="admin-select">
+                  <option value="all">Todos los departamentos</option>
+                  <option value="ropa">Moda & Ropa</option>
+                  <option value="tecnologia">Tecnología & Celulares</option>
+                  <option value="hogar">Hogar & Muebles</option>
+                  <option value="belleza">Belleza & Perfumería</option>
+                  <option value="deportes">Deportes & Fitness</option>
+                  <option value="juguetes">Juguetería</option>
+                  <option value="videojuegos">Videojuegos & Gaming</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Producto & Departamento</th>
+                    <th>Código de Barras (EAN-13)</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th style="text-align: right;">Acciones en Caja</th>
+                  </tr>
+                </thead>
+                <tbody id="adminPosCatalogTableBody">
+                  <!-- Dinámico -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
       </div>
     </main>
 
@@ -1290,9 +1567,11 @@
 
   <!-- Scripts -->
   <script src="js/products-data.js"></script>
+  <script src="js/ticket.js"></script>
   <script src="administrativo/js/admin-db.js"></script>
   <script src="administrativo/js/admin-auth.js"></script>
   <script src="administrativo/js/admin-app.js"></script>
+  <script src="js/barcode.js"></script>
   <script src="js/pwa-qr.js"></script>
 </body>
 
