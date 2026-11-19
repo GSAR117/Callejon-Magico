@@ -993,10 +993,137 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
     },
 
     injectModal() {
+      if (!document.getElementById('callejonTicketStandaloneStyles')) {
+        const st = document.createElement('style');
+        st.id = 'callejonTicketStandaloneStyles';
+        st.textContent = `
+          #ticketModal {
+            display: none !important;
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 100001 !important;
+            max-width: 520px !important;
+            width: 95% !important;
+            padding: 1.25rem 1.25rem 1.75rem !important;
+            background-color: #f1f5f9 !important;
+            border-radius: 16px !important;
+            border: 1px solid #cbd5e1 !important;
+            box-shadow: 0 30px 70px rgba(11, 27, 61, 0.55) !important;
+            max-height: 92vh !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+            color: #1e293b !important;
+          }
+          #ticketModal.active {
+            display: flex !important;
+          }
+          #ticketStandaloneBackdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 20, 42, 0.72);
+            backdrop-filter: blur(3px);
+            z-index: 100000;
+          }
+          #ticketStandaloneBackdrop.active {
+            display: block;
+          }
+          #ticketModal .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #0b1b3d;
+            font-size: 1.25rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+          }
+          #ticketModal .ticket-action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            padding-bottom: 0.85rem;
+            padding-right: 2rem;
+            border-bottom: 1px solid #cbd5e1;
+            margin-bottom: 0.85rem;
+          }
+          #ticketModal .ticket-title-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0b1b3d;
+            background: #ffffff;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+          }
+          #ticketModal .ticket-buttons-group {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+          }
+          #ticketModal .btn-ticket-pdf,
+          #ticketModal .btn-ticket-print,
+          #ticketModal .btn-ticket-email,
+          #ticketModal .btn-ticket-whatsapp,
+          #ticketModal .btn-ticket-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.42rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+          }
+          #ticketModal .btn-ticket-pdf { background: #b91c1c; color: #fff; border: 1px solid #991b1b; }
+          #ticketModal .btn-ticket-print { background: #0b1b3d; color: #fff; border: 1px solid #c58f38; }
+          #ticketModal .btn-ticket-email { background: #059669; color: #fff; border: 1px solid #047857; }
+          #ticketModal .btn-ticket-whatsapp { background: #25D366; color: #fff; border: 1px solid #1ebe5d; }
+          #ticketModal .btn-ticket-download { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
+          #ticketModal .ticket-scroll-viewport {
+            overflow-y: auto;
+            max-height: calc(90vh - 110px);
+            padding: 0.25rem 0.5rem 1rem;
+            display: flex;
+            justify-content: center;
+          }
+          #ticketModal .receipt-paper {
+            background: #ffffff;
+            width: 100%;
+            max-width: 440px;
+            padding: 1.5rem 1.25rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            color: #1e293b;
+            line-height: 1.45;
+          }
+        `;
+        document.head.appendChild(st);
+      }
+
       if (document.getElementById('ticketModal')) return;
 
       const modalHtml = `
-        <div class="modal-window ticket-modal-window" id="ticketModal" role="dialog" aria-modal="true" aria-label="Ticket de Compra">
+        <div id="ticketStandaloneBackdrop"></div>
+        <div class="modal-window ticket-modal-window" id="ticketModal" role="dialog" aria-modal="true" aria-label="Ticket de Compra" style="display: none;">
           <button class="modal-close-btn" id="btnCloseTicketModal" aria-label="Cerrar ticket">&times;</button>
           
           <!-- BARRA SUPERIOR DE ACCIONES -->
@@ -1103,6 +1230,9 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
       document.getElementById('modalBackdrop')?.addEventListener('click', () => {
         this.close();
       });
+      document.getElementById('ticketStandaloneBackdrop')?.addEventListener('click', () => {
+        this.close();
+      });
 
       // Cerrar con tecla Escape
       document.addEventListener('keydown', (e) => {
@@ -1130,9 +1260,12 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
 
       const modal = document.getElementById('ticketModal');
       const backdrop = document.getElementById('modalBackdrop');
+      const standaloneBackdrop = document.getElementById('ticketStandaloneBackdrop');
       if (modal) {
+        modal.style.display = 'flex';
         modal.classList.add('active');
         if (backdrop) backdrop.classList.add('active');
+        if (standaloneBackdrop) standaloneBackdrop.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
     },
@@ -1140,8 +1273,13 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
     close() {
       const modal = document.getElementById('ticketModal');
       const backdrop = document.getElementById('modalBackdrop');
-      if (modal) modal.classList.remove('active');
+      const standaloneBackdrop = document.getElementById('ticketStandaloneBackdrop');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
       if (backdrop) backdrop.classList.remove('active');
+      if (standaloneBackdrop) standaloneBackdrop.classList.remove('active');
       document.body.style.overflow = '';
     },
 

@@ -62,7 +62,8 @@
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <input type="text" id="adminLoginUser" class="admin-login-input" placeholder="admin o admin@callejonmagico.com" required autocomplete="username" />
+            <input type="text" id="adminLoginUser" class="admin-login-input"
+              placeholder="admin o admin@callejonmagico.com" required autocomplete="username" />
           </div>
         </div>
 
@@ -73,7 +74,8 @@
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            <input type="password" id="adminLoginPass" class="admin-login-input" placeholder="••••••••" required autocomplete="current-password" />
+            <input type="password" id="adminLoginPass" class="admin-login-input" placeholder="••••••••" required
+              autocomplete="current-password" />
             <button type="button" class="admin-login-toggle-pwd" id="btnToggleAdminPwd" aria-label="Mostrar contraseña">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -88,7 +90,9 @@
             <input type="checkbox" id="adminRememberMe" checked />
             <span>Recordar en este equipo</span>
           </label>
-          <button type="button" class="btn-forgot-pass-link" id="btnLoginForgotPass" style="background: none; border: none; color: #C58F38; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">¿Olvidaste tu contraseña?</button>
+          <button type="button" class="btn-forgot-pass-link" id="btnLoginForgotPass"
+            style="background: none; border: none; color: #C58F38; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">¿Olvidaste
+            tu contraseña?</button>
         </div>
 
         <button type="submit" class="admin-login-btn-submit" id="btnSubmitAdminLogin">
@@ -195,7 +199,9 @@
 
         <button type="button" class="nav-item" data-view="inventory">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+            </path>
             <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
             <line x1="12" y1="22.08" x2="12" y2="12"></line>
           </svg>
@@ -216,10 +222,13 @@
 
         <button type="button" class="nav-item" data-view="favorites">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
           </svg>
           Productos Favoritos
-          <span class="nav-badge" id="navBadgeFavorites" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">0</span>
+          <span class="nav-badge" id="navBadgeFavorites"
+            style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">0</span>
         </button>
       </nav>
 
@@ -266,7 +275,8 @@
             ║▌║ Caja / Código
           </button>
 
-          <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" id="btnExportDatabase" title="Descargar respaldo JSON completo">
+          <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" id="btnExportDatabase"
+            title="Descargar respaldo JSON completo">
             📥 Exportar BD
           </button>
 
@@ -279,7 +289,8 @@
               </div>
             </div>
 
-            <button type="button" class="btn-admin-key" id="btnOpenChangePassModal" title="Cambiar Contraseña de Administrador">
+            <button type="button" class="btn-admin-key" id="btnOpenChangePassModal"
+              title="Cambiar Contraseña de Administrador">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="8" cy="15" r="4"></circle>
                 <path d="M10.85 12.15L19 4"></path>
@@ -308,7 +319,7 @@
              VISTA 1: DASHBOARD GENERAL
              ================================================================== -->
         <section class="admin-view active" id="view-dashboard">
-          
+
           <!-- Grid de Métricas Principales (KPIs) -->
           <div class="stats-grid">
             <div class="stat-card">
@@ -347,7 +358,9 @@
               <div class="stat-meta">Fondos en Tarjetas Callejón Mágico</div>
             </div>
 
-            <div class="stat-card" style="cursor: pointer;" onclick="window.AdminApp && window.AdminApp.switchView('staff')" title="Ver directorio completo de empleados">
+            <div class="stat-card" style="cursor: pointer;"
+              onclick="window.AdminApp && window.AdminApp.switchView('staff')"
+              title="Ver directorio completo de empleados">
               <div class="stat-card-header">
                 <span class="stat-title">Personal de Tienda</span>
                 <div class="stat-icon" style="background: rgba(223, 183, 67, 0.15); color: #dfb743;">👔</div>
@@ -356,7 +369,9 @@
               <div class="stat-meta" id="kpiActiveStaffMeta">Colaboradores registrados</div>
             </div>
 
-            <div class="stat-card" style="cursor: pointer;" onclick="window.AdminApp && window.AdminApp.switchView('favorites')" title="Ver productos favoritos de clientes">
+            <div class="stat-card" style="cursor: pointer;"
+              onclick="window.AdminApp && window.AdminApp.switchView('favorites')"
+              title="Ver productos favoritos de clientes">
               <div class="stat-card-header">
                 <span class="stat-title">Productos Favoritos</span>
                 <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">❤️</div>
@@ -368,7 +383,7 @@
 
           <!-- Dos Paneles: Últimos Pedidos y Alertas de Stock Bajo -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem;">
-            
+
             <!-- Últimas Ventas -->
             <div class="admin-card">
               <div class="admin-card-header">
@@ -376,7 +391,8 @@
                   <h3>🛍️ Últimas Ventas Realizadas</h3>
                   <p>Pedidos más recientes entrantes en la tienda</p>
                 </div>
-                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp.switchView('orders')">
+                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm"
+                  onclick="window.AdminApp.switchView('orders')">
                   Ver Todas
                 </button>
               </div>
@@ -405,7 +421,8 @@
                   <h3>⚠️ Alertas de Existencias Bajas</h3>
                   <p>Productos con 5 o menos unidades en inventario</p>
                 </div>
-                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp.switchView('inventory')">
+                <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm"
+                  onclick="window.AdminApp.switchView('inventory')">
                   Gestionar Stock
                 </button>
               </div>
@@ -421,9 +438,11 @@
             <div class="admin-card-header">
               <div class="card-title-group">
                 <h3>❤️ Top Productos en Favoritos de Clientes</h3>
-                <p>Artículos con mayor intención de compra guardados en lista de deseos y su disponibilidad actual en bodega</p>
+                <p>Artículos con mayor intención de compra guardados en lista de deseos y su disponibilidad actual en
+                  bodega</p>
               </div>
-              <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm" onclick="window.AdminApp.switchView('favorites')">
+              <button type="button" class="btn-admin btn-admin-secondary btn-admin-sm"
+                onclick="window.AdminApp.switchView('favorites')">
                 Ver Catálogo de Favoritos
               </button>
             </div>
@@ -464,7 +483,8 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" class="admin-search-input" id="searchUsersInput" placeholder="Buscar por nombre, CL-ID, correo o teléfono..." />
+                  <input type="text" class="admin-search-input" id="searchUsersInput"
+                    placeholder="Buscar por nombre, CL-ID, correo o teléfono..." />
                 </div>
                 <select class="admin-select" id="filterCreditStatus">
                   <option value="all">Estatus: Todos</option>
@@ -517,7 +537,8 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" class="admin-search-input" id="searchOrdersInput" placeholder="Buscar por folio o cliente..." />
+                  <input type="text" class="admin-search-input" id="searchOrdersInput"
+                    placeholder="Buscar por folio o cliente..." />
                 </div>
                 <select class="admin-select" id="filterOrderStatus">
                   <option value="all">Todos los Estados</option>
@@ -567,7 +588,8 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" class="admin-search-input" id="searchStockInput" placeholder="Buscar por nombre o SKU..." />
+                  <input type="text" class="admin-search-input" id="searchStockInput"
+                    placeholder="Buscar por nombre o SKU..." />
                 </div>
 
                 <select class="admin-select" id="filterStockFolder">
@@ -631,7 +653,8 @@
             <div class="admin-card-header">
               <div class="card-title-group">
                 <h3>👔 Directorio de Personal & Empleados</h3>
-                <p>Nómina operativa, cargos, sucursales, turnos, datos de contacto de colaboradores y estatus en tienda</p>
+                <p>Nómina operativa, cargos, sucursales, turnos, datos de contacto de colaboradores y estatus en tienda
+                </p>
               </div>
               <div class="admin-card-actions">
                 <div class="search-input-box">
@@ -639,7 +662,8 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" class="admin-search-input" id="searchStaffInput" placeholder="Buscar por nombre, cargo, ID, teléfono o correo..." />
+                  <input type="text" class="admin-search-input" id="searchStaffInput"
+                    placeholder="Buscar por nombre, cargo, ID, teléfono o correo..." />
                 </div>
 
                 <select class="admin-select" id="filterStaffDepartment">
@@ -694,7 +718,7 @@
              VISTA 6: PRODUCTOS FAVORITOS DE CLIENTES
              ================================================================== -->
         <section class="admin-view" id="view-favorites">
-          
+
           <!-- KPIs Resumen de Favoritos -->
           <div class="stats-grid" style="margin-bottom: 1.5rem;">
             <div class="stat-card">
@@ -738,7 +762,8 @@
             <div class="admin-card-header">
               <div class="card-title-group">
                 <h3>❤️ Análisis de Productos Favoritos de Clientes</h3>
-                <p>Monitoreo en tiempo real de artículos con mayor deseo de compra, nombres de clientes interesados y nivel de inventario</p>
+                <p>Monitoreo en tiempo real de artículos con mayor deseo de compra, nombres de clientes interesados y
+                  nivel de inventario</p>
               </div>
               <div class="admin-card-actions">
                 <div class="search-input-box">
@@ -746,7 +771,8 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <input type="text" class="admin-search-input" id="searchFavoritesInput" placeholder="Buscar por producto, SKU, categoría o cliente..." />
+                  <input type="text" class="admin-search-input" id="searchFavoritesInput"
+                    placeholder="Buscar por producto, SKU, categoría o cliente..." />
                 </div>
 
                 <select class="admin-select" id="filterFavoritesDept">
@@ -827,7 +853,7 @@
                   <input
                     type="text"
                     id="adminPosBarcodeInput"
-                    class="admin-input"
+                    class="admin-form-control"
                     placeholder="Ej: 7501010000018 (escribe o pega un código tras otro)..."
                     style="width: 100%; height: 46px; font-family: 'Courier New', Courier, monospace; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.12em;"
                     autocomplete="off"
@@ -841,7 +867,7 @@
                   <input
                     type="number"
                     id="adminPosQtyInput"
-                    class="admin-input"
+                    class="admin-form-control"
                     value="1"
                     min="1"
                     max="99"
@@ -918,22 +944,22 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
                   <div>
                     <label for="adminPosClientName" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">Nombre en Ticket:</label>
-                    <input type="text" id="adminPosClientName" class="admin-input" value="CLIENTE EN MOSTRADOR" style="width: 100%;" />
+                    <input type="text" id="adminPosClientName" class="admin-form-control" value="CLIENTE EN MOSTRADOR" style="width: 100%;" />
                   </div>
                   <div>
                     <label for="adminPosClientPhone" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">WhatsApp Cliente (10 díg):</label>
-                    <input type="tel" id="adminPosClientPhone" class="admin-input" placeholder="Ej: 962 193 2590" style="width: 100%;" />
+                    <input type="tel" id="adminPosClientPhone" class="admin-form-control" placeholder="Ej: 962 193 2590" style="width: 100%;" />
                   </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 0.65rem;">
                   <div>
                     <label for="adminPosClientEmail" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">Correo (opcional):</label>
-                    <input type="email" id="adminPosClientEmail" class="admin-input" placeholder="cliente@correo.com" style="width: 100%;" />
+                    <input type="email" id="adminPosClientEmail" class="admin-form-control" placeholder="cliente@correo.com" style="width: 100%;" />
                   </div>
                   <div>
                     <label for="adminPosClientPostal" style="display: block; font-size: 0.74rem; color: var(--admin-text-muted); margin-bottom: 4px;">C.P.:</label>
-                    <input type="text" id="adminPosClientPostal" class="admin-input" value="30700" maxlength="5" style="width: 100%;" />
+                    <input type="text" id="adminPosClientPostal" class="admin-form-control" value="30700" maxlength="5" style="width: 100%;" />
                   </div>
                 </div>
 
@@ -953,7 +979,7 @@
                 <div id="adminPosCashBox" style="background: rgba(15, 23, 42, 0.65); padding: 10px 12px; border-radius: 8px; border: 1px solid #334155;">
                   <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
                     <label for="adminPosCashGiven" style="font-size: 0.76rem; color: #cbd5e1;">Efectivo recibido ($):</label>
-                    <input type="number" id="adminPosCashGiven" class="admin-input" placeholder="0.00" min="0" step="0.01" style="width: 130px; text-align: right; font-weight: 800;" />
+                    <input type="number" id="adminPosCashGiven" class="admin-form-control" placeholder="0.00" min="0" step="0.01" style="width: 130px; text-align: right; font-weight: 800;" />
                   </div>
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
                     <span style="color: #94a3b8;">Cambio a entregar:</span>
@@ -977,7 +1003,7 @@
                 <div id="adminPosSplitBox" style="display: none; background: rgba(124, 58, 237, 0.1); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(167, 139, 250, 0.4);">
                   <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px;">
                     <label for="adminPosSplitCashInput" style="font-size: 0.75rem; color: #e2e8f0;">Parte en Efectivo ($):</label>
-                    <input type="number" id="adminPosSplitCashInput" class="admin-input" placeholder="0.00" min="0" step="0.01" style="width: 120px; text-align: right; font-weight: 800;" />
+                    <input type="number" id="adminPosSplitCashInput" class="admin-form-control" placeholder="0.00" min="0" step="0.01" style="width: 120px; text-align: right; font-weight: 800;" />
                   </div>
                   <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; margin-bottom: 6px;">
                     <span style="color: #cbd5e1;">Parte a Crédito Callejón:</span>
@@ -1029,7 +1055,7 @@
                 </p>
               </div>
               <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
-                <input type="text" id="adminPosCatalogSearch" class="admin-input" placeholder="Buscar por nombre o código EAN-13..." style="min-width: 230px;" />
+                <input type="text" id="adminPosCatalogSearch" class="admin-form-control" placeholder="Buscar por nombre o código EAN-13..." style="min-width: 230px;" />
                 <select id="adminPosCatalogDept" class="admin-select">
                   <option value="all">Todos los departamentos</option>
                   <option value="ropa">Moda & Ropa</option>
@@ -1081,10 +1107,13 @@
       </div>
       <form id="formAdjustBalance">
         <div class="admin-modal-body">
-          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(223, 183, 67, 0.3); padding: 1.15rem; border-radius: 10px; margin-bottom: 1.25rem;">
+          <div
+            style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(223, 183, 67, 0.3); padding: 1.15rem; border-radius: 10px; margin-bottom: 1.25rem;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
               <div>
-                <div style="font-size: 0.75rem; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Cliente Seleccionado</div>
+                <div
+                  style="font-size: 0.75rem; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                  Cliente Seleccionado</div>
                 <strong style="font-size: 1.1rem; color: #ffffff;" id="balanceClientName">-</strong>
                 <div style="font-size: 0.8rem; color: var(--admin-gold);" id="balanceClientEmail">-</div>
               </div>
@@ -1094,23 +1123,28 @@
             </div>
 
             <!-- Resumen Financiero de la Cuenta -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); text-align: center;">
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); text-align: center;">
               <div style="background: rgba(255, 255, 255, 0.03); padding: 0.5rem; border-radius: 6px;">
                 <span style="font-size: 0.7rem; color: var(--admin-text-muted); display: block;">Línea Total</span>
                 <strong style="font-size: 0.88rem; color: #ffffff;" id="balanceLimitDisplay">$60,000.00</strong>
               </div>
               <div style="background: rgba(223, 183, 67, 0.06); padding: 0.5rem; border-radius: 6px;">
                 <span style="font-size: 0.7rem; color: var(--admin-gold); display: block;">Saldo Disponible</span>
-                <strong style="font-size: 0.88rem; color: var(--admin-gold);" id="balanceCurrentDisplay">$0.00 MXN</strong>
+                <strong style="font-size: 0.88rem; color: var(--admin-gold);" id="balanceCurrentDisplay">$0.00
+                  MXN</strong>
               </div>
-              <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.5rem; border-radius: 6px;">
+              <div
+                style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.5rem; border-radius: 6px;">
                 <span style="font-size: 0.7rem; color: #f87171; display: block; font-weight: 700;">Deuda Actual</span>
-                <strong style="font-size: 0.92rem; color: #ef4444; font-weight: 800;" id="balanceDebtDisplay">$0.00 MXN</strong>
+                <strong style="font-size: 0.92rem; color: #ef4444; font-weight: 800;" id="balanceDebtDisplay">$0.00
+                  MXN</strong>
               </div>
             </div>
 
             <!-- Botón Rápido: Liquidar Deuda Completa -->
-            <button type="button" id="btnQuickPayAllDebt" style="display: none; margin-top: 0.85rem; width: 100%; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; padding: 0.65rem 1rem; border-radius: 7px; font-weight: 700; font-size: 0.85rem; cursor: pointer; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+            <button type="button" id="btnQuickPayAllDebt"
+              style="display: none; margin-top: 0.85rem; width: 100%; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; padding: 0.65rem 1rem; border-radius: 7px; font-weight: 700; font-size: 0.85rem; cursor: pointer; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
               <span>💵 Liquidar Deuda Total</span>
               <strong id="btnQuickPayAmountText">($0.00 MXN)</strong>
             </button>
@@ -1129,12 +1163,14 @@
 
           <div class="admin-form-group">
             <label for="balanceAmountInput">Monto ($ MXN)</label>
-            <input type="number" id="balanceAmountInput" class="admin-form-control" placeholder="Ej: 1500.00" min="0.50" step="0.50" required />
+            <input type="number" id="balanceAmountInput" class="admin-form-control" placeholder="Ej: 1500.00" min="0.50"
+              step="0.50" required />
           </div>
 
           <div class="admin-form-group">
             <label for="balanceReasonInput">Concepto / Motivo</label>
-            <input type="text" id="balanceReasonInput" class="admin-form-control" placeholder="Ej: Pago de abono a cuenta departamental en caja" required />
+            <input type="text" id="balanceReasonInput" class="admin-form-control"
+              placeholder="Ej: Pago de abono a cuenta departamental en caja" required />
           </div>
         </div>
         <div class="admin-modal-footer">
@@ -1156,7 +1192,8 @@
         <div class="admin-modal-body">
           <div class="admin-form-group">
             <label for="prodNameInput">Nombre del Producto</label>
-            <input type="text" id="prodNameInput" class="admin-form-control" placeholder="Ej: Smart TV Samsung 65 Pulgadas Crystal 4K" required />
+            <input type="text" id="prodNameInput" class="admin-form-control"
+              placeholder="Ej: Smart TV Samsung 65 Pulgadas Crystal 4K" required />
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -1174,33 +1211,39 @@
             </div>
             <div class="admin-form-group">
               <label for="prodDeptInput">Departamento</label>
-              <input type="text" id="prodDeptInput" class="admin-form-control" placeholder="Ej: Tecnología · Pantallas" />
+              <input type="text" id="prodDeptInput" class="admin-form-control"
+                placeholder="Ej: Tecnología · Pantallas" />
             </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
             <div class="admin-form-group">
               <label for="prodPriceInput">Precio ($ MXN)</label>
-              <input type="number" id="prodPriceInput" class="admin-form-control" placeholder="Ej: 8499" min="1" step="0.5" required />
+              <input type="number" id="prodPriceInput" class="admin-form-control" placeholder="Ej: 8499" min="1"
+                step="0.5" required />
             </div>
             <div class="admin-form-group">
               <label for="prodOrigPriceInput">Precio Regular</label>
-              <input type="number" id="prodOrigPriceInput" class="admin-form-control" placeholder="Ej: 10999" min="1" step="0.5" />
+              <input type="number" id="prodOrigPriceInput" class="admin-form-control" placeholder="Ej: 10999" min="1"
+                step="0.5" />
             </div>
             <div class="admin-form-group">
               <label for="prodStockInput">Stock (Existencias)</label>
-              <input type="number" id="prodStockInput" class="admin-form-control" placeholder="Ej: 20" min="0" required />
+              <input type="number" id="prodStockInput" class="admin-form-control" placeholder="Ej: 20" min="0"
+                required />
             </div>
           </div>
 
           <div class="admin-form-group">
             <label for="prodImageInput">Ruta de Imagen (Local o URL)</label>
-            <input type="text" id="prodImageInput" class="admin-form-control" placeholder="Ej: Productos/nombre-de-foto.jpg o URL" required />
+            <input type="text" id="prodImageInput" class="admin-form-control"
+              placeholder="Ej: Productos/nombre-de-foto.jpg o URL" required />
           </div>
 
           <div class="admin-form-group">
             <label for="prodDescInput">Descripción del Producto</label>
-            <textarea id="prodDescInput" class="admin-form-control" rows="3" placeholder="Detalles, materiales, especificaciones técnicas..."></textarea>
+            <textarea id="prodDescInput" class="admin-form-control" rows="3"
+              placeholder="Detalles, materiales, especificaciones técnicas..."></textarea>
           </div>
         </div>
         <div class="admin-modal-footer">
@@ -1222,12 +1265,14 @@
         <div class="admin-modal-body">
           <div class="admin-form-group">
             <label for="custFullName">Nombre Completo</label>
-            <input type="text" id="custFullName" class="admin-form-control" placeholder="Ej: María Fernanda González" required />
+            <input type="text" id="custFullName" class="admin-form-control" placeholder="Ej: María Fernanda González"
+              required />
           </div>
 
           <div class="admin-form-group">
             <label for="custEmail">Correo Electrónico</label>
-            <input type="email" id="custEmail" class="admin-form-control" placeholder="Ej: maria@ejemplo.com" required />
+            <input type="email" id="custEmail" class="admin-form-control" placeholder="Ej: maria@ejemplo.com"
+              required />
           </div>
 
           <div class="admin-form-group">
@@ -1237,7 +1282,8 @@
 
           <div class="admin-form-group">
             <label for="custInitialBalance">Saldo Inicial en Tarjeta Callejón Mágico ($ MXN)</label>
-            <input type="number" id="custInitialBalance" class="admin-form-control" placeholder="Ej: 2500.00" min="0" value="0" />
+            <input type="number" id="custInitialBalance" class="admin-form-control" placeholder="Ej: 2500.00" min="0"
+              value="0" />
           </div>
         </div>
         <div class="admin-modal-footer">
@@ -1265,7 +1311,8 @@
           </div>
           <div style="text-align: right;">
             <span class="badge-credit-status al-corriente" id="stmtStatusBadge">Al corriente</span>
-            <div style="font-size: 0.76rem; color: var(--admin-text-muted); margin-top: 0.35rem;" id="stmtCardNumber">4152 •••• •••• 8842</div>
+            <div style="font-size: 0.76rem; color: var(--admin-text-muted); margin-top: 0.35rem;" id="stmtCardNumber">
+              4152 •••• •••• 8842</div>
           </div>
         </div>
 
@@ -1306,7 +1353,8 @@
 
         <!-- Historial de Movimientos -->
         <div style="margin-top: 1.25rem;">
-          <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--admin-text-muted); margin-bottom: 0.65rem;">
+          <h4
+            style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--admin-text-muted); margin-bottom: 0.65rem;">
             📋 Movimientos Recientes de la Cuenta
           </h4>
           <div class="statement-tx-list" id="stmtTransactionsList">
@@ -1316,8 +1364,11 @@
       </div>
       <div class="admin-modal-footer">
         <button type="button" class="btn-admin btn-admin-secondary btn-modal-cancel">Cerrar</button>
-        <button type="button" class="btn-admin btn-admin-secondary" id="btnStmtPayAllDebt" style="display: none; background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1.5px solid #10b981; font-weight: 700;">💵 Liquidar Deuda</button>
-        <button type="button" class="btn-admin btn-admin-primary" id="btnStmtOpenAbonar">💳 Abonar a esta Cuenta</button>
+        <button type="button" class="btn-admin btn-admin-secondary" id="btnStmtPayAllDebt"
+          style="display: none; background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1.5px solid #10b981; font-weight: 700;">💵
+          Liquidar Deuda</button>
+        <button type="button" class="btn-admin btn-admin-primary" id="btnStmtOpenAbonar">💳 Abonar a esta
+          Cuenta</button>
       </div>
     </div>
   </div>
@@ -1335,7 +1386,8 @@
           <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
             <div class="admin-form-group">
               <label for="staffFullNameInput">Nombre Completo del Colaborador</label>
-              <input type="text" id="staffFullNameInput" class="admin-form-control" placeholder="Ej: Sofía Morales Hernández" required />
+              <input type="text" id="staffFullNameInput" class="admin-form-control"
+                placeholder="Ej: Sofía Morales Hernández" required />
             </div>
             <div class="admin-form-group">
               <label for="staffCodeInput">Código / ID Empleado</label>
@@ -1346,7 +1398,8 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="admin-form-group">
               <label for="staffRoleInput">Cargo / Puesto</label>
-              <input type="text" id="staffRoleInput" class="admin-form-control" placeholder="Ej: Jefa de Cajas & Crédito" required />
+              <input type="text" id="staffRoleInput" class="admin-form-control"
+                placeholder="Ej: Jefa de Cajas & Crédito" required />
             </div>
             <div class="admin-form-group">
               <label for="staffDepartmentInput">Departamento</label>
@@ -1365,11 +1418,13 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="admin-form-group">
               <label for="staffPhoneInput">Teléfono Móvil / WhatsApp (10 dígitos)</label>
-              <input type="tel" id="staffPhoneInput" class="admin-form-control" placeholder="Ej: 962 112 3456" required />
+              <input type="tel" id="staffPhoneInput" class="admin-form-control" placeholder="Ej: 962 112 3456"
+                required />
             </div>
             <div class="admin-form-group">
               <label for="staffEmailInput">Correo Institucional</label>
-              <input type="email" id="staffEmailInput" class="admin-form-control" placeholder="Ej: nombre@callejonmagico.com" required />
+              <input type="email" id="staffEmailInput" class="admin-form-control"
+                placeholder="Ej: nombre@callejonmagico.com" required />
             </div>
           </div>
 
@@ -1386,7 +1441,8 @@
             </div>
             <div class="admin-form-group">
               <label for="staffBranchInput">Sucursal / Ubicación</label>
-              <input type="text" id="staffBranchInput" class="admin-form-control" placeholder="Ej: Matriz Plantel Centro" value="Matriz Plantel Centro" required />
+              <input type="text" id="staffBranchInput" class="admin-form-control"
+                placeholder="Ej: Matriz Plantel Centro" value="Matriz Plantel Centro" required />
             </div>
           </div>
 
@@ -1397,7 +1453,8 @@
             </div>
             <div class="admin-form-group">
               <label for="staffSalaryInput">Sueldo Base ($ MXN)</label>
-              <input type="number" id="staffSalaryInput" class="admin-form-control" placeholder="Ej: 14500" min="0" step="100" />
+              <input type="number" id="staffSalaryInput" class="admin-form-control" placeholder="Ej: 14500" min="0"
+                step="100" />
             </div>
             <div class="admin-form-group">
               <label for="staffStatusInput">Estatus Laboral</label>
@@ -1411,7 +1468,8 @@
 
           <div class="admin-form-group">
             <label for="staffNotesInput">Notas / Funciones Especiales</label>
-            <textarea id="staffNotesInput" class="admin-form-control" rows="2" placeholder="Observaciones, funciones principales, certificaciones..."></textarea>
+            <textarea id="staffNotesInput" class="admin-form-control" rows="2"
+              placeholder="Observaciones, funciones principales, certificaciones..."></textarea>
           </div>
         </div>
         <div class="admin-modal-footer">
@@ -1434,19 +1492,24 @@
           <div class="admin-form-group">
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem;">
               <label for="adminCurrentPass" style="margin-bottom: 0;">Contraseña Actual</label>
-              <button type="button" class="btn-forgot-pass-link" id="btnForgotAdminPass" style="background: none; border: none; color: #C58F38; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">¿La olvidaste?</button>
+              <button type="button" class="btn-forgot-pass-link" id="btnForgotAdminPass"
+                style="background: none; border: none; color: #C58F38; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">¿La
+                olvidaste?</button>
             </div>
-            <input type="password" id="adminCurrentPass" class="admin-form-control" placeholder="Contraseña actual" required />
+            <input type="password" id="adminCurrentPass" class="admin-form-control" placeholder="Contraseña actual"
+              required />
           </div>
 
           <div class="admin-form-group">
             <label for="adminNewPass">Nueva Contraseña</label>
-            <input type="password" id="adminNewPass" class="admin-form-control" placeholder="Mínimo 6 caracteres" minlength="6" required />
+            <input type="password" id="adminNewPass" class="admin-form-control" placeholder="Mínimo 6 caracteres"
+              minlength="6" required />
           </div>
 
           <div class="admin-form-group">
             <label for="adminConfirmPass">Confirmar Nueva Contraseña</label>
-            <input type="password" id="adminConfirmPass" class="admin-form-control" placeholder="Repite la nueva contraseña" minlength="6" required />
+            <input type="password" id="adminConfirmPass" class="admin-form-control"
+              placeholder="Repite la nueva contraseña" minlength="6" required />
           </div>
         </div>
         <div class="admin-modal-footer">
@@ -1468,42 +1531,54 @@
       <!-- PASO 1: VALIDACIÓN DE IDENTIDAD (WHATSAPP O PIN MAESTRO) -->
       <div id="recoveryStep1" class="admin-modal-body">
         <p style="font-size: 0.86rem; color: #94a3b8; margin-bottom: 1rem; line-height: 1.45;">
-          Elige cómo deseas validar tu identidad de Administrador para crear una nueva contraseña sin necesidad de recordar la anterior:
+          Elige cómo deseas validar tu identidad de Administrador para crear una nueva contraseña sin necesidad de
+          recordar la anterior:
         </p>
 
         <!-- Selector de Pestañas -->
         <div class="recovery-method-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
-          <button type="button" class="recovery-tab-btn active" id="tabRecoveryWhatsapp" style="flex: 1; padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #25D366; background: rgba(37, 211, 102, 0.12); color: #ffffff; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s;">
+          <button type="button" class="recovery-tab-btn active" id="tabRecoveryWhatsapp"
+            style="flex: 1; padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #25D366; background: rgba(37, 211, 102, 0.12); color: #ffffff; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s;">
             <span>📲 WhatsApp Oficial</span>
           </button>
-          <button type="button" class="recovery-tab-btn" id="tabRecoveryPin" style="flex: 1; padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #334155; background: #1e293b; color: #94a3b8; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s;">
+          <button type="button" class="recovery-tab-btn" id="tabRecoveryPin"
+            style="flex: 1; padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #334155; background: #1e293b; color: #94a3b8; font-weight: 700; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s;">
             <span>🔑 PIN Maestro</span>
           </button>
         </div>
 
         <!-- Panel 1: Método WhatsApp Oficial -->
         <div id="panelRecoveryWhatsapp">
-          <div style="background: rgba(37, 211, 102, 0.08); border: 1px dashed #25D366; border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
+          <div
+            style="background: rgba(37, 211, 102, 0.08); border: 1px dashed #25D366; border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
             <p style="font-size: 0.82rem; color: #e2e8f0; margin-bottom: 0.5rem;">
               Enviaremos un <strong>Código de Seguridad de 6 dígitos</strong> directamente al WhatsApp de Gerencia:
             </p>
-            <div style="font-size: 1rem; font-weight: 800; color: #25D366; display: flex; align-items: center; justify-content: space-between;">
+            <div
+              style="font-size: 1rem; font-weight: 800; color: #25D366; display: flex; align-items: center; justify-content: space-between;">
               <span>📞 962 401 4408</span>
-              <span style="font-size: 0.72rem; background: #25D366; color: #000; padding: 2px 7px; border-radius: 4px; font-weight: 800;">AUTORIZADO</span>
+              <span
+                style="font-size: 0.72rem; background: #25D366; color: #000; padding: 2px 7px; border-radius: 4px; font-weight: 800;">AUTORIZADO</span>
             </div>
           </div>
 
-          <button type="button" class="btn-admin" id="btnSendWhatsappCode" style="width: 100%; background: #25D366; border-color: #25D366; color: #ffffff; font-weight: 700; margin-bottom: 1rem; padding: 0.75rem;">
+          <button type="button" class="btn-admin" id="btnSendWhatsappCode"
+            style="width: 100%; background: #25D366; border-color: #25D366; color: #ffffff; font-weight: 700; margin-bottom: 1rem; padding: 0.75rem;">
             📲 Enviar Código de Seguridad a mi WhatsApp
           </button>
 
           <div id="sectionEnterWhatsappCode" style="display: none; border-top: 1px dashed #334155; padding-top: 1rem;">
             <div class="admin-form-group">
-              <label for="recoveryWhatsappCode" style="color: #cbd5e1; font-weight: 600;">Código de 6 dígitos recibido:</label>
-              <input type="text" id="recoveryWhatsappCode" class="admin-form-control" placeholder="000000" maxlength="6" style="text-align: center; letter-spacing: 0.35em; font-size: 1.4rem; font-weight: 800; color: #C58F38;" />
-              <small style="display: block; color: #94a3b8; font-size: 0.75rem; margin-top: 0.3rem; text-align: center;">Válido durante 15 minutos</small>
+              <label for="recoveryWhatsappCode" style="color: #cbd5e1; font-weight: 600;">Código de 6 dígitos
+                recibido:</label>
+              <input type="text" id="recoveryWhatsappCode" class="admin-form-control" placeholder="000000" maxlength="6"
+                style="text-align: center; letter-spacing: 0.35em; font-size: 1.4rem; font-weight: 800; color: #C58F38;" />
+              <small
+                style="display: block; color: #94a3b8; font-size: 0.75rem; margin-top: 0.3rem; text-align: center;">Válido
+                durante 15 minutos</small>
             </div>
-            <button type="button" class="btn-admin btn-admin-primary" id="btnVerifyWhatsappCode" style="width: 100%; padding: 0.75rem;">
+            <button type="button" class="btn-admin btn-admin-primary" id="btnVerifyWhatsappCode"
+              style="width: 100%; padding: 0.75rem;">
               Verificar Código y Continuar ➔
             </button>
           </div>
@@ -1511,18 +1586,22 @@
 
         <!-- Panel 2: Método PIN Maestro de Emergencia -->
         <div id="panelRecoveryPin" style="display: none;">
-          <div style="background: rgba(197, 143, 56, 0.08); border: 1px dashed #C58F38; border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
+          <div
+            style="background: rgba(197, 143, 56, 0.08); border: 1px dashed #C58F38; border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
             <p style="font-size: 0.82rem; color: #e2e8f0; margin-bottom: 0.3rem;">
-              Ingresa el <strong>PIN Maestro de Rescate</strong> de Super Administrador (predeterminado de emergencia: <code>4408</code>).
+              Ingresa el <strong>PIN Maestro de Rescate</strong> de Super Administrador (predeterminado de emergencia:
+              <code>4408</code>).
             </p>
           </div>
 
           <div class="admin-form-group">
             <label for="recoveryMasterPin" style="color: #cbd5e1; font-weight: 600;">PIN Maestro de Seguridad:</label>
-            <input type="password" id="recoveryMasterPin" class="admin-form-control" placeholder="••••" maxlength="8" style="text-align: center; letter-spacing: 0.4em; font-size: 1.35rem; font-weight: 800;" />
+            <input type="password" id="recoveryMasterPin" class="admin-form-control" placeholder="••••" maxlength="8"
+              style="text-align: center; letter-spacing: 0.4em; font-size: 1.35rem; font-weight: 800;" />
           </div>
 
-          <button type="button" class="btn-admin btn-admin-primary" id="btnVerifyMasterPin" style="width: 100%; padding: 0.75rem;">
+          <button type="button" class="btn-admin btn-admin-primary" id="btnVerifyMasterPin"
+            style="width: 100%; padding: 0.75rem;">
             Validar PIN Maestro y Continuar ➔
           </button>
         </div>
@@ -1530,22 +1609,26 @@
 
       <!-- PASO 2: CREAR NUEVA CONTRASEÑA DIRECTAMENTE -->
       <div id="recoveryStep2" class="admin-modal-body" style="display: none;">
-        <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid #10b981; border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
+        <div
+          style="background: rgba(16, 185, 129, 0.12); border: 1px solid #10b981; border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
           <span style="font-size: 1.5rem;">✅</span>
           <span style="font-size: 0.82rem; color: #a7f3d0; line-height: 1.4;">
-            <strong>Identidad verificada exitosamente.</strong> Escribe tu nueva contraseña de Administrador a continuación.
+            <strong>Identidad verificada exitosamente.</strong> Escribe tu nueva contraseña de Administrador a
+            continuación.
           </span>
         </div>
 
         <form id="formRecoverySetNewPassword">
           <div class="admin-form-group">
             <label for="recoveryNewPass">Nueva Contraseña de Administrador</label>
-            <input type="password" id="recoveryNewPass" class="admin-form-control" placeholder="Mínimo 6 caracteres" minlength="6" required />
+            <input type="password" id="recoveryNewPass" class="admin-form-control" placeholder="Mínimo 6 caracteres"
+              minlength="6" required />
           </div>
 
           <div class="admin-form-group">
             <label for="recoveryConfirmPass">Confirmar Nueva Contraseña</label>
-            <input type="password" id="recoveryConfirmPass" class="admin-form-control" placeholder="Repite la nueva contraseña" minlength="6" required />
+            <input type="password" id="recoveryConfirmPass" class="admin-form-control"
+              placeholder="Repite la nueva contraseña" minlength="6" required />
           </div>
 
           <div class="admin-modal-footer" style="padding: 1rem 0 0; border-top: 1px solid #334155; margin-top: 1rem;">
@@ -1576,4 +1659,3 @@
 </body>
 
 </html>
-
