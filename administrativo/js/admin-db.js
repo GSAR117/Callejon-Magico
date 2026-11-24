@@ -51,113 +51,36 @@
 
         const mappedUsers = users.map((user, idx) => {
           const emailKey = (user.email || '').trim().toLowerCase();
-          const sanitizedEmailKey = emailKey ? emailKey.replace(/[.#$/\[\]]/g, '_') : '';
+          const sanitizedEmailKey = emailKey.replace(/[\.\#\$\[\]\/\s]/g, '_');
           const idKey = (user.id || '').trim().toLowerCase();
-          const candidateKeys = Array.from(new Set([emailKey, sanitizedEmailKey, idKey].filter(Boolean)));
+          const sanitizedIdKey = idKey.replace(/[\.\#\$\[\]\/\s]/g, '_');
 
+          const candidateKeys = [emailKey, sanitizedEmailKey, idKey, sanitizedIdKey, user.id].filter(Boolean);
+          const candidateCards = candidateKeys.map(k => allCards[k]).filter(Boolean);
+
+          // Elegir la tarjeta más actualizada o que tenga movimientos/compras registradas
           let card = null;
-          const mergedTxMap = new Map();
-          for (const k of candidateKeys) {
-            const c = allCards[k];
-            if (!c) continue;
-            if (Array.isArray(c.transactions)) {
-              for (const tx of c.transactions) {
-                if (!tx) continue;
-                const txKey = tx.orderNum || tx.id || `${tx.concept}_${tx.amount}_${tx.date}`;
-                if (!mergedTxMap.has(txKey)) mergedTxMap.set(txKey, tx);
-              }
-            }
-            if (!card) {
-              card = { ...c };
-            } else {
-              const cTime = c._updatedAt ? new Date(c._updatedAt).getTime() : 0;
-              const uTime = card._updatedAt ? new Date(card._updatedAt).getTime() : 0;
-              if (cTime > uTime || (cTime === uTime && Number(c.balance) < Number(card.balance))) {
-                card = { ...card, ...c };
-              }
-            }
+          if (candidateCards.length > 0) {
+            card = candidateCards.slice().sort((a, b) => {
+              const tA = a && a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
+              const tB = b && b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
+              if (tA !== tB) return tB - tA;
+              const limA = Number(a?.creditLimit) || 60000;
+              const limB = Number(b?.creditLimit) || 60000;
+              const debtA = Math.max(0, limA - (typeof a?.balance === 'number' ? a.balance : limA));
+              const debtB = Math.max(0, limB - (typeof b?.balance === 'number' ? b.balance : limB));
+              if (debtA !== debtB) return debtB - debtA;
+              const txA = Array.isArray(a?.transactions) ? a.transactions.length : 0;
+              const txB = Array.isArray(b?.transactions) ? b.transactions.length : 0;
+              return txB - txA;
+            })[0];
           }
 
-          if (card && mergedTxMap.size > 0) {
-            card.transactions = Array.from(mergedTxMap.values());
-          }
-
-          const userOrders = allOrders.filter(o => {
-            if (!o) return false;
-            const oEmail = (o.userEmail || o.recipient?.email || '').trim().toLowerCase();
-            const oId = (o.userId || '').trim().toLowerCase();
-            return (emailKey && oEmail === emailKey) || (idKey && oId === idKey);
-          });
+          const userOrders = allOrders.filter(o =>
+            (emailKey && ((o.userEmail || '').trim().toLowerCase() === emailKey || (o.recipient?.email || '').trim().toLowerCase() === emailKey)) ||
+            (user.id && o.userId === user.id)
+          );
           const totalSpent = userOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
-
-          // Conciliar pedidos pagados con Tarjeta Callejón Mágico o Pago Mixto
-          const userCreditOrders = userOrders.filter(o => {
-            if (o.status === 'cancelled') return false;
-            const pm = (o.paymentMethod || '').toLowerCase();
-            const isSplit = !!o.isSplitPayment && Number(o.creditAmount) > 0;
-            const isCallejon = pm.includes('callejón') || pm.includes('callejon') || pm.includes('departamental') || pm.includes('tienda') || (!o.isSplitPayment && Number(o.creditAmount) > 0);
-            return isSplit || isCallejon;
-          });
-
-          if (!card && userCreditOrders.length > 0) {
-            card = {
-              cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
-              tier: 'ORO DEPARTAMENTAL',
-              creditLimit: 60000,
-              balance: 60000,
-              points: 500,
-              statementDay: 15,
-              isActive: true,
-              transactions: []
-            };
-            cardsNeedSave = true;
-          }
-
-          if (card) {
-            if (!Array.isArray(card.transactions)) card.transactions = [];
-            for (const order of userCreditOrders) {
-              const orderNum = String(order.orderNum || '').trim();
-              if (!orderNum) continue;
-              const creditAmt = order.isSplitPayment
-                ? Math.round((Number(order.creditAmount) || 0) * 100) / 100
-                : Math.round((Number(order.creditAmount) > 0 ? Number(order.creditAmount) : (Number(order.total) || 0)) * 100) / 100;
-              if (creditAmt <= 0) continue;
-
-              const itemNames = Array.isArray(order.items) && order.items.length > 0
-                ? order.items.map(i => `${i.name}${Number(i.quantity) > 1 ? ' x' + i.quantity : ''}`).join(', ')
-                : 'Artículos departamentales';
-              const richConcept = order.isSplitPayment
-                ? `Pago Mixto #${orderNum}: ${itemNames}`
-                : `Compra #${orderNum}: ${itemNames}`;
-
-              let existingTx = card.transactions.find(tx =>
-                tx && (tx.orderNum === orderNum || String(tx.concept || '').includes(orderNum))
-              );
-              if (!existingTx) {
-                existingTx = card.transactions.find(tx =>
-                  tx && !tx.orderNum && Math.abs((Number(tx.amount) || 0) - creditAmt) < 0.5 &&
-                  (String(tx.concept || '').includes('Compra departamental') || String(tx.concept || '').includes('Pago Mixto'))
-                );
-                if (existingTx) {
-                  existingTx.orderNum = orderNum;
-                  existingTx.concept = richConcept;
-                  cardsNeedSave = true;
-                }
-              }
-              if (!existingTx) {
-                card.transactions.unshift({
-                  id: 'tx-ord-' + orderNum,
-                  orderNum: orderNum,
-                  concept: richConcept,
-                  amount: creditAmt,
-                  pointsEarned: Number(order.pointsEarned) || Math.round(creditAmt * 0.05),
-                  date: (order.createdAt || new Date().toISOString()).split('T')[0],
-                  msi: Number(order.creditMsi || order.msi) || 18
-                });
-                cardsNeedSave = true;
-              }
-            }
-          }
 
           const creditLimit = card ? (Number(card.creditLimit) || 60000) : 60000;
           let balance = creditLimit;
@@ -168,33 +91,83 @@
             balance = Math.max(0, creditLimit - Number(card.debt));
           }
 
-          // Recalcular saldo con base en transacciones reales de compras y abonos si existen cargos
-          if (card && Array.isArray(card.transactions)) {
-            let totalCharges = 0;
-            let totalPayments = 0;
-            for (const tx of card.transactions) {
-              if (!tx) continue;
-              const txId = String(tx.id || '');
-              if ((txId === 'tx-101' || txId === 'tx-102') && emailKey !== 'carlos@callejonmagico.com') continue;
-              const amt = Number(tx.amount) || 0;
-              if (txId.startsWith('tx-pay-') || tx.isPayment) {
-                totalPayments += Math.abs(amt);
-              } else if (txId.startsWith('tx-adm-')) {
-                if (amt > 0) totalPayments += amt;
-                else if (amt < 0) totalCharges += Math.abs(amt);
-              } else if (amt > 0) {
-                totalCharges += amt;
-              } else if (amt < 0) {
-                totalPayments += Math.abs(amt);
+          // Reconciliar pedidos pagados con Tarjeta Callejón Mágico para este cliente
+          const creditOrders = userOrders.filter(o => {
+            if (!o || !o.orderNum || o.orderNum === 'CLM-784210' || o.status === 'cancelled') return false;
+            const pm = String(o.paymentMethod || '').toLowerCase();
+            const hasCreditAmt = Number(o.creditAmount) > 0;
+            const isStoreCard = !o.isSplitPayment && (pm.includes('callejón') || pm.includes('callejon') || pm.includes('tarjeta de la tienda') || pm.includes('tarjeta departamental'));
+            const isSplitCred = Boolean(o.isSplitPayment) && hasCreditAmt;
+            return hasCreditAmt || isStoreCard || isSplitCred;
+          });
+
+          if (creditOrders.length > 0) {
+            if (!card) {
+              card = {
+                cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
+                tier: 'ORO DEPARTAMENTAL',
+                creditLimit: creditLimit,
+                balance: creditLimit,
+                points: 500,
+                statementDay: 15,
+                isActive: true,
+                transactions: [],
+                processedOrders: []
+              };
+            }
+            if (!Array.isArray(card.transactions)) card.transactions = [];
+            if (!Array.isArray(card.processedOrders)) card.processedOrders = [];
+
+            creditOrders.forEach(order => {
+              const orderNum = String(order.orderNum).trim();
+              const creditUsed = Math.round((Number(order.creditAmount) > 0 ? Number(order.creditAmount) : (Number(order.total) || 0)) * 100) / 100;
+              if (creditUsed <= 0) return;
+
+              const alreadyLinked = card.processedOrders.includes(orderNum) ||
+                card.transactions.some(tx => tx && (tx.orderNum === orderNum || tx.id === 'tx-ord-' + orderNum || String(tx.concept || '').includes(orderNum)));
+              if (alreadyLinked) return;
+
+              const itemNames = Array.isArray(order.items) && order.items.length > 0
+                ? order.items.map(i => `${i.name}${(i.quantity || 1) > 1 ? ' x' + i.quantity : ''}`).join(', ').slice(0, 90)
+                : 'Artículos departamentales';
+              const richConcept = order.isSplitPayment
+                ? `Pago Mixto #${orderNum}: ${itemNames}`
+                : `Compra #${orderNum}: ${itemNames}`;
+
+              const unlinkedTx = card.transactions.find(tx =>
+                tx && !tx.orderNum && Math.abs((Number(tx.amount) || 0) - creditUsed) < 1 &&
+                /compra|pago mixto/i.test(String(tx.concept || ''))
+              );
+
+              if (unlinkedTx) {
+                unlinkedTx.orderNum = orderNum;
+                unlinkedTx.concept = richConcept;
+                card.processedOrders.push(orderNum);
+                cardsNeedSave = true;
+                return;
               }
-            }
-            if (totalCharges > 0 || userCreditOrders.length > 0) {
-              balance = Math.max(0, Math.min(creditLimit, Math.round((creditLimit - totalCharges + totalPayments) * 100) / 100));
-            }
+
+              balance = Math.max(0, Math.round((balance - creditUsed) * 100) / 100);
+              const earnedPts = Number(order.pointsEarned) || Math.round(creditUsed * 0.05);
+              card.points = (Number(card.points) || 500) + earnedPts;
+              card.processedOrders.push(orderNum);
+              card.transactions.unshift({
+                id: 'tx-ord-' + orderNum,
+                orderNum: orderNum,
+                concept: richConcept,
+                amount: creditUsed,
+                pointsEarned: earnedPts,
+                date: order.date || new Date().toISOString().split('T')[0],
+                msi: Number(order.creditMsi || order.msi) || 18
+              });
+              card._updatedAt = new Date().toISOString();
+              cardsNeedSave = true;
+            });
           }
 
-          // Corrección para usuario demo o cuentas sin pedidos a crédito
-          if ((!userCreditOrders || userCreditOrders.length === 0) && (emailKey === 'carlos@callejonmagico.com' || user.id === 'usr_demo_1')) {
+          // Corrección solo para cuentas nuevas sin ningún pedido ni movimientos de compra
+          const hasPurchaseTxs = card && Array.isArray(card.transactions) && card.transactions.some(tx => (Number(tx?.amount) || 0) > 0 && !/abono|liquidaci/i.test(String(tx?.concept || '')));
+          if ((!userOrders || userOrders.length === 0) && !hasPurchaseTxs && (emailKey === 'carlos@callejonmagico.com' || user.id === 'usr_demo_1' || balance === 0)) {
             balance = creditLimit;
           }
 
@@ -209,20 +182,17 @@
           const debt = Math.max(0, Math.round((creditLimit - balance) * 100) / 100);
           const daysOverdue = debt > 0 ? (card && typeof card.daysOverdue === 'number' ? Math.max(0, parseInt(card.daysOverdue, 10) || 0) : 0) : 0;
 
-          // Si la tarjeta guardada tenía valores inconsistentes, normalizarla en todas las claves del usuario
+          // Sincronizar tarjeta normalizada en todas las claves del usuario
           if (card) {
-            if (card.balance !== balance || card.debt !== debt || (debt === 0 && card.daysOverdue !== 0)) {
+            const keyMismatch = candidateKeys.some(k => !allCards[k] || allCards[k].balance !== balance);
+            if (card.balance !== balance || card.debt !== debt || (debt === 0 && card.daysOverdue !== 0) || keyMismatch) {
               card.balance = balance;
               card.debt = debt;
               if (debt === 0) card.daysOverdue = 0;
-              card._updatedAt = new Date().toISOString();
-              cardsNeedSave = true;
-            }
-            for (const k of candidateKeys) {
-              if (!allCards[k] || allCards[k].balance !== card.balance || (allCards[k].transactions || []).length !== (card.transactions || []).length) {
+              candidateKeys.forEach(k => {
                 allCards[k] = card;
-                cardsNeedSave = true;
-              }
+              });
+              cardsNeedSave = true;
             }
           }
 
@@ -357,8 +327,13 @@
     updateUserBalance(userEmail, newBalance, reason = 'Ajuste de Saldo por Administrador', changeAmount = 0) {
       try {
         const emailKey = (userEmail || '').trim().toLowerCase();
+        const sanitizedEmailKey = emailKey.replace(/[\.\#\$\[\]\/\s]/g, '_');
+        const users = JSON.parse(localStorage.getItem(KEYS.USERS) || '[]');
+        const matchedUser = users.find(u => (u.email || '').trim().toLowerCase() === emailKey);
+        const idKey = matchedUser && matchedUser.id ? String(matchedUser.id).trim().toLowerCase() : '';
+
         const allCards = this.getAllCards();
-        const card = allCards[emailKey] || {
+        const card = allCards[emailKey] || allCards[sanitizedEmailKey] || (idKey && allCards[idKey]) || {
           cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
           tier: 'ORO DEPARTAMENTAL',
           creditLimit: 60000,
@@ -372,28 +347,36 @@
         const oldBalance = Number(card.balance) || 0;
         const creditLimit = Number(card.creditLimit) || 60000;
         card.creditLimit = creditLimit;
-        card.balance = Math.max(0, Math.min(creditLimit, Number(newBalance)));
-        card.debt = Math.max(0, creditLimit - card.balance);
+        card.balance = Math.max(0, Math.min(creditLimit, Math.round(Number(newBalance) * 100) / 100));
+        card.debt = Math.max(0, Math.round((creditLimit - card.balance) * 100) / 100);
         if (card.debt === 0) {
           card.daysOverdue = 0;
         }
         card.transactions = card.transactions || [];
+        card._updatedAt = new Date().toISOString();
 
         card.transactions.unshift({
           id: 'tx-adm-' + Date.now(),
           concept: reason + (card.debt === 0 ? ' (Deuda Liquidada)' : ''),
-          amount: changeAmount !== 0 ? changeAmount : (card.balance - oldBalance),
+          amount: changeAmount !== 0 ? Math.abs(changeAmount) : Math.abs(card.balance - oldBalance),
           pointsEarned: 0,
           date: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
           msi: 1
         });
 
-        allCards[emailKey] = card;
+        [emailKey, sanitizedEmailKey, idKey, matchedUser?.id].filter(Boolean).forEach(k => {
+          allCards[k] = card;
+        });
         localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
 
         // Sincronizar tarjeta con Firebase
-        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncCard === 'function') {
-          window.CallejonFirebase.syncCard(emailKey, card);
+        if (typeof window !== 'undefined' && window.CallejonFirebase) {
+          if (typeof window.CallejonFirebase.syncCard === 'function') {
+            window.CallejonFirebase.syncCard(emailKey, card);
+          }
+          if (typeof window.CallejonFirebase.syncAllCards === 'function') {
+            window.CallejonFirebase.syncAllCards(allCards);
+          }
         }
 
         // Si es el usuario demo activo o el usuario en sesión actual, sincronizar
@@ -415,8 +398,13 @@
     payUserDebt(userEmail, paymentAmount, reason = 'Abono / Pago de deuda en sucursal') {
       try {
         const emailKey = (userEmail || '').trim().toLowerCase();
+        const sanitizedEmailKey = emailKey.replace(/[\.\#\$\[\]\/\s]/g, '_');
+        const users = JSON.parse(localStorage.getItem(KEYS.USERS) || '[]');
+        const matchedUser = users.find(u => (u.email || '').trim().toLowerCase() === emailKey);
+        const idKey = matchedUser && matchedUser.id ? String(matchedUser.id).trim().toLowerCase() : '';
+
         const allCards = this.getAllCards();
-        const card = allCards[emailKey] || {
+        const card = allCards[emailKey] || allCards[sanitizedEmailKey] || (idKey && allCards[idKey]) || {
           cardNumber: '4152 ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000) + ' ' + Math.floor(1000 + Math.random() * 9000),
           tier: 'ORO DEPARTAMENTAL',
           creditLimit: 60000,
@@ -437,32 +425,36 @@
         }
 
         // Aumentar saldo disponible hasta el límite máximo de crédito
-        card.balance = Math.min(limit, currentBal + payAmt);
-        card.debt = Math.max(0, limit - card.balance);
+        card.balance = Math.min(limit, Math.round((currentBal + payAmt) * 100) / 100);
+        card.debt = Math.max(0, Math.round((limit - card.balance) * 100) / 100);
         if (card.debt === 0) {
           card.daysOverdue = 0;
         }
-        card.debt = Math.max(0, limit - card.balance);
-        if (card.debt === 0) {
-          card.daysOverdue = 0;
-        }
+        card._updatedAt = new Date().toISOString();
 
         card.transactions = card.transactions || [];
         card.transactions.unshift({
           id: 'tx-pay-' + Date.now(),
           concept: reason + (card.debt === 0 ? ' — Deuda Liquidada' : ` (Deuda restante: $${card.debt.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN)`),
-          amount: payAmt,
+          amount: -Math.abs(payAmt),
           pointsEarned: 0,
           date: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
           msi: 1
         });
 
-        allCards[emailKey] = card;
+        [emailKey, sanitizedEmailKey, idKey, matchedUser?.id].filter(Boolean).forEach(k => {
+          allCards[k] = card;
+        });
         localStorage.setItem(KEYS.CARDS_BY_USER, JSON.stringify(allCards));
 
         // Sincronizar en la nube con Firebase
-        if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncCard === 'function') {
-          window.CallejonFirebase.syncCard(emailKey, card);
+        if (typeof window !== 'undefined' && window.CallejonFirebase) {
+          if (typeof window.CallejonFirebase.syncCard === 'function') {
+            window.CallejonFirebase.syncCard(emailKey, card);
+          }
+          if (typeof window.CallejonFirebase.syncAllCards === 'function') {
+            window.CallejonFirebase.syncAllCards(allCards);
+          }
         }
 
         try {

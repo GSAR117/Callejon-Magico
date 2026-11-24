@@ -61,7 +61,15 @@
   }
 
   /**
-   * Generates a normalized canonical user key for storage (prioritizing email)
+   * Normaliza una clave para compatibilidad con Firebase Realtime DB
+   */
+  function sanitizeCardKey(key) {
+    if (!key) return '';
+    return String(key).trim().toLowerCase().replace(/[\.\#\$\[\]\/\s]/g, '_');
+  }
+
+  /**
+   * Generates a normalized canonical user key for storage (prefers email so it never changes across devices/sessions)
    */
   function getUserKey(user) {
     if (!user) return null;
@@ -69,15 +77,24 @@
   }
 
   /**
-   * Returns all possible storage keys associated with a user (email, sanitized email, id, username)
+   * Returns all possible dictionary keys under which this user's card may have been stored
    */
-  function getUserKeys(user) {
+  function getUserCandidateKeys(user) {
     if (!user) return [];
-    const email = (user.email || '').toLowerCase().trim();
-    const sanitizedEmail = email ? email.replace(/[.#$/\[\]]/g, '_') : '';
-    const id = (user.id || '').toLowerCase().trim();
-    const username = (user.username || '').toLowerCase().trim();
-    return Array.from(new Set([email, sanitizedEmail, id, username].filter(Boolean)));
+    const rawKeys = [
+      user.email,
+      sanitizeCardKey(user.email),
+      user.id,
+      sanitizeCardKey(user.id),
+      user.username,
+      sanitizeCardKey(user.username)
+    ];
+    const unique = [];
+    rawKeys.forEach(k => {
+      const clean = String(k || '').trim().toLowerCase();
+      if (clean && !unique.includes(clean)) unique.push(clean);
+    });
+    return unique;
   }
 
   /**
@@ -146,10 +163,10 @@
   function getCardHolderState() {
     const user = getActiveUser();
     if (user && (user.fullName || user.email || user.username)) {
-      const displayName = (user.fullName || user.username || (user.email ? user.email.split('@')[0] : 'TITULAR')).trim().toUpperCase();
+      const nameStr = (user.fullName || user.username || user.email || 'TITULAR CALLEJÓN').trim();
       return {
         isLoggedIn: true,
-        displayName: displayName,
+        displayName: nameStr.toUpperCase(),
         user: user
       };
     }
@@ -158,6 +175,152 @@
       displayName: '•••• ••••',
       user: null
     };
+  }
+
+  /**
+   * Elige la tarjeta más reciente / con movimientos reales cuando existen varias claves del mismo usuario
+   */
+  function pickBestUserCard(candidates) {
+    if (!candidates || candidates.length === 0) return null;
+    if (candidates.length === 1) return candidates[0];
+
+    return candidates.slice().sort((a, b) => {
+      const tA = a && a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
+      const tB = b && b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
+      if (tA !== tB) return tB - tA;
+
+      const limA = Number(a?.creditLimit) || 60000;
+      const limB = Number(b?.creditLimit) || 60000;
+      const debtA = Math.max(0, limA - (typeof a?.balance === 'number' ? a.balance : limA));
+      const debtB = Math.max(0, limB - (typeof b?.balance === 'number' ? b.balance : limB));
+      if (debtA !== debtB) return debtB - debtA;
+
+      const txA = Array.isArray(a?.transactions) ? a.transactions.length : 0;
+      const txB = Array.isArray(b?.transactions) ? b.transactions.length : 0;
+      return txB - txA;
+    })[0];
+  }
+
+  /**
+   * Reconcilia la tarjeta del usuario con sus compras reales pagadas con Tarjeta Callejón Mágico
+   * en callejon_user_orders para garantizar que ninguna compra (ej. iPhone) quede sin descontar saldo.
+   */
+  function reconcileCardWithUserOrders(user, userCard) {
+    if (!user || !userCard) return false;
+    let changed = false;
+
+    try {
+      const rawOrders = JSON.parse(localStorage.getItem('callejon_user_orders') || '[]');
+      if (!Array.isArray(rawOrders) || rawOrders.length === 0) return false;
+
+      const emailKey = (user.email || '').trim().toLowerCase();
+      const userId = user.id ? String(user.id).trim() : '';
+
+      if (!Array.isArray(userCard.transactions)) userCard.transactions = [];
+      if (!Array.isArray(userCard.processedOrders)) userCard.processedOrders = [];
+
+      // Filtrar pedidos que pertenecen a este usuario y fueron pagados con Tarjeta Callejón Mágico o Pago Mixto
+      const creditOrders = rawOrders.filter(o => {
+        if (!o || !o.orderNum || o.orderNum === 'CLM-784210') return false;
+        if (o.status === 'cancelled') return false;
+
+        const oEmail = (o.userEmail || o.recipient?.email || '').trim().toLowerCase();
+        const oId = o.userId ? String(o.userId).trim() : '';
+        const belongsToUser = (emailKey && oEmail === emailKey) || (userId && oId && oId === userId);
+        if (!belongsToUser) return false;
+
+        const pm = String(o.paymentMethod || '').toLowerCase();
+        const hasCreditAmount = Number(o.creditAmount) > 0;
+        const isStoreCardMethod = !o.isSplitPayment && (pm.includes('callejón') || pm.includes('callejon') || pm.includes('tarjeta de la tienda') || pm.includes('tarjeta departamental'));
+        const isSplitWithCredit = Boolean(o.isSplitPayment) && hasCreditAmount;
+
+        return hasCreditAmount || isStoreCardMethod || isSplitWithCredit;
+      });
+
+      creditOrders.forEach(order => {
+        const orderNum = String(order.orderNum).trim();
+        const creditUsed = Math.round((Number(order.creditAmount) > 0 ? Number(order.creditAmount) : (Number(order.total) || 0)) * 100) / 100;
+        if (creditUsed <= 0) return;
+
+        // 1. Verificar si ya está vinculada por orderNum
+        const alreadyLinked = userCard.processedOrders.includes(orderNum) ||
+          userCard.transactions.some(tx => tx && (tx.orderNum === orderNum || tx.id === 'tx-ord-' + orderNum || String(tx.concept || '').includes(orderNum)));
+
+        if (alreadyLinked) return;
+
+        const itemNames = Array.isArray(order.items) && order.items.length > 0
+          ? order.items.map(i => `${i.name}${(i.quantity || 1) > 1 ? ' x' + i.quantity : ''}`).join(', ').slice(0, 90)
+          : 'Artículos departamentales';
+        const richConcept = order.isSplitPayment
+          ? `Pago Mixto #${orderNum}: ${itemNames}`
+          : `Compra #${orderNum}: ${itemNames}`;
+
+        // 2. Verificar si existe una transacción genérica sin orderNum con el mismo monto para vincularla
+        const unlinkedTx = userCard.transactions.find(tx =>
+          tx && !tx.orderNum && Math.abs((Number(tx.amount) || 0) - creditUsed) < 1 &&
+          /compra|pago mixto/i.test(String(tx.concept || ''))
+        );
+
+        if (unlinkedTx) {
+          unlinkedTx.orderNum = orderNum;
+          unlinkedTx.concept = richConcept;
+          userCard.processedOrders.push(orderNum);
+          changed = true;
+          return;
+        }
+
+        // 3. No estaba registrada la compra en la tarjeta: descontar del saldo y registrar movimiento
+        const limit = Number(userCard.creditLimit) || 60000;
+        const currentBal = typeof userCard.balance === 'number' ? Number(userCard.balance) : limit;
+        const earnedPts = Number(order.pointsEarned) || Math.round(creditUsed * 0.05);
+
+        userCard.balance = Math.max(0, Math.round((currentBal - creditUsed) * 100) / 100);
+        userCard.debt = Math.max(0, Math.round((limit - userCard.balance) * 100) / 100);
+        userCard.points = (Number(userCard.points) || 500) + earnedPts;
+        userCard.processedOrders.push(orderNum);
+
+        userCard.transactions.unshift({
+          id: 'tx-ord-' + orderNum,
+          orderNum: orderNum,
+          concept: richConcept,
+          amount: creditUsed,
+          pointsEarned: earnedPts,
+          date: order.date || new Date().toISOString().split('T')[0],
+          msi: Number(order.creditMsi || order.msi) || 18
+        });
+
+        userCard._updatedAt = new Date().toISOString();
+        changed = true;
+      });
+
+      // 4. Verificación de consistencia: si hay cargos de compra en transactions pero el saldo sigue en 60,000 intacto
+      const limit = Number(userCard.creditLimit) || 60000;
+      if (Number(userCard.balance) >= limit && userCard.transactions.length > 0) {
+        let netCharges = 0;
+        userCard.transactions.forEach(tx => {
+          if (!tx) return;
+          const amt = Number(tx.amount) || 0;
+          const isAbono = /abono|liquidaci[oó]n|pago de deuda|recarga/i.test(String(tx.concept || ''));
+          if (!isAbono && amt > 0) {
+            netCharges += amt;
+          } else if (isAbono && amt !== 0) {
+            netCharges -= Math.abs(amt);
+          }
+        });
+        // No aplicar a las transacciones demo fijas de Carlos Mendoza si no tiene pedidos nuevos
+        const isUntouchedDemo = (emailKey === 'carlos@callejonmagico.com' || userId === 'usr_demo_1') && creditOrders.length === 0;
+        if (!isUntouchedDemo && netCharges > 0) {
+          userCard.balance = Math.max(0, Math.round((limit - netCharges) * 100) / 100);
+          userCard.debt = Math.max(0, Math.round((limit - userCard.balance) * 100) / 100);
+          userCard._updatedAt = new Date().toISOString();
+          changed = true;
+        }
+      }
+    } catch (e) {
+      console.warn('Error al reconciliar pedidos con tarjeta:', e);
+    }
+
+    return changed;
   }
 
   const CardEngine = {
@@ -181,137 +344,6 @@
       }
     },
 
-    /**
-     * Sincroniza y concilia automáticamente las compras a crédito de callejon_user_orders
-     * con los movimientos y el saldo disponible de la Tarjeta Callejón Mágico del usuario.
-     */
-    reconcileCardWithOrders(user, userCard) {
-      if (!user || !userCard) return false;
-      let changed = false;
-
-      try {
-        const emailKey = (user.email || '').toLowerCase().trim();
-        const idKey = (user.id || '').toLowerCase().trim();
-        const rawOrders = JSON.parse(localStorage.getItem('callejon_user_orders') || '[]');
-        if (!Array.isArray(rawOrders)) return false;
-
-        if (!Array.isArray(userCard.transactions)) {
-          userCard.transactions = [];
-          changed = true;
-        }
-
-        // Filtrar pedidos que pertenecen a este usuario y que usaron crédito de Tarjeta Callejón Mágico
-        const userCreditOrders = rawOrders.filter(o => {
-          if (!o || o.status === 'cancelled') return false;
-          const oEmail = (o.userEmail || o.recipient?.email || '').toLowerCase().trim();
-          const oId = (o.userId || '').toLowerCase().trim();
-          const belongsToUser = (emailKey && oEmail === emailKey) || (idKey && oId === idKey);
-          if (!belongsToUser) return false;
-
-          const pm = (o.paymentMethod || '').toLowerCase();
-          const isSplit = !!o.isSplitPayment && Number(o.creditAmount) > 0;
-          const isCallejon = pm.includes('callejón') || pm.includes('callejon') || pm.includes('departamental') || pm.includes('tienda') || (!o.isSplitPayment && Number(o.creditAmount) > 0);
-          return isSplit || isCallejon;
-        });
-
-        for (const order of userCreditOrders) {
-          const orderNum = String(order.orderNum || '').trim();
-          if (!orderNum) continue;
-
-          const creditAmt = order.isSplitPayment
-            ? Math.round((Number(order.creditAmount) || 0) * 100) / 100
-            : Math.round((Number(order.creditAmount) > 0 ? Number(order.creditAmount) : (Number(order.total) || 0)) * 100) / 100;
-
-          if (creditAmt <= 0) continue;
-
-          const itemNames = Array.isArray(order.items) && order.items.length > 0
-            ? order.items.map(i => `${i.name}${Number(i.quantity) > 1 ? ' x' + i.quantity : ''}`).join(', ')
-            : 'Artículos departamentales';
-          const richConcept = order.isSplitPayment
-            ? `Pago Mixto #${orderNum}: ${itemNames}`
-            : `Compra #${orderNum}: ${itemNames}`;
-
-          // 1. Verificar si ya existe la transacción con este orderNum
-          let existingTx = userCard.transactions.find(tx =>
-            tx && (tx.orderNum === orderNum || String(tx.concept || '').includes(orderNum))
-          );
-
-          // 2. Si no tiene orderNum pero hay una transacción genérica con el mismo monto exacto, vincularla
-          if (!existingTx) {
-            existingTx = userCard.transactions.find(tx =>
-              tx && !tx.orderNum && Math.abs((Number(tx.amount) || 0) - creditAmt) < 0.5 &&
-              (String(tx.concept || '').includes('Compra departamental') || String(tx.concept || '').includes('Pago Mixto'))
-            );
-            if (existingTx) {
-              existingTx.orderNum = orderNum;
-              existingTx.concept = richConcept;
-              changed = true;
-            }
-          }
-
-          // 3. Si la compra no estaba registrada en absoluto en la tarjeta, registrarla ahora
-          if (!existingTx) {
-            const pts = Number(order.pointsEarned) || Math.round(creditAmt * 0.05);
-            userCard.transactions.unshift({
-              id: 'tx-ord-' + orderNum,
-              orderNum: orderNum,
-              concept: richConcept,
-              amount: creditAmt,
-              pointsEarned: pts,
-              date: (order.createdAt || new Date().toISOString()).split('T')[0],
-              msi: Number(order.creditMsi || order.msi) || 18
-            });
-            changed = true;
-          }
-        }
-
-        // Recalcular saldo disponible y deuda real en base a los cargos reales y abonos
-        const limit = Number(userCard.creditLimit) || 60000;
-        let totalCharges = 0;
-        let totalPayments = 0;
-
-        for (const tx of userCard.transactions) {
-          if (!tx) continue;
-          const txId = String(tx.id || '');
-          // Ignorar transacciones demo estáticas si no es el usuario demo
-          if ((txId === 'tx-101' || txId === 'tx-102') && emailKey !== 'carlos@callejonmagico.com') {
-            continue;
-          }
-          const amt = Number(tx.amount) || 0;
-          if (txId.startsWith('tx-pay-') || tx.isPayment) {
-            totalPayments += Math.abs(amt);
-          } else if (txId.startsWith('tx-adm-')) {
-            // Ajuste manual de administrador: positivo = incrementó saldo (abono), negativo = redujo saldo (cargo)
-            if (amt > 0) totalPayments += amt;
-            else if (amt < 0) totalCharges += Math.abs(amt);
-          } else if (amt > 0) {
-            totalCharges += amt;
-          } else if (amt < 0) {
-            totalPayments += Math.abs(amt);
-          }
-        }
-
-        // Si existen compras registradas en la tarjeta (o si se acaba de conciliar un pedido), asegurar que el saldo refleje los cargos
-        if (totalCharges > 0 || userCreditOrders.length > 0) {
-          const expectedBalance = Math.max(0, Math.min(limit, Math.round((limit - totalCharges + totalPayments) * 100) / 100));
-          const expectedDebt = Math.max(0, Math.round((limit - expectedBalance) * 100) / 100);
-
-          if (Math.abs((Number(userCard.balance) || 0) - expectedBalance) > 0.01 || Math.abs((Number(userCard.debt) || 0) - expectedDebt) > 0.01) {
-            userCard.balance = expectedBalance;
-            userCard.debt = expectedDebt;
-            userCard._updatedAt = new Date().toISOString();
-            changed = true;
-          }
-        } else {
-          userCard.debt = Math.max(0, Math.round((limit - (Number(userCard.balance) || 0)) * 100) / 100);
-        }
-      } catch (e) {
-        console.warn('Error al conciliar pedidos con Tarjeta Callejón Mágico:', e);
-      }
-
-      return changed;
-    },
-
     getCard() {
       const user = getActiveUser();
       const userKey = getUserKey(user);
@@ -321,79 +353,49 @@
         return { ...GUEST_CARD };
       }
 
+      // Buscar la tarjeta del usuario en todas sus claves posibles (email, id, clave sanitizada de Firebase)
       const allCards = this.getAllCards();
-      const candidateKeys = getUserKeys(user);
-
-      // Buscar todas las entradas existentes del mismo usuario (email, sanitizedEmail, id, username) y unificarlas
-      let userCard = null;
-      const mergedTxMap = new Map();
-
-      for (const k of candidateKeys) {
-        const c = allCards[k];
-        if (!c) continue;
-        if (Array.isArray(c.transactions)) {
-          for (const tx of c.transactions) {
-            if (!tx) continue;
-            const txKey = tx.orderNum || tx.id || `${tx.concept}_${tx.amount}_${tx.date}`;
-            if (!mergedTxMap.has(txKey)) {
-              mergedTxMap.set(txKey, tx);
-            }
-          }
-        }
-        if (!userCard) {
-          userCard = { ...c };
-        } else {
-          // Preferir la versión más reciente o con compras aplicadas
-          const cTime = c._updatedAt ? new Date(c._updatedAt).getTime() : 0;
-          const uTime = userCard._updatedAt ? new Date(userCard._updatedAt).getTime() : 0;
-          if (cTime > uTime || (cTime === uTime && Number(c.balance) < Number(userCard.balance))) {
-            userCard = { ...userCard, ...c };
-          }
-        }
-      }
-
+      const candidateKeys = getUserCandidateKeys(user);
+      const foundCards = candidateKeys.map(k => allCards[k]).filter(Boolean);
+      let userCard = pickBestUserCard(foundCards);
       let needsSave = false;
 
       if (!userCard) {
         userCard = generateCardForUser(user);
+        userCard._updatedAt = new Date().toISOString();
         needsSave = true;
-      } else {
-        if (mergedTxMap.size > 0) {
-          const currentLen = Array.isArray(userCard.transactions) ? userCard.transactions.length : 0;
-          userCard.transactions = Array.from(mergedTxMap.values());
-          if (userCard.transactions.length !== currentLen) needsSave = true;
-        }
-        if (Number(userCard.creditLimit) < 60000) {
-          const diff = 60000 - (Number(userCard.creditLimit) || 35000);
-          userCard.creditLimit = 60000;
-          userCard.balance = Math.min(60000, (Number(userCard.balance) || 0) + diff);
-          needsSave = true;
-        } else if (Number(userCard.balance) > (Number(userCard.creditLimit) || 60000)) {
-          userCard.balance = Number(userCard.creditLimit) || 60000;
-          needsSave = true;
-        }
+      } else if (Number(userCard.creditLimit) < 60000) {
+        const diff = 60000 - (Number(userCard.creditLimit) || 35000);
+        userCard.creditLimit = 60000;
+        userCard.balance = Math.min(60000, (Number(userCard.balance) || 0) + diff);
+        needsSave = true;
+      } else if (Number(userCard.balance) > (Number(userCard.creditLimit) || 60000)) {
+        userCard.balance = Number(userCard.creditLimit) || 60000;
+        userCard.debt = 0;
+        delete userCard.creditInFavor;
+        needsSave = true;
       }
 
       // Validar valores numéricos mínimos
-      if (typeof userCard.points !== 'number') userCard.points = 500;
+      const limit = Number(userCard.creditLimit) || 60000;
+      userCard.creditLimit = limit;
+      if (typeof userCard.balance !== 'number' || isNaN(userCard.balance)) userCard.balance = limit;
+      userCard.balance = Math.max(0, Math.min(limit, Math.round(userCard.balance * 100) / 100));
+      userCard.debt = Math.max(0, Math.round((limit - userCard.balance) * 100) / 100);
+      if (typeof userCard.points !== 'number' || isNaN(userCard.points)) userCard.points = 500;
       if (!Array.isArray(userCard.transactions)) userCard.transactions = [];
 
-      // Conciliar automáticamente con los pedidos reales a crédito del usuario (ej. compra de iPhone)
-      if (this.reconcileCardWithOrders(user, userCard)) {
+      // Reconciliar automáticamente con pedidos pagados con Tarjeta Callejón Mágico
+      if (reconcileCardWithUserOrders(user, userCard)) {
         needsSave = true;
       }
 
-      userCard.debt = Math.max(0, Math.round(((Number(userCard.creditLimit) || 60000) - (Number(userCard.balance) || 0)) * 100) / 100);
-
-      // Asegurar que todas las claves del usuario apunten a la misma tarjeta actualizada
-      for (const k of candidateKeys) {
-        if (!allCards[k] || allCards[k].balance !== userCard.balance || (allCards[k].transactions || []).length !== userCard.transactions.length) {
+      // Si había desincronización entre claves (ej. allCards[email] vs allCards[id]), unificar todas
+      const hasMismatchedKeys = candidateKeys.some(k => !allCards[k] || allCards[k].balance !== userCard.balance);
+      if (needsSave || hasMismatchedKeys) {
+        candidateKeys.forEach(k => {
           allCards[k] = userCard;
-          needsSave = true;
-        }
-      }
-
-      if (needsSave) {
+        });
         this.saveAllCards(allCards);
       }
 
@@ -408,19 +410,25 @@
     saveCard(data) {
       try {
         const user = getActiveUser();
-        const candidateKeys = getUserKeys(user);
+        const userKey = getUserKey(user);
         const limit = Number(data.creditLimit) || 60000;
         data.creditLimit = limit;
         data.balance = Math.max(0, Math.min(limit, Math.round((Number(data.balance) || 0) * 100) / 100));
         data.debt = Math.max(0, Math.round((limit - data.balance) * 100) / 100);
         data._updatedAt = new Date().toISOString();
 
-        if (candidateKeys.length > 0) {
+        if (userKey) {
           const allCards = this.getAllCards();
-          for (const k of candidateKeys) {
+          const candidateKeys = getUserCandidateKeys(user);
+          candidateKeys.forEach(k => {
             allCards[k] = data;
-          }
+          });
+          allCards[userKey] = data;
           this.saveAllCards(allCards);
+
+          if (typeof window !== 'undefined' && window.CallejonFirebase && typeof window.CallejonFirebase.syncCard === 'function') {
+            window.CallejonFirebase.syncCard(userKey, data);
+          }
         }
         localStorage.setItem(STORAGE_LEGACY_KEY, JSON.stringify(data));
         this.updateCardUI();
@@ -467,12 +475,14 @@
         };
       }
 
-      const cleanAmount = Math.round((Number(amount) || 0) * 100) / 100;
+      const numAmount = Math.round((Number(amount) || 0) * 100) / 100;
       const card = this.getCard();
       const cardholderName = holderState.displayName;
+      const limit = Number(card.creditLimit) || 60000;
+      const currentBalance = typeof card.balance === 'number' ? Number(card.balance) : limit;
 
       // Validación de saldo: si el crédito disponible es 0
-      if (card.balance <= 0) {
+      if (currentBalance <= 0) {
         return {
           success: false,
           limitReached: true,
@@ -480,33 +490,46 @@
         };
       }
 
-      if (card.balance < cleanAmount) {
+      if (currentBalance < numAmount) {
         return {
           success: false,
           limitReached: true,
-          message: `⚠️ Tu saldo disponible ($${card.balance.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN) no es suficiente para cubrir esta compra de $${cleanAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN.`
+          message: `⚠️ Tu saldo disponible ($${currentBalance.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN) no es suficiente para cubrir esta compra de $${numAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN.`
         };
       }
 
       // Descontar saldo, actualizar deuda y sumar Puntos Mágicos (5% de cashback en puntos)
-      const limit = Number(card.creditLimit) || 60000;
-      card.balance = Math.max(0, Math.round((card.balance - cleanAmount) * 100) / 100);
+      card.balance = Math.max(0, Math.round((currentBalance - numAmount) * 100) / 100);
       card.debt = Math.max(0, Math.round((limit - card.balance) * 100) / 100);
-      const pointsEarned = Math.round(cleanAmount * 0.05);
+      const pointsEarned = Math.max(1, Math.round(numAmount * 0.05));
       card.points = (Number(card.points) || 0) + pointsEarned;
+
+      if (!Array.isArray(card.transactions)) card.transactions = [];
+      if (!Array.isArray(card.processedOrders)) card.processedOrders = [];
+      if (orderNum && !card.processedOrders.includes(orderNum)) {
+        card.processedOrders.push(orderNum);
+      }
 
       card.transactions.unshift({
         id: orderNum ? ('tx-ord-' + orderNum) : ('tx-' + Date.now()),
         orderNum: orderNum || undefined,
         concept: concept || 'Compra en Callejón Mágico',
-        amount: cleanAmount,
+        amount: numAmount,
         pointsEarned: pointsEarned,
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
         msi: msi
       });
 
       this.saveCard(card);
-      return { success: true, newBalance: card.balance, newDebt: card.debt, pointsEarned, totalPoints: card.points, cardholderName, cardNumber: card.cardNumber };
+      return {
+        success: true,
+        newBalance: card.balance,
+        newDebt: card.debt,
+        pointsEarned,
+        totalPoints: card.points,
+        cardholderName,
+        cardNumber: card.cardNumber
+      };
     },
 
     /**
@@ -760,11 +783,9 @@
         }
       }
 
-      // ======================================================================
-      // ACTUALIZAR HISTORIAL DE MOVIMIENTOS Y COMPRAS DE LA TARJETA
-      // ======================================================================
-      const txSection = document.getElementById('cardTransactionsSection');
-      const txListEl = document.getElementById('cardTransactionsList');
+      // Renderizar historial de compras y movimientos recientes dentro del modal de la tarjeta
+      const txSection = document.getElementById('cardModalTransactionsSection');
+      const txListEl = document.getElementById('cardModalTransactionsList');
       if (txSection && txListEl) {
         if (!holderState.isLoggedIn) {
           txSection.style.display = 'none';
@@ -772,35 +793,31 @@
           txSection.style.display = 'block';
           const txs = Array.isArray(card.transactions) ? card.transactions : [];
           if (txs.length === 0) {
-            txListEl.innerHTML = `<div style="padding: 0.75rem; text-align: center; color: #64748b; font-size: 0.8rem;">Aún no tienes movimientos registrados en tu tarjeta.</div>`;
+            txListEl.innerHTML = `<div style="font-size: 0.78rem; color: #64748b; text-align: center; padding: 0.65rem;">Aún no hay compras registradas con tu tarjeta.</div>`;
           } else {
-            txListEl.innerHTML = txs.slice(0, 8).map(tx => {
+            txListEl.innerHTML = txs.slice(0, 6).map(tx => {
               const amt = Number(tx.amount) || 0;
-              const txId = String(tx.id || '');
-              const isPayment = txId.startsWith('tx-pay-') || tx.isPayment || amt < 0 || (txId.startsWith('tx-adm-') && amt > 0);
-              const isNeutral = amt === 0;
+              const isAbono = /abono|liquidaci[oó]n|pago de deuda|recarga/i.test(String(tx.concept || '')) || amt < 0;
+              const isZero = amt === 0;
               const absAmt = Math.abs(amt);
-              const msiBadge = (!isPayment && !isNeutral && Number(tx.msi) > 1)
-                ? `<span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 999px; margin-left: 4px;">${tx.msi} MSI</span>`
+              const msiBadge = (!isAbono && !isZero && Number(tx.msi) > 1)
+                ? `<span style="background:#fef3c7;color:#92400e;font-size:0.68rem;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:5px;">${tx.msi} MSI</span>`
                 : '';
-              const amountHtml = isNeutral
-                ? `<span style="color: #d97706; font-weight: 800; font-size: 0.82rem;">+${Number(tx.pointsEarned || 0)} pts</span>`
-                : isPayment
-                  ? `<span style="color: #059669; font-weight: 800; font-size: 0.85rem;">+ $${absAmt.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>`
-                  : `<span style="color: #dc2626; font-weight: 800; font-size: 0.85rem;">- $${absAmt.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>`;
-
+              const ptsBadge = Number(tx.pointsEarned) > 0
+                ? `<span style="color:#c58f38;font-weight:700;font-size:0.71rem;margin-left:6px;">+${tx.pointsEarned} pts</span>`
+                : '';
               return `
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; padding: 0.55rem 0.65rem; border-bottom: 1px solid #f1f5f9; font-size: 0.8rem;">
-                  <div style="min-width: 0; flex: 1;">
-                    <div style="font-weight: 700; color: #0b1b3d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                      ${isPayment ? '💵 ' : (isNeutral ? '✨ ' : '🛍️ ')}${tx.concept || 'Movimiento departamental'}${msiBadge}
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:0.65rem;padding:0.5rem 0.65rem;border-bottom:1px solid #f1f5f9;font-size:0.79rem;">
+                  <div style="min-width:0;flex:1;">
+                    <div style="font-weight:700;color:#0b1b3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${String(tx.concept || '').replace(/"/g, '&quot;')}">
+                      ${tx.concept || 'Compra en Callejón Mágico'}${msiBadge}
                     </div>
-                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">
-                      📅 ${tx.date || 'Reciente'} ${(!isNeutral && Number(tx.pointsEarned) > 0) ? `• <span style="color: #b45309; font-weight: 600;">+${tx.pointsEarned} pts</span>` : ''}
+                    <div style="font-size:0.71rem;color:#64748b;">
+                      ${tx.date || 'Reciente'}${ptsBadge}
                     </div>
                   </div>
-                  <div style="white-space: nowrap; text-align: right;">
-                    ${amountHtml}
+                  <div style="font-weight:800;white-space:nowrap;color:${isZero ? '#64748b' : (isAbono ? '#10b981' : '#ef4444')};">
+                    ${isZero ? '$0.00' : `${isAbono ? '+' : '-'}$${absAmt.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}
                   </div>
                 </div>
               `;
@@ -832,10 +849,12 @@
 
       // Listen for cross-tab or storage user updates
       window.addEventListener('storage', (e) => {
-        if (!e.key || e.key === 'davanti_current_user' || e.key === STORAGE_USERS_CARDS_KEY || e.key === STORAGE_LEGACY_KEY) {
+        if (!e.key || e.key === 'davanti_current_user' || e.key === STORAGE_USERS_CARDS_KEY || e.key === STORAGE_LEGACY_KEY || e.key === 'callejon_user_orders') {
           CardEngine.updateCardUI();
         }
       });
+      window.addEventListener('callejon_admin_db_changed', () => CardEngine.updateCardUI());
+      window.addEventListener('callejon_cloud_sync', () => CardEngine.updateCardUI());
     },
 
     injectModal() {
@@ -936,12 +955,12 @@
           </div>
 
           <!-- HISTORIAL DE COMPRAS Y MOVIMIENTOS DE LA TARJETA -->
-          <div id="cardTransactionsSection" style="margin-bottom: 1rem; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 10px; overflow: hidden; display: ${holderState.isLoggedIn ? 'block' : 'none'};">
+          <div id="cardModalTransactionsSection" style="margin-bottom: 1rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
             <div style="background: #f8fafc; padding: 0.55rem 0.85rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.78rem; font-weight: 800; color: #0b1b3d;">📋 Historial de Compras y Movimientos</span>
-              <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;">Cargos y Abonos</span>
+              <strong style="font-size: 0.8rem; color: #0b1b3d;">🧾 Movimientos y Compras Recientes</strong>
+              <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;">Estado de Cuenta en Vivo</span>
             </div>
-            <div id="cardTransactionsList" style="max-height: 175px; overflow-y: auto;"></div>
+            <div id="cardModalTransactionsList" style="max-height: 155px; overflow-y: auto;"></div>
           </div>
 
           <!-- BENEFITS LIST -->
@@ -1752,7 +1771,6 @@
       const ccBrandBadge = document.getElementById('detectedCardBrand');
       const ccExpiryInput = document.getElementById('ccCardExpiry');
       const ccCvvInput = document.getElementById('ccCardCvv');
-      const ppPhoneInput = document.getElementById('ppPhone');
 
       if (ccNumInput) {
         ccNumInput.addEventListener('input', (e) => {
@@ -1802,19 +1820,6 @@
       if (ccCvvInput) {
         ccCvvInput.addEventListener('input', (e) => {
           e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
-        });
-      }
-
-      if (ppPhoneInput) {
-        ppPhoneInput.addEventListener('input', (e) => {
-          let v = e.target.value.replace(/\D/g, '').slice(0, 10);
-          if (v.length > 6) {
-            e.target.value = `${v.slice(0, 3)} ${v.slice(3, 6)} ${v.slice(6)}`;
-          } else if (v.length > 3) {
-            e.target.value = `${v.slice(0, 3)} ${v.slice(3)}`;
-          } else {
-            e.target.value = v;
-          }
         });
       }
 

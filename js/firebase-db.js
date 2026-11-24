@@ -364,31 +364,32 @@
             } catch (e) {}
 
             const merged = { ...localCards };
+            const cardsToPushBack = {};
+
             Object.entries(remoteCards).forEach(([k, rCard]) => {
               if (!rCard) return;
               const lCard = localCards[k];
               if (!lCard) {
                 merged[k] = rCard;
-              } else {
-                // Unificar historial de transacciones sin perder compras locales
-                const txMap = new Map();
-                const allTxs = [
-                  ...(Array.isArray(lCard.transactions) ? lCard.transactions : []),
-                  ...(Array.isArray(rCard.transactions) ? rCard.transactions : [])
-                ];
-                for (const tx of allTxs) {
-                  if (!tx) continue;
-                  const txKey = tx.orderNum || tx.id || `${tx.concept}_${tx.amount}_${tx.date}`;
-                  if (!txMap.has(txKey)) txMap.set(txKey, tx);
-                }
+                return;
+              }
 
-                const rTime = rCard._updatedAt ? new Date(rCard._updatedAt).getTime() : 0;
-                const lTime = lCard._updatedAt ? new Date(lCard._updatedAt).getTime() : 0;
-                const baseCard = (lTime > rTime || (lTime === rTime && Number(lCard.balance) < Number(rCard.balance)))
-                  ? { ...rCard, ...lCard }
-                  : { ...lCard, ...rCard };
-                baseCard.transactions = Array.from(txMap.values());
-                merged[k] = baseCard;
+              const tRemote = rCard._updatedAt ? new Date(rCard._updatedAt).getTime() : 0;
+              const tLocal = lCard._updatedAt ? new Date(lCard._updatedAt).getTime() : 0;
+
+              const limR = Number(rCard.creditLimit) || 60000;
+              const limL = Number(lCard.creditLimit) || 60000;
+              const debtR = Math.max(0, limR - (typeof rCard.balance === 'number' ? rCard.balance : limR));
+              const debtL = Math.max(0, limL - (typeof lCard.balance === 'number' ? lCard.balance : limL));
+              const txR = Array.isArray(rCard.transactions) ? rCard.transactions.length : 0;
+              const txL = Array.isArray(lCard.transactions) ? lCard.transactions.length : 0;
+
+              // Si la tarjeta local es más reciente o tiene compras registradas que aún no estaban en un registro remoto virgen
+              if (tLocal > tRemote || (tLocal === tRemote && (debtL > debtR || txL > txR)) || (!tRemote && debtL > debtR)) {
+                merged[k] = lCard;
+                cardsToPushBack[sanitizeKey(k)] = lCard;
+              } else {
+                merged[k] = rCard;
               }
             });
 
@@ -406,9 +407,10 @@
                 }
               }
             });
+
             localStorage.setItem(STORAGE_KEYS.CARDS, JSON.stringify(merged));
-            if (typeof window !== 'undefined' && window.CallejonCard && typeof window.CallejonCard.updateUI === 'function') {
-              window.CallejonCard.updateUI();
+            if (Object.keys(cardsToPushBack).length > 0) {
+              db.ref('cards').update(cardsToPushBack).catch(() => {});
             }
             notifyLocal('cards');
           } else {
@@ -456,9 +458,6 @@
 
           if (mergedOrders.length > 0) {
             localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(mergedOrders));
-            if (typeof window !== 'undefined' && window.CallejonCard && typeof window.CallejonCard.updateUI === 'function') {
-              window.CallejonCard.updateUI();
-            }
             notifyLocal('orders');
           }
         } catch (e) {

@@ -37,7 +37,7 @@
    */
   function ensureEmailJSLoaded() {
     if (window.emailjs) {
-      try { window.emailjs.init(EMAILJS_CONFIG.publicKey); } catch(e){}
+      try { window.emailjs.init(EMAILJS_CONFIG.publicKey); } catch (e) { }
       return Promise.resolve(window.emailjs);
     }
     return new Promise((resolve, reject) => {
@@ -46,7 +46,7 @@
       script.onload = () => {
         try {
           window.emailjs.init(EMAILJS_CONFIG.publicKey);
-        } catch(e){}
+        } catch (e) { }
         resolve(window.emailjs);
       };
       script.onerror = reject;
@@ -237,7 +237,7 @@
           }
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // Fallback de demostración
     return {
@@ -342,8 +342,8 @@
       });
 
       // Subtotal bruto garantizado (el precio del producto en la tienda)
-      const subtotalGross = calculatedSubtotalGross > 0 
-        ? calculatedSubtotalGross 
+      const subtotalGross = calculatedSubtotalGross > 0
+        ? calculatedSubtotalGross
         : (Number(order.subtotal) || Number(order.total) || 0);
 
       // 3. Descuento departamental total aplicado
@@ -567,15 +567,15 @@
               </thead>
               <tbody>
                 ${(fin.itemsDetailed || order.items).map((item) => {
-                  const qty = Number(item.quantity) || 1;
-                  const unitPrice = Number(item.unitPrice !== undefined ? item.unitPrice : item.price) || 0;
-                  const lineTotal = Number(item.lineGross !== undefined ? item.lineGross : (qty * unitPrice)) || 0;
-                  const taxTag = item.taxType === '0' 
-                    ? ' • [TASA 0%]' 
-                    : (item.taxType === 'exento' 
-                      ? ' • [EXENTO]' 
-                      : '');
-                  return `
+        const qty = Number(item.quantity) || 1;
+        const unitPrice = Number(item.unitPrice !== undefined ? item.unitPrice : item.price) || 0;
+        const lineTotal = Number(item.lineGross !== undefined ? item.lineGross : (qty * unitPrice)) || 0;
+        const taxTag = item.taxType === '0'
+          ? ' • [TASA 0%]'
+          : (item.taxType === 'exento'
+            ? ' • [EXENTO]'
+            : '');
+        return `
                     <tr>
                       <td class="td-qty bold">${qty}</td>
                       <td class="td-desc">
@@ -592,7 +592,7 @@
                       <td class="td-total bold">$${lineTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>
                   `;
-                }).join('')}
+      }).join('')}
               </tbody>
             </table>
 
@@ -789,12 +789,12 @@
         return `• *${qty}x* ${item.name}${specs}\n   Unitario: $${unit.toLocaleString('es-MX', { minimumFractionDigits: 2 })} ➔ Importe: *$${lineTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN*`;
       }).join('\n\n');
 
-      let discountText = fin.discount > 0 
-        ? `\n*DESCUENTO DEPARTAMENTAL:* -$${fin.discount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN` 
+      let discountText = fin.discount > 0
+        ? `\n*DESCUENTO DEPARTAMENTAL:* -$${fin.discount.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`
         : '';
 
       return (
-`🎩 *CALLEJÓN MÁGICO — COMPROBANTE OFICIAL* ✨
+        `🎩 *CALLEJÓN MÁGICO — COMPROBANTE OFICIAL* ✨
 _Tienda Departamental & Maison Privé_
 📲 *WhatsApp Oficial:* 962 401 4408
 ══════════════════════════════
@@ -817,8 +817,8 @@ _Condiciones: El I.V.A. ya viene registrado e incluido en el precio de los artí
 ══════════════════════════════
 
 ${order.isSplitPayment || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('mixto')) ? `💳💵 *MODALIDAD DE PAGO:* PAGO MIXTO (EFECTIVO + CRÉDITO)
-   💵 *Efectivo:* $${(typeof order.cashAmount === 'number' ? order.cashAmount : fin.total/2).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN (${order.cashLabel || order.cashType || 'Contraentrega'})
-   💳 *Crédito Callejón:* $${(typeof order.creditAmount === 'number' ? order.creditAmount : fin.total/2).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN${(order.creditMsi || order.msi || 1) > 1 ? ` (${order.creditMsi || order.msi} MSI de $${(((typeof order.creditAmount === 'number' ? order.creditAmount : fin.total/2)) / (order.creditMsi || order.msi)).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes)` : ''}\n` : `💳 *FORMA DE PAGO:* ${order.paymentMethod || 'Tarjeta Departamental Callejón Mágico'}
+   💵 *Efectivo:* $${(typeof order.cashAmount === 'number' ? order.cashAmount : fin.total / 2).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN (${order.cashLabel || order.cashType || 'Contraentrega'})
+   💳 *Crédito Callejón:* $${(typeof order.creditAmount === 'number' ? order.creditAmount : fin.total / 2).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN${(order.creditMsi || order.msi || 1) > 1 ? ` (${order.creditMsi || order.msi} MSI de $${(((typeof order.creditAmount === 'number' ? order.creditAmount : fin.total / 2)) / (order.creditMsi || order.msi)).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes)` : ''}\n` : `💳 *FORMA DE PAGO:* ${order.paymentMethod || 'Tarjeta Departamental Callejón Mágico'}
 ${order.msi && order.msi > 1 ? `🎉 *FINANCIAMIENTO:* ${order.msi} MSI de $${(fin.total / order.msi).toLocaleString('es-MX', { minimumFractionDigits: 2 })}/mes\n` : ''}`}✨ *PUNTOS MÁGICOS:* +${order.pointsEarned || 0} pts
 🚚 *GUÍA DE RASTREO:* ${order.trackingNumber || 'EST-MX-849201948'} (${order.carrier || 'Estafeta Express'})
 
@@ -910,7 +910,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
         const msi = order.creditMsi || order.msi || 1;
         lines.push({ text: `FORMA DE PAGO: PAGO MIXTO (EFECTIVO + CREDITO)`, font: "F2", size: 8, align: "left", spacing: 2 });
         lines.push({ text: `  - Efectivo: $${cashAmt.toFixed(2)} MXN (${clean(order.cashLabel || order.cashType || 'Contraentrega')})`, font: "F1", size: 7.5, align: "left", spacing: 1.5 });
-        lines.push({ text: `  - Credito Callejon: $${credAmt.toFixed(2)} MXN (${msi > 1 ? msi + ' MSI de $' + (credAmt/msi).toFixed(2) + '/mes' : '1 solo pago'})`, font: "F1", size: 7.5, align: "left", spacing: 2 });
+        lines.push({ text: `  - Credito Callejon: $${credAmt.toFixed(2)} MXN (${msi > 1 ? msi + ' MSI de $' + (credAmt / msi).toFixed(2) + '/mes' : '1 solo pago'})`, font: "F1", size: 7.5, align: "left", spacing: 2 });
       } else {
         lines.push({ text: `FORMA DE PAGO: ${clean(order.paymentMethod || 'Tarjeta Callejon Magico')}`, font: "F2", size: 8, align: "left", spacing: 3 });
         if (order.msi && order.msi > 1) {
@@ -1834,7 +1834,7 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             const u = JSON.parse(userRaw);
             targetEmail = u.email;
           }
-        } catch(e){}
+        } catch (e) { }
       }
 
       if (!targetEmail && order.recipient && order.recipient.email) {
@@ -1881,18 +1881,18 @@ Hola Callejón Mágico (962 401 4408), te comparto el comprobante oficial de mi 
             </thead>
             <tbody>
               ${(order.items || []).map(item => {
-                const qty = Number(item.quantity) || 1;
-                const price = Number(item.price) || 0;
-                const subtotal = (qty * price).toFixed(2);
-                const specs = (item.size || item.color) ? `<br><small style="color: #64748b;">${item.size ? 'Talla: ' + item.size : ''} ${item.color ? 'Col: ' + item.color : ''}</small>` : '';
-                return `
+          const qty = Number(item.quantity) || 1;
+          const price = Number(item.price) || 0;
+          const subtotal = (qty * price).toFixed(2);
+          const specs = (item.size || item.color) ? `<br><small style="color: #64748b;">${item.size ? 'Talla: ' + item.size : ''} ${item.color ? 'Col: ' + item.color : ''}</small>` : '';
+          return `
                   <tr>
                     <td style="padding: 8px 6px; border-bottom: 1px solid #e2e8f0;"><strong>${qty}x</strong> ${item.name}${specs}</td>
                     <td style="padding: 8px 6px; border-bottom: 1px solid #e2e8f0; text-align: right;">$${price.toFixed(2)}</td>
                     <td style="padding: 8px 6px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700; color: #0b1b3d;">$${subtotal}</td>
                   </tr>
                 `;
-              }).join('')}
+        }).join('')}
             </tbody>
           </table>
         `;
